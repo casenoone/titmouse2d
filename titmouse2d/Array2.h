@@ -2,5 +2,4 @@
 #define ARRAY2_H
 
 
-
 #endif

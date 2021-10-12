@@ -7,15 +7,10 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-//复制构造函数与重载等于号有区别吗？
-//答：有区别
+#include <cmath>
+#include <iostream>
 
-//复制构造函数不仅仅在使用等于号时会调用
-//而且还会在传参等地方调用
 
-//注意const函数的用法
-
-//注意inline函数在函数实现的时候也加上inline关键字
 
 template<class T>
 class Vector2 {
@@ -27,11 +22,10 @@ public:
 	Vector2(const T& _x, const T& _y);
 	
 	//拷贝构造函数
-	Vector2(const Vector2<T>&);
+	Vector2(const Vector2<T>& var);
 
 	//用s来设置当前对象的属性
 	inline void set(const T& s);
-
 
 	//运算符重载
 	inline Vector2<T> operator+(const Vector2<T>& vec) const;
@@ -44,17 +38,17 @@ public:
 
 	inline Vector2<T> operator/(const T& r) const;
 
-	inline Vector2<T> operator/(const Vector2<T>& r) const;\
+	inline Vector2<T> operator/(const Vector2<T>& r) const;
 
-	inline Vector2<T> operator=(const Vector2<T>& vec);
+	inline void operator=(const Vector2<T>& vec);
 
 	inline bool operator!=(const Vector2<T>& r)const;
 
 	inline bool operator==(const Vector2<T>& r)const;
 
-	inline Vector2<T> operator+=(const Vector2<T>& vec) const;
+	inline Vector2<T> operator+=(const Vector2<T>& vec) ;
 
-	inline Vector2<T> operator-=(const Vector2<T>& vec) const;
+	inline Vector2<T> operator-=(const Vector2<T>& vec) ;
 
 	inline Vector2<T> operator*=(const T& r) ;
 
@@ -104,5 +98,203 @@ public:
 };
 
 
+
+
+template<class T>
+Vector2<T>::Vector2():
+x(static_cast<T>(0)),
+y(static_cast<T>(0)){}
+
+
+template<class T>
+Vector2<T>::~Vector2() {
+
+}
+
+
+template<class T>
+Vector2<T>::Vector2(const T& _x, const T& _y) :
+	x(_x),
+	y(_y){}
+
+//复制构造函数怎么实现？
+template<class T>
+Vector2<T>::Vector2(const Vector2<T>& var) {
+	this->x = var.x;
+	this->y = var.y;
+}
+
+template<class T>
+inline void Vector2<T>::set(const T& s) {
+	this->x = s.x;
+	this->y = s.y;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator+(const Vector2<T>& vec) const {
+	Vector2<T> result(this->x + vec.x, this->y + vec.y);
+	return result;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator-(const Vector2<T>& vec) const {
+	Vector2<T> result(this->x - vec.x, this->y - vec.y);
+	return result;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator*(const T& r) const {
+	Vector2<T> result(this->x * r, this->y * r);
+	return result;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator*(const Vector2<T>& r) const {
+	Vector2 result(this->x * r.x, this->y * r.y);
+	return result;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator/(const T& r) const {
+	Vector2 result(this->x / r, this->y / r);
+	return result;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator/(const Vector2<T>& r) const {
+	Vector2 result(this->x / r.x, this->y / r.y);
+	return result;
+}
+
+template<class T>
+inline void Vector2<T>::operator=(const Vector2<T>& vec) {
+	this->x = vec.x;
+	this->y = vec.y;
+}
+
+
+//浮点数比较大小
+template<class T>
+inline bool Vector2<T>::operator!=(const Vector2<T>& r)const {
+	if (this->x == r.x && this->y == r.y) {
+		return false;
+	}
+	return true;
+}
+
+template<class T>
+inline bool Vector2<T>::operator==(const Vector2<T>& r)const {
+	if (this->x == r.x && this->y == r.y) {
+		return true;
+	}
+	return false;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator+=(const Vector2<T>& vec)  {
+	(*this) = (*this) + vec;
+	return *this;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator-=(const Vector2<T>& vec)  {
+	(*this) = (*this) - vec;
+	return *this;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator*=(const T& r) {
+	(*this) = (*this) * r;
+	return *this;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator*=(const Vector2<T>& r) {
+	(*this) = (*this) * r;
+	return *this;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator/=(const T& r) {
+	(*this) = (*this) / r;
+	return *this;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::operator/=(const Vector2<T>& r) {
+	(*this) = (*this) / r;
+	return *this;
+}
+
+template<class T>
+inline T Vector2<T>::dot(const Vector2<T>& vec) const {
+	return this->x * vec.x + this->y * vec.y;
+}
+
+template<class T>
+inline T Vector2<T>::getLength()const {
+	T length = sqrt(this->x * this->x + this->y * this->y);
+	return length;
+}
+
+
+template<class T>
+inline T Vector2<T>::getLengthSquared()const {
+	T length = (this->x * this->x + this->y * this->y);
+	return length;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::normalize() {
+	double length = getLength();
+	if (length > 0) {
+		this->x /= length;
+		this->y /= length;
+	}
+
+	return *this;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::getNormalize()const {
+	T length = getLength();
+	if (length > 0) {
+		return Vector2<T>(x / length, y / length);
+	}
+
+	return *this;
+}
+
+template<class T>
+inline T Vector2<T>::cross(const Vector2<T>& vec)const {
+	return (x * vec.y - vec.x * y);
+}
+
+template<class T>
+inline T Vector2<T>::dis(const Vector2<T>& vec)const {
+	auto result = sqrt((vec.x - x) * (vec.x - x) + (vec.y - y) * (vec.y - y));
+	return result;
+}
+
+template<class T>
+inline T Vector2<T>::disSquare(const Vector2<T>& vec)const {
+	return dis(vec) * dis(vec);
+}
+
+template<class T>
+inline T Vector2<T>::min()const {
+	return std::min(x, y);
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::rdiv(const T& v)const {
+	Vector2 result(v / this->x, v / this->y);
+	return result;
+}
+
+template<class T>
+inline Vector2<T> Vector2<T>::projected(const Vector2<T>& normal) const {
+	return *this - (normal * (this->dot(normal)));
+}
 
 #endif
