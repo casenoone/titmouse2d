@@ -17,7 +17,7 @@ public:
 
 	T lookAt(size_t i,size_t j) const;
 
-	T& operator[](size_t i, size_t j);
+	T& operator()(size_t i, size_t j);
 
 	Size2 reSize(size_t nx, size_t ny);
 
