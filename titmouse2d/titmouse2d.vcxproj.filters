@@ -32,5 +32,8 @@
     <ClInclude Include="Size2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lagrangian\ParticleSystemData2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Array.hpp" />
     <ClInclude Include="Size2.h" />
+    <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
     <ClInclude Include="Vector2.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
