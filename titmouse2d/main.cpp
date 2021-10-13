@@ -18,13 +18,14 @@ int main() {
 
 	arrayPtr<double> p = make_shared < Array < double >> (x);
 	
-	auto k = p->dataAccessor();
-	auto k1 = p->constDataAccessor();
-	(*k)[5] = 0;
+	p->reSize(20, 10);
 
-	p->reSize(7, 10);
 
-	cout << (*k)[5]<<endl;
+	p->forEachIndex([&](size_t i) {
+		cout << p->lookAt(i) << endl;
+
+	});
+
 
 	return 0;
 }

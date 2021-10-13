@@ -117,7 +117,7 @@ Vector2<T>::Vector2(const T& _x, const T& _y) :
 	x(_x),
 	y(_y){}
 
-//复制构造函数怎么实现？
+
 template<class T>
 Vector2<T>::Vector2(const Vector2<T>& var) {
 	this->x = var.x;

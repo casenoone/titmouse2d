@@ -25,9 +25,28 @@ public:
 
 	Size2  dataSize();
 
+	void set(const Array2<T>& other);
+
+	void swap(Array2<T>& other);
+
+	T infnorm();
+
+	T dot(const Array2<T>& a);
+
+	void increment(T scale, Array2<T>& a);
+
+	void scaleAndIncrement(T scale, Array2<T>& a);
+
 	const vector<vector<T>>* constDataAccessor() const;
 
 	vector<vector<T>>* dataAccessor();
+
+	template<typename Callback>
+	void forEachIndex(Callback func);
+
+
+	template <typename Callback>
+	void parallelForEachIndex(Callback func);
 
 private:
 	vector<vector<T>> _data;
@@ -37,5 +56,137 @@ private:
 
 template<typename T>
 using array2Ptr = shared_ptr<Array2<T>>;
+
+template<typename T>
+Array2<T>::Array2() {
+
+}
+
+template<typename T>
+Array2<T>::~Array2() {
+
+}
+
+template<typename T>
+Array2<T>::Array2(const vector<vector<T>>& data) {
+	_data = data;
+}
+
+template<typename T>
+T Array2<T>::lookAt(size_t i, size_t j) const {
+	return _data[i][j];
+}
+
+template<typename T>
+T& Array2<T>::operator()(size_t i, size_t j) {
+	return _data[i][j];
+}
+
+//这里记得并行优化
+template<typename T>
+Size2 Array2<T>::reSize(size_t nx, size_t ny) {
+	_data.resize(nx);
+	for (size_t i = 0; i < nx; ++i) {
+		_data[i].resize(ny);
+	}
+	Size2 l(nx, ny);
+	_size = l;
+}
+
+template<typename T>
+Size2 Array2<T>::reSize(size_t nx, size_t ny, T initValue) {
+	_data.resize(nx);
+	for (size_t i = 0; i < nx; ++i) {
+		_data[i].resize(ny);
+		for (size_t j = 0; j < ny; ++j) {
+			_data[i][j] = initValue;
+		}
+	}
+	Size2 l(nx, ny);
+	_size = l;
+}
+
+template<typename T>
+Size2  Array2<T>::dataSize() {
+	return _size;
+}
+
+template<typename T>
+void Array2<T>::set(const Array2<T>& other) {
+	_data = other;
+}
+
+template<typename T>
+void Array2<T>::swap(Array2<T>& other) {
+	std::swap(_data, *(other.dataAccessor()));
+}
+
+template<typename T>
+T Array2<T>::infnorm() {
+	T r = static_cast<T>(0);
+
+	for (size_t i = 0; i < _size.x; ++i) {
+		for (size_t j = 0; j < _size.y; ++j) {
+			if ((std::fabs(_data[i][j]) > r)) r = std::fabs(_data[i][j]);
+		}
+	}
+	return r;
+}
+
+template<typename T>
+T Array2<T>::dot(const Array2<T>& a) {
+	T r = static_cast<T>(0);
+
+	for (size_t i = 0; i < _size.x; ++i) {
+		for (size_t j = 0; j < _size.y; ++j) {
+			r += _data[i][j] * a._data[i][j];
+		}
+	}
+}
+
+template<typename T>
+void Array2<T>::increment(T scale, Array2<T>& a) {
+	for (size_t i = 0; i < _size.x; ++i) {
+		for (size_t j = 0; j < _size.y; ++j) {
+			_data[i][j] += scale * a._data[i][j];
+		}
+	}
+}
+
+template<typename T>
+void Array2<T>::scaleAndIncrement(T scale, Array2<T>& a) {
+	for (size_t i = 0; i < _size.x; ++i) {
+		for (size_t j = 0; j < _size.y; ++j) {
+			_data[i][j] = scale * _data[i][j] + a._data[i][j];
+		}
+	}
+}
+
+template<typename T>
+const vector<vector<T>>* Array2<T>::constDataAccessor() const {
+	return _data;
+}
+
+template<typename T>
+vector<vector<T>>* Array2<T>::dataAccessor() {
+	return _data;
+}
+
+template<typename T>
+template<typename Callback>
+void Array2<T>::forEachIndex(Callback func) {
+	for (size_t j = 0; j < _size.y; ++j) {
+		for (size_t i = 0; i < _size.x; ++i) {
+			func(j, i);
+		}
+	}
+}
+
+template<typename T>
+template <typename Callback>
+void Array2<T>::parallelForEachIndex(Callback func) {
+
+}
+
 
 #endif
