@@ -22,6 +22,7 @@ int main() {
 
 
 	p->forEachIndex([&](size_t i) {
+		(*p)[i] = 0;
 		cout << p->lookAt(i) << endl;
 
 	});

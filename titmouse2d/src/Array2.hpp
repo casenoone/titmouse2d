@@ -23,7 +23,7 @@ public:
 
 	Size2 reSize(size_t nx, size_t ny, T initValue);
 
-	Size2  dataSize();
+	Size2  dataSize() const;
 
 	void set(const Array2<T>& other);
 
@@ -42,7 +42,7 @@ public:
 	vector<vector<T>>* dataAccessor();
 
 	template<typename Callback>
-	void forEachIndex(Callback func);
+	void forEachIndex(Callback func) const;
 
 
 	template <typename Callback>
@@ -107,7 +107,7 @@ Size2 Array2<T>::reSize(size_t nx, size_t ny, T initValue) {
 }
 
 template<typename T>
-Size2  Array2<T>::dataSize() {
+Size2  Array2<T>::dataSize() const{
 	return _size;
 }
 
@@ -174,7 +174,7 @@ vector<vector<T>>* Array2<T>::dataAccessor() {
 
 template<typename T>
 template<typename Callback>
-void Array2<T>::forEachIndex(Callback func) {
+void Array2<T>::forEachIndex(Callback func) const{
 	for (size_t j = 0; j < _size.y; ++j) {
 		for (size_t i = 0; i < _size.x; ++i) {
 			func(j, i);
@@ -182,6 +182,8 @@ void Array2<T>::forEachIndex(Callback func) {
 	}
 }
 
+
+//并行还是先搁置一下吧，不好弄
 template<typename T>
 template <typename Callback>
 void Array2<T>::parallelForEachIndex(Callback func) {

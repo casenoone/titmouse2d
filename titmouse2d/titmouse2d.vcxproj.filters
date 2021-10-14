@@ -15,24 +15,33 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Size2.cpp">
+    <ClCompile Include="src\Size2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector2.hpp">
+    <ClInclude Include="src\Vector2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Array.hpp">
+    <ClInclude Include="src\Array.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Size2.h">
+    <ClInclude Include="src\Size2.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lagrangian\NeighborSearcher2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConstVar.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

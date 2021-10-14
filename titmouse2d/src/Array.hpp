@@ -27,14 +27,14 @@ public:
 
 	size_t& reSize(size_t n, T initValue);
 
-	size_t dataSize();
+	size_t dataSize() const;
 
 	const vector<T>* constDataAccessor() const;
 	
 	vector<T>* dataAccessor() ;
 
 	template<typename Callback>
-	void forEachIndex(Callback func) ;
+	void forEachIndex(Callback func) const;
 
 
 	template <typename Callback>
@@ -98,7 +98,7 @@ size_t& Array<T>::reSize(size_t n, T initValue) {
 }
 
 template<typename T>
-inline size_t Array<T>::dataSize() {
+inline size_t Array<T>::dataSize() const{
 	return _size;
 }
 
@@ -117,7 +117,7 @@ inline vector<T>* Array<T>::dataAccessor() {
 
 template<typename T>
 template<typename Callback>
-void Array<T>::forEachIndex(Callback func) {
+void Array<T>::forEachIndex(Callback func) const{
 	for (size_t i = 0; i < _size; ++i) {
 		func(i);
 	}
