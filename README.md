@@ -7,3 +7,4 @@
 
   - basic vector operator（基本的向量操作）
   - basic array struct（基本的数组结构）
+  - neighborSearch struct in O(kn)（基于网格的粒子邻近搜索结构）
