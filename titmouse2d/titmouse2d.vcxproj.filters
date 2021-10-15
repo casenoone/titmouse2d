@@ -24,6 +24,12 @@
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -42,6 +48,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\ConstVar.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DenseMatrix.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VectorN.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

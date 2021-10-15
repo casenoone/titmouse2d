@@ -1,5 +1,5 @@
-#ifndef ARRAY2_H
-#define ARRAY2_H
+#ifndef ARRAY2_HPP
+#define ARRAY2_HPP
 
 #include <iostream>
 using namespace std;
@@ -47,6 +47,9 @@ public:
 
 	template <typename Callback>
 	void parallelForEachIndex(Callback func);
+
+	//暂时不实现，这个clone只是说克隆出一个新的对象，与当前对象无关
+	//T clone();
 
 private:
 	vector<vector<T>> _data;

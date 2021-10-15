@@ -140,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
+    <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
+    <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
@@ -147,9 +149,12 @@
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\ConstVar.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
+    <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
+    <ClInclude Include="src\DenseMatrix.hpp" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
     <ClInclude Include="src\Vector2.hpp" />
+    <ClInclude Include="src\VectorN.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

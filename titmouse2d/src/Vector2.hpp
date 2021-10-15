@@ -11,7 +11,6 @@
 #include <iostream>
 
 
-
 template<class T>
 class Vector2 {
 public:
@@ -37,6 +36,12 @@ public:
 	inline Vector2<T> operator*(const Vector2<T>& r) const;
 
 	inline Vector2<T> operator/(const T& r) const;
+	
+	//这里为何要写一个template呢？
+	//那是因为该函数只是一个友元函数而非成员函数
+	//所以需要我们去指定其为模板函数
+	template<typename T>
+	friend Vector2<T> operator* (const T& r, const Vector2<T>& obj);
 
 	inline Vector2<T> operator/(const Vector2<T>& r) const;
 
@@ -150,19 +155,24 @@ inline Vector2<T> Vector2<T>::operator*(const T& r) const {
 
 template<class T>
 inline Vector2<T> Vector2<T>::operator*(const Vector2<T>& r) const {
-	Vector2 result(this->x * r.x, this->y * r.y);
+	Vector2<T> result(this->x * r.x, this->y * r.y);
 	return result;
 }
 
 template<class T>
 inline Vector2<T> Vector2<T>::operator/(const T& r) const {
-	Vector2 result(this->x / r, this->y / r);
+	Vector2<T> result(this->x / r, this->y / r);
 	return result;
 }
 
 template<class T>
+inline Vector2<T> operator* (const T& r, const Vector2<T>& obj)  {
+	return obj * r;
+}
+
+template<class T>
 inline Vector2<T> Vector2<T>::operator/(const Vector2<T>& r) const {
-	Vector2 result(this->x / r.x, this->y / r.y);
+	Vector2<T> result(this->x / r.x, this->y / r.y);
 	return result;
 }
 

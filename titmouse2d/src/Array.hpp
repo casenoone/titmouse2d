@@ -1,5 +1,5 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef ARRAY_HPP
+#define ARRAY_HPP
 
 #include <iostream>
 using namespace std;
@@ -13,7 +13,7 @@ template<class T>
 class Array {
 public:
 	Array();
-	~Array();
+	virtual ~Array();
 
 	Array(const vector<T>& data);
 
@@ -87,14 +87,14 @@ template<typename T>
 size_t& Array<T>::reSize(size_t n) {
 	_size = n;
 	_data.resize(n);
-	return n;
+	return _size;
 }
 
 template<typename T>
 size_t& Array<T>::reSize(size_t n, T initValue) {
 	_size = n;
 	_data.assign(n, initValue);
-	return n;
+	return _size;
 }
 
 template<typename T>
