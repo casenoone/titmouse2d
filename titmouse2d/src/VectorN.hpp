@@ -11,7 +11,7 @@ using namespace std;
 //VectorY为列向量
 
 
-template<class T>
+template<class baseType>
 class VectorX : public Array<T> {
 public:
 
@@ -20,12 +20,17 @@ public:
 
 	size_t dataSize() const;
 
-	//VectorX(const vector<baseType>& data);
+	VectorX(const vector<T>& data);
 
 	////转置为列向量
 	//VectorY TransToColumnVec();
 
 	//重载向量和向量相乘
+
+
+
+protected:
+
 
 protected:
 	size_t _size;
@@ -33,7 +38,11 @@ protected:
 
 };
 
-template<class T>
+template<typename T>
+using VectorXPtr = shared_ptr<VectorX<T>>;
+
+
+template<class T>                                                                            
 VectorX<T>::VectorX() {
 
 }
@@ -54,7 +63,7 @@ public:
 	VectorY();
 	~VectorY();
 
-	//VectorY(const vector<baseType>& data);
+	VectorY(const vector<baseType>& data);
 
 	////转置为行向量
 	//VectorX TransToRowVec();
@@ -70,6 +79,7 @@ VectorY<T>::~VectorY() {
 
 }
 
-
+template<typename T>
+using VectorYPtr = shared_ptr<VectorY<T>>;
 
 #endif
