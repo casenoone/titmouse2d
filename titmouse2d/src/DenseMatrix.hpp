@@ -11,6 +11,18 @@ using namespace std;
 
 //考虑行优先与列优先
 
+//我们规定，一个矩阵的大小至少是2 x 2，1 x n或n x 1使用VectorN
+
+//对于矩阵行列的要求，交给使用者去判断
+//例如两个矩阵相乘，要事先指定结果矩阵的
+
+//矩阵默认是列优先存储，那么使用向量的指针的好处在于，可以非常方便的转换行列存储而无需大量内存操作
+
+
+
+
+
+
 template<class T>
 class DenseMatrix {
 public:
@@ -39,6 +51,8 @@ private:
 
 };
 
+template<typename T>
+using DenseMatrixPtr = shared_ptr<DenseMatrix<T>>;
 
 
 #endif
