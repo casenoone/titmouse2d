@@ -31,7 +31,7 @@ public:
 
 	DenseMatrix(size_t row, size_t column, const vector<vector<T>>& data);
 
-	DenseMatrix(const Matrix& other);
+	DenseMatrix(const DenseMatrix<T>& other);
 
 	Size2 dataSize() const;
 
@@ -53,6 +53,43 @@ private:
 
 template<typename T>
 using DenseMatrixPtr = shared_ptr<DenseMatrix<T>>;
+
+template<class T>
+DenseMatrix<T>::DenseMatrix() {
+
+}
+
+template<class T>
+DenseMatrix<T>::~DenseMatrix() {
+
+}
+
+template<class T>
+DenseMatrix<T>::DenseMatrix(size_t row, size_t column, const vector<vector<T>>& data) {
+
+}
+
+template<class T>
+DenseMatrix<T>::DenseMatrix(const DenseMatrix<T>& other) {
+
+}
+
+template<class T>
+Size2 DenseMatrix<T>::dataSize() const {
+	return Size2();
+}
+
+template<class T>
+void DenseMatrix<T>::reSize(Size2 newSize) {
+
+}
+
+template<typename T>
+template<typename Callback>
+void DenseMatrix<T>::forEachIndex(Callback func) const {
+
+}
+
 
 
 #endif

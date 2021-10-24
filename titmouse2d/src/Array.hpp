@@ -42,7 +42,7 @@ public:
 
 
 
-private:
+protected:
 	vector<T> _data;
 
 	size_t _size;

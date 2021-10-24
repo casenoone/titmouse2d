@@ -8,49 +8,43 @@ using namespace std;
 #include "VectorN.hpp"
 int main() {
 	
-	Vector2<double> v1(1.5, 1.5);
-	Vector2<double> v2(2.0, 2.0);
-	v2 += v1;
-	2.0 * v1;
+	
 
-	const double pi = 2;
-	const Vector2<double> m(1.0, 1.0);
 
-	2.0 * m;
+	vector<int> temp1, temp2;
 
-	cout << (2.0 * m).x << endl;
-
-	vector<double> x;
-	for (int i = 0; i < 10; ++i) {
-		x.push_back(i);
+	for (int i = 1; i < 4; ++i) {
+		temp1.push_back(i);
 	}
 
-	arrayPtr<double> p = make_shared < Array < double >> (x);
+	for (int i = 1; i < 4; ++i) {
+		temp2.push_back(i);
+	}
+
+	VectorX<int> vec1(temp1);
+	VectorY<int> vec2(temp2);
+
+	auto var1 = vec1 * vec2;
 	
-	p->reSize(20, 10);
+	cout << var1 << endl;
+
+	//cout << var1 << endl;
 
 
-	p->forEachIndex([&](size_t i) {
-		(*p)[i] = 0;
+	//VectorY<int> temp1;
 
-	});
+	//shared_ptr<VectorX<int>> p1 = make_shared<VectorX<int>>();
 
-	VectorX<int> temp;
+	//shared_ptr<VectorY<int>> p2 = make_shared<VectorY<int>>();
 
-	VectorY<int> temp1;
+	////派生类转为基类
+	//p1 = dynamic_pointer_cast<VectorX<int>>(p2);
 
-	shared_ptr<VectorX<int>> p1 = make_shared<VectorX<int>>();
+	//cout << typeid(p1).name() << endl;
 
-	shared_ptr<VectorY<int>> p2 = make_shared<VectorY<int>>();
+	//p2 = dynamic_pointer_cast<VectorY<int>>(p1);
 
-	//派生类转为基类
-	p1 = dynamic_pointer_cast<VectorX<int>>(p2);
-
-	cout << typeid(p1).name() << endl;
-
-	p2 = dynamic_pointer_cast<VectorY<int>>(p1);
-
-	cout << typeid(p2).name() << endl;
+	//cout << typeid(p2).name() << endl;
 
 	return 0;
 }
