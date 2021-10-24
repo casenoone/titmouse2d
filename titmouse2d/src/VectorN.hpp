@@ -6,7 +6,7 @@ using namespace std;
 #include <vector>
 
 #include "Array.hpp"
-#include "DenseMatrix.hpp"
+
 //VectorX为行向量
 //VectorY为列向量
 
@@ -45,13 +45,6 @@ public:
 	
 	template<class T>
 	friend VectorXPtr<T> operator*(const T r, const VectorX<T>& vel);
-
-	//行向量和矩阵相乘，注意左乘和右乘的规则是不一样的
-	//但是由于我们规定矩阵大小至少为2 x 2，因此对于行向量我们只有右乘矩阵的法则
-	
-	//右乘矩阵，得到的结果必为一个行向量
-	//我们返回一个matrix的指针
-	DenseMatrixPtr<T> operator*(const DenseMatrix<T>& matrix) const;
 
 };
 
@@ -117,11 +110,6 @@ VectorXPtr<T> operator*(const T r, const VectorX<T>& vel) {
 }
 
 
-template<class T>
-DenseMatrixPtr<T> VectorX<T>::operator*(const DenseMatrix<T>& matrix) const {
-
-}
-
 
 
 
@@ -152,7 +140,6 @@ public:
 	template<class T>
 	friend VectorYPtr<T> operator*(const T r, const VectorY<T>& vel);
 
-	DenseMatrixPtr<T> operator*(const DenseMatrix<T>& matrix) const;
 
 };
 
@@ -218,10 +205,7 @@ VectorYPtr<T> operator*(const T r, const VectorY<T>& vel) {
 }
 
 
-template<class T>
-DenseMatrixPtr<T> VectorY<T>::operator*(const DenseMatrix<T>& matrix) const {
 
-}
 
 
 #endif

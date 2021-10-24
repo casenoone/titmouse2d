@@ -14,3 +14,4 @@ Size2::Size2(size_t _x, size_t _y) :
 
 }
 
+

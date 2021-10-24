@@ -180,7 +180,7 @@ template<typename Callback>
 void Array2<T>::forEachIndex(Callback func) const{
 	for (size_t j = 0; j < _size.y; ++j) {
 		for (size_t i = 0; i < _size.x; ++i) {
-			func(j, i);
+			func(i, j);
 		}
 	}
 }

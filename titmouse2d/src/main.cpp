@@ -4,8 +4,11 @@ using namespace std;
 #include "Vector2.hpp"
 #include "Array.hpp"
 #include "Array2.hpp"
-
 #include "VectorN.hpp"
+#include "DenseMatrix.hpp"
+
+
+
 int main() {
 	
 	
@@ -26,9 +29,29 @@ int main() {
 
 	auto var1 = vec1 * vec2;
 	
-	cout << var1 << endl;
 
-	//cout << var1 << endl;
+	vector<vector<int>> tempMat1 = {
+		{1,2},
+		{3,1},
+		{4,6}
+	};
+
+	vector<vector<int>> tempMat2 = {
+		{1,4},
+		{2,3},
+		{1,1}
+	};
+
+	DenseMatrix<int> mat1(3, 2, tempMat1);
+	DenseMatrix<int> mat2(3, 2, tempMat2);
+
+	auto mat3 = mat1 + mat2;
+	mat3->forEachIndex([&](size_t i,size_t j){
+		
+		cout << mat3->lookAt(i, j) << endl;
+			
+	});
+
 
 
 	//VectorY<int> temp1;
