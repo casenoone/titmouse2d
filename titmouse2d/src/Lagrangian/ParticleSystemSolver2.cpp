@@ -17,7 +17,7 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles, Array<Vector2<doub
 	_particleSystemData->forces().reSize(numberOfParticles);
 	
 	
-	//³õÊ¼»¯neighborSearche
+	//åˆå§‹åŒ–neighborSearche
 	_particleSystemData->neighbor = make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
 	_particleSystemData->neighbor->setNeiborList(pos);
 }
@@ -25,7 +25,7 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles, Array<Vector2<doub
 
 void ParticleSystemSolver2::beginAdvanceTimeStep() {
 	size_t n = _particleSystemData->numberOfParticles();
-	//ÎªÊ²Ã´ÒªÓĞÕâÒ»²½²Ù×÷ÄØ£¿ºÃÏñ
+
 	_newPositions.reSize(n);
 	_newVelocities.reSize(n);
 
@@ -69,7 +69,7 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 }
 
-//ÔİÊ±²»ÊµÏÖ
+//æš‚æ—¶ä¸å®ç°
 void ParticleSystemSolver2::resolveCollision() {
 	
 	
