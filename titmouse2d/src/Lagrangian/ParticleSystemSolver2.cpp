@@ -17,7 +17,7 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles, Array<Vector2<doub
 	_particleSystemData->forces().reSize(numberOfParticles);
 	
 	
-	//��ʼ��neighborSearche
+	//初始化neighborSearche
 	_particleSystemData->neighbor = make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
 	_particleSystemData->neighbor->setNeiborList(pos);
 }
@@ -25,6 +25,7 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles, Array<Vector2<doub
 
 void ParticleSystemSolver2::beginAdvanceTimeStep() {
 	size_t n = _particleSystemData->numberOfParticles();
+	//为什么要有这一步操作呢？好像
 	_newPositions.reSize(n);
 	_newVelocities.reSize(n);
 
@@ -68,7 +69,7 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 }
 
-//��ʱ��ʵ��
+//暂时不实现
 void ParticleSystemSolver2::resolveCollision() {
 	
 	
