@@ -25,7 +25,7 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles, Array<Vector2<doub
 
 void ParticleSystemSolver2::beginAdvanceTimeStep() {
 	size_t n = _particleSystemData->numberOfParticles();
-	//为什么要有这一步操作呢？好像
+
 	_newPositions.reSize(n);
 	_newVelocities.reSize(n);
 
