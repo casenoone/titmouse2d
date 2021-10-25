@@ -7,7 +7,7 @@ using namespace std;
 #include "VectorN.hpp"
 #include "DenseMatrix.hpp"
 
-
+#include <array>
 
 int main() {
 	
@@ -31,29 +31,42 @@ int main() {
 	
 
 	vector<vector<int>> tempMat1 = {
-		{1,2},
-		{3,1},
-		{4,6}
+		{1,2,7},
+		{2,0,1},
+		{0,1,1}
 	};
 
 	vector<vector<int>> tempMat2 = {
-		{1,4},
-		{2,3},
-		{1,1}
+		{1,1,0},
+		{3,1,2},
+		{1,4,0}
 	};
 
-	DenseMatrix<int> mat1(3, 2, tempMat1);
-	DenseMatrix<int> mat2(3, 2, tempMat2);
+	DenseMatrix<int> mat1(3, 3, tempMat1);
+	DenseMatrix<int> mat2(3, 3, tempMat2);
 
-	auto mat3 = mat1 + mat2;
+	auto mat3 = mat1 * mat2;
 	mat3->forEachIndex([&](size_t i,size_t j){
 		
-		cout << mat3->lookAt(i, j) << endl;
+		//cout << mat3->lookAt(i, j) << endl;
 			
 	});
 
+	auto mat4 = 5 * mat1;
 
+	mat4->setOrder(ROW);
 
+	mat1.forEachIndex([&](size_t i, size_t j) {
+
+		cout << mat1.lookAt(i, j) << endl;
+
+	});
+
+	
+	
+	auto kk = mat4->getVec(0);
+	
+	//mat4->setOrder(COLUMN);
 	//VectorY<int> temp1;
 
 	//shared_ptr<VectorX<int>> p1 = make_shared<VectorX<int>>();

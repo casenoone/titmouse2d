@@ -10,11 +10,6 @@ using namespace std;
 #include "Size2.h"
 #include "ConstVar.h"
 
-//对于矩阵来说，底层数据用array是不是比vector更为合适？
-//是的，从逻辑上来讲，矩阵的大小一经确定，就不允许更改尺寸了
-//Array2不一定，或许自适应网格需要这样的结构？
-//而对于Array类型来说，长度时经常变的，因此用Vector比较好
-
 //应该写一个Matrix基类
 //稀疏矩阵+稠密矩阵
 
@@ -64,6 +59,9 @@ public:
 
 	T& lookAt(size_t i, size_t j) const;
 
+	//返回行向量或者列向量
+	VectorXPtr<T> getVec(size_t idx) const;
+
 	//两个矩阵相加
 	DenseMatrixPtr<T> operator+(const DenseMatrix<T>& mat) const;
 
@@ -71,10 +69,17 @@ public:
 	DenseMatrixPtr<T> operator-(const DenseMatrix<T>& mat) const;
 
 	//两个矩阵相乘
-	T& operator*(const DenseMatrix<T>& mat)const;
+	DenseMatrixPtr<T> operator*(const DenseMatrix<T>& mat)const;
 
 	//矩阵和数相乘
 	DenseMatrixPtr<T> operator*(const T r) const;
+
+	//矩阵和数相乘的友元实现
+	template<class T>
+	friend DenseMatrixPtr<T> operator*(const T r, const DenseMatrix<T>& mat);
+
+	//矩阵和数相除
+	DenseMatrixPtr<T> operator/(const T r) const;
 
 private:
 	Size2 _size;
@@ -151,18 +156,25 @@ void DenseMatrix<T>::forEachIndex(Callback func) const {
 	}
 }
 
-template<typename T>
+
 //设置行优先、列优先
+template<typename T>
 void DenseMatrix<T>::setOrder(int state) {
 	_order = state;
 }
 
-
-template<typename T>
 //返回矩阵是行优先还是列优先
+template<typename T>
 int DenseMatrix<T>::getOrder() const {
 	return _order;
 }
+
+template<typename T>
+VectorXPtr<T> DenseMatrix<T>::getVec(size_t idx) const {
+
+	return _data[idx];
+}
+
 
 template<typename T>
 T& DenseMatrix<T>::lookAt(size_t i, size_t j) const{
@@ -213,13 +225,82 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator+(const DenseMatrix<T>& mat) const {
 	}
 }
 
+
+
 //两个矩阵相减
-//DenseMatrixPtr<T> operator-(const DenseMatrix<T> mat) const;
+template<typename T>
+DenseMatrixPtr<T> DenseMatrix<T>::operator-(const DenseMatrix<T>& mat) const {
+	if (mat._size == this->_size) {
+
+		vector<vector<T>> temp(_size.x, vector<T>(_size.y));
+
+		this->forEachIndex([&](size_t i, size_t j) {
+
+			temp[i][j] = this->lookAt(i, j) - mat.lookAt(i, j);
+
+			});
+
+		DenseMatrixPtr<T> result = make_shared<DenseMatrix<T>>(_size.x, _size.y, temp);
+		return result;
+
+	}
+}
+
+
 
 //两个矩阵相乘
-//T& operator*(const DenseMatrix<T> mat)const;
+template<class T>
+DenseMatrixPtr<T> DenseMatrix<T>::operator*(const DenseMatrix<T>& mat)const {
+	if (this->_size.y == mat._size.x) {
+		auto newSize = Size2(this->_size.x, mat._size.y);
+		vector<vector<T>> temp(newSize.x, vector<T>(newSize.y));
+
+		for (size_t i = 0; i < newSize.x; ++i) {
+			for (size_t j = 0; j < newSize.y; ++j) {
+				T tempResult = static_cast<T>(0);
+				for (size_t k = 0; k < this->_size.y; ++k) {
+					tempResult += this->lookAt(i, k) * mat.lookAt(k, j);
+				}
+				temp[i][j] = tempResult;
+			}
+		}
+
+		DenseMatrixPtr<T> result = make_shared<DenseMatrix>(newSize.x, newSize.y, temp);
+		return result;
+
+	}
+}
 
 //矩阵和数相乘
-//DenseMatrixPtr<T> operator*(const T r) const;
+template<class T>
+DenseMatrixPtr<T> DenseMatrix<T>::operator*(const T r) const {
+	vector<vector<T>> temp(_size.x, vector<T>(_size.y));
+	this->forEachIndex([&](size_t i, size_t j) {
+		temp[i][j] = r * this->lookAt(i, j);
+	});
+	DenseMatrixPtr<T> result = make_shared<DenseMatrix>(_size.x, _size.y, temp);
+	return result;
+}
+
+
+template<class T>
+DenseMatrixPtr<T> operator*(const T r, const DenseMatrix<T>& mat) {
+	return mat * r;
+}
+
+
+
+template<class T>
+DenseMatrixPtr<T> DenseMatrix<T>::operator/(const T r) const {
+	vector<vector<T>> temp(_size.x, vector<T>(_size.y));
+	this->forEachIndex([&](size_t i, size_t j) {
+		temp[i][j] = r / this->lookAt(i, j);
+		});
+	DenseMatrixPtr<T> result = make_shared<DenseMatrix>(_size.x, _size.y, temp);
+	return result;
+}
+
+
+
 
 #endif

@@ -18,6 +18,7 @@ using namespace std;
 //若构造的类为模板类，那么派生类不可以直接使用继承到的基类数据和方法，
 //需要通过this指针使用。否则，在使用一些较新的编译器时，会报“找不到标识符”错误
 
+
 template<class T>
 class VectorX : public Array<T> {
 public:
