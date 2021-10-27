@@ -59,7 +59,10 @@
     <ClInclude Include="src\VectorN.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SparseMatrix.hpp">
+    <ClInclude Include="src\SparseMatrix.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Matrix.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

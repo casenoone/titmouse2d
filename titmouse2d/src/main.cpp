@@ -6,6 +6,7 @@ using namespace std;
 #include "Array2.hpp"
 #include "VectorN.hpp"
 #include "DenseMatrix.hpp"
+#include "SparseMatrix.hpp"
 
 #include <array>
 
@@ -58,7 +59,7 @@ int main() {
 
 	mat1.forEachIndex([&](size_t i, size_t j) {
 
-		cout << mat1.lookAt(i, j) << endl;
+		//cout << mat1.lookAt(i, j) << endl;
 
 	});
 
@@ -66,6 +67,37 @@ int main() {
 	
 	auto kk = mat4->getVec(0);
 	
+	vector<int> lp;
+	//lp.resize(5);
+	//lp.push_back(666);
+	
+	lp.emplace(lp.begin() + 0, 2);
+
+	for (auto iter = lp.begin(); iter != lp.end(); ++iter) {
+		//cout << *iter << endl;
+	}
+
+	SparseMatrix<int> testMat(4, 3);
+
+	testMat.insert(0,0,1);
+	testMat.insert(0,2,4);
+	testMat.insert(1,0,5);
+	testMat.insert(2,1,7);
+	testMat.insert(3,2,3);
+
+	testMat.build();
+
+	testMat.forEachIndex([&](size_t i, size_t j) {
+			
+		cout << testMat.lookAt(i, j)<<endl;
+	});
+
+	auto data = testMat._data;
+
+	for (auto i = data.begin(); i != data.end(); ++i) {
+		//cout << *i <<"hhu" << endl;
+	}
+
 	//mat4->setOrder(COLUMN);
 	//VectorY<int> temp1;
 
