@@ -146,6 +146,7 @@
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SparseMatrix.hpp" />
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\ConstVar.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
