@@ -28,6 +28,9 @@ public:
 
 	VectorN(const vector<T>& data);
 
+	T norm() const;
+
+	T norm2() const;
 
 	//重载向量和向量相乘
 	T operator*(const VectorN<T>& vel) const;
@@ -130,7 +133,7 @@ VectorNPtr<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
 	temp.resize(vel.dataSize());
 
 	vel.forEachIndex([&](size_t i) {
-		temp[i] = this->lookAt(i)-vel->lookAt(i);
+		temp[i] = this->lookAt(i)-vel.lookAt(i);
 
 		});
 
@@ -138,9 +141,21 @@ VectorNPtr<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
 	return resultVec;
 }
 
+template<class T>
+T VectorN<T>::norm() const{
+	return sqrt(this->norm2());
+}
 
 
 
+template<class T>
+T VectorN<T>::norm2() const{
+	T result = static_cast<T>(0);
+	this->forEachIndex([&](size_t i) {
+		result += this->lookAt(i) * this->lookAt(i);
+	});
+	return result;
+}
 
 
 #endif

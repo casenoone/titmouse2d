@@ -12,7 +12,7 @@ public:
 	~JacobiSolver();
 
 	//«ÛΩ‚Ax = b
-	void compute(const SparseMatrix<T>& A, VectorY<T>& x, const VectorY<T>& b)  const;
+	void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b)  const;
 };
 
 
@@ -28,7 +28,7 @@ JacobiSolver<T>::~JacobiSolver() {
 }
 
 template<class T>
-void JacobiSolver<T>::compute(const SparseMatrix<T>& A, VectorY<T>& x, const VectorY<T>& b) const {
+void JacobiSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) const {
 
 }
 

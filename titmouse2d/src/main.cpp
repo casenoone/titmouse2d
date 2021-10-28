@@ -14,42 +14,53 @@ using namespace std;
 int main() {
 	
 	
-	vector<int> tempVec = { 1,0,2,3 };
+	SteepestDescentSolver<double> iterSolver;
 
-	VectorN<int> vec(tempVec);
+	SparseMatrix<double> A(5, 5);
+	A.insert(0,0,10);
+	A.insert(0,1,1);
+	A.insert(0,2,2);
+	A.insert(0,3,3);
+	A.insert(0,4,4);
+	A.insert(1,0,1);
+	A.insert(1,1,9);
+	A.insert(1,2,-1);
+	A.insert(1,3,2);
+	A.insert(1,4,-3);
+	A.insert(2,0,2);
+	A.insert(2,1,-1);
+	A.insert(2,2,7);
+	A.insert(2,3,3);
+	A.insert(2,4,-5);
+	A.insert(3,0,3);
+	A.insert(3,1,2);
+	A.insert(3,2,3);
+	A.insert(3,3,12);
+	A.insert(3,4,-1);
+	A.insert(4,0,4);
+	A.insert(4,1,-3);
+	A.insert(4,2,-5);
+	A.insert(4,3,-1);
+	A.insert(4,4,15);
+	
 
-	vec.forEachIndex([&](size_t i) {
-		
-		//cout << vec(i) << endl;
+	A.build();
+
+	vector<double> b_used = { 12,-27,14,-17,12 };
+	vector<double> x_used;
+	x_used.resize(5);
+	VectorN<double> b(b_used);
+	VectorN<double> x(x_used);
+
+
+
+	iterSolver.compute(A, x, b);
+
+	x.forEachIndex([&](size_t i) {
+		cout << x[i] << endl;
 	});
 
-	SparseMatrix<int> testMat(4, 3);
-	testMat.insert(0,0,1);
-	testMat.insert(0,2,8);
-	testMat.insert(1,0,2);
-	testMat.insert(2,0,1);
-	testMat.insert(2,1,2);
-	testMat.insert(3,0,1);
-
-	testMat.build();
-
-	SparseMatrix<int> testMat1(3, 2);
-	testMat1.insert(0,0,1);
-	testMat1.insert(0,1,6);
-	testMat1.insert(1,1,1);
-	testMat1.insert(2,0,4);
-	testMat1.insert(2, 1, 2);
-	testMat1.build();
-
-	testMat1.forEachIndex([&](size_t i, size_t j) {
-		//cout << testMat1.lookAt(i, j) << endl;
-	});
-
-	auto vecN = vec * testMat;
-	*vecN = *((*vecN) + (*vecN));
-	vecN->forEachIndex([&](size_t i) {
-		cout << vecN->lookAt(i);
-	});
+	//该算例的正确答案： 1.000000 -2.000000  3.000000 -2.000000  1.000000
 
 	return 0;
 }

@@ -351,7 +351,7 @@ VectorNPtr<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat){
     
 	for (size_t j = 0; j < mat._column; ++j) {
 		T result = static_cast<T>(0);
-		for(int i = 0; i<vec.dataSize(); ++i){
+		for(int i = 0; i < vec.dataSize(); ++i){
 			result += vec.lookAt(i) * mat(i, j);
 		}
 		temp.push_back(result);
