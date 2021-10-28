@@ -30,6 +30,9 @@
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\LinearSystem\IterativeSystemSolver.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -63,6 +66,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Matrix.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\IterativeSystemSolver.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\JacobiSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\GaussSeidelSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -9,7 +9,7 @@ using namespace std;
 #include <algorithm>
 
 #include "Size2.h"
-
+#include "VectorN.hpp"
 //CSR稀疏矩阵结构的特点是每一行至少得有一个0
 
 //此处CSR稀疏矩阵的初始化是通过三元组进行的
@@ -36,6 +36,7 @@ public:
 	bool operator<(const Triplet<T>& t) const;
 
 	bool operator>(const Triplet<T>& t) const;
+
 
 public:
 	size_t row;
@@ -90,6 +91,10 @@ bool Triplet<T>::operator>(const Triplet<T>& t) const {
 template<class T>
 class SparseMatrix {
 public:
+	
+	template<typename T>
+	using sparseMatrixPtr = shared_ptr<SparseMatrix<T>>;
+	
 	SparseMatrix();
 
 	SparseMatrix(const size_t& row, const size_t& column);
@@ -98,16 +103,40 @@ public:
 
 	virtual ~SparseMatrix();
 
+	
+
 	void insert(size_t i, size_t j, const T r);
 
-	T operator()(size_t i, size_t j);
+	T operator()(size_t i, size_t j) const;
 
+	void operator=(const SparseMatrix& mat);
+	
+	//矩阵右乘列向量
+	VectorNPtr<T> operator*(const VectorN<T>& vec) const;
+
+	//矩阵左乘行向量
+	template<class B>
+	friend VectorNPtr<B> operator*(const VectorN<T>& vec, const SparseMatrix& mat);
+
+	//矩阵相乘
+	sparseMatrixPtr<T> operator*(const SparseMatrix<T>& mat) const;
+
+	//矩阵与数相乘
+	sparseMatrixPtr<T> operator*(const T& r) const;
+
+	template<class T>
+	friend sparseMatrixPtr<T> operator*(const T& r, const SparseMatrix<T>& mat);
+	
 	T lookAt(size_t i, size_t j)const;
 
 	template<typename Callback>
 	void forEachIndex(Callback func) const;
 
 	void build();
+
+private:
+	//获取矩阵某一行的元素个数
+	T getRowElementNum(size_t i) const;
 
 public :
 	size_t _row;
@@ -207,13 +236,32 @@ void SparseMatrix<T>::build() {
 
 }
 
+template<class T>
+T SparseMatrix<T>::getRowElementNum(size_t i) const {
+	auto row_offset = _rowIndices[i];
+	auto next_row_offset = _rowIndices[i + 1];
+	return next_row_offset - row_offset;
+}
 
 template<class T>
-T SparseMatrix<T>::operator()(size_t i, size_t j) {
+void SparseMatrix<T>::operator=(const SparseMatrix& mat) {
+
+	this->_row = mat._row;
+	this->_column = mat._column;
+	this->_valuedNum = mat._valuedNum;
+	this->_rowIndices = mat._rowIndices;
+	this->_columnOffsets = mat._columnOffsets;
+	this->_data = mat._data;
+	this->_tempData = nullptr;
+}
+
+
+
+template<class T>
+T SparseMatrix<T>::operator()(size_t i, size_t j) const{
 	if (_valuedNum == 0) {
 		return static_cast<T>(0);
 	}
-
 
 	//待查询处的行号
 	size_t row = i;
@@ -233,7 +281,7 @@ T SparseMatrix<T>::operator()(size_t i, size_t j) {
 		auto idx = _columnOffsets[row_offset];
 		//该行中元素的个数
 		auto row_element_num = next_row_offset - row_offset;
-		//cout << "i:" << i << "," << j << "," << "value:" << row_offset << "," << next_row_offset << endl;
+
 		size_t count = 0;
 		while (count < row_element_num) {
 			auto e_idx = row_offset + count;
@@ -253,43 +301,126 @@ T SparseMatrix<T>::operator()(size_t i, size_t j) {
 
 template<class T>
 T SparseMatrix<T>::lookAt(size_t i, size_t j)const {
-	if (_valuedNum == 0) {
-		return static_cast<T>(0);
+	return (*this)(i, j);
+}
+
+//注意添加异常判断
+
+//矩阵右乘列向量
+template<class T>
+VectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
+	if (this->_column != vec.dataSize()) {
+		//引发异常
 	}
 
-	//待查询处的行号
-	size_t row = i;
-	//该行首元素的偏移量
-	auto row_offset = _rowIndices[row];
-	//下一行首元素的偏移量
-	auto next_row_offset = _rowIndices[row + 1];
+	vector<T> temp;
+	for (size_t i = 0; i < this->_row; ++i) {
+		//获取该行首元素偏移量
+		auto row_offset = _rowIndices[i];
+		
+		//获取该行元素的个数
+		auto e_num = getRowElementNum(i);
 
-	//cout << "i:" << i << "," << j << "," << "value:" << row_offset << endl;
-
-
-	//如果该行不是空行
-	if (row_offset != next_row_offset && _valuedNum>=1) {
-		//待查询处的列号
-		size_t col = j;
-		//该行首元素的列号
-		auto idx = _columnOffsets[row_offset];
-		//该行中元素的个数
-		auto row_element_num = next_row_offset - row_offset;
+		T result = static_cast<T>(0);
 
 		size_t count = 0;
-		while (count < row_element_num) {
-			auto e_idx = row_offset + count;
-			if (_columnOffsets[e_idx] == col) {
-				return _data[e_idx];
-			}
+		while (count < e_num) {
+			//当前元素的列号
+			auto n = row_offset + count;
+			auto e_col_num = _columnOffsets[n];
+			
+			result += (_data[n] * vec.lookAt(e_col_num));
 			count++;
 		}
 
-		return static_cast<T>(0);
+		temp.push_back(result);
+		
 	}
-	else {
-		return static_cast<T>(0);
+
+	auto resultP = make_shared<VectorN<T>>(temp);
+	return resultP;
+}
+
+
+
+
+
+template<class T>
+VectorNPtr<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat){
+	vector<T> temp;
+    
+	for (size_t j = 0; j < mat._column; ++j) {
+		T result = static_cast<T>(0);
+		for(int i = 0; i<vec.dataSize(); ++i){
+			result += vec.lookAt(i) * mat(i, j);
+		}
+		temp.push_back(result);
 	}
+
+	auto resultVec = make_shared<VectorN<T>>(temp);
+	return resultVec;
+}
+
+
+
+//矩阵相乘
+template<class T>
+sparseMatrixPtr<T> SparseMatrix<T>::operator*(const SparseMatrix<T>& mat) const {
+	if (this->_column != mat._row) {
+		//引发异常
+	}
+
+	auto resultSize = Size2(this->_row, mat._column);
+	auto  resultMat = make_shared<SparseMatrix<T>>(resultSize.x, resultSize.y);
+	
+
+	for (size_t i = 0; i < this->_row; ++i) {
+		//获取该行首元素偏移量
+		auto row_offset = _rowIndices[i];
+
+		//获取该行元素的个数
+		auto e_num = getRowElementNum(i);
+		
+
+		for (size_t j = 0; j < mat._column; ++j) {
+			T result = static_cast<T>(0);
+			size_t count = 0;
+			while (count < e_num) {
+				//当前元素的列号
+				auto n = row_offset + count;
+				auto e_col_num = _columnOffsets[n];
+
+				result += _data[n] * mat(e_col_num, j);
+				
+				count++;
+			}
+			resultMat->insert(i, j, result);
+		}
+
+	}
+
+	resultMat->build();
+	return resultMat;
+}
+
+//矩阵与数相乘
+template<class T>
+sparseMatrixPtr<T> SparseMatrix<T>::operator*(const T& r) const {
+	
+	auto resultMat = make_shared<SparseMatrix<T>>(this->_row, this->_column);
+	
+	(*resultMat) = (*this);
+	
+	for (size_t i= 0; i < _valuedNum; ++i) {
+		resultMat->_data[i] *= r;
+	}
+
+	return resultMat;
+}
+
+template<class T>
+sparseMatrixPtr<T> operator*(const T& r,const SparseMatrix<T>& mat) {
+	return (*this) * r;
 }
 
 

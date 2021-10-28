@@ -7,12 +7,6 @@ using namespace std;
 
 #include "Array.hpp"
 
-//VectorX为行向量
-//VectorY为列向量
-
-//为了实现多态，这里的VectorX和vectorY均使用指针形式
-
-//如何给向量初始化呢？这里还没想好怎么写，是否需要builder类还没想好，暂时就简单粗暴的调用构造函数吧
 
 
 //若构造的类为模板类，那么派生类不可以直接使用继承到的基类数据和方法，
@@ -20,65 +14,69 @@ using namespace std;
 
 
 template<class T>
-class VectorX : public Array<T> {
+class VectorN : public Array<T> {
 public:
 
 	template<typename T>
-	using VectorXPtr = shared_ptr<VectorX<T>>;
+	using VectorNPtr = shared_ptr<VectorN<T>>;
 
 
-	VectorX();
-	~VectorX();
+	VectorN();
+	~VectorN();
 
 	size_t dataSize() const;
 
-	VectorX(const vector<T>& data);
+	VectorN(const vector<T>& data);
 
-	//转置为列向量
-	//VectorY TransToColumnVec();
 
 	//重载向量和向量相乘
-	T operator*(const VectorX<T>& vel) const;
+	T operator*(const VectorN<T>& vel) const;
 
 	//向量和数乘
 
-	VectorXPtr<T> operator*(const T r) const;
+	VectorNPtr<T> operator*(const T r) const;
 	
 	template<class T>
-	friend VectorXPtr<T> operator*(const T r, const VectorX<T>& vel);
+	friend VectorNPtr<T> operator*(const T r, const VectorN<T>& vel);
+
+	//向量相加
+	VectorNPtr<T> operator+(const VectorN<T>& vel) const;
+
+	//向量相减
+	VectorNPtr<T> operator-(const VectorN<T>& vel) const;
 
 };
 
 
 template<typename T>
-using VectorXPtr = shared_ptr<VectorX<T>>;
+using VectorNPtr = shared_ptr<VectorN<T>>;
 
 
 template<class T>                                                                            
-VectorX<T>::VectorX() {
+VectorN<T>::VectorN() {
 
 }
 
 template<class T>
-VectorX<T>::~VectorX() {
-
-}
-
-
-template<class T>
-VectorX<T>::VectorX(const vector<T>& data): Array<T>(data) {
+VectorN<T>::~VectorN() {
 
 }
 
 
 template<class T>
-size_t VectorX<T>::dataSize() const {
+VectorN<T>::VectorN(const vector<T>& data): Array<T>(data) {
+
+}
+
+
+template<class T>
+size_t VectorN<T>::dataSize() const {
 	return this->_size;
 }
 
 
 template<class T>
-T VectorX<T>::operator*(const VectorX<T>& vel) const {
+T VectorN<T>::operator*(const VectorN<T>& vel) const {
 	T result = static_cast<T>(0);
 	
 	vel.forEachIndex([&](size_t i){
@@ -91,14 +89,14 @@ T VectorX<T>::operator*(const VectorX<T>& vel) const {
 
 
 template<class T>
-VectorXPtr<T> VectorX<T>::operator*(const T r) const {
+VectorNPtr<T> VectorN<T>::operator*(const T r) const {
 	vector<T> temp;
 	temp.resize(this->_size);
 	this->forEachIndex([&](size_t i) {
 		temp[i] = this->lookAt(i) * r;
 	});
 
-	VectorXPtr<T> result = make_shared<VectorX<T>>(temp);
+	VectorNPtr<T> result = make_shared<VectorN<T>>(temp);
 	return result;
 
 }
@@ -106,104 +104,40 @@ VectorXPtr<T> VectorX<T>::operator*(const T r) const {
 
 
 template<class T>
-VectorXPtr<T> operator*(const T r, const VectorX<T>& vel) {
+VectorNPtr<T> operator*(const T r, const VectorN<T>& vel) {
 	return (vel * r);
 }
 
 
-
-
-
 template<class T>
-class VectorY : public VectorX<T> {
-public:
-
-	template<typename T>
-	using VectorYPtr = shared_ptr<VectorY<T>>;
-
-
-	VectorY();
-	~VectorY();
-
-	size_t dataSize() const;
-
-	VectorY(const vector<T>& data);
-
-	//VectorY TransToColumnVec();
-
-	//重载向量和向量相乘
-	T operator*(const VectorX<T>& vel) const;
-
-	//向量和数乘
-
-	VectorYPtr<T> operator*(const T r) const;
-
-	template<class T>
-	friend VectorYPtr<T> operator*(const T r, const VectorY<T>& vel);
-
-
-};
-
-
-template<typename T>
-using VectorYPtr = shared_ptr<VectorY<T>>;
-
-
-template<class T>
-VectorY<T>::VectorY() {
-
-}
-
-template<class T>
-VectorY<T>::~VectorY() {
-
-}
-
-
-template<class T>
-VectorY<T>::VectorY(const vector<T>& data):VectorX<T>(data){
+VectorNPtr<T> VectorN<T>::operator+(const VectorN<T>& vel) const {
 	
-}
-
-
-template<class T>
-size_t VectorY<T>::dataSize() const {
-	return this->_size;
-}
-
-
-template<class T>
-T VectorY<T>::operator*(const VectorX<T>& vel) const {
-	T result = static_cast<T>(0);
+	vector<T> temp;
+	temp.resize(vel.dataSize());
 
 	vel.forEachIndex([&](size_t i) {
-		result += this->lookAt(i) * vel[i];
-		});
-	return result;
+		temp[i] = vel.lookAt(i) + this->lookAt(i);
+		
+	});
+
+	auto resultVec = make_shared<VectorN>(temp);
+	return resultVec;
 }
 
-
-
-
 template<class T>
-VectorYPtr<T> VectorY<T>::operator*(const T r) const {
+VectorNPtr<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
 	vector<T> temp;
-	temp.resize(this->_size);
-	this->forEachIndex([&](size_t i) {
-		temp[i] = this.lookAt(i) * r;
+	temp.resize(vel.dataSize());
+
+	vel.forEachIndex([&](size_t i) {
+		temp[i] = this->lookAt(i)-vel->lookAt(i);
+
 		});
 
-	VectorYPtr<T> result = make_shared<VectorY<T>>(temp);
-	return result;
-
+	auto resultVec = make_shared<VectorN>(temp);
+	return resultVec;
 }
 
-
-
-template<class T>
-VectorYPtr<T> operator*(const T r, const VectorY<T>& vel) {
-	return (vel * r);
-}
 
 
 

@@ -1,0 +1,6 @@
+#ifndef GAUSSSEIDELSOLVER_HPP
+#define GAUSSSEIDELSOLVER_HPP
+
+
+
+#endif
