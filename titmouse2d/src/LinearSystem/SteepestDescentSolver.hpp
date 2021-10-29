@@ -23,10 +23,10 @@ private:
 	void correctResidual(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
 
 	//计算residual
-	void computResidual(const SparseMatrixPtr<T>& A);
+	void computeResidual(const SparseMatrixPtr<T>& A);
 
 	//计算步进系数
-	void computAlpha(const SparseMatrixPtr<T>& A);
+	void computeAlpha(const SparseMatrixPtr<T>& A);
 
 private:
 	//误差
@@ -40,6 +40,8 @@ private:
 
 	//记录迭代次数
 	size_t _iterNum = 0;
+
+	size_t _maxIterNum = 500;
 	
 };
 
@@ -57,19 +59,18 @@ SteepestDescentSolver<T>::~SteepestDescentSolver() {
 template<class T>
 void SteepestDescentSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b)   {
 	correctResidual(A, x, b);
-	while (_r.norm() > _minR) {
-		if (_iterNum == 0 || _iterNum % 5 == 0) {
+	while (_r.norm() > _minR && _iterNum <= _maxIterNum) {
+		if (_iterNum+1 % 50 == 0) {
 			correctResidual(A, x, b);
 		}
 		else {
-			//correctResidual(A, x, b);
-			computResidual(A);
+			computeResidual(A);
 		}
 		if (_r.norm() <= 0) {
 			cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
 			break;
 		}
-		computAlpha(A);
+		computeAlpha(A);
 		x = x + _alpha * _r;
 		_iterNum++;
 		
@@ -92,14 +93,14 @@ void SteepestDescentSolver<T>::correctResidual(const SparseMatrixPtr<T>& A, Vect
 
 //计算residual
 template<class T>
-void SteepestDescentSolver<T>::computResidual(const SparseMatrixPtr<T>& A) {
+void SteepestDescentSolver<T>::computeResidual(const SparseMatrixPtr<T>& A) {
 	_r = _r - _alpha * A * _r;
 }
 
 
 //计算步进系数
 template<class T>
-void SteepestDescentSolver<T>::computAlpha(const SparseMatrixPtr<T>& A) {
+void SteepestDescentSolver<T>::computeAlpha(const SparseMatrixPtr<T>& A) {
 	_alpha = _r * _r / (_r * A * _r);
 }
 

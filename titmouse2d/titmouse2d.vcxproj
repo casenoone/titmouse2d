@@ -155,6 +155,7 @@
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
     <ClInclude Include="src\DenseMatrix.hpp" />
+    <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussSeidelSolver.hpp" />
     <ClInclude Include="src\LinearSystem\IterativeSystemSolver.h" />
     <ClInclude Include="src\LinearSystem\JacobiSolver.hpp" />

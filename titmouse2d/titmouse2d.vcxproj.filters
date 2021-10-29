@@ -95,5 +95,8 @@
     <ClInclude Include="src\DenseMatrixPtr.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
