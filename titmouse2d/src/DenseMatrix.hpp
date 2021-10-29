@@ -1,5 +1,5 @@
-#ifndef MATRIX_HPP
-#define MATRIX_HPP
+#ifndef DENSEMATRIX_HPP
+#define DENSEMATRIX_HPP
 
 #include <iostream>
 using namespace std;
@@ -60,7 +60,7 @@ public:
 	T& lookAt(size_t i, size_t j) const;
 
 	//返回行向量或者列向量
-	VectorNPtr<T> getVec(size_t idx) const;
+	vectorNPtr<T> getVec(size_t idx) const;
 
 	//两个矩阵相加
 	DenseMatrixPtr<T> operator+(const DenseMatrix<T>& mat) const;
@@ -84,8 +84,7 @@ public:
 private:
 	Size2 _size;
 
-	//这里考虑使用array类型
-	vector<VectorNPtr<T>> _data;
+	vector<vectorNPtr<T>> _data;
 
 	//默认为列优先存储
 	int _order = ROW;
@@ -118,7 +117,7 @@ DenseMatrix<T>::DenseMatrix(size_t row, size_t column, const vector<vector<T>>& 
 			temp.push_back(data[i][j]);
 		}
 
-		VectorNPtr<T> temp_p = make_shared<VectorN<T>>(temp);
+		vectorNPtr<T> temp_p = make_shared<VectorN<T>>(temp);
 		_data.push_back(temp_p);
 
 	}
@@ -170,7 +169,7 @@ int DenseMatrix<T>::getOrder() const {
 }
 
 template<typename T>
-VectorNPtr<T> DenseMatrix<T>::getVec(size_t idx) const {
+vectorNPtr<T> DenseMatrix<T>::getVec(size_t idx) const {
 
 	return _data[idx];
 }

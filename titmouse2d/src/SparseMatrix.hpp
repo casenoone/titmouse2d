@@ -112,11 +112,11 @@ public:
 	void operator=(const SparseMatrix& mat);
 	
 	//矩阵右乘列向量
-	VectorNPtr<T> operator*(const VectorN<T>& vec) const;
+	vectorNPtr<T> operator*(const VectorN<T>& vec) const;
 
 	//矩阵左乘行向量
 	template<class B>
-	friend VectorNPtr<B> operator*(const VectorN<T>& vec, const SparseMatrix& mat);
+	friend vectorNPtr<B> operator*(const VectorN<T>& vec, const SparseMatrix& mat);
 
 	//矩阵相乘
 	sparseMatrixPtr<T> operator*(const SparseMatrix<T>& mat) const;
@@ -134,11 +134,13 @@ public:
 
 	void build();
 
+	Size2 size()const;
+
 private:
 	//获取矩阵某一行的元素个数
 	T getRowElementNum(size_t i) const;
 
-public :
+private:
 	size_t _row;
 
 	size_t _column;
@@ -236,6 +238,13 @@ void SparseMatrix<T>::build() {
 
 }
 
+
+template<class T>
+Size2 SparseMatrix<T>::size()const {
+	return Size2(_row, _column);
+}
+
+
 template<class T>
 T SparseMatrix<T>::getRowElementNum(size_t i) const {
 	auto row_offset = _rowIndices[i];
@@ -308,7 +317,7 @@ T SparseMatrix<T>::lookAt(size_t i, size_t j)const {
 
 //矩阵右乘列向量
 template<class T>
-VectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
+vectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 	if (this->_column != vec.dataSize()) {
 		//引发异常
 	}
@@ -346,10 +355,12 @@ VectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 
 
 template<class T>
-VectorNPtr<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat){
+vectorNPtr<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat){
 	vector<T> temp;
     
-	for (size_t j = 0; j < mat._column; ++j) {
+	auto _column = mat.size().y;
+
+	for (size_t j = 0; j < _column; ++j) {
 		T result = static_cast<T>(0);
 		for(int i = 0; i < vec.dataSize(); ++i){
 			result += vec.lookAt(i) * mat(i, j);

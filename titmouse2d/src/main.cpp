@@ -8,7 +8,9 @@ using namespace std;
 #include "DenseMatrix.hpp"
 #include "SparseMatrix.hpp"
 #include "LinearSystem/SteepestDescentSolver.hpp"
-
+#include "ArrayPtr.hpp"
+#include "Array2Ptr.hpp"
+#include "VectorNPtr.hpp"
 #include <array>
 
 int main() {
@@ -16,7 +18,7 @@ int main() {
 	
 	SteepestDescentSolver<double> iterSolver;
 
-	SparseMatrix<double> A(5, 5);
+	SparseMatrixPtr<double> A(5, 5);
 	A.insert(0,0,10);
 	A.insert(0,1,1);
 	A.insert(0,2,2);
@@ -49,18 +51,23 @@ int main() {
 	vector<double> b_used = { 12,-27,14,-17,12 };
 	vector<double> x_used;
 	x_used.resize(5);
-	VectorN<double> b(b_used);
-	VectorN<double> x(x_used);
+	VectorNPtr<double> b(b_used);
+	VectorNPtr<double> x(x_used);
 
 
 
 	iterSolver.compute(A, x, b);
 
+	
 	x.forEachIndex([&](size_t i) {
 		cout << x[i] << endl;
 	});
 
 	//该算例的正确答案： 1.000000 -2.000000  3.000000 -2.000000  1.000000
+
+
+
+
 
 	return 0;
 }

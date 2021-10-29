@@ -2,8 +2,9 @@
 #define STEEPESTDESCENTSOLVER_HPP
 
 #include "IterativeSystemSolver.h"
-#include "../SparseMatrix.hpp"
-#include "../VectorN.hpp"
+#include "../SparseMatrixPtr.hpp"
+#include "../VectorNPtr.hpp"
+
 
 template<class T>
 class SteepestDescentSolver :public IterativeSystemSolver {
@@ -11,7 +12,7 @@ public:
 	SteepestDescentSolver();
 	~SteepestDescentSolver();
 
-	void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b)  ;
+	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b)  ;
 
 	//设置容许的最小误差
 	void setMinError(T minValue);
@@ -19,17 +20,17 @@ public:
 private:
 
 	//矫正residual
-	void correctResidual(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b);
+	void correctResidual(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
 
 	//计算residual
-	void computResidual(const SparseMatrix<T>& A);
+	void computResidual(const SparseMatrixPtr<T>& A);
 
 	//计算步进系数
-	void computAlpha(const SparseMatrix<T>& A);
+	void computAlpha(const SparseMatrixPtr<T>& A);
 
 private:
 	//误差
-	VectorN<T> _r;
+	VectorNPtr<T> _r;
 
 	//步进系数
 	T _alpha;
@@ -54,7 +55,7 @@ SteepestDescentSolver<T>::~SteepestDescentSolver() {
 }
 
 template<class T>
-void SteepestDescentSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b)   {
+void SteepestDescentSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b)   {
 	correctResidual(A, x, b);
 	while (_r.norm() > _minR) {
 		if (_iterNum == 0 || _iterNum % 5 == 0) {
@@ -69,7 +70,7 @@ void SteepestDescentSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, 
 			break;
 		}
 		computAlpha(A);
-		x = *(x + (*(_alpha * _r)));
+		x = x + _alpha * _r;
 		_iterNum++;
 		
 	}
@@ -84,22 +85,22 @@ void SteepestDescentSolver<T>::setMinError(T minValue) {
 
 //矫正residual
 template<class T>
-void SteepestDescentSolver<T>::correctResidual(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
-	_r = *(b - *(A * x));
+void SteepestDescentSolver<T>::correctResidual(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
+	_r = b - A * x;
 }
 
 
 //计算residual
 template<class T>
-void SteepestDescentSolver<T>::computResidual(const SparseMatrix<T>& A) {
-	_r = *(_r - (*(_alpha * (*(A * _r)))));
+void SteepestDescentSolver<T>::computResidual(const SparseMatrixPtr<T>& A) {
+	_r = _r - _alpha * A * _r;
 }
 
 
 //计算步进系数
 template<class T>
-void SteepestDescentSolver<T>::computAlpha(const SparseMatrix<T>& A) {
-	_alpha = (_r * _r) / (*(_r * A) * _r);	
+void SteepestDescentSolver<T>::computAlpha(const SparseMatrixPtr<T>& A) {
+	_alpha = _r * _r / (_r * A * _r);
 }
 
 #endif

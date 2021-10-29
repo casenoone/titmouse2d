@@ -8,7 +8,6 @@ using namespace std;
 #include "Array.hpp"
 
 
-
 //若构造的类为模板类，那么派生类不可以直接使用继承到的基类数据和方法，
 //需要通过this指针使用。否则，在使用一些较新的编译器时，会报“找不到标识符”错误
 
@@ -18,13 +17,11 @@ class VectorN : public Array<T> {
 public:
 
 	template<typename T>
-	using VectorNPtr = shared_ptr<VectorN<T>>;
+	using vectorNPtr = shared_ptr<VectorN<T>>;
 
 
 	VectorN();
 	~VectorN();
-
-	size_t dataSize() const;
 
 	VectorN(const vector<T>& data);
 
@@ -37,22 +34,22 @@ public:
 
 	//向量和数乘
 
-	VectorNPtr<T> operator*(const T r) const;
+	vectorNPtr<T> operator*(const T r) const;
 	
 	template<class T>
-	friend VectorNPtr<T> operator*(const T r, const VectorN<T>& vel);
+	friend vectorNPtr<T> operator*(const T r, const VectorN<T>& vel);
 
 	//向量相加
-	VectorNPtr<T> operator+(const VectorN<T>& vel) const;
+	vectorNPtr<T> operator+(const VectorN<T>& vel) const;
 
 	//向量相减
-	VectorNPtr<T> operator-(const VectorN<T>& vel) const;
+	vectorNPtr<T> operator-(const VectorN<T>& vel) const;
 
 };
 
 
 template<typename T>
-using VectorNPtr = shared_ptr<VectorN<T>>;
+using vectorNPtr = shared_ptr<VectorN<T>>;
 
 
 template<class T>                                                                            
@@ -72,10 +69,7 @@ VectorN<T>::VectorN(const vector<T>& data): Array<T>(data) {
 }
 
 
-template<class T>
-size_t VectorN<T>::dataSize() const {
-	return this->_size;
-}
+
 
 
 template<class T>
@@ -92,14 +86,15 @@ T VectorN<T>::operator*(const VectorN<T>& vel) const {
 
 
 template<class T>
-VectorNPtr<T> VectorN<T>::operator*(const T r) const {
+vectorNPtr<T> VectorN<T>::operator*(const T r) const {
 	vector<T> temp;
 	temp.resize(this->_size);
 	this->forEachIndex([&](size_t i) {
 		temp[i] = this->lookAt(i) * r;
 	});
 
-	VectorNPtr<T> result = make_shared<VectorN<T>>(temp);
+
+	vectorNPtr<T> result = make_shared<VectorN<T>>(temp);
 	return result;
 
 }
@@ -107,13 +102,13 @@ VectorNPtr<T> VectorN<T>::operator*(const T r) const {
 
 
 template<class T>
-VectorNPtr<T> operator*(const T r, const VectorN<T>& vel) {
+vectorNPtr<T> operator*(const T r, const VectorN<T>& vel) {
 	return (vel * r);
 }
 
 
 template<class T>
-VectorNPtr<T> VectorN<T>::operator+(const VectorN<T>& vel) const {
+vectorNPtr<T> VectorN<T>::operator+(const VectorN<T>& vel) const {
 	
 	vector<T> temp;
 	temp.resize(vel.dataSize());
@@ -123,12 +118,12 @@ VectorNPtr<T> VectorN<T>::operator+(const VectorN<T>& vel) const {
 		
 	});
 
-	auto resultVec = make_shared<VectorN>(temp);
+	vectorNPtr<T> resultVec = make_shared<VectorN>(temp);
 	return resultVec;
 }
 
 template<class T>
-VectorNPtr<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
+vectorNPtr<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
 	vector<T> temp;
 	temp.resize(vel.dataSize());
 
@@ -137,7 +132,7 @@ VectorNPtr<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
 
 		});
 
-	auto resultVec = make_shared<VectorN>(temp);
+	vectorNPtr<T> resultVec = make_shared<VectorN>(temp);
 	return resultVec;
 }
 

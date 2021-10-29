@@ -107,6 +107,7 @@ Size2 Array2<T>::reSize(size_t nx, size_t ny, T initValue) {
 	}
 	Size2 l(nx, ny);
 	_size = l;
+	return _size;
 }
 
 template<typename T>
@@ -145,6 +146,7 @@ T Array2<T>::dot(const Array2<T>& a) {
 			r += _data[i][j] * a._data[i][j];
 		}
 	}
+	return r;
 }
 
 template<typename T>
