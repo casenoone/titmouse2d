@@ -9,4 +9,5 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - Iterative Solve Linea System：
   -  Steepest Descent method(最速下降法)
   - ConjugateGradient method(共轭梯度法)
+  - Jaocobi method(雅可比迭代法)
 - neighborSearch struct in O(kn)（基于网格的粒子邻近搜索结构）
