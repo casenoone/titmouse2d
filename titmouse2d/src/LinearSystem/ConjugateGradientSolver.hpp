@@ -14,6 +14,7 @@ public:
 	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
 
 	//设置容许的最小误差
+	//这个函数写到基类里
 	void setMinError(T minValue);
 
 private:
@@ -76,7 +77,7 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 	auto delta_old = 0.0;
 	auto minR2 = _minR * _minR;
 
-	while (delta_new > minR2*delta0 && _iterNum <= _maxIterNum) {
+	while (delta_new > minR2*delta0 || _iterNum <= _maxIterNum) {
 		computeAlpha(A);
 		x = x + _alpha * _d;
 		if (_iterNum+1 % 50 == 0) {

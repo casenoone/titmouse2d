@@ -12,6 +12,7 @@ using namespace std;
 #include "Array2Ptr.hpp"
 #include "VectorNPtr.hpp"
 #include "LinearSystem/ConjugateGradientSolver.hpp"
+#include "LinearSystem/JacobiSolver.hpp"
 #include <array>
 
 int main() {
@@ -20,6 +21,8 @@ int main() {
 	SteepestDescentSolver<double> iterSolver;
 
 	ConjugateGradientSolver <double> cgSolver;
+
+	JacobiSolver <double> jSolver;
 
 	SparseMatrixPtr<double> A(5, 5);
 	A.insert(0,0,10);
@@ -59,9 +62,9 @@ int main() {
 
 
 
-	iterSolver.compute(A, x, b);
+	//iterSolver.compute(A, x, b);
 	//cgSolver.compute(A, x, b);
-	
+	jSolver.compute(A, x, b);
 	x.forEachIndex([&](size_t i) {
 		cout << x[i] << endl;
 	});

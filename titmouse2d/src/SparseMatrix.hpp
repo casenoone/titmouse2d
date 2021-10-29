@@ -126,6 +126,11 @@ public:
 
 	template<class T>
 	friend sparseMatrixPtr<T> operator*(const T& r, const SparseMatrix<T>& mat);
+
+	sparseMatrixPtr<T> operator+(const SparseMatrix<T>& mat) const;
+
+	//¾ØÕóÓë¾ØÕóÏà¼õ
+	sparseMatrixPtr<T> operator-(const SparseMatrix<T>& mat) const;
 	
 	T lookAt(size_t i, size_t j)const;
 
@@ -435,6 +440,30 @@ sparseMatrixPtr<T> operator*(const T& r,const SparseMatrix<T>& mat) {
 }
 
 
+
+//¾ØÕóÓë¾ØÕóÏà¼õ
+template<class T>
+sparseMatrixPtr<T> SparseMatrix<T>::operator+(const SparseMatrix<T>& mat) const {
+	auto resultMat = make_shared<SparseMatrix<T>>(this->_row, this->_column);
+	this->forEachIndex([&](size_t i, size_t j) {
+		resultMat->insert(i,j,this->lookAt(i, j) + mat.lookAt(i, j));
+		});
+
+	resultMat->build();
+	return resultMat;
+}
+
+
+template<class T>
+sparseMatrixPtr<T> SparseMatrix<T>::operator-(const SparseMatrix<T>& mat) const {
+	auto resultMat = make_shared<SparseMatrix<T>>(this->_row, this->_column);
+	this->forEachIndex([&](size_t i, size_t j) {
+		resultMat->insert(i,j,this->lookAt(i, j) - mat.lookAt(i, j));
+	});
+
+	resultMat->build();
+	return resultMat;
+}
 
 
 template<typename T>

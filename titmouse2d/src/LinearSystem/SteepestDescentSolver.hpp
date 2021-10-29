@@ -60,7 +60,7 @@ template<class T>
 void SteepestDescentSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b)   {
 	correctResidual(A, x, b);
 	while (_r.norm() > _minR && _iterNum <= _maxIterNum) {
-		if (_iterNum+1 % 50 == 0) {
+		if ((_iterNum+1) % 50 == 0) {
 			correctResidual(A, x, b);
 		}
 		else {

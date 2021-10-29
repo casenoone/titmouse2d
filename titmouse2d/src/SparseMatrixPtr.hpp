@@ -44,6 +44,10 @@ public:
 	template<class T>
 	friend SparseMatrixPtr<T> operator*(const T& r, const SparseMatrixPtr<T>& mat);
 
+	SparseMatrixPtr<T> operator+(const SparseMatrixPtr<T>& mat) const;
+
+	SparseMatrixPtr<T> operator-(const SparseMatrixPtr<T>& mat) const;
+
 	T lookAt(size_t i, size_t j)const;
 
 	template<typename Callback>
@@ -171,6 +175,18 @@ SparseMatrixPtr<T> operator*(const T& r, const SparseMatrixPtr<T>& mat) {
 }
 
 
+template<class T>
+SparseMatrixPtr<T> SparseMatrixPtr<T>::operator+(const SparseMatrixPtr<T>& mat) const {
+	SparseMatrixPtr<T> result(*(this->sparseMatrixPtr) + (*(mat.sparseMatrixPtr)));
+	return result;
+}
+
+
+template<class T>
+SparseMatrixPtr<T> SparseMatrixPtr<T>::operator-(const SparseMatrixPtr<T>& mat) const {
+	SparseMatrixPtr<T> result(*(this->sparseMatrixPtr) - (*(mat.sparseMatrixPtr)));
+	return result;
+}
 
 
 template<typename T>

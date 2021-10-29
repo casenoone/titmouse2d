@@ -98,5 +98,11 @@
     <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\LinearSystem\PreConjugateGradientSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\ICCGSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
