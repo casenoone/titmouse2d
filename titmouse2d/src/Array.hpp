@@ -33,6 +33,8 @@ public:
 	
 	vector<T>* dataAccessor() ;
 
+	void clear();
+
 	template<typename Callback>
 	void forEachIndex(Callback func) const;
 
@@ -66,6 +68,12 @@ template<typename T>
 Array<T>::Array(const vector<T>& data) {
 	_data = data;
 	_size = _data.size();
+}
+
+template<typename T>
+inline void Array<T>::clear() {
+	_data.clear();
+	_data.resize(_size);
 }
 
 template<typename T>

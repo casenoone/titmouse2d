@@ -87,7 +87,6 @@ bool Triplet<T>::operator>(const Triplet<T>& t) const {
 	}
 }
 
-//暂时不考虑矩阵的对称存储
 template<class T>
 class SparseMatrix {
 public:
@@ -141,6 +140,12 @@ public:
 
 	Size2 size()const;
 
+	//下三角矩阵求逆
+	sparseMatrixPtr<T> inverseForLMatrix() const;
+
+	//求矩阵的对角矩阵
+	sparseMatrixPtr<T> diagonalMatrix() const;
+
 private:
 	//获取矩阵某一行的元素个数
 	T getRowElementNum(size_t i) const;
@@ -185,8 +190,20 @@ SparseMatrix<T>::SparseMatrix(const size_t& row, const size_t& column):_row(row)
 }
 
 template<class T>
-SparseMatrix<T>::SparseMatrix(const vector<vector<T>>& mat) {
+SparseMatrix<T>::SparseMatrix(const vector<vector<T>>& mat) :_row(mat.size()), _column(mat[0].size()) {
+	_tempData = new vector<Triplet<T>>();
+	_rowIndices.resize(mat.size() + 1);
 
+	size_t sizeX = mat.size();
+	size_t sizeY = mat[0].size();
+	for (size_t i = 0; i < sizeX; ++i) {
+		for (size_t j = 0; j < sizeY; ++j) {
+			if (mat[i][j] != 0) {
+				this->insert(i, j, mat[i][j]);
+			}
+		}
+	}
+	this->build();
 }
 
 
@@ -247,6 +264,48 @@ void SparseMatrix<T>::build() {
 template<class T>
 Size2 SparseMatrix<T>::size()const {
 	return Size2(_row, _column);
+}
+
+//下三角矩阵求逆
+template<class T>
+sparseMatrixPtr<T> SparseMatrix<T>::inverseForLMatrix() const {
+	sparseMatrixPtr<T> result = make_shared<SparseMatrix>(this->_row, this->_column);
+
+	this->forEachIndex([&](size_t i, size_t j) {
+		if (i == j) {
+			result->insert(i, j, this->lookAt(i, j));
+		}
+		if (i > j) {
+			auto L_ii_inv = 1.0 / this->lookAt(i, j);
+			T temp = 0.0;
+			for (size_t k = 0; k <= i - 1; ++k) {
+				temp += this->lookAt(i, k) * this->lookAt(k, j);
+			}
+			temp *= -L_ii_inv;
+		}
+	});
+
+	result->build();
+	return result;
+}
+
+
+
+
+template<class T>
+sparseMatrixPtr<T> SparseMatrix<T>::diagonalMatrix() const {
+	sparseMatrixPtr<T> D = make_shared<SparseMatrix>(this->_row, this->_column);
+
+	for (size_t i = 0; i < this->_row; ++i) {
+
+		auto value = this->lookAt(i, i);
+		if (value == 0)value = 1.0;
+		D->insert(i, i, value);
+	}
+
+	D->build();
+
+	return D;
 }
 
 

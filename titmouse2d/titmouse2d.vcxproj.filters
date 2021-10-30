@@ -101,7 +101,10 @@
     <ClInclude Include="src\LinearSystem\PreConjugateGradientSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\LinearSystem\ICCGSolver.hpp">
+    <ClInclude Include="src\LinearSystem\MICCGSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\SORsolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

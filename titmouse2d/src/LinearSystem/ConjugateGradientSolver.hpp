@@ -46,7 +46,7 @@ private:
 	VectorNPtr<T> _d;
 
 	//最小误差
-	T _minR = 1e-6;
+	T _minR = 1e-5;
 
 	//记录迭代次数
 	size_t _iterNum = 0;
@@ -77,7 +77,7 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 	auto delta_old = 0.0;
 	auto minR2 = _minR * _minR;
 
-	while (delta_new > minR2*delta0 || _iterNum <= _maxIterNum) {
+	while (delta_new > minR2*delta0 && _iterNum <= _maxIterNum) {
 		computeAlpha(A);
 		x = x + _alpha * _d;
 		if (_iterNum+1 % 50 == 0) {
@@ -89,7 +89,7 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 		}
 
 		if (_r1.norm() <= 0) {
-			cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
+			//cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
 			break;
 		}
 
@@ -101,6 +101,7 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 
 		_r = _r1;
 		_iterNum++;
+		
 	}
 	cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
 }

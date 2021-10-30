@@ -57,6 +57,11 @@ public:
 
 	Size2 size()const;
 
+	SparseMatrixPtr<T> inverseForLMatrix() const;
+
+	//Çó¾ØÕóµÄ¶Ô½Ç¾ØÕó
+	SparseMatrixPtr<T> diagonalMatrix() const;
+
 private:
 	shared_ptr<SparseMatrix<T>> sparseMatrixPtr;
 };
@@ -75,7 +80,7 @@ SparseMatrixPtr<T>::SparseMatrixPtr(const size_t& row, const size_t& column) {
 
 template<class T>
 SparseMatrixPtr<T>::SparseMatrixPtr(const vector<vector<T>>& mat) {
-
+	sparseMatrixPtr = make_shared<SparseMatrix<T>>(mat);
 }
 
 template<class T>
@@ -107,6 +112,18 @@ void SparseMatrixPtr<T>::build() {
 template<class T>
 Size2 SparseMatrixPtr<T>::size()const {
 	return sparseMatrixPtr->size();
+}
+
+template<class T>
+SparseMatrixPtr<T> SparseMatrixPtr<T>::inverseForLMatrix() const {
+	SparseMatrixPtr result(sparseMatrixPtr->inverseForLMatrix());
+	return result;
+}
+
+template<class T>
+SparseMatrixPtr<T> SparseMatrixPtr<T>::diagonalMatrix() const {
+	SparseMatrixPtr result(sparseMatrixPtr->diagonalMatrix());
+	return result;
 }
 
 

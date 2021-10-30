@@ -28,6 +28,8 @@ public:
 
 	size_t dataSize() const;
 
+	void clear();
+
 	template<typename Callback>
 	void forEachIndex(Callback func) const;
 
@@ -51,6 +53,10 @@ ArrayPtr<T>::ArrayPtr(const vector<T>& data) {
 	arrayPtr = make_shared<Array<T>>(data);
 }
 
+template<typename T>
+void ArrayPtr<T>::clear() {
+	this->arrayPtr->clear();
+}
 
 template<typename T>
 inline T ArrayPtr<T>::lookAt(size_t idx) const {

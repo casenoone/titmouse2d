@@ -5,6 +5,10 @@
 #include "../SparseMatrixPtr.hpp"
 #include "../VectorNPtr.hpp"
 
+//这里可以进一步优化内存
+//暂时不管了，用到的时候再优化
+
+
 const double eps = 2.718281828459;
 
 template<class T>
@@ -99,9 +103,10 @@ void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, con
 		}
 		_iterNum++;
 
-		cout << "迭代次数：" << _iterNum << "当前误差：" << err << endl;
+		//cout << x[0] << endl;
 
 	}
+	cout << "迭代次数：" << _iterNum << "当前误差：" << err << endl;
 }
 
 

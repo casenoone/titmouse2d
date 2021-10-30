@@ -67,7 +67,7 @@ void SteepestDescentSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T
 			computeResidual(A);
 		}
 		if (_r.norm() <= 0) {
-			cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
+			
 			break;
 		}
 		computeAlpha(A);
@@ -75,6 +75,7 @@ void SteepestDescentSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T
 		_iterNum++;
 		
 	}
+
 	cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
 	
 }
