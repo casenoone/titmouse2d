@@ -1,10 +1,10 @@
 #ifndef GAUSSSEIDELSOLVER_HPP
 #define GAUSSSEIDELSOLVER_HPP
 
-#include "IterativeSystemSolver.h"
+#include "IterativeSystemSolver.hpp"
 
 template<class T>
-class GaussSeidelSolver {
+class GaussSeidelSolver : public IterativeSystemSolver<T> {
 public:
 	GaussSeidelSolver();
 
@@ -13,17 +13,7 @@ public:
 	//求解Ax = b
 	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
 
-private:
-	//误差
-	VectorNPtr<T> _r;
 
-	//最小误差
-	T _minR = 1e-7;
-
-	//记录迭代次数
-	size_t _iterNum = 0;
-
-	size_t _maxIterNum = 500;
 };
 
 
@@ -42,10 +32,10 @@ GaussSeidelSolver<T>::~GaussSeidelSolver() {
 //因为矩阵格式要写LU分解，懒得写了
 template<class T>
 void GaussSeidelSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
-	_r = (b - A * x);
+	this->_r = (b - A * x);
 	auto x1 = x;
-	auto err = _r.norm();
-	while (_iterNum <= _maxIterNum) {
+	auto err = this->_r.norm();
+	while (this->_iterNum <= this->_maxIterNum) {
 
 		//size_t 是无符号数
 		x1.forEachIndex([&](size_t i) {
@@ -68,17 +58,17 @@ void GaussSeidelSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x
 		
 		
 		x = x1;
-		_r = (b - A * x);
-		err = _r.norm();
+		this->_r = (b - A * x);
+		err = this->_r.norm();
 		
-		if (err <= _minR) {
+		if (err <= this->_minR) {
 			
 			break;
 		}
-		_iterNum++;
+		this->_iterNum++;
 		
 	}
-	cout << "迭代次数：" << _iterNum << "当前误差：" << _r.norm() << endl;
+	cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << endl;
 	
 }
 

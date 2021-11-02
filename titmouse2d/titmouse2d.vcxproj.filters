@@ -30,9 +30,6 @@
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\LinearSystem\IterativeSystemSolver.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -68,7 +65,7 @@
     <ClInclude Include="src\Matrix.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\LinearSystem\IterativeSystemSolver.h">
+    <ClInclude Include="src\LinearSystem\IterativeSystemSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\LinearSystem\JacobiSolver.hpp">
@@ -105,6 +102,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\LinearSystem\SORsolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\Grid2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\Field2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\ScalarField2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

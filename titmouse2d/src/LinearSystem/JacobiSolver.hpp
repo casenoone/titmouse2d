@@ -1,7 +1,7 @@
 #ifndef JACOBISOLVER_HPP
 #define JACOBISOLVER_HPP
 
-#include "IterativeSystemSolver.h"
+#include "IterativeSystemSolver.hpp"
 #include "../SparseMatrixPtr.hpp"
 #include "../VectorNPtr.hpp"
 
@@ -12,7 +12,7 @@
 const double eps = 2.718281828459;
 
 template<class T>
-class JacobiSolver : public IterativeSystemSolver {
+class JacobiSolver : public IterativeSystemSolver<T>{
 public:
 	JacobiSolver();
 	~JacobiSolver();
@@ -22,19 +22,7 @@ public:
 
 	SparseMatrixPtr<T> computeD(const SparseMatrixPtr<T>& A) const;
 
-
-
-private:
-	//误差
-	VectorNPtr<T> _r;
-
-	//最小误差
-	T _minR = 1e-5;
-
-	//记录迭代次数
-	size_t _iterNum = 0;
-
-	size_t _maxIterNum = 500;
+	
 };
 
 
@@ -75,10 +63,10 @@ SparseMatrixPtr<T> JacobiSolver<T>::computeD(const SparseMatrixPtr<T>& A) const 
 //其中D为对角矩阵
 template<class T>
 void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
-	_r = (b - A * x);
-	auto err = _r.norm();
+	this->_r = (b - A * x);
+	auto err = this->_r.norm();
 	auto relerr = err;
-	while (_iterNum <=_maxIterNum) {
+	while (this->_iterNum <= this->_maxIterNum) {
 		auto D = computeD(A);
 		
 		
@@ -98,15 +86,15 @@ void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, con
 		x = D_inv * (b - R * x);
 		
 		err = (b - A * x).norm();
-		if (err <= _minR) {
+		if (err <= this->_minR) {
 			break;
 		}
-		_iterNum++;
+		this->_iterNum++;
 
 		//cout << x[0] << endl;
 
 	}
-	cout << "迭代次数：" << _iterNum << "当前误差：" << err << endl;
+	cout << "迭代次数：" << this->_iterNum << "当前误差：" << err << endl;
 }
 
 

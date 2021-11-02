@@ -35,7 +35,8 @@ int main() {
 		{4.0,-3.0,-5.0,-1.0,15.0}
 	};
 
-	/*vector<vector<double>> A_data = {
+	/*vector<vector<
+	double>> A_data = {
 		{4.,-1.,0.},
 		{-1.,4.,-1.},
 		{0.,-1.,4.}

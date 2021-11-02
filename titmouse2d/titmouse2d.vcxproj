@@ -142,7 +142,6 @@
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
-    <ClCompile Include="src\LinearSystem\IterativeSystemSolver.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
@@ -152,13 +151,16 @@
     <ClInclude Include="src\ArrayPtr.hpp" />
     <ClInclude Include="src\ConstVar.h" />
     <ClInclude Include="src\DenseMatrixPtr.hpp" />
+    <ClInclude Include="src\Eulerian\Field2.hpp" />
+    <ClInclude Include="src\Eulerian\Grid2.hpp" />
+    <ClInclude Include="src\Eulerian\ScalarField2.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
     <ClInclude Include="src\DenseMatrix.hpp" />
     <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussSeidelSolver.hpp" />
     <ClInclude Include="src\LinearSystem\MICCGSolver.hpp" />
-    <ClInclude Include="src\LinearSystem\IterativeSystemSolver.h" />
+    <ClInclude Include="src\LinearSystem\IterativeSystemSolver.hpp" />
     <ClInclude Include="src\LinearSystem\JacobiSolver.hpp" />
     <ClInclude Include="src\LinearSystem\PreConjugateGradientSolver.hpp" />
     <ClInclude Include="src\LinearSystem\SORsolver.hpp" />
