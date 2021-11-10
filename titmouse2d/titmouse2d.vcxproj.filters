@@ -30,6 +30,27 @@
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Eulerian\fdm_utils.hpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\ScalarGrid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\ScalarField2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\Field2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\Grid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -104,13 +125,22 @@
     <ClInclude Include="src\LinearSystem\SORsolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Eulerian\Grid2.hpp">
+    <ClInclude Include="src\Eulerian\Grid2.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Eulerian\Field2.hpp">
+    <ClInclude Include="src\Eulerian\Field2.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\ScalarField2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\ScalarGrid2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\CellCenteredScalarGrid2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

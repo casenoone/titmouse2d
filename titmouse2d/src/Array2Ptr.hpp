@@ -66,7 +66,7 @@ T Array2Ptr<T>::lookAt(size_t i, size_t j) const {
 
 template<typename T>
 T& Array2Ptr<T>::operator()(size_t i, size_t j) {
-	return (*array2Ptr)[i][j];
+	return (*array2Ptr)(i,j);
 }
 
 //这里记得并行优化

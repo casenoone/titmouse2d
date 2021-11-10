@@ -14,6 +14,9 @@ using namespace std;
 #include "LinearSystem/ConjugateGradientSolver.hpp"
 #include "LinearSystem/JacobiSolver.hpp"
 #include "LinearSystem/GaussSeidelSolver.hpp"
+
+#include "../src/Eulerian/CellCenteredScalarGrid2.h"
+#include "../src/Eulerian/ScalarGrid2.h"
 #include <array>
 
 int main() {

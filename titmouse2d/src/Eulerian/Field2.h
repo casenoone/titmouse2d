@@ -12,13 +12,7 @@ public:
 
 };
 
-Field2::Field2() {
-
-}
 
 
-Field2::~Field2() {
-
-}
 
 #endif

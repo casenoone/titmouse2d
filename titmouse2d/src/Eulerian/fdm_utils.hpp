@@ -31,14 +31,14 @@ Vector2<T> gradient2(const Array2<T>& data,
 	size_t j) {
 
 	auto tempData = data;
-	Vector2 ds = tempData.dataSize();
+	Vector2<T> ds = tempData.dataSize();
 
 	double left = tempData((i > 0) ? i - 1 : i, j);
 	double right = tempData((i + 1 < ds.x()) ? i + 1 : i, j);
 	double down = tempData(i, (j > 0) ? j - 1 : j);
 	double up = tempData(i, (j + 1 < ds.y()) ? j + 1 : j);
 
-	return Vector2(right - left, up - down) * 0.5 / gridSpacing;
+	return Vector2<T>(right - left, up - down) * 0.5 / gridSpacing;
 
 }
 

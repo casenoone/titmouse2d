@@ -139,6 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
+    <ClCompile Include="src\Eulerian\fdm_utils.hpp" />
+    <ClCompile Include="src\Eulerian\Field2.cpp" />
+    <ClCompile Include="src\Eulerian\Grid2.cpp" />
+    <ClCompile Include="src\Eulerian\ScalarField2.cpp" />
+    <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
+    <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
@@ -151,9 +158,12 @@
     <ClInclude Include="src\ArrayPtr.hpp" />
     <ClInclude Include="src\ConstVar.h" />
     <ClInclude Include="src\DenseMatrixPtr.hpp" />
-    <ClInclude Include="src\Eulerian\Field2.hpp" />
-    <ClInclude Include="src\Eulerian\Grid2.hpp" />
+    <ClInclude Include="src\Eulerian\CellCenteredScalarGrid2.h" />
+    <ClInclude Include="src\Eulerian\Field2.h" />
+    <ClInclude Include="src\Eulerian\Grid2.h" />
     <ClInclude Include="src\Eulerian\ScalarField2.h" />
+    <ClInclude Include="src\Eulerian\ScalarGrid2.h" />
+    <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
     <ClInclude Include="src\DenseMatrix.hpp" />
