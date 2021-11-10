@@ -12,3 +12,4 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
   - Jaocobi method(雅可比迭代法)
   - Gauss-Seidel method(高斯赛德法)
 - neighborSearch struct in O(kn)（基于网格的粒子邻近搜索结构）
+- FDM Grids such as CenteredGrid (有限差分计算用到的均匀网格结构)
