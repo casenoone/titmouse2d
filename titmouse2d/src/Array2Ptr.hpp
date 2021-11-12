@@ -46,12 +46,12 @@ private:
 
 template<typename T>
 Array2Ptr<T>::Array2Ptr() {
-
+	array2Ptr = make_shared<Array2<T>>(vector<vector<double>>());
 }
 
 template<typename T>
 Array2Ptr<T>::~Array2Ptr() {
-
+	
 }
 
 template<typename T>
@@ -77,6 +77,7 @@ Size2 Array2Ptr<T>::reSize(size_t nx, size_t ny) {
 
 template<typename T>
 Size2 Array2Ptr<T>::reSize(size_t nx, size_t ny, T initValue) {
+	
 	return array2Ptr->reSize(nx, ny, initValue);
 }
 

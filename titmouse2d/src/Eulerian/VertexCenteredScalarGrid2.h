@@ -14,9 +14,10 @@ public:
 
     VertexCenteredScalarGrid2(
         const Vector2<size_t>& resolution,
-        const Vector2<double>& gridSpacing,
         const Vector2<double>& origin,
         double initialValue);
+
+
 
     VertexCenteredScalarGrid2(const VertexCenteredScalarGrid2& other);
 
@@ -24,7 +25,7 @@ public:
 
     Vector2<double> dataOrigin() const override;
 
-
+    void clearData(double initialValue)override;
 
     //静态成员函数不属于任何对象，它属于类
     //思考一下啊，如果这里的builder函数不是静态的，只是一个普通的成员函数
@@ -53,27 +54,21 @@ public:
 
     Builder& withResolution(size_t resolutionX, size_t resolutionY);
 
-    Builder& withGridSpacing(const Vector2<double>& gridSpacing);
-
-    Builder& withGridSpacing(double gridSpacingX, double gridSpacingY);
-
     Builder& withOrigin(const Vector2<double>& gridOrigin);
 
     Builder& withOrigin(double gridOriginX, double gridOriginY);
 
     Builder& withInitialValue(double initialVal);
 
-    //这个build（）是什么作用
+
     //返回一个vetex...类对象
     VertexCenteredScalarGrid2 build() const;
 
-    //仍然搞不懂这个玩意儿有啥用
-    //明白了，就是返回一个vertex...类对象的共享指针
+   //返回一个vertex...类对象的共享指针
     VertexCenteredScalarGrid2Ptr makeShared() const;
 
     ScalarGrid2Ptr build(
         const Vector2<size_t>& resolution,
-        const Vector2<double>& gridSpacing,
         const Vector2 <double> & gridOrigin,
         double initialVal) const override;
 
@@ -81,7 +76,6 @@ public:
 
 private:
     Vector2<size_t> _resolution;
-    Vector2 <double> _gridSpacing;
     Vector2<double> _gridOrigin;
     double _initialVal = 0.0;
 };

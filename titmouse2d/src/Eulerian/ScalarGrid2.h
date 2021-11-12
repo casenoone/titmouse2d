@@ -12,6 +12,9 @@ public:
 
 	ScalarGrid2();
 
+	//只清除数据
+	virtual void clearData(double initialValue);
+
 	virtual ~ScalarGrid2();
 
 	virtual Vector2<size_t> dataSize()const = 0;
@@ -45,6 +48,11 @@ public:
 
 	void fill(double value);
 
+	void resize(const Vector2<size_t>& resolution,
+		const Vector2<double>& gridSpacing,
+		const Vector2<double>& origin ,
+		double initialValue = 0.0);
+
 	
 
 protected:
@@ -69,7 +77,6 @@ public:
 
 	virtual ScalarGrid2Ptr build(
 		const Vector2<size_t>& resolution,
-		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin,
 		double initialVal) const = 0;
 };

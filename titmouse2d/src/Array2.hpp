@@ -99,12 +99,15 @@ Size2 Array2<T>::reSize(size_t nx, size_t ny) {
 template<typename T>
 Size2 Array2<T>::reSize(size_t nx, size_t ny, T initValue) {
 	_data.resize(nx);
+
 	for (size_t i = 0; i < nx; ++i) {
 		_data[i].resize(ny);
 		for (size_t j = 0; j < ny; ++j) {
 			_data[i][j] = initValue;
 		}
 	}
+
+	
 	Size2 l(nx, ny);
 	_size = l;
 	return _size;

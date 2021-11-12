@@ -40,7 +40,7 @@ protected:
 
 template<typename T>
 ArrayPtr<T>::ArrayPtr() {
-
+	arrayPtr = make_shared<Array<T>>(vector<T>());
 }
 
 template<typename T>

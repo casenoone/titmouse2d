@@ -51,6 +51,15 @@
     <ClCompile Include="src\Eulerian\Grid2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Eulerian\MarchingCubes2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -141,6 +150,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\MarchingCubes2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MathUtils.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\MarchingCubesTable2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Array2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

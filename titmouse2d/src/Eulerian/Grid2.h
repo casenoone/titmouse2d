@@ -32,10 +32,8 @@ public:
 	void forEachCellIndex(Callback& func) const;
 
 
+
 protected:
-
-
-private:
 	Vector2<size_t> _resolution;
 	Vector2<double> _gridSpacing;
 	Vector2<double> _origin;

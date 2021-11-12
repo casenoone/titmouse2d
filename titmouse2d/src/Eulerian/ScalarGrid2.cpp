@@ -1,6 +1,6 @@
 #include "ScalarGrid2.h"
 
-ScalarGrid2::ScalarGrid2() {
+ScalarGrid2::ScalarGrid2():_data(vector<vector<double>>()) {
 
 }
 
@@ -23,10 +23,36 @@ double ScalarGrid2::laplacianAtDataPoint(size_t i, size_t j) const {
 }
 
 
+void ScalarGrid2::resize(const Vector2<size_t>& resolution,
+	const Vector2<double>& gridSpacing,
+	const Vector2<double>& origin,
+	double initialValue) {
+
+	_resolution = resolution;
+	_gridSpacing = gridSpacing;
+	_origin = origin;
+	
+	auto size = dataSize();
+
+	_data.reSize(size.x, size.y, initialValue);
+
+
+}
+
+
+void ScalarGrid2::clearData(double initialValue) {
+	auto res = resolution();
+	_data.reSize(res.x, res.y, initialValue);
+}
+
 //暂时不实现
-//ScalarGrid2::DataPositionFunc ScalarGrid2::dataPosition() const {
-//
-//}
+ScalarGrid2::DataPositionFunc ScalarGrid2::dataPosition() const {
+	Vector2<double> o = dataOrigin();
+	//从size_t转换到const double &需要收缩转换
+	return [this, o](double i, double j) -> Vector2<double> {
+		return o + gridSpacing() * Vector2<double>({ i, j });
+	};
+}
 
 
 double ScalarGrid2::sample(const Vector2<double>& x) const {

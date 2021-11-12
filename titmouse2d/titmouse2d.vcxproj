@@ -139,10 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
+    <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\fdm_utils.hpp" />
     <ClCompile Include="src\Eulerian\Field2.cpp" />
     <ClCompile Include="src\Eulerian\Grid2.cpp" />
+    <ClCompile Include="src\Eulerian\MarchingCubes2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarField2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
@@ -154,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Array.hpp" />
+    <ClInclude Include="src\Array2.hpp" />
     <ClInclude Include="src\Array2Ptr.hpp" />
     <ClInclude Include="src\ArrayPtr.hpp" />
     <ClInclude Include="src\ConstVar.h" />
@@ -161,6 +165,8 @@
     <ClInclude Include="src\Eulerian\CellCenteredScalarGrid2.h" />
     <ClInclude Include="src\Eulerian\Field2.h" />
     <ClInclude Include="src\Eulerian\Grid2.h" />
+    <ClInclude Include="src\Eulerian\MarchingCubes2.h" />
+    <ClInclude Include="src\Eulerian\MarchingCubesTable2.h" />
     <ClInclude Include="src\Eulerian\ScalarField2.h" />
     <ClInclude Include="src\Eulerian\ScalarGrid2.h" />
     <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h" />
@@ -175,6 +181,7 @@
     <ClInclude Include="src\LinearSystem\PreConjugateGradientSolver.hpp" />
     <ClInclude Include="src\LinearSystem\SORsolver.hpp" />
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
+    <ClInclude Include="src\MathUtils.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
