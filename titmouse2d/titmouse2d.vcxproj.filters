@@ -60,6 +60,15 @@
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Eulerian\VectorField2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\VectorGrid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -162,6 +171,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Array2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\VectorField2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\VectorGrid2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\FaceCenteredGrid2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\ArraySampler2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
