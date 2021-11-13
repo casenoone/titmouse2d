@@ -16,9 +16,12 @@ public:
         const Vector2<double>& gridSpacing,
         const Vector2<double>& origin ,
         const Vector2<double>& initialValue);
-    virtual std::shared_ptr<VectorGrid2> clone() const = 0;
+    
+    //暂时不实现
+    //virtual std::shared_ptr<VectorGrid2> clone() const = 0;
 
-    virtual void fill(const Vector2<double>& value) = 0;
+    //暂时不实现
+    //virtual void fill(const Vector2<double>& value) = 0;
 
 protected:
     virtual void onResize(const Vector2<size_t>& resolution, const Vector2<double>& gridSpacing,

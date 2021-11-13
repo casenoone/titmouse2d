@@ -22,7 +22,8 @@ public:
 	//暂时不实现
 	//void swap(Grid2* other) override;
 
-	void set(const FaceCenteredGrid2& other);
+	//暂时不实现
+	//void set(const FaceCenteredGrid2& other);
 
 	FaceCenteredGrid2& operator=(const FaceCenteredGrid2& other);
 
@@ -40,9 +41,9 @@ public:
 
 	DataPositionFunc vPosition() const;
 
-	Vector2<size_t> uSize();
+	Size2 uSize();
 
-	Vector2<size_t> vSize();
+	Size2 vSize();
 
 	//这里想一个更好的实现方式
 	Array2Ptr<double>& uDatas();
@@ -60,7 +61,8 @@ public:
 
 	std::function<Vector2<double>(const Vector2<double>&)> sampler() const override;
 
-	std::shared_ptr<VectorGrid2> clone() const override;
+	//暂时不实现
+	//std::shared_ptr<VectorGrid2> clone() const override;
 
 	//暂时不实现
 	//void fill(const Vector2<double>& value)override;
@@ -120,7 +122,8 @@ public:
 private:
 	Vector2<size_t> _resolution;
 	Vector2<double> _gridOrigin;
-	Vector2<double> _initialVal;
+	Vector2<double> _gridSpacing;
+ 	Vector2<double> _initialVal;
 };
 
 #endif

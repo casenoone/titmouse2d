@@ -2,8 +2,8 @@
 
 
 FaceCenteredGrid2::FaceCenteredGrid2():
-    _uLinearSampler(_dataU, Vector2(1, 1), Vector2(0, 0)),
-    _vLinearSampler(_dataV, Vector2(1, 1), Vector2(0, 0)) 
+    _uLinearSampler(_dataU, Vector2<double>(1.0, 1.0), Vector2<double>()),
+    _vLinearSampler(_dataV, Vector2<double>(1.0, 1.0), Vector2<double>())
 {
     _dataOriginU = Vector2<double>(0.0, 0.5);
     _dataOriginV = Vector2<double>(0.5, 0.0);
@@ -12,65 +12,42 @@ FaceCenteredGrid2::FaceCenteredGrid2():
 
 
 
-FaceCenteredGrid2::FaceCenteredGrid2(const Vector2& resolution,
-    const Vector2& gridSpacing,
-    const Vector2& origin,
-    const Vector2& initialValue) :
-    _uLinearSampler(_dataU, gridSpacing, uOrigin()),
-    _vLinearSampler(_dataV, gridSpacing, vOrigin())
+FaceCenteredGrid2::FaceCenteredGrid2(const Vector2<size_t>& resolution,
+    const Vector2<double>& origin,
+    const Vector2<double>& initialValue) :
+    _uLinearSampler(_dataU, Vector2<double>(2.0/resolution.x,2.0/resolution.y), uOrigin()),
+    _vLinearSampler(_dataV, Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y), vOrigin())
 {
 
-    //这里还对线性采样器初始化了
-    //这里暂时不实现
-    //与上面那个构造函数类似
-
-    //傻逼函数，这个函数执行完之后才会对data进行初始化
+    auto gridSpacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
     resize(resolution, gridSpacing, origin, initialValue);
-    _uLinearSampler._scalarAccessor = _dataU;
-    _vLinearSampler._scalarAccessor = _dataV;
-
-    solveSystemMarker.resize(resolution, -1);
+    _uLinearSampler._accessor = _dataU;
+    _vLinearSampler._accessor = _dataV;
 
 }
 
 FaceCenteredGrid2::FaceCenteredGrid2(const FaceCenteredGrid2& other) {
 
-    set(other);
-}
-
-void FaceCenteredGrid2::swap(Grid2* other) {
-
-    //这是干啥呢？
-    FaceCenteredGrid2* sameType = dynamic_cast<FaceCenteredGrid2*>(other);
-
-    if (sameType != nullptr) {
-        swapGrid(sameType);
-
-        _dataU.swap(sameType->_dataU);
-        _dataV.swap(sameType->_dataV);
-        std::swap(_dataOriginU, sameType->_dataOriginU);
-        std::swap(_dataOriginV, sameType->_dataOriginV);
-        std::swap(_uLinearSampler, sameType->_uLinearSampler);
-        std::swap(_vLinearSampler, sameType->_vLinearSampler);
-        std::swap(_sampler, sameType->_sampler);
-    }
+   // set(other);
 }
 
 
-void FaceCenteredGrid2::set(const FaceCenteredGrid2& other) {
-    setGrid(other);
 
-    _dataU.set(other._dataU);
-    _dataV.set(other._dataV);
-    _dataOriginU = other._dataOriginU;
-    _dataOriginV = other._dataOriginV;
-
-    resetSampler();
-}
+//这个函数暂时不实现
+//void FaceCenteredGrid2::set(const FaceCenteredGrid2& other) {
+//    setGrid(other);
+//
+//    _dataU.set(other._dataU);
+//    _dataV.set(other._dataV);
+//    _dataOriginU = other._dataOriginU;
+//    _dataOriginV = other._dataOriginV;
+//
+//    resetSampler();
+//}
 
 FaceCenteredGrid2& FaceCenteredGrid2::operator=(
     const FaceCenteredGrid2& other) {
-    set(other);
+    //set(other);
     return *this;
 }
 
@@ -78,9 +55,9 @@ double& FaceCenteredGrid2::u(size_t i, size_t j) { return _dataU(i, j); }
 
 double& FaceCenteredGrid2::v(size_t i, size_t j) { return _dataV(i, j); }
 
-Vector2 FaceCenteredGrid2::valueAtCellCenter(size_t i, size_t j) {
+Vector2<double> FaceCenteredGrid2::valueAtCellCenter(size_t i, size_t j) {
 
-    return Vector2(_dataU(i, j) + _dataU(i + 1, j),
+    return Vector2<double>(_dataU(i, j) + _dataU(i + 1, j),
         _dataV(i, j) + _dataV(i, j + 1)) * 0.5;
 }
 
@@ -88,115 +65,114 @@ Vector2 FaceCenteredGrid2::valueAtCellCenter(size_t i, size_t j) {
 
 double FaceCenteredGrid2::divergenceAtCellCenter(size_t i, size_t j) {
 
-    Vector2 gs = gridSpacing();
+    auto gs = gridSpacing();
 
     double leftU = _dataU(i, j);
     double rightU = _dataU(i + 1, j);
     double bottomV = _dataV(i, j);
     double topV = _dataV(i, j + 1);
 
-    return (rightU - leftU) / gs.x() + (topV - bottomV) / gs.y();
+    return (rightU - leftU) / gs.x + (topV - bottomV) / gs.y;
 }
 
 
 double FaceCenteredGrid2::curlAtCellCenter(size_t i, size_t j) {
-    Vector2 res = resolution();
+    auto res = resolution();
 
 
-    Vector2 gs = gridSpacing();
+    auto gs = gridSpacing();
 
-    Vector2 left = valueAtCellCenter((i > 0) ? i - 1 : i, j);
-    Vector2 right = valueAtCellCenter((i + 1 < res.x()) ? i + 1 : i, j);
-    Vector2 bottom = valueAtCellCenter(i, (j > 0) ? j - 1 : j);
-    Vector2 top = valueAtCellCenter(i, (j + 1 < res.y()) ? j + 1 : j);
+    auto left = valueAtCellCenter((i > 0) ? i - 1 : i, j);
+    auto right = valueAtCellCenter((i + 1 < res.x) ? i + 1 : i, j);
+    auto bottom = valueAtCellCenter(i, (j > 0) ? j - 1 : j);
+    auto top = valueAtCellCenter(i, (j + 1 < res.y) ? j + 1 : j);
 
-    double Fx_ym = bottom.x();
-    double Fx_yp = top.x();
+    double Fx_ym = bottom.x;
+    double Fx_yp = top.x;
 
-    double Fy_xm = left.y();
-    double Fy_xp = right.y();
+    double Fy_xm = left.y;
+    double Fy_xp = right.y;
 
-    return 0.5 * (Fy_xp - Fy_xm) / gs.x() - 0.5 * (Fx_yp - Fx_ym) / gs.y();
+    return 0.5 * (Fy_xp - Fy_xm) / gs.x - 0.5 * (Fx_yp - Fx_ym) / gs.y;
 }
 
 
 VectorGrid2::DataPositionFunc FaceCenteredGrid2::uPosition() const {
-    Vector2 h = gridSpacing();
+    auto h = gridSpacing();
 
-    return [this, h](double i, double j) -> Vector2 {
-        return _dataOriginU + h * Vector2({ i, j });
+    return [this, h](double i, double j) -> Vector2<double> {
+        return _dataOriginU + h * Vector2<double>({ i, j });
     };
 }
 
 VectorGrid2::DataPositionFunc FaceCenteredGrid2::vPosition() const {
-    Vector2 h = gridSpacing();
+    auto h = gridSpacing();
 
-    return [this, h](double i, double j) -> Vector2 {
-        return _dataOriginV + h * Vector2({ i, j });
+    return [this, h](double i, double j) -> Vector2<double> {
+        return _dataOriginV + h * Vector2<double>({ i, j });
     };
 }
 
-Vector2 FaceCenteredGrid2::uSize() {
-    auto result = _dataU.size();
+Size2 FaceCenteredGrid2::uSize() {
+    auto result = _dataU.dataSize();
     return result;
 }
 
-Vector2 FaceCenteredGrid2::vSize() { return _dataV.size(); }
+Size2 FaceCenteredGrid2::vSize() { return _dataV.dataSize(); }
 
-DoubleArray2& FaceCenteredGrid2::uDatas() {
+Array2Ptr<double>& FaceCenteredGrid2::uDatas() {
     return _dataU;
 }
 
-DoubleArray2& FaceCenteredGrid2::vDatas() {
+Array2Ptr<double>& FaceCenteredGrid2::vDatas() {
     return _dataV;
 }
 
-Vector2 FaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
+Vector2<double> FaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
 
-Vector2 FaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
+Vector2<double> FaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
 
-Vector2 FaceCenteredGrid2::sample(const Vector2& x) const {
+Vector2<double> FaceCenteredGrid2::sample(const Vector2<double>& x) const {
 
 
-    //这里有个问题，为什么不能直接调用_uLinearSampler？
+    //这里有个问题，为什么不能直接调用_uLinearSampler？一调就baocuo
     auto uSample = _uLinearSampler;
     auto vSample = _vLinearSampler;
 
     auto u = uSample(_dataU, x);
     auto v = vSample(_dataV, x);
-    Vector2 result(u, v);
+    Vector2<double> result(u, v);
 
     return result;
 }
 
-std::function<Vector2(const Vector2&)> FaceCenteredGrid2::sampler() const {
+std::function<Vector2<double>(const Vector2<double>&)> FaceCenteredGrid2::sampler() const {
     return _sampler;
 }
 
-std::shared_ptr<VectorGrid2> FaceCenteredGrid2::clone() const {
-    return CLONE_W_CUSTOM_DELETER(FaceCenteredGrid2);
-}
 
-void FaceCenteredGrid2::fill(const Vector2& value) {
+//暂时不实现
+//void FaceCenteredGrid2::fill(const Vector2& value) {
+//
+//    auto sizeU = uSize();
+//
+//    for (size_t i = 0; i < sizeU.x(); ++i) {
+//        for (size_t j = 0; j < sizeU.y(); ++j) {
+//            _dataU(i, j) = value.x();
+//        }
+//    }
+//
+//
+//    auto sizeV = vSize();
+//    for (size_t i = 0; i < sizeV.x(); ++i) {
+//        for (size_t j = 0; j < sizeV.y(); ++j) {
+//            _dataV(i, j) = value.y();
+//        }
+//    }
+//}
 
-    auto sizeU = uSize();
-
-    for (size_t i = 0; i < sizeU.x(); ++i) {
-        for (size_t j = 0; j < sizeU.y(); ++j) {
-            _dataU(i, j) = value.x();
-        }
-    }
-
-
-    auto sizeV = vSize();
-    for (size_t i = 0; i < sizeV.x(); ++i) {
-        for (size_t j = 0; j < sizeV.y(); ++j) {
-            _dataV(i, j) = value.y();
-        }
-    }
-}
-
-double FaceCenteredGrid2::divergence(const Vector2& x) const {
+//暂时不实现
+double FaceCenteredGrid2::divergence(const Vector2<double>& x) const {
     //ssize_t i, j;
     //double fx, fy;
     //Vector2D cellCenterOrigin = origin() + 0.5 * gridSpacing();
@@ -229,12 +205,12 @@ double FaceCenteredGrid2::divergence(const Vector2& x) const {
     //}
 
     double result = 0;
-    cout << "FaceCenteredGrid2::divergence 尚未实现" << endl;
+    
     return result;
 }
 
-
-double FaceCenteredGrid2::curl(const Vector2& x) const {
+//暂时不实现
+double FaceCenteredGrid2::curl(const Vector2<double>& x) const {
     //ssize_t i, j;
     //double fx, fy;
     //Vector2D cellCenterOrigin = origin() + 0.5 * gridSpacing();
@@ -265,30 +241,34 @@ double FaceCenteredGrid2::curl(const Vector2& x) const {
     //    result += weights[n] * curlAtCellCenter(indices[n].x, indices[n].y);
     //}
     double result = 0;
-    cout << "FaceCenteredGrid2::curl 尚未实现" << endl;
     return result;
 }
 
 
 
-void FaceCenteredGrid2::onResize(const Vector2& resolution,
-    const Vector2& gridSpacing,
-    const Vector2& origin,
-    const Vector2& initialValue) {
-    if (resolution != Vector2(0, 0)) {
-        _dataU.resize(resolution + Vector2(1, 0), initialValue.x());
-        _dataV.resize(resolution + Vector2(0, 1), initialValue.y());
+void FaceCenteredGrid2::onResize(const Vector2<size_t>& resolution,
+    const Vector2<double>& gridSpacing,
+    const Vector2<double>& origin,
+    const Vector2<double>& initialValue) {
+    if (resolution != Vector2<size_t>(0, 0)) {
+        auto ures = resolution + Vector2<size_t>(1, 0);
+        auto vres = resolution + Vector2<size_t>(0, 1);
+        _dataU.reSize(ures.x, ures.y, initialValue.x);
+        _dataV.reSize(ures.x, ures.y, initialValue.x);
+        
     }
     else {
-        _dataU.resize(Vector2(0, 0), 0.0);
-        _dataV.resize(Vector2(0, 0), 0.0);
+        _dataU.reSize(0, 0, 0.0);
+        _dataV.reSize(0, 0, 0.0);
     }
-    _dataOriginU = origin + Vector2(0.0, gridSpacing.y()) * 0.5;
-    _dataOriginV = origin + Vector2(gridSpacing.x(), 0.0) * 0.5;
+    _dataOriginU = origin + Vector2<double>(0.0, gridSpacing.y) * 0.5;
+    _dataOriginV = origin + Vector2<double>(gridSpacing.x, 0.0) * 0.5;
 
     resetSampler();
 }
 
+
+//暂时不实现
 void FaceCenteredGrid2::resetSampler() {
     //LinearArraySampler2<double, double> uSampler(_dataU.constAccessor(),
     //    gridSpacing(), _dataOriginU);
@@ -304,100 +284,70 @@ void FaceCenteredGrid2::resetSampler() {
     //    return Vector2D(u, v);
     //};
 
-    cout << "FaceCenteredGrid2::resetSampler 尚未实现" << endl;
 }
 
 
 FaceCenteredGrid2::Builder FaceCenteredGrid2::builder() { return Builder(); }
 
 
-void FaceCenteredGrid2::getData(std::vector<double>* data) {
-    /////size_t size = uSize().x * uSize().y + vSize().x * vSize().y;
-    ////data->resize(size);
-    ////size_t cnt = 0;
-    ////_dataU.forEach([&](double value) { (*data)[cnt++] = value; });
-    ////_dataV.forEach([&](double value) { (*data)[cnt++] = value; });
 
-    cout << "FaceCenteredGrid2::getData 尚未实现" << endl;
-}
-
-void FaceCenteredGrid2::setData(const std::vector<double>& data) {
-
-    //size_t cnt = 0;
-    //_dataU.forEachIndex(
-    //    [&](size_t i, size_t j) { _dataU(i, j) = data[cnt++]; });
-    //_dataV.forEachIndex(
-    //    [&](size_t i, size_t j) { _dataV(i, j) = data[cnt++]; });
-}
 
 FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withResolution(
-    const Vector2& resolution) {
+    const Vector2<size_t>& resolution) {
     _resolution = resolution;
     return *this;
 }
 
 FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withResolution(
     size_t resolutionX, size_t resolutionY) {
-    _resolution.x() = resolutionX;
-    _resolution.y() = resolutionY;
+    _resolution.x = resolutionX;
+    _resolution.y = resolutionY;
     return *this;
 }
 
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withGridSpacing(
-    const Vector2& gridSpacing) {
-    _gridSpacing = gridSpacing;
-    return *this;
-}
 
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withGridSpacing(
-    double gridSpacingX, double gridSpacingY) {
-    _gridSpacing.x() = gridSpacingX;
-    _gridSpacing.y() = gridSpacingY;
-    return *this;
-}
 
 FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withOrigin(
-    const Vector2& gridOrigin) {
+    const Vector2<double>& gridOrigin) {
     _gridOrigin = gridOrigin;
     return *this;
 }
 
 FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withOrigin(
     double gridOriginX, double gridOriginY) {
-    _gridOrigin.x() = gridOriginX;
-    _gridOrigin.y() = gridOriginY;
+    _gridOrigin.x = gridOriginX;
+    _gridOrigin.y = gridOriginY;
     return *this;
 }
 
 FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withInitialValue(
-    const Vector2& initialVal) {
+    const Vector2<double>& initialVal) {
     _initialVal = initialVal;
     return *this;
 }
 
 FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withInitialValue(
     double initialValX, double initialValY) {
-    _initialVal.x() = initialValX;
-    _initialVal.y() = initialValY;
+    _initialVal.x = initialValX;
+    _initialVal.y = initialValY;
     return *this;
 }
 
 FaceCenteredGrid2 FaceCenteredGrid2::Builder::build() const {
-    return FaceCenteredGrid2(_resolution, _gridSpacing, _gridOrigin,
+    return FaceCenteredGrid2(_resolution, _gridOrigin,
         _initialVal);
 }
 
 FaceCenteredGrid2Ptr FaceCenteredGrid2::Builder::makeShared() const {
     return std::shared_ptr<FaceCenteredGrid2>(
-        new FaceCenteredGrid2(_resolution, _gridSpacing, _gridOrigin,
+        new FaceCenteredGrid2(_resolution, _gridOrigin,
             _initialVal),
         [](FaceCenteredGrid2* obj) { delete obj; });
 }
 
 VectorGrid2Ptr FaceCenteredGrid2::Builder::build(
-    const Vector2& resolution, const Vector2& gridSpacing,
-    const Vector2& gridOrigin, const Vector2& initialVal) const {
+    const Vector2<size_t>& resolution, const Vector2<double>& gridOrigin, const Vector2<double>& initialVal) const {
     return std::shared_ptr<FaceCenteredGrid2>(
-        new FaceCenteredGrid2(resolution, gridSpacing, gridOrigin, initialVal),
+        new FaceCenteredGrid2(resolution, gridOrigin, initialVal),
         [](FaceCenteredGrid2* obj) { delete obj; });
 }

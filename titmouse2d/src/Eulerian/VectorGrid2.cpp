@@ -23,6 +23,10 @@ void VectorGrid2::resize(
     
     //setSizeParameters(resolution, gridSpacing, origin);
 
+    _resolution = resolution;
+    _gridSpacing = gridSpacing;
+    _origin = origin;
+
     onResize(resolution, gridSpacing, origin, initialValue);
 }
 

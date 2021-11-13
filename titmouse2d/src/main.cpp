@@ -2,6 +2,7 @@
 using namespace std;
 
 #include "../src/Eulerian/ArraySampler2.hpp"
+#include "../src/Eulerian/FaceCenteredGrid2.h"
 
 int main() {
 	
