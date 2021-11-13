@@ -36,4 +36,7 @@ private:
 };
 
 
+using ParticleSystemData2Ptr = shared_ptr<ParticleSystemData2>;
+
+
 #endif
