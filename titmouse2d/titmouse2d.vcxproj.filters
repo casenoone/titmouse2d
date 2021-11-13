@@ -69,6 +69,12 @@
     <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Hybrid\PicSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\GridFluidSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -183,6 +189,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\ArraySampler2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hybrid\PicSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\GridFluidSolver2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

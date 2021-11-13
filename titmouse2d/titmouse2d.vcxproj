@@ -146,12 +146,14 @@
     <ClCompile Include="src\Eulerian\fdm_utils.hpp" />
     <ClCompile Include="src\Eulerian\Field2.cpp" />
     <ClCompile Include="src\Eulerian\Grid2.cpp" />
+    <ClCompile Include="src\Eulerian\GridFluidSolver2.cpp" />
     <ClCompile Include="src\Eulerian\MarchingCubes2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarField2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\VectorField2.cpp" />
     <ClCompile Include="src\Eulerian\VectorGrid2.cpp" />
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
+    <ClCompile Include="src\Hybrid\PicSolver2.cpp" />
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
@@ -170,6 +172,7 @@
     <ClInclude Include="src\Eulerian\FaceCenteredGrid2.h" />
     <ClInclude Include="src\Eulerian\Field2.h" />
     <ClInclude Include="src\Eulerian\Grid2.h" />
+    <ClInclude Include="src\Eulerian\GridFluidSolver2.h" />
     <ClInclude Include="src\Eulerian\MarchingCubes2.h" />
     <ClInclude Include="src\Eulerian\MarchingCubesTable2.h" />
     <ClInclude Include="src\Eulerian\ScalarField2.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="src\Eulerian\VectorField2.h" />
     <ClInclude Include="src\Eulerian\VectorGrid2.h" />
     <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h" />
+    <ClInclude Include="src\Hybrid\PicSolver2.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
     <ClInclude Include="src\DenseMatrix.hpp" />
