@@ -151,25 +151,24 @@ std::function<Vector2<double>(const Vector2<double>&)> FaceCenteredGrid2::sample
 }
 
 
-//暂时不实现
-//void FaceCenteredGrid2::fill(const Vector2& value) {
-//
-//    auto sizeU = uSize();
-//
-//    for (size_t i = 0; i < sizeU.x(); ++i) {
-//        for (size_t j = 0; j < sizeU.y(); ++j) {
-//            _dataU(i, j) = value.x();
-//        }
-//    }
-//
-//
-//    auto sizeV = vSize();
-//    for (size_t i = 0; i < sizeV.x(); ++i) {
-//        for (size_t j = 0; j < sizeV.y(); ++j) {
-//            _dataV(i, j) = value.y();
-//        }
-//    }
-//}
+void FaceCenteredGrid2::fill(const Vector2<double>& value) {
+
+    auto sizeU = uSize();
+
+    for (size_t i = 0; i < sizeU.x; ++i) {
+        for (size_t j = 0; j < sizeU.y; ++j) {
+            _dataU(i, j) = value.x;
+        }
+    }
+
+
+    auto sizeV = vSize();
+    for (size_t i = 0; i < sizeV.x; ++i) {
+        for (size_t j = 0; j < sizeV.y; ++j) {
+            _dataV(i, j) = value.y;
+        }
+    }
+}
 
 //暂时不实现
 double FaceCenteredGrid2::divergence(const Vector2<double>& x) const {

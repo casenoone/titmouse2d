@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-#include "../Array.hpp"
+#include "../ArrayPtr.hpp"
 #include "../Vector2.hpp"
 
 #include "ParticleSystemData2.h"
@@ -17,7 +17,7 @@ public:
 	ParticleSystemSolver2();
 	~ParticleSystemSolver2();
 
-	void setData(size_t numberOfParticles, Array<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) ;
+	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) ;
 
 	//Åö×²ÌåÏÈ²»Ð´
 	//void setCollider(ColliderSet2& collider_);
@@ -43,11 +43,11 @@ protected:
 	
 	virtual void accumlateExternalForces();
 	
-	void clearForces(Array<Vector2<double>>& forces);
+	void clearForces(ArrayPtr<Vector2<double>>& forces);
 
-	Array<Vector2<double>> _newPositions;
+	ArrayPtr<Vector2<double>> _newPositions;
 
-	Array<Vector2<double>> _newVelocities;
+	ArrayPtr<Vector2<double>> _newVelocities;
 
 };
 

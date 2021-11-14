@@ -21,10 +21,31 @@ public:
 
 	static Builder builder();
 
+
+protected:
+	void onBeginAdvanceTimeStep(double timeIntervalInSeconds) override;
+
+	//暂时不实现
+	//void computeViscosity(double timeIntervalInSeconds)override;
+
+	void computePressure(double timeIntervalInSeconds)override;
+
+	void computeAdvection(double timeIntervalInSeconds) override;
+
+	virtual void transferFromParticlesToGrids();
+
+	virtual void transferFromGridsToParticles();
+
+	virtual void moveParticles(double timeIntervalInSeconds);
+
+
+
 protected:
 
+	ParticleSystemData2Ptr _particles;
 
-
+	Array2Ptr<double>_uMarkers;
+	Array2Ptr<double> _vMarkers;
 };
 
 typedef std::shared_ptr<PicSolver2> PicSolver2Ptr;

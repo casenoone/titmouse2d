@@ -1,4 +1,5 @@
 #include "GridFluidSolver2.h"
+#include "../../src/ConstVar.h"
 
 GridFluidSolver2::GridFluidSolver2(){}
 
@@ -76,7 +77,6 @@ void GridFluidSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
         return;
     }
 
-    //这个顺序是不是不对啊，不应该是先advection再projection吗
 
    /* beginAdvanceTimeStep(timeIntervalInSeconds);
     computeExternalForces(timeIntervalInSeconds);
@@ -100,3 +100,61 @@ void GridFluidSolver2::computeExternalForces(double timeIntervalInSeconds) {
 void GridFluidSolver2::computePressure(double timeIntervalInSeconds) {
     
 }
+
+//暂时不实现
+void GridFluidSolver2::computeAdvection(double timeIntervalInSeconds) {
+
+}
+
+
+GridFluidSolver2::Builder GridFluidSolver2::builder() { return Builder(); }
+
+
+void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
+    if (_gravity.getLengthSquared() > kEpsilonD) {
+        auto vel = _grids->velocity();
+
+
+
+        if (std::abs(_gravity.y) > kEpsilonD) {
+
+            auto sizeV = vel->vSize();
+            size_t sizeVx = sizeV.x;
+            size_t sizeVy = sizeV.y;
+
+            for (size_t i = 0; i < sizeVx; ++i) {
+                for (size_t j = 0; j < sizeVy; ++j) {
+                    vel->v(i, j) += timeIntervalInSeconds * _gravity.y;
+                }
+            }
+
+
+        }
+
+
+
+        //applyBoundaryCondition();
+    }
+}
+
+
+void GridFluidSolver2::beginAdvanceTimeStep(double timeIntervalInSeconds) {
+    onBeginAdvanceTimeStep(timeIntervalInSeconds);
+}
+
+
+void GridFluidSolver2::endAdvanceTimeStep(double timeIntervalInSeconds) {
+    onEndAdvanceTimeStep(timeIntervalInSeconds);
+}
+
+
+//暂时不实现
+void GridFluidSolver2::updateCollider(double timeIntervalInSeconds) {
+   /* if (_collider != nullptr) {
+        _collider->update(0, timeIntervalInSeconds);
+    }*/
+}
+
+
+
+

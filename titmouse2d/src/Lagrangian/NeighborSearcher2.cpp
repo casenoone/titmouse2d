@@ -47,7 +47,7 @@ bool NeighborSearcher2::IsNeighbor(Vector2<double>& pos1, Vector2<double>& pos2,
 }
 
 
-void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particleId, vector<vector<vector<size_t>>>& grids, const Array<Vector2<double>>& positions) {
+void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particleId, vector<vector<vector<size_t>>>& grids, const ArrayPtr<Vector2<double>>& positions) {
 
 	//idx是待求格子的坐标
 	size_t x = idx.x;
@@ -71,7 +71,7 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particl
 
 }
 
-void NeighborSearcher2::setNeiborList(const Array<Vector2<double>>& positions) {
+void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions) {
 	clearData();
 	resetDataSize();
 

@@ -23,6 +23,9 @@ public:
     //暂时不实现
     //virtual void fill(const Vector2<double>& value) = 0;
 
+    //注意，这里的fill应当写到Grid中，但是目前我不想修改了，用到时再修改
+    virtual void fill(const Vector2<double>& value);
+
 protected:
     virtual void onResize(const Vector2<size_t>& resolution, const Vector2<double>& gridSpacing,
         const Vector2<double>& origin,

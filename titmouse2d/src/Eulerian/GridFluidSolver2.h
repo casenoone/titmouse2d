@@ -32,6 +32,10 @@ protected:
 
     virtual void accumulateForces(double timeIntervalInSeconds);
 
+    virtual void computePressure(double timeIntervalInSeconds);
+
+    virtual void computeAdvection(double timeIntervalInSeconds);
+
     void computeGravity(double timeIntervalInSeconds);
 
     void beginAdvanceTimeStep(double timeIntervalInSeconds);
@@ -42,11 +46,13 @@ protected:
     
     const Vector2<double>& gravity() const;
 
-    double cfl(double timeIntervalInSeconds) const;
+    //暂时不实现
+    //double cfl(double timeIntervalInSeconds) const;
 
     double maxCfl() const;
 
-    void setMaxCfl(double newCfl);
+    //暂时不实现
+    //void setMaxCfl(double newCfl);
 
     const GridSystemData2Ptr& gridSystemData() const;
 
@@ -77,8 +83,8 @@ public:
 
 protected:
     Vector2<size_t> _resolution;
-    Vector2 _gridSpacing;
-    Vector2 _gridOrigin;
+    Vector2<double> _gridSpacing;
+    Vector2<double> _gridOrigin;
 
 };
 

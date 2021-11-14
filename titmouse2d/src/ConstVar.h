@@ -13,7 +13,12 @@ const double DRAG_COEFFICIENT = 0.8;
 
 const double R = 0.08;
 
+//epsilonD指浮点数的最小数，可以理解为0
+constexpr double kEpsilonD = std::numeric_limits<double>::epsilon();
 
+constexpr double kMaxD = std::numeric_limits<double>::max();
+
+constexpr size_t kMaxSize = std::numeric_limits<size_t>::max();
 
 
 #endif

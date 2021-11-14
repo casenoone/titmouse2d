@@ -64,8 +64,7 @@ public:
 	//暂时不实现
 	//std::shared_ptr<VectorGrid2> clone() const override;
 
-	//暂时不实现
-	//void fill(const Vector2<double>& value)override;
+	void fill(const Vector2<double>& value)override;
 
 	static Builder builder();
 

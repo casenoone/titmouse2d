@@ -6,8 +6,8 @@ using namespace std;
 
 #include <vector>
 #include "../Vector2.hpp"
-#include "../Array.hpp"
-#include "../Array2.hpp"
+#include "../ArrayPtr.hpp"
+#include "../Array2Ptr.hpp"
 
 //Íø¸ñËÑË÷·¨
 
@@ -18,7 +18,7 @@ public:
 
 	explicit NeighborSearcher2(size_t resolutionX, size_t resolutionY, size_t numberOfParticles);
 
-	void setNeiborList(const Array<Vector2<double>>& positions);
+	void setNeiborList(const ArrayPtr<Vector2<double>>& positions);
 
 	vector<vector<size_t>>& neighBors();
 
@@ -40,7 +40,7 @@ private:
 
 	bool IsNeighbor(Vector2 <double> & pos1, Vector2<double>& pos2, const double& r);
 
-	void forEachNeighborGrid(Vector2<size_t>& idx, size_t particleId, vector<vector<vector<size_t>>>& grids, const Array<Vector2<double>>& positions);
+	void forEachNeighborGrid(Vector2<size_t>& idx, size_t particleId, vector<vector<vector<size_t>>>& grids, const ArrayPtr<Vector2<double>>& positions);
 
 };
 

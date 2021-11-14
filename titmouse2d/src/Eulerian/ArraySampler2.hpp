@@ -7,6 +7,8 @@
 #include "../Array2Ptr.hpp"
 #include "../MathUtils.hpp"
 
+#include <iostream>
+
 //线性采样器
 
 template<class T>
@@ -28,7 +30,7 @@ public:
 
     void getCoordinatesAndWeights(
         const Vector2<double>& x,
-        std::array<Vector2<size_t>, 4>* indices,
+        std::array<Vector2<int>, 4>* indices,
         std::array<double, 4>* weights);
 
 
@@ -112,7 +114,7 @@ double LinearArraySampler2<T>::operator()(const Array2Ptr<T>& accessor, const Ve
 template<class T>
 void LinearArraySampler2<T>::getCoordinatesAndWeights(
     const Vector2<double>& x,
-    std::array<Vector2<size_t>, 4>* indices,
+    std::array<Vector2<int>, 4>* indices,
     std::array<double, 4>* weights) {
 
     //这步操作在做这样一个事情：
@@ -121,13 +123,13 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
 
     
     //这里的origin指的是背景网格的起点，而非每一个小cell里的起点
-    Vector2 normalizedX = (x - _origin) / _gridSpacing;
+    Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
 
     auto size = _accessor.dataSize();
     int iSize = size.x;
     int jSize = size.y;
 
-    size_t i, j;
+    int i, j;
     double fx, fy;
 
     //得到粒子所在的格子的下标以及粒子在格子中的相对坐标
@@ -139,10 +141,10 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
     int ip1 = std::min(i + 1, iSize - 1);
     int jp1 = std::min(j + 1, jSize - 1);
 
-    (*indices)[0] = Vector2<size_t>(i, j);
-    (*indices)[1] = Vector2<size_t>(ip1, j);
-    (*indices)[2] = Vector2<size_t>(i, jp1);
-    (*indices)[3] = Vector2<size_t>(ip1, jp1);
+    (*indices)[0] = Vector2<int>(i, j);
+    (*indices)[1] = Vector2<int>(ip1, j);
+    (*indices)[2] = Vector2<int>(i, jp1);
+    (*indices)[3] = Vector2<int>(ip1, jp1);
 
     //双线性插值
     (*weights)[0] = (1 - fx) * (1 - fy);

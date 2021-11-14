@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-#include "../Array.hpp"
+#include "../ArrayPtr.hpp"
 #include "../Vector2.hpp"
 #include "NeighborSearcher2.h"
 
@@ -15,21 +15,21 @@ public:
 
 	size_t &numberOfParticles();
 
-	Array<Vector2<double>>& positions();
+	ArrayPtr<Vector2<double>>& positions();
 	
-	Array<Vector2<double>>& velocities();
+	ArrayPtr<Vector2<double>>& velocities();
 	
-	Array<Vector2<double>>& forces();
+	ArrayPtr<Vector2<double>>& forces();
 
 	NeighborSearcher2Ptr neighbor;
 
 private:
 	
-	Array<Vector2<double>> _positions;
+	ArrayPtr<Vector2<double>> _positions;
 	
-	Array<Vector2<double>> _velocities;
+	ArrayPtr<Vector2<double>> _velocities;
 	
-	Array<Vector2<double>> _forces;
+	ArrayPtr<Vector2<double>> _forces;
 	
 	size_t _numberOfParticles = 0;
 

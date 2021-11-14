@@ -30,6 +30,11 @@ void VectorGrid2::resize(
     onResize(resolution, gridSpacing, origin, initialValue);
 }
 
+void VectorGrid2::fill(const Vector2<double>& value) {
+
+}
+
+
 VectorGridBuilder2::VectorGridBuilder2() {
 }
 
