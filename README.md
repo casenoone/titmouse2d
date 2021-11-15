@@ -15,6 +15,6 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - FDM Grids such as CenteredGrid (有限差分计算用到的均匀网格结构)
 - PIC scheme (PIC映射方案)
 - MarchingSquare algorthm 
-- FrameWork or Api(使用的框架或接口): 
+- Framework or Api(使用的框架或接口): 
   - OpenGL/GLUT
  
