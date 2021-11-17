@@ -50,6 +50,7 @@ ArrayPtr<T>::~ArrayPtr() {
 
 template<typename T>
 ArrayPtr<T>::ArrayPtr(const vector<T>& data) {
+	
 	arrayPtr = make_shared<Array<T>>(data);
 }
 

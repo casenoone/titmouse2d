@@ -67,7 +67,7 @@ Array<T>::~Array() {
 template<typename T>
 Array<T>::Array(const vector<T>& data) {
 	_data = data;
-	_size = _data.size();
+	_size = _data.size();	
 }
 
 template<typename T>
