@@ -26,3 +26,12 @@ ExplicitSurface2::~ExplicitSurface2() {
 ExplicitSurface2::ExplicitSurface2(const vector<SurfaceElement2>& data):
 	_data(data)
 {}
+
+
+Vector2<double> ExplicitSurface2::closestPoint(const Vector2<double>& otherPoint)const {
+
+}
+
+double ExplicitSurface2::closestDistance(const Vector2<double>& otherPoint)const {
+
+}

@@ -18,6 +18,8 @@ constexpr double kEpsilonD = std::numeric_limits<double>::epsilon();
 
 constexpr double kMaxD = std::numeric_limits<double>::max();
 
+constexpr double kMinD = std::numeric_limits<double>::min();
+
 constexpr size_t kMaxSize = std::numeric_limits<size_t>::max();
 
 

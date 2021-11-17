@@ -39,6 +39,10 @@ public:
 
 	ExplicitSurface2(const vector<SurfaceElement2>& data);
 
+	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const;
+
+	virtual double closestDistance(const Vector2<double>& otherPoint)const;
+
 	virtual void ghost() const{
 		
 	}
@@ -48,6 +52,7 @@ public:
 public:
 
 	vector<SurfaceElement2> _data;
+
 
 };
 

@@ -12,6 +12,10 @@ public:
 
 	virtual ~Surface2();
 
+	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const;
+
+	virtual double closestDistance(const Vector2<double>& otherPoint)const;
+
 	virtual void ghost() const{
 		
 	}
