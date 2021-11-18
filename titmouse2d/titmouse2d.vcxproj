@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="src\boundingbox2.cpp" />
     <ClCompile Include="src\Collider2.cpp" />
+    <ClCompile Include="src\ColliderSet2.cpp" />
     <ClCompile Include="src\demo\freefallingUsingPicTest\freefallingUsingPicTest.cpp.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Geometry\Box2.cpp" />
     <ClCompile Include="src\Geometry\ExplicitSurface2.cpp" />
+    <ClCompile Include="src\Geometry\Plane2.cpp" />
     <ClCompile Include="src\Geometry\Surface2.cpp" />
     <ClCompile Include="src\Hybrid\PicSolver2.cpp" />
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
@@ -175,6 +177,7 @@
     <ClInclude Include="src\ArrayPtr.hpp" />
     <ClInclude Include="src\boundingbox2.h" />
     <ClInclude Include="src\Collider2.h" />
+    <ClInclude Include="src\ColliderSet2.h" />
     <ClInclude Include="src\ConstVar.h" />
     <ClInclude Include="src\DenseMatrixPtr.hpp" />
     <ClInclude Include="src\Eulerian\ArraySampler2.hpp" />
@@ -193,6 +196,7 @@
     <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h" />
     <ClInclude Include="src\Geometry\Box2.h" />
     <ClInclude Include="src\Geometry\ExplicitSurface2.h" />
+    <ClInclude Include="src\Geometry\Plane2.h" />
     <ClInclude Include="src\Geometry\Surface2.h" />
     <ClInclude Include="src\Hybrid\PicSolver2.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />

@@ -17,7 +17,8 @@ void Collider2::getClosestPoint(
 	const Vector2<double>& queryPoint,
 	ColliderQueryResult* result) const {
 
-	auto minDis = kMaxD
+	auto minDis = kMaxD;
+
 }
 
 
@@ -31,4 +32,15 @@ void Collider2::resolveCollision(
 	ColliderQueryResult colliderPoint;
 
 	getClosestPoint(*position, &colliderPoint);
+}
+
+
+
+bool Collider2::isPenetrating(
+	const Collider2::ColliderQueryResult& colliderPoint,
+	const Vector2<double>& position,
+	double radius) {
+
+	return false;
+
 }

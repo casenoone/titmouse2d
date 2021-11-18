@@ -39,9 +39,11 @@ public:
 
 	ExplicitSurface2(const vector<SurfaceElement2>& data);
 
-	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const;
+	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const override;
 
-	virtual double closestDistance(const Vector2<double>& otherPoint)const;
+	virtual double closestDistance(const Vector2<double>& otherPoint)const override;
+
+	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
 
 	virtual void ghost() const{
 		

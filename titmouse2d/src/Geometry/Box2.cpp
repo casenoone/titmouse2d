@@ -43,3 +43,17 @@ Box2::Box2(const Vector2<double>& _lowerCorner,
 Box2::Box2(const Box2& other) {
 	*this = other;
 }
+
+
+Vector2<double> Box2::closestPoint(const Vector2<double>& otherPoint)const {
+	return ExplicitSurface2::closestPoint(otherPoint);
+}
+
+
+double Box2::closestDistance(const Vector2<double>& otherPoint)const {
+	return ExplicitSurface2::closestDistance(otherPoint);
+}
+
+Surface2::SurfaceQueryResult Box2::getClosedInformation(const Vector2<double>& otherPoint) {
+	return ExplicitSurface2::getClosedInformation(otherPoint);
+}

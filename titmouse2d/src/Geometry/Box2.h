@@ -13,6 +13,12 @@ public:
 
 	Box2(const Box2& other);
 
+	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const;
+
+	virtual double closestDistance(const Vector2<double>& otherPoint)const;
+
+	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
+
 	virtual void ghost() const{
 		
 	}

@@ -4,6 +4,8 @@
 #include <iostream>
 using namespace std;
 
+#include "../Vector2.hpp"
+
 //将这个类划分为显式曲面和隐式曲面
 //然后再配以显式和隐式之间的转换
 class Surface2 {
@@ -12,13 +14,26 @@ public:
 
 	virtual ~Surface2();
 
-	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const;
+	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const = 0;
 
-	virtual double closestDistance(const Vector2<double>& otherPoint)const;
+	virtual double closestDistance(const Vector2<double>& otherPoint)const = 0;
 
 	virtual void ghost() const{
 		
 	}
+
+public:
+	struct SurfaceQueryResult final {
+		double distance;
+		Vector2<double> point;
+		Vector2<double> normal;
+		Vector2<double> velocity;
+	};
+
+
+	SurfaceQueryResult _surfaceQueryResult;
+
+	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint) = 0;
 
 };
 

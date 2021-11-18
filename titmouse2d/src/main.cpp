@@ -4,7 +4,7 @@
 using namespace std;
 
 #include "Geometry/Box2.h"
-
+#include "Geometry/Plane2.h"
 #include "Collider2.h"
 
 #include <vector>
@@ -12,12 +12,20 @@ using namespace std;
 int main()
 {
 
-    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0.5), Vector2<double>(2, 2.5));
-    Box2 box2(Vector2<double>(0, 0.5), Vector2<double>(3, 3.5));
-    Surface2 surface;
+    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(5, 5));
+    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0, 0), Vector2<double>(5, 5));
+    Vector2<double> P(1, 1);
+
+    auto result = box1->getClosedInformation(P);
+
+    //cout << result.point.x << "," << result.point.y << "," << result.distance << endl;
+
+    cout << plane1->normal.x << "," << plane1->normal.y << endl;
 
     Collider2 collider;
     collider.push(box1);
+
+
 
     return 0;
 }
