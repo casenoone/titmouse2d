@@ -19,13 +19,14 @@ Plane2::Plane2(const Vector2<double>& _ponit1,
 	//法向量的处理，这里默认二维平面的法向量为：
 	//point1指向point2的这条线逆时针转90度
 	auto temp_vec = (point2 - point1).getNormalize();
-	normal = Vector2<double>(temp_vec.y, temp_vec.x);
+	normal = Vector2<double>(-temp_vec.y, temp_vec.x);
 	if (isFliped == true) {
 		normal = -1.0 * normal;
 	}
 
 	SurfaceElement2 e(point1, point2, normal);
 	_data.push_back(e);
+	
 
 }
 	

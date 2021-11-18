@@ -54,6 +54,8 @@ double Box2::closestDistance(const Vector2<double>& otherPoint)const {
 	return ExplicitSurface2::closestDistance(otherPoint);
 }
 
+
+
 Surface2::SurfaceQueryResult Box2::getClosedInformation(const Vector2<double>& otherPoint) {
 	return ExplicitSurface2::getClosedInformation(otherPoint);
 }

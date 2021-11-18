@@ -23,6 +23,7 @@ public:
 
 	virtual double closestDistance(const Vector2<double>& otherPoint)const;
 
+
 	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
 
 	virtual void ghost() const {

@@ -144,6 +144,7 @@
     <ClCompile Include="src\Collider2.cpp" />
     <ClCompile Include="src\ColliderSet2.cpp" />
     <ClCompile Include="src\demo\freefallingUsingPicTest\freefallingUsingPicTest.cpp.cpp" />
+    <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
