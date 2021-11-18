@@ -51,6 +51,8 @@ public:
 		const Vector2<double>& position,
 		double radius);
 
+private:
+	double _frictionCoeffient = 0.0;
 };
 
 

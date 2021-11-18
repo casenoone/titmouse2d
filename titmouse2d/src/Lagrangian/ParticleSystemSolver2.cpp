@@ -65,14 +65,20 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 		auto& newPosition = _newPositions[i];
 		auto temp2 = positions[i] + newVelocity * timeIntervalInSeconds;
 		newPosition = temp2;
+		//cout << timeIntervalInSeconds << endl;
 	}
 
 }
 
 //暂时不实现
 void ParticleSystemSolver2::resolveCollision() {
+	size_t n = _particleSystemData->numberOfParticles();
+	auto& velocities = _particleSystemData->velocities();
 	
-	
+	for (size_t i = 0; i < n; ++i) {
+		_collider.resolveCollision(0.000000011, 0.00001, &_newPositions[i], &_newVelocities[i]);
+	}
+
 }
 
 
@@ -82,7 +88,13 @@ void ParticleSystemSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	timeIntegration(timeIntervalInSeconds);
 	resolveCollision();
 	endAdvanceTimeStep();
+	
 }
+
+void ParticleSystemSolver2::setCollider(const Collider2& collider) {
+	_collider = collider;
+}
+
 
 
 void ParticleSystemSolver2::accumulateForces(double timeIntervalInSeconds) {
@@ -101,9 +113,9 @@ void ParticleSystemSolver2::accumlateExternalForces() {
 	for (size_t i = 0; i < n; ++i) {
 		auto force = GRAVITY * mass;
 		forces[i] = forces[i] + force;
-
+		
 		//Drag Forces
-		forces[i] = forces[i] + velocities[i] * (-DRAG_COEFFICIENT);
+		//forces[i] = forces[i] + velocities[i] * (-DRAG_COEFFICIENT);
 	}
 
 

@@ -8,12 +8,18 @@ using namespace std;
 #include "../Vector2.hpp"
 
 #include "ParticleSystemData2.h"
+
+#include "../Collider2.h"
+
 //当前的粒子求解器中，碰撞检测作简单处理
 
 //solver类里应当写一个Builder类，但是目前先不实现
 
 class ParticleSystemSolver2 {
 public:
+	
+	class Builder;
+	
 	ParticleSystemSolver2();
 	~ParticleSystemSolver2();
 
@@ -21,6 +27,9 @@ public:
 
 	//碰撞体先不写
 	//void setCollider(ColliderSet2& collider_);
+
+	void setCollider(const Collider2& collider);
+
 
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
 
@@ -32,6 +41,8 @@ public:
 protected:
 	//暂时不实现
 	//ColliderSet2 _collider;
+
+	Collider2 _collider;
 
 	virtual void beginAdvanceTimeStep();
 	

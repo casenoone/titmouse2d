@@ -22,9 +22,9 @@ public:
 	//±‹√‚…ÓøΩ±¥
 	void operator=(const ArrayPtr<T>& arrPtr);
 
-	size_t& reSize(size_t n);
+	size_t reSize(size_t n);
 
-	size_t& reSize(size_t n, T initValue);
+	size_t reSize(size_t n, T initValue);
 
 	size_t dataSize() const;
 
@@ -82,13 +82,13 @@ inline void ArrayPtr<T>::operator=(const ArrayPtr<T>& arrPtr) {
 
 
 template<typename T>
-size_t& ArrayPtr<T>::reSize(size_t n) {
+size_t ArrayPtr<T>::reSize(size_t n) {
 	arrayPtr->reSize(n);
 	return n;
 }
 
 template<typename T>
-size_t& ArrayPtr<T>::reSize(size_t n, T initValue) {
+size_t ArrayPtr<T>::reSize(size_t n, T initValue) {
 	arrayPtr->reSize(n,initValue);
 	return n;
 }

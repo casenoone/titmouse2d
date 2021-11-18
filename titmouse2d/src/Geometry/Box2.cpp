@@ -18,7 +18,8 @@ Box2::~Box2() {
 /*****3*****/
 
 Box2::Box2(const Vector2<double>& _lowerCorner, 
-	const Vector2<double>& _upperCorner):
+	const Vector2<double>& _upperCorner,
+	bool IsFliped):
 	lowerCorner(_lowerCorner),upperCorner(_upperCorner)
 {
 	
@@ -26,16 +27,32 @@ Box2::Box2(const Vector2<double>& _lowerCorner,
 	Vector2<double> B = upperCorner;
 	Vector2<double> C(upperCorner.x, lowerCorner.y);
 	Vector2<double> D = lowerCorner;
-	
-	SurfaceElement2 e1(A, B, Vector2<double>(0, 1));
-	SurfaceElement2 e2(B, C, Vector2<double>(1, 0));
-	SurfaceElement2 e3(C, D, Vector2<double>(0, -1));
-	SurfaceElement2 e4(D, A, Vector2<double>(-1, 0));
 
-	_data.push_back(e1);
-	_data.push_back(e2);
-	_data.push_back(e3);
-	_data.push_back(e4);
+	if (IsFliped) {
+		SurfaceElement2 e1(A, B, Vector2<double>(0, -1));
+		SurfaceElement2 e2(B, C, Vector2<double>(-1, 0));
+		SurfaceElement2 e3(C, D, Vector2<double>(0, 1));
+		SurfaceElement2 e4(D, A, Vector2<double>(1, 0));
+
+		_data.push_back(e1);
+		_data.push_back(e2);
+		_data.push_back(e3);
+		_data.push_back(e4);
+	}
+	else {
+		SurfaceElement2 e1(A, B, Vector2<double>(0, 1));
+		SurfaceElement2 e2(B, C, Vector2<double>(1, 0));
+		SurfaceElement2 e3(C, D, Vector2<double>(0, -1));
+		SurfaceElement2 e4(D, A, Vector2<double>(-1, 0));
+
+		_data.push_back(e1);
+		_data.push_back(e2);
+		_data.push_back(e3);
+		_data.push_back(e4);
+	}
+	
+
+	
 
 }
 

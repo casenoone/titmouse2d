@@ -23,9 +23,9 @@ public:
 
 	T& operator()(size_t idx);
 
-	size_t& reSize(size_t n);
+	size_t reSize(size_t n);
 
-	size_t& reSize(size_t n, T initValue);
+	size_t reSize(size_t n, T initValue);
 
 	size_t dataSize() const;
 
@@ -92,14 +92,14 @@ inline T& Array<T>::operator()(size_t idx) {
 }
 
 template<typename T>
-size_t& Array<T>::reSize(size_t n) {
+size_t Array<T>::reSize(size_t n) {
 	_size = n;
 	_data.resize(n);
 	return _size;
 }
 
 template<typename T>
-size_t& Array<T>::reSize(size_t n, T initValue) {
+size_t Array<T>::reSize(size_t n, T initValue) {
 	_size = n;
 	_data.assign(n, initValue);
 	return _size;

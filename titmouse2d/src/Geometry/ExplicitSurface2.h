@@ -45,9 +45,7 @@ public:
 
 	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
 
-	virtual void ghost() const{
-		
-	}
+
 
 
 

@@ -9,7 +9,7 @@ public:
 
 	virtual ~Box2();
 
-	Box2(const Vector2<double>& _lowerCorner, const Vector2<double>& _upperCorner);
+	Box2(const Vector2<double>& _lowerCorner, const Vector2<double>& _upperCorner,bool IsFliped = false);
 
 	Box2(const Box2& other);
 
@@ -19,9 +19,7 @@ public:
 
 	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
 
-	virtual void ghost() const{
-		
-	}
+
 
 public:
 	Vector2<double> lowerCorner;
