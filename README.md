@@ -18,4 +18,5 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
   - OpenGL/GLUT
+  - OpenMP
  
