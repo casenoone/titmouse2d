@@ -27,6 +27,7 @@ public:
 	static Builder builder();
 
 public:
+	//collider应该放在GridFluidSolver2里
 	Collider2 collider;
 
 protected:

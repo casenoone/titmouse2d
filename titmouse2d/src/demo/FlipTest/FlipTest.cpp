@@ -7,8 +7,8 @@ using namespace std;
 
 #include "../../Hybrid/PicSolver2.h"
 
+#include "../../Hybrid/FlipSolver2.h"
 #include <GL/glut.h>
-
 #include <cmath>
 static void key(unsigned char key, int x, int y)
 {
@@ -58,10 +58,10 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 }
 
 
-auto picSolver = PicSolver2::builder()
-        .withOrigin(Vector2<double>(0.0,0.0))
-        .withResolution(Vector2<size_t>(10, 10))
-        .makeShared();
+auto flipSolver = FlipSolver2::builder()
+.withOrigin(Vector2<double>(0.0, 0.0))
+.withResolution(Vector2<size_t>(10, 10))
+.makeShared();
 
 ParticleSystemSolver2 solver;
 double dt = 0.02;
@@ -80,23 +80,19 @@ static void display(void)
     glLoadIdentity();
     gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-    //auto num = solver._particleSystemData->numberOfParticles();
-    //auto &pos = solver._particleSystemData->positions();
-    //for (size_t i = 0; i < num; ++i) {
-    //    drawPoint(pos[i].x, pos[i].y);
-    //}
 
-      auto num = picSolver->particleSystemData()->numberOfParticles();
-      auto &pos = picSolver->particleSystemData()->positions();
-      for (size_t i = 0; i < num; ++i) {
-          drawPoint(pos[i].x, pos[i].y);
-      }
+
+    auto num = flipSolver->particleSystemData()->numberOfParticles();
+    auto& pos = flipSolver->particleSystemData()->positions();
+    for (size_t i = 0; i < num; ++i) {
+        drawPoint(pos[i].x, pos[i].y);
+    }
 
 
 
-      picSolver->onAdvanceTimeStep(dt);
-      drawColliders(surfaceSet);
-      glutSwapBuffers();
+    flipSolver->onAdvanceTimeStep(dt);
+    drawColliders(surfaceSet);
+    glutSwapBuffers();
 
 }
 
@@ -134,37 +130,37 @@ int main(int argc, char** argv)
     glShadeModel(GL_FLAT);
 
 
-    int numberOfParticles = 10000;
+    int numberOfParticles = 2000;
     int resolutionX = 100;
     int resolutionY = 100;
     vector <Vector2<double>> temp1;
     for (int i = 0; i < numberOfParticles; ++i) {
-       auto x = rand() / double(RAND_MAX) + 1.0;
-       auto y = rand() / double(RAND_MAX) + 1.0;
-       Vector2<double> temp(x, y);
-       temp1.push_back(temp);
+        auto x = rand() / double(RAND_MAX) + 1.0;
+        auto y = rand() / double(RAND_MAX) + 1.0;
+        Vector2<double> temp(x, y);
+        temp1.push_back(temp);
     }
-    
+
     ArrayPtr<Vector2<double>> pos(temp1);
 
- 
 
-    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(1.99, 1.99),true);
+
+    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(1.99, 1.99), true);
     Box2Ptr box2 = make_shared<Box2>(Vector2<double>(1, 0), Vector2<double>(1.3, 0.8), false);
-    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.5, 0), Vector2<double>(1, 0.8),false);
-    
+    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.5, 0), Vector2<double>(1, 0.8), false);
+
     surfaceSet.push_back(box1);
     surfaceSet.push_back(box2);
     surfaceSet.push_back(plane1);
-    
-    
+
+
     collider.push(box1);
     collider.push(box2);
     collider.push(plane1);
-    
+
     solver.setCollider(collider);
     solver.setData(numberOfParticles, pos, resolutionX, resolutionY);
-    picSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
+    flipSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
 
 
 
@@ -178,7 +174,7 @@ int main(int argc, char** argv)
     glutMainLoop();
 
 
-    
+
     return 0;
 }
 

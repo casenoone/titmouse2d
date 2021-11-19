@@ -165,6 +165,7 @@
     <ClCompile Include="src\Geometry\ExplicitSurface2.cpp" />
     <ClCompile Include="src\Geometry\Plane2.cpp" />
     <ClCompile Include="src\Geometry\Surface2.cpp" />
+    <ClCompile Include="src\Hybrid\FlipSolver2.cpp" />
     <ClCompile Include="src\Hybrid\PicSolver2.cpp" />
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="src\Geometry\ExplicitSurface2.h" />
     <ClInclude Include="src\Geometry\Plane2.h" />
     <ClInclude Include="src\Geometry\Surface2.h" />
+    <ClInclude Include="src\Hybrid\FlipSolver2.h" />
     <ClInclude Include="src\Hybrid\PicSolver2.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />

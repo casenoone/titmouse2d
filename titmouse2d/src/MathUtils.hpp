@@ -1,3 +1,6 @@
+#ifndef MATHUTILS_HPP
+#define MATHUTILS_HPP
+
 #include <cmath>
 
 
@@ -6,6 +9,18 @@ template<class T>
 inline T sqr(const T& x)
 {
 	return x * x;
+}
+
+
+template<class T>
+inline T clamp(const T& factor, const T& min, const T& max) {
+	if (factor > max) {
+		return max;
+	}
+	if (factor < min) {
+		return min;
+	}
+	return factor;
 }
 
 
@@ -65,3 +80,6 @@ inline T bilerp(
 		ty);
 
 }
+
+
+#endif
