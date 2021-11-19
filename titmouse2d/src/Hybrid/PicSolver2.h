@@ -18,13 +18,19 @@ public:
 	virtual ~PicSolver2();
 
 	const ParticleSystemData2Ptr& particleSystemData() const;
+	
+	//临时测试使用,后期改成Builder里构建
+	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY);
+
+	void onBeginAdvanceTimeStep(double timeIntervalInSeconds) override;
 
 	static Builder builder();
 
+public:
+	Collider2 collider;
 
 protected:
-	void onBeginAdvanceTimeStep(double timeIntervalInSeconds) override;
-
+	
 	//暂时不实现
 	//void computeViscosity(double timeIntervalInSeconds)override;
 

@@ -1,11 +1,11 @@
-﻿#include <iostream>
-using namespace std;
-
-#include <vector>
-
-int main()
-{
-
-    
-    return 0;
-}
+﻿//#include <iostream>
+//using namespace std;
+//
+//#include <vector>
+//
+//int main()
+//{
+//
+//    
+//    return 0;
+//}

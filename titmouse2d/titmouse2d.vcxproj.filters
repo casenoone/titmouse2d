@@ -105,6 +105,9 @@
     <ClCompile Include="src\demo\freefalling\freefalling.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\demo\freefallingUsingFlipTest\freefallingUsingFlipTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">

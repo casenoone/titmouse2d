@@ -20,6 +20,8 @@ public:
 
     Vector2<double> gridOrigin() const;
 
+    virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
+
     static Builder builder();
 
 protected:
@@ -56,7 +58,7 @@ protected:
 
     const GridSystemData2Ptr& gridSystemData() const;
 
-    virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
+    
 
     FaceCenteredGrid2Ptr velocity();
 

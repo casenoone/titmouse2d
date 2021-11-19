@@ -9,6 +9,7 @@ GridFluidSolver2::GridFluidSolver2(
     const Vector2<double>& gridOrigin) {
 
     _grids = std::make_shared<GridSystemData2>(resolution, gridSpacing, gridOrigin);
+
 }
 
 GridFluidSolver2::~GridFluidSolver2() {}
@@ -77,16 +78,16 @@ void GridFluidSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
         return;
     }
 
-
-   /* beginAdvanceTimeStep(timeIntervalInSeconds);
+    beginAdvanceTimeStep(timeIntervalInSeconds);
     computeExternalForces(timeIntervalInSeconds);
     computePressure(timeIntervalInSeconds);
     computeAdvection(timeIntervalInSeconds);
-    endAdvanceTimeStep(timeIntervalInSeconds);*/
+    endAdvanceTimeStep(timeIntervalInSeconds);
 }
 
 
 void GridFluidSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds) {
+
 }
 
 void GridFluidSolver2::onEndAdvanceTimeStep(double timeIntervalInSeconds) {
@@ -125,6 +126,7 @@ void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
             for (size_t i = 0; i < sizeVx; ++i) {
                 for (size_t j = 0; j < sizeVy; ++j) {
                     vel->v(i, j) += timeIntervalInSeconds * _gravity.y;
+                    
                 }
             }
 
@@ -132,8 +134,6 @@ void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
         }
 
 
-
-        //applyBoundaryCondition();
     }
 }
 

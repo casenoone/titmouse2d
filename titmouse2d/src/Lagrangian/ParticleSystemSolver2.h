@@ -37,12 +37,11 @@ public:
 
 public:
 	shared_ptr<ParticleSystemData2> _particleSystemData;
+	Collider2 _collider;
 
 protected:
 	//暂时不实现
 	//ColliderSet2 _collider;
-
-	Collider2 _collider;
 
 	virtual void beginAdvanceTimeStep();
 	

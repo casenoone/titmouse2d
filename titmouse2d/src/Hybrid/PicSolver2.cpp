@@ -2,6 +2,8 @@
 #include "../boundingbox2.h"
 #include <array>
 
+#include<omp.h>
+
 PicSolver2::PicSolver2() {
 }
 
@@ -18,6 +20,7 @@ PicSolver2::PicSolver2(
 	auto grids = gridSystemData();
 
 	_particles = std::make_shared<ParticleSystemData2>();
+   
 }
 
 
@@ -76,29 +79,33 @@ void PicSolver2::transferFromParticlesToGrids() {
         flow->vOrigin()
     );
 
+    omp_set_num_threads(8);
+//#pragma omp parallel 
+    {
+        //#pragma omp for
+        for (int i = 0; i < numberOfParticles; ++i) {
 
-    for (size_t i = 0; i < numberOfParticles; ++i) {
+            std::array<Vector2<int>, 4> indices;
 
-        std::array<Vector2<int>,4> indices;
+            std::array<double, 4> weights;
 
-        std::array<double, 4> weights;
+            uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+            for (int j = 0; j < 4; ++j) {
+                u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
+                uWeight(indices[j].x, indices[j].y) += weights[j];
+                _uMarkers(indices[j].x, indices[j].y) = 1;
+            }
 
-        uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-        for (int j = 0; j < 4; ++j) {
-            u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
-            uWeight(indices[j].x, indices[j].y) += weights[j];
-            _uMarkers(indices[j].x, indices[j].y) = 1;
+            vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+            for (int j = 0; j < 4; ++j) {
+                v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
+                vWeight(indices[j].x, indices[j].y) += weights[j];
+                _vMarkers(indices[j].x, indices[j].y) = 1;
+            }
+           
         }
-
-        vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-        for (int j = 0; j < 4; ++j) {
-            v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
-            vWeight(indices[j].x, indices[j].y) += weights[j];
-            _vMarkers(indices[j].x, indices[j].y) = 1;
-        }
-
     }
-
+    
     for (size_t i = 0; i < sizeU.x; ++i) {
         for (size_t j = 0; j < sizeU.y; ++j) {
             if (uWeight(i, j) > 0.0) {
@@ -129,7 +136,7 @@ void PicSolver2::transferFromGridsToParticles() {
     for (size_t i = 0; i < numberOfParticles; ++i) {
         //注意这个sample怎么写
         velocities[i] = flow->sample(positions[i]);
-
+        
     }
 
 }
@@ -148,7 +155,7 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
     Vector2<double> upper;
     upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
     upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
-
+    //cout << lower.x << " " << lower.y << endl;
     auto  boundingBox = BoundingBox2(lower, upper);
 
     for (size_t i = 0; i < numberOfParticles; ++i) {
@@ -193,18 +200,17 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 
 
         positions[i] = pt1;
-        //cout << (*positions)[i].y() << endl;
         velocities[i] = vel;
-
+        //cout << positions[0].y << endl;
     }
-
-
-    //Collider2Ptr col = collider();
-    //if (col != nullptr) {
-    //    for (size_t i = 0; i < numberOfParticles; ++i) {
-    //        col->resolveCollision(0.0, 0.0, &positions[i], &velocities[i]);
-    //    }
-    //}
+    
+    //auto col = this->particleSystemData()->
+    //
+    ////if (col != nullptr) {
+    ////    for (size_t i = 0; i < numberOfParticles; ++i) {
+    ////        col->resolveCollision(0.0, 0.0, &positions[i], &velocities[i]);
+    ////    }
+    ////}
 }
 
 
@@ -218,6 +224,13 @@ PicSolver2::Builder PicSolver2::builder() {
 
 const ParticleSystemData2Ptr& PicSolver2::particleSystemData() const {
 	return _particles;
+}
+
+void PicSolver2::setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) {
+    _particles->positions() = pos;
+    _particles->numberOfParticles() = numberOfParticles;
+    _particles->forces().reSize(numberOfParticles);
+    _particles->velocities().reSize(numberOfParticles);
 }
 
 
