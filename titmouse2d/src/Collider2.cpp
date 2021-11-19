@@ -101,10 +101,8 @@ bool Collider2::isPenetrating(
 
 	auto OP = position - colliderPoint.point;
 	auto result = OP.dot(colliderPoint.normal);
-	
-	//cout << colliderPoint.normal.x << " " << colliderPoint.normal.y << endl;
-	
-	if (result < 0) {
+
+	if (result < 0 && OP.getLengthSquared()<0.0001) {
 		return true;
 	}
 

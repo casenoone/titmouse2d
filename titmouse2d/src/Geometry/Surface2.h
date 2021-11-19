@@ -18,8 +18,6 @@ public:
 
 	virtual double closestDistance(const Vector2<double>& otherPoint)const = 0;
 
-
-
 public:
 	struct SurfaceQueryResult final {
 		double distance;

@@ -56,6 +56,6 @@ public:
 
 };
 
-
+using ExplicitSurface2Ptr = shared_ptr<ExplicitSurface2>;
 
 #endif
