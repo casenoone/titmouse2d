@@ -2,7 +2,6 @@
 #include "../boundingbox2.h"
 #include <array>
 
-#include<omp.h>
 
 PicSolver2::PicSolver2() {
 }
@@ -17,10 +16,8 @@ PicSolver2::PicSolver2(
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin)
 	: GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
-	auto grids = gridSystemData();
 
 	_particles = std::make_shared<ParticleSystemData2>();
-   
 }
 
 
@@ -38,13 +35,15 @@ void PicSolver2::computePressure(double timeIntervalInSeconds) {
 void PicSolver2::computeAdvection(double timeIntervalInSeconds) {
 
 	transferFromGridsToParticles();
-	moveParticles(timeIntervalInSeconds);
+    moveParticles(timeIntervalInSeconds);
 }
 
 
 //暂时不实现
 //void computeViscosity(double timeIntervalInSeconds)override;
 
+
+//这里感觉也不会出问题啊！
 void PicSolver2::transferFromParticlesToGrids() {
 
     auto flow = gridSystemData()->velocity();
@@ -52,10 +51,9 @@ void PicSolver2::transferFromParticlesToGrids() {
     auto velocities = _particles->velocities();
     size_t numberOfParticles = _particles->numberOfParticles();
 
-    flow->fill(Vector2<double>());
+    flow->fill(Vector2<double>(0.0,0.0));
     auto sizeU = flow->uSize();
     auto sizeV = flow->vSize();
-
     auto& u = flow->uDatas();
     auto& v = flow->vDatas();
 
@@ -79,32 +77,33 @@ void PicSolver2::transferFromParticlesToGrids() {
         flow->vOrigin()
     );
 
-    omp_set_num_threads(8);
-//#pragma omp parallel 
-    {
-        //#pragma omp for
-        for (int i = 0; i < numberOfParticles; ++i) {
+    for (int i = 0; i < numberOfParticles; ++i) {
 
-            std::array<Vector2<int>, 4> indices;
+        std::array<Vector2<int>, 4> indices;
 
-            std::array<double, 4> weights;
+        std::array<double, 4> weights;
 
-            uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-            for (int j = 0; j < 4; ++j) {
-                u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
-                uWeight(indices[j].x, indices[j].y) += weights[j];
-                _uMarkers(indices[j].x, indices[j].y) = 1;
-            }
-
-            vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-            for (int j = 0; j < 4; ++j) {
-                v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
-                vWeight(indices[j].x, indices[j].y) += weights[j];
-                _vMarkers(indices[j].x, indices[j].y) = 1;
-            }
-           
+        uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+        for (int j = 0; j < 4; ++j) {
+            u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
+            uWeight(indices[j].x, indices[j].y) += weights[j];
+            _uMarkers(indices[j].x, indices[j].y) = 1;
         }
+
+        vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+        for (int j = 0; j < 4; ++j) {
+            v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
+            
+            //这里是为了处理PIC损失重力引起的动能，也可以去掉，没什么影响
+            if (velocities[i].y == 0)weights[j] = 0;
+            
+            vWeight(indices[j].x, indices[j].y) += weights[j];
+            _vMarkers(indices[j].x, indices[j].y) = 1;
+        }
+        
+       
     }
+
     
     for (size_t i = 0; i < sizeU.x; ++i) {
         for (size_t j = 0; j < sizeU.y; ++j) {
@@ -118,14 +117,13 @@ void PicSolver2::transferFromParticlesToGrids() {
         for (size_t j = 0; j < sizeV.y; ++j) {
             if (vWeight(i, j) > 0.0) {
                 v(i, j) /= vWeight(i, j);
-
             }
         }
     }
 
 
-}
 
+}
 
 void PicSolver2::transferFromGridsToParticles() {
     auto flow = gridSystemData()->velocity();
@@ -136,26 +134,25 @@ void PicSolver2::transferFromGridsToParticles() {
     for (size_t i = 0; i < numberOfParticles; ++i) {
         //注意这个sample怎么写
         velocities[i] = flow->sample(positions[i]);
-        
     }
+    
+
 
 }
 
 
-
+//这里不会有问题
 void PicSolver2::moveParticles(double timeIntervalInSeconds) {
     auto flow = gridSystemData()->velocity();
     auto positions = _particles->positions();
     auto velocities = _particles->velocities();
     size_t numberOfParticles = _particles->numberOfParticles();
 
-    //BoundingBox2 boundingBox = flow->boundingBox();
-
     auto lower = flow->origin();
     Vector2<double> upper;
     upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
     upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
-    //cout << lower.x << " " << lower.y << endl;
+    //cout << upper.x << " " << upper.y << endl;
     auto  boundingBox = BoundingBox2(lower, upper);
 
     for (size_t i = 0; i < numberOfParticles; ++i) {
@@ -163,10 +160,8 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
         Vector2<double> pt1 = pt0;
         Vector2<double> vel = velocities[i];
 
-  
         unsigned int numSubSteps
-            = static_cast<unsigned int>(std::max(maxCfl(), 1.0));
-
+            = static_cast<unsigned int>(std::min(maxCfl(), 1.0));
         double dt = timeIntervalInSeconds / numSubSteps;
         for (unsigned int t = 0; t < numSubSteps; ++t) {
             Vector2<double> vel0 = flow->sample(pt0);
@@ -174,6 +169,8 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
             //中点法
             Vector2<double> midPt = pt0 + vel0 * 0.5 * dt;
             Vector2<double> midVel = flow->sample(midPt);
+            
+
             pt1 = pt0 + midVel * dt;
             pt0 = pt1;
         }
@@ -187,6 +184,7 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
         if (pt1.x >= boundingBox.upperCorner.x) {
             pt1.x = boundingBox.upperCorner.x;
             vel.x = 0.0;
+           
         }
 
         if (pt1.y <= boundingBox.lowerCorner.y) {
@@ -201,16 +199,14 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 
         positions[i] = pt1;
         velocities[i] = vel;
-        //cout << positions[0].y << endl;
     }
-    
-    //auto col = this->particleSystemData()->
-    //
-    ////if (col != nullptr) {
-    ////    for (size_t i = 0; i < numberOfParticles; ++i) {
-    ////        col->resolveCollision(0.0, 0.0, &positions[i], &velocities[i]);
-    ////    }
-    ////}
+
+
+    for (int i = 0; i < numberOfParticles; ++i) {
+        collider.resolveCollision(0.00001, 0.0, &positions[i], &velocities[i]); 
+            //cout << i << endl;
+    }
+
 }
 
 
@@ -220,6 +216,11 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 PicSolver2::Builder PicSolver2::builder() {
 	return Builder();
 }
+
+void PicSolver2::setCollider(const Collider2& _collider) {
+    this->collider = _collider;
+}
+
 
 
 const ParticleSystemData2Ptr& PicSolver2::particleSystemData() const {

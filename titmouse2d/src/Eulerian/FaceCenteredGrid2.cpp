@@ -15,14 +15,15 @@ FaceCenteredGrid2::FaceCenteredGrid2():
 FaceCenteredGrid2::FaceCenteredGrid2(const Vector2<size_t>& resolution,
     const Vector2<double>& origin,
     const Vector2<double>& initialValue) :
-    _uLinearSampler(_dataU, Vector2<double>(2.0/resolution.x,2.0/resolution.y), uOrigin()),
-    _vLinearSampler(_dataV, Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y), vOrigin())
+    _uLinearSampler(_dataU, Vector2<double>(2.0/resolution.x,2.0/resolution.y), (origin + Vector2<double>(0.0, 2.0 / resolution.y * 0.5))),
+    _vLinearSampler(_dataV, Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2<double>(2.0 / resolution.x * 0.5, 0.0)))
 {
 
     auto gridSpacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
     resize(resolution, gridSpacing, origin, initialValue);
     _uLinearSampler._accessor = _dataU;
     _vLinearSampler._accessor = _dataV;
+
 
 }
 
@@ -135,15 +136,13 @@ Vector2<double> FaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
 Vector2<double> FaceCenteredGrid2::sample(const Vector2<double>& x) const {
 
 
-    //这里有个问题，为什么不能直接调用_uLinearSampler？一调就baocuo
     auto uSample = _uLinearSampler;
-    auto vSample = _vLinearSampler;
-
+    auto vSample = _vLinearSampler;    
+    
     auto u = uSample(_dataU, x);
     auto v = vSample(_dataV, x);
     Vector2<double> result(u, v);
-
-    return result;
+   return result;
 }
 
 std::function<Vector2<double>(const Vector2<double>&)> FaceCenteredGrid2::sampler() const {
@@ -253,7 +252,7 @@ void FaceCenteredGrid2::onResize(const Vector2<size_t>& resolution,
         auto ures = resolution + Vector2<size_t>(1, 0);
         auto vres = resolution + Vector2<size_t>(0, 1);
         _dataU.reSize(ures.x, ures.y, initialValue.x);
-        _dataV.reSize(ures.x, ures.y, initialValue.x);
+        _dataV.reSize(vres.x, vres.y, initialValue.y);
         
     }
     else {

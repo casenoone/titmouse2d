@@ -117,7 +117,7 @@
 //    glShadeModel(GL_FLAT);
 //
 //
-//    int numberOfParticles = 100;
+//    int numberOfParticles = 4;
 //    int resolutionX = 50;
 //    int resolutionY = 50;
 //    vector <Vector2<double>> temp1;

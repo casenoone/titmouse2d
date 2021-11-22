@@ -32,6 +32,7 @@ inline void getBarycentric(
 	int* i,
 	double* f) {
 
+
 	double s = std::floor(x);
 	*i = static_cast<int>(s);
 	int offset = -iLow;

@@ -4,6 +4,8 @@
 #include "../Vector2.hpp"
 #include "GridSystemData2.h"
 
+#include "../Collider2.h"
+
 class GridFluidSolver2 {
 public:
 	class Builder;
@@ -58,9 +60,8 @@ protected:
 
     const GridSystemData2Ptr& gridSystemData() const;
 
-    
-
     FaceCenteredGrid2Ptr velocity();
+
 
 private:
     Vector2<double> _gravity = Vector2<double>(0.0, -9.8);
@@ -68,7 +69,6 @@ private:
     double _maxCfl = 5.0;
 
     GridSystemData2Ptr _grids;
-    //Collider2Ptr _collider;
 };
 
 

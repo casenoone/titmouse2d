@@ -78,7 +78,7 @@
     <ClCompile Include="src\Eulerian\GridSystemData2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\freefallingUsingPicTest\freefallingUsingPicTest.cpp.cpp">
+    <ClCompile Include="src\demo\PicTest\Pictest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\boundingbox2.cpp">
@@ -105,7 +105,7 @@
     <ClCompile Include="src\demo\freefalling\freefalling.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\freefallingUsingFlipTest\freefallingUsingFlipTest.cpp">
+    <ClCompile Include="src\demo\FlipTest\FlipTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Hybrid\FlipSolver2.cpp">

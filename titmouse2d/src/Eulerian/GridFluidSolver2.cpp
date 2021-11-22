@@ -113,7 +113,7 @@ GridFluidSolver2::Builder GridFluidSolver2::builder() { return Builder(); }
 
 void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
     if (_gravity.getLengthSquared() > kEpsilonD) {
-        auto vel = _grids->velocity();
+        auto &vel = _grids->velocity();
 
 
 
@@ -122,18 +122,14 @@ void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
             auto sizeV = vel->vSize();
             size_t sizeVx = sizeV.x;
             size_t sizeVy = sizeV.y;
-
             for (size_t i = 0; i < sizeVx; ++i) {
                 for (size_t j = 0; j < sizeVy; ++j) {
                     vel->v(i, j) += timeIntervalInSeconds * _gravity.y;
-                    
                 }
             }
 
 
         }
-
-
     }
 }
 

@@ -143,8 +143,8 @@
     <ClCompile Include="src\boundingbox2.cpp" />
     <ClCompile Include="src\Collider2.cpp" />
     <ClCompile Include="src\ColliderSet2.cpp" />
-    <ClCompile Include="src\demo\freefallingUsingFlipTest\freefallingUsingFlipTest.cpp" />
-    <ClCompile Include="src\demo\freefallingUsingPicTest\freefallingUsingPicTest.cpp.cpp" />
+    <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
+    <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />

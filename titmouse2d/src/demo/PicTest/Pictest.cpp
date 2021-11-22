@@ -25,7 +25,17 @@
 //void drawPoint(double x, double y)
 //{
 //    //在后缓存绘制图形，就一个点
-//    glPointSize(3.05f);//缺省是1
+//    glPointSize(1.05f);//缺省是1
+//    glBegin(GL_POINTS);
+//    glColor3f(1, 128.0 / 255, 51.0 / 255);
+//    glVertex3f((x - 1) * 10, (y - 1) * 10, 0);
+//    glEnd();
+//}
+//
+//void drawPoint(double x, double y,float size)
+//{
+//    //在后缓存绘制图形，就一个点
+//    glPointSize(size);//缺省是1
 //    glBegin(GL_POINTS);
 //    glColor3f(1, 128.0 / 255, 51.0 / 255);
 //    glVertex3f((x - 1) * 10, (y - 1) * 10, 0);
@@ -59,11 +69,11 @@
 //
 //auto picSolver = PicSolver2::builder()
 //        .withOrigin(Vector2<double>(0.0,0.0))
-//        .withResolution(Vector2<size_t>(10, 10))
+//        .withResolution(Vector2<size_t>(20, 20))
 //        .makeShared();
 //
 //ParticleSystemSolver2 solver;
-//double dt = 0.02;
+//double dt = 0.002;
 //Collider2 collider;
 //
 //vector<ExplicitSurface2Ptr> surfaceSet;
@@ -79,22 +89,18 @@
 //    glLoadIdentity();
 //    gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 //
-//    //auto num = solver._particleSystemData->numberOfParticles();
-//    //auto &pos = solver._particleSystemData->positions();
-//    //for (size_t i = 0; i < num; ++i) {
-//    //    drawPoint(pos[i].x, pos[i].y);
-//    //}
+//
 //
 //      auto num = picSolver->particleSystemData()->numberOfParticles();
 //      auto &pos = picSolver->particleSystemData()->positions();
 //      for (size_t i = 0; i < num; ++i) {
-//          drawPoint(pos[i].x, pos[i].y);
+//          drawPoint(pos[i].x, pos[i].y,1.5f);
 //      }
 //
 //
+//      drawColliders(surfaceSet);
 //
 //      picSolver->onAdvanceTimeStep(dt);
-//      drawColliders(surfaceSet);
 //      glutSwapBuffers();
 //
 //}
@@ -133,13 +139,13 @@
 //    glShadeModel(GL_FLAT);
 //
 //
-//    int numberOfParticles = 10000;
-//    int resolutionX = 100;
-//    int resolutionY = 100;
+//    int numberOfParticles = 200;
+//    int resolutionX = 10;
+//    int resolutionY = 10;
 //    vector <Vector2<double>> temp1;
 //    for (int i = 0; i < numberOfParticles; ++i) {
-//       auto x = rand() / double(RAND_MAX) + 1.0;
-//       auto y = rand() / double(RAND_MAX) + 1.0;
+//       auto x = rand() / double(RAND_MAX)+0.5;
+//       auto y = rand() / double(RAND_MAX)+1.0;
 //       Vector2<double> temp(x, y);
 //       temp1.push_back(temp);
 //    }
@@ -148,7 +154,7 @@
 //
 // 
 //
-//    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(1.99, 1.99),true);
+//    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0),true);
 //    Box2Ptr box2 = make_shared<Box2>(Vector2<double>(1, 0), Vector2<double>(1.3, 0.8), false);
 //    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.5, 0), Vector2<double>(1, 0.8),false);
 //    
@@ -165,7 +171,7 @@
 //    solver.setData(numberOfParticles, pos, resolutionX, resolutionY);
 //    picSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
 //
-//
+//    picSolver->setCollider(collider);
 //
 //
 //

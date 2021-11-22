@@ -69,6 +69,7 @@ LinearArraySampler2<T>::LinearArraySampler2(
     _invGridSpacing = Vector2<double>(1 / gridSpacing.x, 1 / gridSpacing.y);
     _origin = gridOrigin;
     _accessor = accessor;
+   // cout << _accessor.dataSize().x << endl;
 
 }
 
@@ -88,10 +89,13 @@ double LinearArraySampler2<T>::operator()(const Array2Ptr<T>& accessor, const Ve
     int i, j;
     double fx, fy;
     Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
+    //cout << _origin.x << "," << _origin.y << endl;
+    //cout << (x - _origin).x << "," << (x - _origin).y << endl;
     auto& accessors = const_cast<Array2Ptr<double>&>(accessor);
     auto size = accessors.dataSize();
     int iSize = size.x;
     int jSize = size.y;
+    //cout << _origin.x << endl;
     getBarycentric(normalizedX.x, 0, iSize - 1, &i, &fx);
     getBarycentric(normalizedX.y, 0, jSize - 1, &j, &fy);
     int ip1 = std::min(i + 1, iSize - 1);
@@ -124,8 +128,11 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
     
     //这里的origin指的是背景网格的起点，而非每一个小cell里的起点
     Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
-
+    //cout << normalizedX.x << endl;
+    //cout << normalizedX.x<<","<<normalizedX.y<< endl;
     auto size = _accessor.dataSize();
+
+    //cout << size.x<<","<<size.y<< endl;
     int iSize = size.x;
     int jSize = size.y;
 

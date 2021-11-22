@@ -17,6 +17,8 @@ public:
 
 	virtual ~PicSolver2();
 
+	void setCollider(const Collider2& _collider);
+
 	const ParticleSystemData2Ptr& particleSystemData() const;
 	
 	//临时测试使用,后期改成Builder里构建
@@ -27,7 +29,7 @@ public:
 	static Builder builder();
 
 public:
-	//collider应该放在GridFluidSolver2里
+
 	Collider2 collider;
 
 protected:
