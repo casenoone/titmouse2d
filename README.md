@@ -21,3 +21,5 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
   - OpenGL/GLUT
   - OpenMP
  
+实现的算法：
+- Flip/Pic + 压力泊松方程求解自由表面流
