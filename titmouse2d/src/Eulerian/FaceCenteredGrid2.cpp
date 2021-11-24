@@ -1,5 +1,5 @@
 #include "FaceCenteredGrid2.h"
-
+#include "../ConstVar.h"
 
 FaceCenteredGrid2::FaceCenteredGrid2():
     _uLinearSampler(_dataU, Vector2<double>(1.0, 1.0), Vector2<double>()),
@@ -24,7 +24,7 @@ FaceCenteredGrid2::FaceCenteredGrid2(const Vector2<size_t>& resolution,
     _uLinearSampler._accessor = _dataU;
     _vLinearSampler._accessor = _dataV;
 
-
+    solveSystemMarker.reSize(resolution.x,resolution.y, AIR);
 }
 
 FaceCenteredGrid2::FaceCenteredGrid2(const FaceCenteredGrid2& other) {

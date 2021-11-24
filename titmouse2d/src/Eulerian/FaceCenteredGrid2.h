@@ -66,6 +66,13 @@ public:
 
 	void fill(const Vector2<double>& value)override;
 
+
+	//由于faceCentered常常被用作速度场
+	//在求解线性系统时，往往只求解流体所在部分
+	//所以用该成员去标识线性系统中未知量系数的序号
+	//我们令其初始化为空气
+	Array2Ptr<int> solveSystemMarker;
+
 	static Builder builder();
 
 protected:

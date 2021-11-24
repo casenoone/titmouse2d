@@ -9,7 +9,7 @@ GridFluidSolver2::GridFluidSolver2(
     const Vector2<double>& gridOrigin) {
 
     _grids = std::make_shared<GridSystemData2>(resolution, gridSpacing, gridOrigin);
-
+    _pressureSolver = make_shared<SimplePressureSolver2>();
 }
 
 GridFluidSolver2::~GridFluidSolver2() {}
@@ -114,8 +114,6 @@ GridFluidSolver2::Builder GridFluidSolver2::builder() { return Builder(); }
 void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
     if (_gravity.getLengthSquared() > kEpsilonD) {
         auto &vel = _grids->velocity();
-
-
 
         if (std::abs(_gravity.y) > kEpsilonD) {
 

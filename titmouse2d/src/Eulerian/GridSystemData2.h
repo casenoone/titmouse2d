@@ -37,7 +37,7 @@ private:
     Vector2<double> _origin;
 
     FaceCenteredGrid2Ptr _velocity;
-
+    
 };
 
 typedef std::shared_ptr<GridSystemData2> GridSystemData2Ptr;

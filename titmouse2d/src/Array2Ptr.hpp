@@ -46,7 +46,7 @@ private:
 
 template<typename T>
 Array2Ptr<T>::Array2Ptr() {
-	array2Ptr = make_shared<Array2<T>>(vector<vector<double>>());
+	array2Ptr = make_shared<Array2<T>>(vector<vector<T>>());
 }
 
 template<typename T>

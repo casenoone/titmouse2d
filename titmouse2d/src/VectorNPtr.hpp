@@ -14,6 +14,8 @@ public:
 
 	VectorNPtr(const vector<T>& data);
 
+	VectorNPtr(int len);
+
 	//这个构造函数一般用于重载运算符处
 	VectorNPtr(const shared_ptr<VectorN<T>>& p);
 
@@ -25,6 +27,8 @@ public:
 
 	//重载向量和向量相乘
 	T operator*(const VectorNPtr<T>& vel) const;
+
+	void operator*=(const T & r);
 
 	//向量和数乘
 
@@ -65,7 +69,8 @@ VectorNPtr<T>::~VectorNPtr() {
 
 }
 
-
+//一失足成千古恨，这里本没必要搞这个类的
+//但是。。。等写3D版本的时候再改正吧
 template<class T>
 VectorNPtr<T>::VectorNPtr(const vector<T>& data){
 	vectorNPtr = make_shared<VectorN<T>>(data);	
@@ -73,6 +78,13 @@ VectorNPtr<T>::VectorNPtr(const vector<T>& data){
 	this->arrayPtr = this->vectorNPtr;
 	
 }
+
+template<class T>
+VectorNPtr<T>::VectorNPtr(int len) {
+	vectorNPtr = make_shared<VectorN<T>>(len);
+	this->arrayPtr = this->vectorNPtr;
+}
+
 
 template<class T>
 shared_ptr<VectorN<T>> VectorNPtr<T>::getVectorNPtr() const{
@@ -88,7 +100,10 @@ T VectorNPtr<T>::operator*(const VectorNPtr<T>& vel) const {
 	return k;
 }
 
-
+template<class T>
+void VectorNPtr<T>::operator*=(const T& r) {
+	(*this->vectorNPtr) *= r;
+}
 
 
 template<class T>

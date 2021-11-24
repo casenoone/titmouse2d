@@ -33,7 +33,7 @@ protected:
 	void transferFromGridsToParticles() override;
 
 private:
-	double _picBlendingFactor = 1;
+	double _picBlendingFactor = 0.01;
 	Array2Ptr<double> _uDelta;
 	Array2Ptr<double> _vDelta;
 

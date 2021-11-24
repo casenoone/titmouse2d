@@ -24,13 +24,13 @@ protected:
 	VectorNPtr<T> _r;
 
 	//最小误差
-	T _minR = 1e-5;
+	T _minR = 1e-7;
 
 	//记录迭代次数
 	size_t _iterNum = 0;
 
 	//最大迭代次数
-	size_t _maxIterNum = 500;
+	size_t _maxIterNum = 1000;
 };
 
 

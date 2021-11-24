@@ -123,6 +123,9 @@ public:
 	//矩阵与数相乘
 	sparseMatrixPtr<T> operator*(const T& r) const;
 
+	//乘等于
+	void operator*=(const T& r);
+
 	template<class T>
 	friend sparseMatrixPtr<T> operator*(const T& r, const SparseMatrix<T>& mat);
 
@@ -492,6 +495,14 @@ sparseMatrixPtr<T> SparseMatrix<T>::operator*(const T& r) const {
 
 	return resultMat;
 }
+
+template<class T>
+void SparseMatrix<T>::operator*=(const T& r) {
+	for (size_t i = 0; i < _valuedNum; ++i) {
+		this->_data[i] *= r;
+	}
+}
+
 
 template<class T>
 sparseMatrixPtr<T> operator*(const T& r,const SparseMatrix<T>& mat) {

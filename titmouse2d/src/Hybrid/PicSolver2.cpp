@@ -28,7 +28,7 @@ void PicSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds) {
 
 //暂时不实现
 void PicSolver2::computePressure(double timeIntervalInSeconds) {
-	//_pressureSolver->solver(velocity(), cellCenterMarkers);
+	_pressureSolver->solve(velocity(), cellCenterMarkers);
 }
 
 
@@ -43,7 +43,6 @@ void PicSolver2::computeAdvection(double timeIntervalInSeconds) {
 //void computeViscosity(double timeIntervalInSeconds)override;
 
 
-//这里感觉也不会出问题啊！
 void PicSolver2::transferFromParticlesToGrids() {
 
     auto flow = gridSystemData()->velocity();
@@ -95,7 +94,7 @@ void PicSolver2::transferFromParticlesToGrids() {
             v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
             
             //这里是为了处理PIC损失重力引起的动能，也可以去掉，没什么影响
-            if (velocities[i].y == 0)weights[j] = 0;
+            //if (velocities[i].y == 0)weights[j] = 0;
             
             vWeight(indices[j].x, indices[j].y) += weights[j];
             _vMarkers(indices[j].x, indices[j].y) = 1;
@@ -121,7 +120,8 @@ void PicSolver2::transferFromParticlesToGrids() {
         }
     }
 
-
+    setMarkers();
+    setFluidCellNum();
 
 }
 
@@ -141,7 +141,6 @@ void PicSolver2::transferFromGridsToParticles() {
 }
 
 
-//这里不会有问题
 void PicSolver2::moveParticles(double timeIntervalInSeconds) {
     auto flow = gridSystemData()->velocity();
     auto positions = _particles->positions();
@@ -161,7 +160,7 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
         Vector2<double> vel = velocities[i];
 
         unsigned int numSubSteps
-            = static_cast<unsigned int>(std::min(maxCfl(), 1.0));
+            = static_cast<unsigned int>(std::max(maxCfl(), 1.0));
         double dt = timeIntervalInSeconds / numSubSteps;
         for (unsigned int t = 0; t < numSubSteps; ++t) {
             Vector2<double> vel0 = flow->sample(pt0);
@@ -203,12 +202,60 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 
 
     for (int i = 0; i < numberOfParticles; ++i) {
-        collider.resolveCollision(0.00001, 0.0, &positions[i], &velocities[i]); 
-            //cout << i << endl;
+        collider.resolveCollision(0.00001, 0.01, &positions[i], &velocities[i]); 
     }
 
 }
 
+
+
+void PicSolver2::setMarkers() {
+    auto size = resolution();
+    auto positions = particleSystemData()->positions();
+    cellCenterMarkers.reSize(size.x,size.y, AIR);
+    auto numberOfParticles = particleSystemData()->numberOfParticles();
+
+    for (int i = 0; i < numberOfParticles; ++i) {
+        //作映射
+        auto x = positions[i].x;
+        auto y = positions[i].y;
+
+        auto xs = (x - gridOrigin().x) / (gridSpacing().x);
+        auto ys = (y - gridOrigin().y) / (gridSpacing().y);
+
+        int xss = floor(xs);
+        int yss = floor(ys);
+        if (xss >= resolution().x) {
+            xss = resolution().x - 1;
+        }
+
+        if (yss >= resolution().y) {
+            yss = resolution().x - 1;
+        }
+
+
+        cellCenterMarkers(xss, yss) = FLUID;
+
+    }
+}
+
+void PicSolver2::setFluidCellNum() {
+    int nums = 0;
+    auto size = resolution();
+    auto vel = velocity();
+
+    vel->solveSystemMarker.reSize(resolution().x,resolution().y, -1);
+
+    for (int j = 0; j < size.y; ++j) {
+        for (int i = 0; i < size.x; ++i) {
+            //如果格子被流体占据
+            if (cellCenterMarkers(i, j) == FLUID) {
+                vel->solveSystemMarker(i, j) = nums;
+                nums++;
+            }
+        }
+    }
+}
 
 
 

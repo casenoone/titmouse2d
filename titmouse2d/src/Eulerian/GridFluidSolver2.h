@@ -6,6 +6,8 @@
 
 #include "../Collider2.h"
 
+#include "SimplePressureSolver2.h"
+
 class GridFluidSolver2 {
 public:
 	class Builder;
@@ -50,18 +52,26 @@ protected:
     
     const Vector2<double>& gravity() const;
 
+
+
     //暂时不实现
     //double cfl(double timeIntervalInSeconds) const;
 
     double maxCfl() const;
 
     //暂时不实现
-    //void setMaxCfl(double newCfl);
+   // void setMaxCfl(double newCfl);
 
     const GridSystemData2Ptr& gridSystemData() const;
 
     FaceCenteredGrid2Ptr velocity();
 
+
+protected:
+    //标记网格是否被粒子占用
+    Array2Ptr<int> cellCenterMarkers;
+
+    SimplePressureSolver2Ptr _pressureSolver;
 
 private:
     Vector2<double> _gravity = Vector2<double>(0.0, -9.8);

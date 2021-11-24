@@ -54,7 +54,6 @@ void FlipSolver2::transferFromParticlesToGrids() {
 		}
 	}
 
-
 }
 
 
@@ -98,7 +97,6 @@ void FlipSolver2::transferFromGridsToParticles() {
 		velocities[i] = flipVel;
 
 	}
-
 }
 
 

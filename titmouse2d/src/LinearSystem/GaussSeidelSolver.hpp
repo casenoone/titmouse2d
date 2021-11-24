@@ -68,7 +68,7 @@ void GaussSeidelSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x
 		this->_iterNum++;
 		
 	}
-	cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << endl;
+	//cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << endl;
 	
 }
 

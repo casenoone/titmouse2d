@@ -73,7 +73,7 @@
 //        .makeShared();
 //
 //ParticleSystemSolver2 solver;
-//double dt = 0.002;
+//double dt = 0.01;
 //Collider2 collider;
 //
 //vector<ExplicitSurface2Ptr> surfaceSet;
@@ -139,13 +139,13 @@
 //    glShadeModel(GL_FLAT);
 //
 //
-//    int numberOfParticles = 200;
+//    int numberOfParticles = 1000;
 //    int resolutionX = 10;
 //    int resolutionY = 10;
 //    vector <Vector2<double>> temp1;
 //    for (int i = 0; i < numberOfParticles; ++i) {
 //       auto x = rand() / double(RAND_MAX)+0.5;
-//       auto y = rand() / double(RAND_MAX)+1.0;
+//       auto y = rand() / double(RAND_MAX)+0.5;
 //       Vector2<double> temp(x, y);
 //       temp1.push_back(temp);
 //    }
@@ -159,13 +159,13 @@
 //    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.5, 0), Vector2<double>(1, 0.8),false);
 //    
 //    surfaceSet.push_back(box1);
-//    surfaceSet.push_back(box2);
-//    surfaceSet.push_back(plane1);
+//    //surfaceSet.push_back(box2);
+//    //surfaceSet.push_back(plane1);
 //    
 //    
 //    collider.push(box1);
-//    collider.push(box2);
-//    collider.push(plane1);
+//    //collider.push(box2);
+//    //collider.push(plane1);
 //    
 //    solver.setCollider(collider);
 //    solver.setData(numberOfParticles, pos, resolutionX, resolutionY);

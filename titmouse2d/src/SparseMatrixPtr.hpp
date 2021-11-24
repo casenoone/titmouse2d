@@ -38,6 +38,9 @@ public:
 	//矩阵相乘
 	SparseMatrixPtr<T> operator*(const SparseMatrixPtr<T>& mat) const;
 
+	//乘等于
+	void operator*=(const T& r);
+
 	//矩阵与数相乘
 	SparseMatrixPtr<T> operator*(const T& r) const;
 
@@ -170,6 +173,10 @@ VectorNPtr<T> operator*(const VectorNPtr<T>& vec, const SparseMatrixPtr<T>& mat)
 	return result;
 }
 
+template<class T>
+void SparseMatrixPtr<T>::operator*=(const T& r) {
+	(*this->sparseMatrixPtr)*= r;
+}
 
 
 //矩阵相乘

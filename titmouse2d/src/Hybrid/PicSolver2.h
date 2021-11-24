@@ -4,6 +4,9 @@
 #include "../Eulerian/GridFluidSolver2.h"
 #include "../Lagrangian/ParticleSystemSolver2.h"
 
+#include "../ConstVar.h"
+
+
 class PicSolver2 :public GridFluidSolver2 {
 public:
 	class Builder;
@@ -47,7 +50,9 @@ protected:
 
 	virtual void moveParticles(double timeIntervalInSeconds);
 
+	void setMarkers();
 
+	void setFluidCellNum();
 
 protected:
 

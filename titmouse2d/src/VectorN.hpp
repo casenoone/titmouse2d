@@ -24,6 +24,8 @@ public:
 	~VectorN();
 
 	VectorN(const vector<T>& data);
+	
+	VectorN(int len);
 
 	T norm() const;
 
@@ -32,8 +34,10 @@ public:
 	//重载向量和向量相乘
 	T operator*(const VectorN<T>& vel) const;
 
-	//向量和数乘
+	//乘等于
+	void operator*=(const T& r);
 
+	//向量和数乘
 	vectorNPtr<T> operator*(const T r) const;
 	
 	template<class T>
@@ -68,7 +72,10 @@ VectorN<T>::VectorN(const vector<T>& data): Array<T>(data) {
 
 }
 
-
+template<class T>
+VectorN<T>::VectorN(int len) {
+	this->reSize(len, static_cast<T>(0));
+}
 
 
 
@@ -83,6 +90,12 @@ T VectorN<T>::operator*(const VectorN<T>& vel) const {
 }
 
 
+template<class T>
+void VectorN<T>::operator*=(const T& r) {
+	this->forEachIndex([&](size_t i) {
+		(*this)[i] *= r;
+		});
+}
 
 
 template<class T>
