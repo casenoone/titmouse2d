@@ -15,8 +15,11 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - collision detection（2D情况下任意几何形状的碰撞检测与处理）
 - FDM Grids such as CenteredGrid (有限差分计算用到的均匀网格结构)
 - PIC/FLIP scheme (PIC/FLIP映射方案)
+- Pressure Possion Equation Solve (压力泊松方程求解)
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
   - OpenGL/GLUT
   - OpenMP
  
+实现的算法：
+- FLIP/PIC + 压力泊松方程求解自由表面流
