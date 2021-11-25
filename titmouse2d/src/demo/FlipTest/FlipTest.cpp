@@ -60,11 +60,11 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto flipSolver = FlipSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(25, 25))
+.withResolution(Vector2<size_t>(30, 30))
 .makeShared();
 
 ParticleSystemSolver2 solver;
-double dt = 0.01;
+double dt = 0.02;
 Collider2 collider;
 
 vector<ExplicitSurface2Ptr> surfaceSet;
@@ -124,19 +124,19 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(200, 200);
     glutInitWindowPosition(0, 0);
-    glutCreateWindow("titmouse");
+    glutCreateWindow("titmouse2d");
 
-    glClearColor(0.0, 0.0, 0.0, 1);
+    glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);   
     glShadeModel(GL_FLAT);
 
 
-    int numberOfParticles = 500;
+    int numberOfParticles = 1000;
     int resolutionX = 10;
     int resolutionY = 10;
     vector <Vector2<double>> temp1;
     for (int i = 0; i < numberOfParticles; ++i) {
         auto x = rand() / double(RAND_MAX) + 0.3;
-        auto y = rand() / double(RAND_MAX) + 0.88;
+        auto y = rand() / double(RAND_MAX) + 0.95;
         Vector2<double> temp(x, y);
         temp1.push_back(temp);
     }
@@ -145,16 +145,19 @@ int main(int argc, char** argv)
 
 
     Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
-    Box2Ptr box2 = make_shared<Box2>(Vector2<double>(1, 0), Vector2<double>(1.3, 0.8), false);
-    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(-1, -1), Vector2<double>(1, 0.8), false);
+    Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0.4, 0.3), Vector2<double>(1.0, 0.4), false);
+    Box2Ptr box3 = make_shared<Box2>(Vector2<double>(0.6, 0.6), Vector2<double>(1.0, 0.7), false);
+    Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.7, 0.8), Vector2<double>(1.0, 0.8), false);
 
     surfaceSet.push_back(box1);
-    //surfaceSet.push_back(box2);
+    surfaceSet.push_back(box2);
+    surfaceSet.push_back(box3);
     //surfaceSet.push_back(plane1);
 
 
     collider.push(box1);
-    //collider.push(box2);
+    collider.push(box2);
+    collider.push(box3);
     //collider.push(plane1);
 
     flipSolver->setCollider(collider);

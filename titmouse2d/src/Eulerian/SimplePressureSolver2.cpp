@@ -119,10 +119,6 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 		}
 	}
 	
-	//保证矩阵对角线上的元素为正
-	//A *= invH;
-	//b *= -1;
-
 	//千万不要忘记build（）
 	A.build();
 
@@ -130,7 +126,8 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	ConjugateGradientSolver<double> cgSolver;
 	GaussSeidelSolver<double> gauSolver;
 	SteepestDescentSolver<double> steepSolver;
-
+	
+	//线性系统求解可作并行优化
 	cgSolver.compute(A, x, b);
 	//gauSolver.compute(A, x, b);
 	//steepSolver.compute(A, x, b);
@@ -215,12 +212,4 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 		}
 	}
 
-
-	//for (size_t j = 0; j < sizeV.y; ++j) {
-	//	for (size_t i = 0; i < sizeV.x; ++i) {
-	//		if (j <= 0 || j >= sizeV.y - 1) {
-	//			cout << v(i, j) << endl;
-	//		}
-	//	}
-	//}
 }

@@ -114,6 +114,9 @@
     <ClCompile Include="src\Eulerian\SimplePressureSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Eulerian\SimpleDiffuseSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -264,6 +267,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\SimplePressureSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\SimpleDiffuseSolver2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

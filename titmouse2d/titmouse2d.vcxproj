@@ -158,6 +158,7 @@
     <ClCompile Include="src\Eulerian\MarchingCubes2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarField2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
+    <ClCompile Include="src\Eulerian\SimpleDiffuseSolver2.cpp" />
     <ClCompile Include="src\Eulerian\SimplePressureSolver2.cpp" />
     <ClCompile Include="src\Eulerian\VectorField2.cpp" />
     <ClCompile Include="src\Eulerian\VectorGrid2.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\Eulerian\MarchingCubesTable2.h" />
     <ClInclude Include="src\Eulerian\ScalarField2.h" />
     <ClInclude Include="src\Eulerian\ScalarGrid2.h" />
+    <ClInclude Include="src\Eulerian\SimpleDiffuseSolver2.h" />
     <ClInclude Include="src\Eulerian\SimplePressureSolver2.h" />
     <ClInclude Include="src\Eulerian\VectorField2.h" />
     <ClInclude Include="src\Eulerian\VectorGrid2.h" />

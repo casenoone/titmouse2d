@@ -66,12 +66,11 @@ Surface2::SurfaceQueryResult ExplicitSurface2::getClosedInformation(const Vector
 		//如果投影点在线段内
 		if (PA.dot(PB) < 0) {
 			auto temp_dis2 = (otherPoint - P).getLengthSquared();
-			
 			if (temp_dis2 < minDis_2) { minDis_2 = temp_dis2; minPoint = P;minNormal = N;}
 		}
 		//如果投影点不在线段内，那么就判断其离哪个端点最近
 		else {
-						
+
 			auto PA_dis2 = PA.getLengthSquared();
 			auto PB_dis2 = PB.getLengthSquared();
 			
