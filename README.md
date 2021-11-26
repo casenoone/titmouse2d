@@ -23,3 +23,6 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
  
 实现的算法：
 - FLIP/PIC + 压力泊松方程求解自由表面流
+
+效果图：
+https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif
