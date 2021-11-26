@@ -1,10 +1,13 @@
 #include "SimplePressureSolver2.h"
 #include "../LinearSystem/ConjugateGradientSolver.hpp"
 #include "../LinearSystem/SteepestDescentSolver.hpp"
+#include "../LinearSystem/JacobiSolver.hpp"
 #include "../ConstVar.h"
 
 
 #include "../LinearSystem/GaussSeidelSolver.hpp"
+
+#include<omp.h>
 SimplePressureSolver2::SimplePressureSolver2() {
 
 }
@@ -27,15 +30,18 @@ int SimplePressureSolver2::fluidCellSize(const Array2Ptr<int>& markers) {
 	int systemSize = 0;
 
 	auto markersSize = markers.dataSize();
-	for (size_t i = 0; i < markersSize.x; ++i) {
-		for (size_t j = 0; j < markersSize.y; ++j) {
+	omp_set_num_threads(23);
+#pragma omp parallel for reduction(+:systemSize)
+	for (int i = 0; i < markersSize.x; ++i) {
+		for (int j = 0; j < markersSize.y; ++j) {
 			if (markers.lookAt(i,j) == FLUID) {
-				systemSize++;
+				systemSize+=1;
 			}
 		}
 	}
 	return systemSize;
 }
+
 
 void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow, 
 	const Array2Ptr<int>& markers,
@@ -105,7 +111,6 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				
 				if (i <= 0 || i >= flow->uSize().x - 1) {
 					u(i, j) = 0;
-					//cout << i << endl;
 				}
 
 				if (j <= 0 || j >= flow->vSize().y - 1) {
@@ -126,14 +131,13 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	ConjugateGradientSolver<double> cgSolver;
 	GaussSeidelSolver<double> gauSolver;
 	SteepestDescentSolver<double> steepSolver;
-	
+	JacobiSolver<double> JacobiSolver;
+
 	//线性系统求解可作并行优化
 	cgSolver.compute(A, x, b);
 	//gauSolver.compute(A, x, b);
 	//steepSolver.compute(A, x, b);
-	
-	//x *= 1000000;
-	
+	//JacobiSolver.compute(A, x, b);
 }
 
 void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow, 
@@ -150,8 +154,11 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 	auto& solveSystemMarker = flow->solveSystemMarker;
 
 	auto sizeU = flow->uSize();
-	for (size_t j = 0; j < sizeU.y; ++j) {
-		for (size_t i = 0; i < sizeU.x; ++i) {
+	
+	omp_set_num_threads(23);
+#pragma omp parallel for 
+	for (int j = 0; j < sizeU.y; ++j) {
+		for (int i = 0; i < sizeU.x; ++i) {
 			//说明在边界上
 			if (i <= 0 || i >= sizeU.x - 1) {
 				u(i, j) = 0;
@@ -161,17 +168,17 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 				if (markers.lookAt(i - 1, j) == FLUID && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
 					auto col0 = solveSystemMarker(i - 1, j);
-					u(i, j) = u(i, j) - (x[col1] - x[col0]) * invH;
+					u(i, j) -=(x[col1] - x[col0]) * invH;
 				}
 				//如果左边是气体，右边是流体
 				if (markers.lookAt(i - 1, j) == AIR && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
-					u(i, j) = u(i, j) - x[col1] * invH;
+					u(i, j) -= x[col1] * invH;
 				}
 				//如果左边是流体，右边是气体
 				if (markers.lookAt(i - 1, j) == FLUID && markers.lookAt(i, j) == AIR) {
 					auto col0 = solveSystemMarker(i - 1, j);
-					u(i, j) = u(i, j) - (0 - x[col0]) * invH;
+					u(i, j) += (x[col0]) * invH;
 				}
 
 
@@ -181,8 +188,10 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 
 
 	auto sizeV = flow->vSize();
-	for (size_t j = 0; j < sizeV.y; ++j) {
-		for (size_t i = 0; i < sizeV.x; ++i) {
+	omp_set_num_threads(23);
+#pragma omp parallel for 
+	for (int j = 0; j < sizeV.y; ++j) {
+		for (int i = 0; i < sizeV.x; ++i) {
 			//说明在边界上
 			if (j <= 0 || j >= sizeV.y - 1) {
 				v(i, j) = 0;
@@ -192,19 +201,19 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 				if (markers.lookAt(i, j - 1) == FLUID && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
 					auto col0 = solveSystemMarker(i, j - 1);
-					v(i, j) = v(i, j) - (x[col1] - x[col0]) * invH;
+					v(i, j) -=(x[col1] - x[col0]) * invH;
 				}
 				//如果下是气体，上边是流体
 
 				if (markers.lookAt(i, j - 1) == AIR && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
-					v(i, j) = v(i, j) - x[col1] * invH;
+					v(i, j) -=x[col1] * invH;
 				}
 				//如果下边是流体，上边是气体
 
 				if (markers.lookAt(i, j - 1) == FLUID && markers.lookAt(i, j) == AIR) {
 					auto col0 = solveSystemMarker(i, j - 1);
-					v(i, j) = v(i, j) - (0 - x[col0]) * invH;
+					v(i, j) +=(x[col0]) * invH;
 				}
 
 

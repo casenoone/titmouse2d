@@ -24,7 +24,7 @@ protected:
 	VectorNPtr<T> _r;
 
 	//最小误差
-	T _minR = 1e-7;
+	T _minR = 1e-9;
 
 	//记录迭代次数
 	size_t _iterNum = 0;

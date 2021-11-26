@@ -1,6 +1,8 @@
 #include "FlipSolver2.h"
 #include "../MathUtils.hpp"
 
+#include <omp.h>
+
 FlipSolver2::FlipSolver2() :FlipSolver2({ 2,2 }, { 2,2 }, { 0,0 }) {
 
 }
@@ -41,15 +43,23 @@ void FlipSolver2::transferFromParticlesToGrids() {
 	_vDelta.reSize(v.dataSize().x, v.dataSize().y, 0.0);
 
 	auto sizeU = vel->uSize();
-	for (size_t i = 0; i < sizeU.x; ++i) {
-		for (size_t j = 0; j < sizeU.y; ++j) {
+
+
+
+	omp_set_num_threads(20);
+#pragma omp parallel for
+	for (int i = 0; i < sizeU.x; ++i) {
+		for (int j = 0; j < sizeU.y; ++j) {
 			_uDelta(i, j) = u(i, j);
 		}
 	}
 
 	auto sizeV = vel->vSize();
-	for (size_t i = 0; i < sizeV.x; ++i) {
-		for (size_t j = 0; j < sizeV.y; ++j) {
+
+	omp_set_num_threads(20);
+#pragma omp parallel for
+	for (int i = 0; i < sizeV.x; ++i) {
+		for (int j = 0; j < sizeV.y; ++j) {
 			_vDelta(i, j) = v(i, j);
 		}
 	}
@@ -66,16 +76,20 @@ void FlipSolver2::transferFromGridsToParticles() {
 
 	//计算速度增量
 	auto sizeU = flow->uSize();
-	for (size_t i = 0; i < sizeU.x; ++i) {
-		for (size_t j = 0; j < sizeU.y; ++j) {
+	omp_set_num_threads(20);
+#pragma omp parallel for
+	for (int i = 0; i < sizeU.x; ++i) {
+		for (int j = 0; j < sizeU.y; ++j) {
 			_uDelta(i, j) = flow->u(i, j) - _uDelta(i, j);
 		}
 	}
 
 
 	auto sizeV = flow->vSize();
-	for (size_t i = 0; i < sizeV.x; ++i) {
-		for (size_t j = 0; j < sizeV.y; ++j) {
+	omp_set_num_threads(20);
+#pragma omp parallel for
+	for (int i = 0; i < sizeV.x; ++i) {
+		for (int j = 0; j < sizeV.y; ++j) {
 			_vDelta(i, j) = flow->v(i, j) - _vDelta(i, j);
 		}
 	}
@@ -84,7 +98,9 @@ void FlipSolver2::transferFromGridsToParticles() {
 	LinearArraySampler2<double> vSampler(_vDelta, flow->gridSpacing(), flow->origin());
 
 	//把flip的delta值映射回particles
-	for (size_t i = 0; i < numberOfParticles; ++i) {
+	omp_set_num_threads(20);
+#pragma omp parallel for
+	for (int i = 0; i < numberOfParticles; ++i) {
 		auto sampleDelta = Vector2<double>(uSampler(_uDelta, positions[i]), vSampler(_vDelta, positions[i]));
 		Vector2<double> flipVel = velocities[i] + sampleDelta;
 

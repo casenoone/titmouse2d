@@ -2,6 +2,7 @@
 #include "../boundingbox2.h"
 #include <array>
 
+#include<omp.h>
 
 PicSolver2::PicSolver2() {
 }
@@ -75,7 +76,7 @@ void PicSolver2::transferFromParticlesToGrids() {
         flow->gridSpacing(),
         flow->vOrigin()
     );
-
+    
     for (int i = 0; i < numberOfParticles; ++i) {
 
         std::array<Vector2<int>, 4> indices;
@@ -94,7 +95,7 @@ void PicSolver2::transferFromParticlesToGrids() {
             v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
             
             //这里是为了处理PIC损失重力引起的动能，也可以去掉，没什么影响
-            //if (velocities[i].y == 0)weights[j] = 0;
+            if (velocities[i].y == 0)weights[j] = 0;
             
             vWeight(indices[j].x, indices[j].y) += weights[j];
             _vMarkers(indices[j].x, indices[j].y) = 1;
@@ -103,17 +104,20 @@ void PicSolver2::transferFromParticlesToGrids() {
        
     }
 
-    
-    for (size_t i = 0; i < sizeU.x; ++i) {
-        for (size_t j = 0; j < sizeU.y; ++j) {
+    omp_set_num_threads(23);
+#pragma omp parallel for
+    for (int i = 0; i < sizeU.x; ++i) {
+        for (int j = 0; j < sizeU.y; ++j) {
             if (uWeight(i, j) > 0.0) {
                 u(i, j) /= uWeight(i, j);
             }
         }
     }
 
-    for (size_t i = 0; i < sizeV.x; ++i) {
-        for (size_t j = 0; j < sizeV.y; ++j) {
+    omp_set_num_threads(23);
+#pragma omp parallel for
+    for (int i = 0; i < sizeV.x; ++i) {
+        for (int j = 0; j < sizeV.y; ++j) {
             if (vWeight(i, j) > 0.0) {
                 v(i, j) /= vWeight(i, j);
             }
@@ -153,8 +157,9 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
     upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
     //cout << upper.x << " " << upper.y << endl;
     auto  boundingBox = BoundingBox2(lower, upper);
-
-    for (size_t i = 0; i < numberOfParticles; ++i) {
+    omp_set_num_threads(23);
+#pragma omp parallel for
+    for (int i = 0; i < numberOfParticles; ++i) {
         Vector2<double> pt0 = positions[i];
         Vector2<double> pt1 = pt0;
         Vector2<double> vel = velocities[i];
@@ -215,6 +220,8 @@ void PicSolver2::setMarkers() {
     cellCenterMarkers.reSize(size.x,size.y, AIR);
     auto numberOfParticles = particleSystemData()->numberOfParticles();
 
+    omp_set_num_threads(23);
+#pragma omp parallel for
     for (int i = 0; i < numberOfParticles; ++i) {
         //作映射
         auto x = positions[i].x;
@@ -246,12 +253,15 @@ void PicSolver2::setFluidCellNum() {
 
     vel->solveSystemMarker.reSize(resolution().x,resolution().y, -1);
 
+    //omp_set_num_threads(1);
+//#pragma omp parallel for reduction(+:nums)
+    //这种情况该怎么并行？
     for (int j = 0; j < size.y; ++j) {
         for (int i = 0; i < size.x; ++i) {
             //如果格子被流体占据
             if (cellCenterMarkers(i, j) == FLUID) {
                 vel->solveSystemMarker(i, j) = nums;
-                nums++;
+                nums += 1;
             }
         }
     }

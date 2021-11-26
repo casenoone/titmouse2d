@@ -10,6 +10,8 @@ using namespace std;
 
 #include "Size2.h"
 #include "VectorN.hpp"
+
+#include <omp.h>
 //CSR稀疏矩阵结构的特点是每一行至少得有一个0
 
 //此处CSR稀疏矩阵的初始化是通过三元组进行的
@@ -199,6 +201,7 @@ SparseMatrix<T>::SparseMatrix(const vector<vector<T>>& mat) :_row(mat.size()), _
 
 	size_t sizeX = mat.size();
 	size_t sizeY = mat[0].size();
+#pragma omp parallel for num_threads(20) 
 	for (size_t i = 0; i < sizeX; ++i) {
 		for (size_t j = 0; j < sizeY; ++j) {
 			if (mat[i][j] != 0) {
@@ -240,17 +243,18 @@ void SparseMatrix<T>::build() {
 
 	size_t tempIdx = -100;
 
-	size_t tempRow = 0;
+	int tempRow = 0;
 
 	//首先放置首元素
 	auto size = _tempData->size();
-	for (size_t i = 0; i < size; ++i) {
+//#pragma omp parallel for num_threads(20) reduction(+:tempRow)
+	for (int i = 0; i < size; ++i) {
 		if ((*_tempData)[i].row != tempIdx) {
 			tempIdx = (*_tempData)[i].row;
 			
 			//偏移量
 			_rowIndices[tempRow] = i;
-			tempRow++;
+			tempRow+=1;
 		}
 
 		_columnOffsets[i] = (*_tempData)[i].column;

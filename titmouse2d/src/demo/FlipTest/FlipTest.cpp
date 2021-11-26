@@ -1,5 +1,9 @@
 #include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
 using namespace std;
+
 
 #include "../../Lagrangian/ParticleSystemSolver2.h"
 #include "../../Geometry/Box2.h"
@@ -60,11 +64,11 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto flipSolver = FlipSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(30, 30))
+.withResolution(Vector2<size_t>(50, 50))
 .makeShared();
 
 ParticleSystemSolver2 solver;
-double dt = 0.02;
+double dt = 0.005;
 Collider2 collider;
 
 vector<ExplicitSurface2Ptr> surfaceSet;
@@ -90,7 +94,7 @@ static void display(void)
 
 
 
-    flipSolver->onAdvanceTimeStep(dt);
+    //flipSolver->onAdvanceTimeStep(dt);
     drawColliders(surfaceSet);
     glutSwapBuffers();
 
@@ -130,7 +134,7 @@ int main(int argc, char** argv)
     glShadeModel(GL_FLAT);
 
 
-    int numberOfParticles = 1000;
+    int numberOfParticles = 10000;
     int resolutionX = 10;
     int resolutionY = 10;
     vector <Vector2<double>> temp1;
@@ -162,6 +166,58 @@ int main(int argc, char** argv)
 
     flipSolver->setCollider(collider);
     flipSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
+
+
+
+
+
+
+
+
+
+
+
+     //这里是写入文件
+ //记得重新算的时候要删掉 原来的文件夹
+ int frame = 1000;
+ flipSolver->setPicBlendingFactor(1);
+ auto num = flipSolver->particleSystemData()->numberOfParticles();
+ auto position = flipSolver->particleSystemData()->positions();
+
+
+ int interval = 1;
+
+ string outfilename = "1";
+
+ system("mkdir FlipData3");
+
+ for (int i = 0; i < frame; i+= 1) {
+    
+     ofstream out("../titmouse2d/FlipData3/"+outfilename + ".txt", ios::app);
+
+     for (int n = 0; n < num; ++n) {
+         auto x = position[n].x;
+         auto y = position[n].y;
+         out << x << "," << y << endl;
+     }
+     flipSolver->onAdvanceTimeStep(dt);
+     auto temp1 = std::atoi(outfilename.c_str());
+     temp1++;
+     outfilename = std::to_string(temp1);
+     
+ }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
