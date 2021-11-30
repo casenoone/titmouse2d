@@ -30,13 +30,6 @@ public:
 using  CellCenteredScalarGrid2Ptr = std::shared_ptr<CellCenteredScalarGrid2> ;
 
 
-
-
-
-
-
-
-
 class CellCenteredScalarGrid2::Builder : public ScalarGridBuilder2 {
 public:
     Builder& withResolution(const Vector2<size_t>& resolution);

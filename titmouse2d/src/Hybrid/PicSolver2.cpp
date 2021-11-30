@@ -149,7 +149,7 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
     auto flow = gridSystemData()->velocity();
     auto positions = _particles->positions();
     auto velocities = _particles->velocities();
-    size_t numberOfParticles = _particles->numberOfParticles();
+    int numberOfParticles = _particles->numberOfParticles();
 
     auto lower = flow->origin();
     Vector2<double> upper;

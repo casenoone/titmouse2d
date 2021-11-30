@@ -60,12 +60,6 @@
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Eulerian\VectorField2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Eulerian\VectorGrid2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -121,6 +115,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -227,10 +224,10 @@
     <ClInclude Include="src\Array2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Eulerian\VectorField2.h">
+    <ClInclude Include="src\Eulerian\VectorField2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\Eulerian\VectorGrid2.h">
+    <ClInclude Include="src\Eulerian\VectorGrid2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\FaceCenteredGrid2.h">

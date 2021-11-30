@@ -1,12 +1,11 @@
 #ifndef FACECENTEREDGRID2_H
 #define FACECENTEREDGRID2_H
 
-#include "VectorGrid2.h"
+#include "VectorGrid2.hpp"
 #include "../Array2Ptr.hpp"
 #include "../Eulerian/ArraySampler2.hpp"
 
-
-class FaceCenteredGrid2 final : public VectorGrid2 {
+class FaceCenteredGrid2 final : public VectorGrid2<Vector2<double>> {
 
 public:
 	class Builder;
@@ -103,33 +102,5 @@ private:
 
 typedef std::shared_ptr<FaceCenteredGrid2> FaceCenteredGrid2Ptr;
 
-class FaceCenteredGrid2::Builder final : public VectorGridBuilder2 {
-public:
-	Builder& withResolution(const Vector2<size_t>& resolution);
-
-	Builder& withResolution(size_t resolutionX, size_t resolutionY);
-
-	Builder& withOrigin(const Vector2<double>& gridOrigin);
-
-	Builder& withOrigin(double gridOriginX, double gridOriginY);
-
-	Builder& withInitialValue(const Vector2<double>& initialVal);
-
-	Builder& withInitialValue(double initialValX, double initialValY);
-
-	FaceCenteredGrid2 build() const;
-
-	FaceCenteredGrid2Ptr makeShared() const;
-
-	VectorGrid2Ptr build(const Vector2<size_t>& resolution,
-		const Vector2<double>& gridOrigin,
-		const Vector2<double>& initialVal) const override;
-
-private:
-	Vector2<size_t> _resolution;
-	Vector2<double> _gridOrigin;
-	Vector2<double> _gridSpacing;
- 	Vector2<double> _initialVal;
-};
 
 #endif

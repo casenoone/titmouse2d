@@ -11,14 +11,15 @@ public:
 	//这里暂时不实现Builder类
 	//class Builder;
 
-    template<class T>
-    using CellCenteredVectorGrid2Ptr = shared_ptr<CellCenteredVectorGrid2<T>>;
+    /*template<class T>
+    using CellCenteredVectorGrid2Ptr = shared_ptr<CellCenteredVectorGrid2<T>>;*/
 
     CellCenteredVectorGrid2();
 
+    virtual ~CellCenteredVectorGrid2();
+
     CellCenteredVectorGrid2(
         const Vector2<size_t>& resolution,
-        const Vector2<double>& gridSpacing,
         const Vector2<double>& origin,
         const T& initialValue);
 
@@ -28,7 +29,8 @@ public:
 
     Vector2<double> dataOrigin() const override;
 
-    void swap(Grid2* other) override;
+    //暂时不实现
+    //void swap(Grid2* other) override;
 
     void set(const CellCenteredVectorGrid2<T>& other);
 
@@ -47,17 +49,26 @@ using CellCenteredVectorGrid2Ptr = shared_ptr<CellCenteredVectorGrid2<T>>;
 
 template<class T>
 CellCenteredVectorGrid2<T>:: CellCenteredVectorGrid2() {
+    cout << 777 << endl;
+}
+
+template<class T>
+CellCenteredVectorGrid2<T>::~CellCenteredVectorGrid2() {
 
 }
 
-
 template<class T>
-CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2(
+CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2
+(
     const Vector2<size_t>& resolution,
-    const Vector2<double>& gridSpacing,
     const Vector2<double>& origin,
     const T& initialValue) {
+   
+    auto newgridspacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
+    this->resize(resolution, newgridspacing, origin, initialValue);
 
+    this->_linearSampler->_accessor = this->_data;
+ 
 }
 
 
@@ -69,20 +80,21 @@ CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2(const CellCenteredVectorGrid
 
 template<class T>
 Vector2<size_t> CellCenteredVectorGrid2<T>::dataSize() const {
-
+    return this->resolution();
 }
 
 
 template<class T>
 Vector2<double> CellCenteredVectorGrid2<T>::dataOrigin() const {
-
+    return this->origin() + this->gridSpacing() * 0.5;
 }
 
 
-template<class T>
-void CellCenteredVectorGrid2<T>::swap(Grid2* other) {
-
-}
+//暂时不实现其内部
+//template<class T>
+//void CellCenteredVectorGrid2<T>::swap(Grid2* other) {
+//
+//}
 
 
 template<class T>
@@ -91,6 +103,7 @@ void CellCenteredVectorGrid2<T>::set(const CellCenteredVectorGrid2<T>& other) {
 }
 
 
+//暂不实现其内部
 template<class T>
 CellCenteredVectorGrid2<T>& CellCenteredVectorGrid2<T>::operator=(const CellCenteredVectorGrid2<T>& other) {
 

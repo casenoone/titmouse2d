@@ -144,6 +144,7 @@
     <ClCompile Include="src\Collider2.cpp" />
     <ClCompile Include="src\ColliderSet2.cpp" />
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
+    <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
     <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
@@ -162,8 +163,6 @@
     <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\SimpleDiffuseSolver2.cpp" />
     <ClCompile Include="src\Eulerian\SimplePressureSolver2.cpp" />
-    <ClCompile Include="src\Eulerian\VectorField2.cpp" />
-    <ClCompile Include="src\Eulerian\VectorGrid2.cpp" />
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Geometry\Box2.cpp" />
     <ClCompile Include="src\Geometry\ExplicitSurface2.cpp" />
@@ -204,8 +203,8 @@
     <ClInclude Include="src\Eulerian\ScalarGrid2.h" />
     <ClInclude Include="src\Eulerian\SimpleDiffuseSolver2.h" />
     <ClInclude Include="src\Eulerian\SimplePressureSolver2.h" />
-    <ClInclude Include="src\Eulerian\VectorField2.h" />
-    <ClInclude Include="src\Eulerian\VectorGrid2.h" />
+    <ClInclude Include="src\Eulerian\VectorField2.hpp" />
+    <ClInclude Include="src\Eulerian\VectorGrid2.hpp" />
     <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h" />
     <ClInclude Include="src\Geometry\Box2.h" />
     <ClInclude Include="src\Geometry\ExplicitSurface2.h" />

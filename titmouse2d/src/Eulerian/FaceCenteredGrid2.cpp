@@ -8,6 +8,7 @@ FaceCenteredGrid2::FaceCenteredGrid2():
     _dataOriginU = Vector2<double>(0.0, 0.5);
     _dataOriginV = Vector2<double>(0.5, 0.0);
 
+
 }
 
 
@@ -98,7 +99,7 @@ double FaceCenteredGrid2::curlAtCellCenter(size_t i, size_t j) {
 }
 
 
-VectorGrid2::DataPositionFunc FaceCenteredGrid2::uPosition() const {
+VectorGrid2<Vector2<double>>::DataPositionFunc FaceCenteredGrid2::uPosition() const {
     auto h = gridSpacing();
 
     return [this, h](double i, double j) -> Vector2<double> {
@@ -106,7 +107,7 @@ VectorGrid2::DataPositionFunc FaceCenteredGrid2::uPosition() const {
     };
 }
 
-VectorGrid2::DataPositionFunc FaceCenteredGrid2::vPosition() const {
+VectorGrid2<Vector2<double>>::DataPositionFunc FaceCenteredGrid2::vPosition() const {
     auto h = gridSpacing();
 
     return [this, h](double i, double j) -> Vector2<double> {
@@ -285,67 +286,3 @@ void FaceCenteredGrid2::resetSampler() {
 }
 
 
-FaceCenteredGrid2::Builder FaceCenteredGrid2::builder() { return Builder(); }
-
-
-
-
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withResolution(
-    const Vector2<size_t>& resolution) {
-    _resolution = resolution;
-    return *this;
-}
-
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withResolution(
-    size_t resolutionX, size_t resolutionY) {
-    _resolution.x = resolutionX;
-    _resolution.y = resolutionY;
-    return *this;
-}
-
-
-
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withOrigin(
-    const Vector2<double>& gridOrigin) {
-    _gridOrigin = gridOrigin;
-    return *this;
-}
-
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withOrigin(
-    double gridOriginX, double gridOriginY) {
-    _gridOrigin.x = gridOriginX;
-    _gridOrigin.y = gridOriginY;
-    return *this;
-}
-
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withInitialValue(
-    const Vector2<double>& initialVal) {
-    _initialVal = initialVal;
-    return *this;
-}
-
-FaceCenteredGrid2::Builder& FaceCenteredGrid2::Builder::withInitialValue(
-    double initialValX, double initialValY) {
-    _initialVal.x = initialValX;
-    _initialVal.y = initialValY;
-    return *this;
-}
-
-FaceCenteredGrid2 FaceCenteredGrid2::Builder::build() const {
-    return FaceCenteredGrid2(_resolution, _gridOrigin,
-        _initialVal);
-}
-
-FaceCenteredGrid2Ptr FaceCenteredGrid2::Builder::makeShared() const {
-    return std::shared_ptr<FaceCenteredGrid2>(
-        new FaceCenteredGrid2(_resolution, _gridOrigin,
-            _initialVal),
-        [](FaceCenteredGrid2* obj) { delete obj; });
-}
-
-VectorGrid2Ptr FaceCenteredGrid2::Builder::build(
-    const Vector2<size_t>& resolution, const Vector2<double>& gridOrigin, const Vector2<double>& initialVal) const {
-    return std::shared_ptr<FaceCenteredGrid2>(
-        new FaceCenteredGrid2(resolution, gridOrigin, initialVal),
-        [](FaceCenteredGrid2* obj) { delete obj; });
-}
