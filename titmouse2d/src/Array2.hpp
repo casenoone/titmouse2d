@@ -19,6 +19,7 @@ public:
 
 	T& operator()(size_t i, size_t j);
 
+
 	Size2 reSize(size_t nx, size_t ny);
 
 	Size2 reSize(size_t nx, size_t ny, T initValue);
@@ -51,7 +52,7 @@ public:
 	//暂时不实现，这个clone只是说克隆出一个新的对象，与当前对象无关
 	//T clone();
 
-private:
+public:
 	vector<vector<T>> _data;
 
 	Size2 _size;
@@ -84,6 +85,9 @@ template<typename T>
 T& Array2<T>::operator()(size_t i, size_t j) {
 	return _data[i][j];
 }
+
+
+
 
 //这里记得并行优化
 template<typename T>

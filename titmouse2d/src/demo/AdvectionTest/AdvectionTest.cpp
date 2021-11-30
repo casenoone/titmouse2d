@@ -12,8 +12,9 @@ using namespace std;
 
 #include "../../Color3.hpp"
 #include "../../Vector2.hpp"
-#include "../../../src/Eulerian/CellCenteredVectorGrid2.hpp"
-
+#include "../../Eulerian/CellCenteredVectorGrid2.hpp"
+#include "../../Eulerian/FaceCenteredGrid2.h"
+#include "../../Eulerian/AdvectionSolver2.h"
 
 //advection测试
 //测试场景：
@@ -78,6 +79,16 @@ void drawPoint(Vector2<double> pos,float size, Color3<float> color)
     glEnd();
 }
 
+void drawPoint(Vector2<double> pos, float size, Color3<double> color)
+{
+    glPointSize(size);
+    glBegin(GL_POINTS);
+    glColor3f(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0);
+    glVertex3f((pos.x - 1) * 10, (pos.y - 1) * 10, 0);
+    glEnd();
+}
+
+
 
 void drawLine(double x1, double y1, double x2, double y2) {
 
@@ -94,7 +105,24 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 Circles circle;
 
+Vector2<size_t> resolution(50, 50);
+Vector2<double> origin(0.0, 0.0);
+Color3<double> red(255, 0.0, 0.0);
 
+CellCenteredVectorGrid2Ptr<Color3<double>> advectedData;
+
+
+Vector2<double> center1(1.0, 1.0);
+double r1 = 0.5;
+double r1_sqr = r1 * r1;
+
+Color3<double> blacks(0, 0, 0);
+Color3<double> whites(255, 255, 255);
+
+
+auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>(0, 0));
+
+auto advectionSolver = make_shared<AdvectionSolver2>();
 
 static void display(void)
 {
@@ -105,14 +133,17 @@ static void display(void)
     glLoadIdentity();
     gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-    rotation(circle, 0.1);
 
-    int num = circle.points.size();
-    for (int i = 0; i < num; ++i) {
-       
-        drawPoint(circle.points[i], 1.0f, circle.colors[i]);
+    for (int i = 0; i < advectedData->resolution().x; ++i) {
+        for (int j = 0; j < advectedData->resolution().y; ++j) {
+            auto dataFunc = advectedData->dataPosition();
+            auto pos = dataFunc(i, j);
+            auto color = (*advectedData)(i, j);
+            drawPoint(pos, 2.0f, color);
+        }
     }
 
+    advectionSolver->solve(velocity, advectedData, 0.001);
   
     glutSwapBuffers();
 
@@ -151,47 +182,34 @@ int main(int argc, char** argv)
     glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);   
     glShadeModel(GL_FLAT);
 
-    Color3<float> black(0, 0, 0);
-    Color3<float> white(255, 255, 255);
-    
 
-    double r = 0.7;
-    double r2 = r * r;
-    Vector2<double> center(1.0, 1.0);
+   
+   
 
-    circle.center = center;
-    circle.r = r;
+    advectedData = make_shared<CellCenteredVectorGrid2<Color3<double>>>(resolution, origin, red);
 
-    double interval = 0.01;
+    for (int i = 0; i < advectedData->resolution().x; ++i) {
+        for (int j = 0; j < advectedData->resolution().y; ++j) {
+            auto posFunc = advectedData->dataPosition();
+            auto current_pos = posFunc(i, j);
+            if (current_pos.disSquare(center1) <= r1_sqr) {
+                if (current_pos.x - center1.x <= 0.0) (*advectedData)(i, j) = blacks;
+                else (*advectedData)(i, j) = whites;
 
-    for (double i = 0; i < 2; i += interval) {
-        for (double j = 0; j < 2; j += interval) {
-            Vector2<double> p(i, j);
-            if (p.disSquare(center) <= r) {
-                circle.points.push_back(p);
             }
         }
     }
 
-    int num = circle.points.size();
-    for (int i = 0; i < num; ++i) {
-        
-        if (circle.points[i].x - 1.0 <= 0) {
-            circle.colors.push_back(black);
-        }
-        else {
-            circle.colors.push_back(white);
-        }
-    }
+    
 
-
-
-
-
+    auto temp = advectedData->sample(Vector2<double>(1,1));
+   // cout << temp.r << " " << temp.g << " " << temp.b << endl;
+    auto temp1 = (*advectedData)(25, 25);
+    //cout << temp1.r << " " << temp1.g << " " << temp1.b << endl;
     glutKeyboardFunc(key);       //键盘按下去时
     glutIdleFunc(idle);          //空闲时
     glutReshapeFunc(resize);     //改变窗口大小时
-    glutDisplayFunc(display);    //绘制窗口显示时
+    glutDisplayFunc(display);    //绘制窗zz口显示时
 
     glutMainLoop();
 

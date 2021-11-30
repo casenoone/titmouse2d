@@ -24,6 +24,8 @@ CellCenteredScalarGrid2::CellCenteredScalarGrid2(
     auto size = resolution;
     _data.reSize(size.x, size.y, initialValue);
 
+    
+
 }
 
 

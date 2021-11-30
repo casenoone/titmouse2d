@@ -38,6 +38,8 @@ public:
 
     //暂时不实现
     //std::shared_ptr<VectorGrid2> clone() const override;
+    std::shared_ptr<CellCenteredVectorGrid2> clone() const;
+
 
     //暂时不实现
     //static Builder builder();
@@ -49,7 +51,6 @@ using CellCenteredVectorGrid2Ptr = shared_ptr<CellCenteredVectorGrid2<T>>;
 
 template<class T>
 CellCenteredVectorGrid2<T>:: CellCenteredVectorGrid2() {
-    cout << 777 << endl;
 }
 
 template<class T>
@@ -66,15 +67,14 @@ CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2
    
     auto newgridspacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
     this->resize(resolution, newgridspacing, origin, initialValue);
-
-    this->_linearSampler->_accessor = this->_data;
+    this->_linearSampler = make_shared<LinearArraySampler2<T>>(this->_data, newgridspacing, origin);
  
 }
 
 
 template<class T>
 CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2(const CellCenteredVectorGrid2& other) {
-
+    (*this) = other;
 }
 
 
@@ -103,11 +103,21 @@ void CellCenteredVectorGrid2<T>::set(const CellCenteredVectorGrid2<T>& other) {
 }
 
 
-//暂不实现其内部
+//这样做可能会有隐患
 template<class T>
 CellCenteredVectorGrid2<T>& CellCenteredVectorGrid2<T>::operator=(const CellCenteredVectorGrid2<T>& other) {
-
+    this->_data = other->data;
+    *(this->_linearSampler) = *(other._linearSampler);
 }
+
+template<class T>
+std::shared_ptr<CellCenteredVectorGrid2<T>> CellCenteredVectorGrid2<T>::clone() const {
+    CellCenteredVectorGrid2 newGrid;
+    newGrid = (*this);
+    auto result = make_shared<CellCenteredVectorGrid2<T>>(newGrid);
+    return result;
+}
+
 
 
 

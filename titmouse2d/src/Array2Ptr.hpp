@@ -15,6 +15,8 @@ public:
 
 	T& operator()(size_t i, size_t j);
 
+	void operator=(const Array2Ptr<T>& obj);
+
 	Size2 reSize(size_t nx, size_t ny);
 
 	Size2 reSize(size_t nx, size_t ny, T initValue);
@@ -67,6 +69,14 @@ T Array2Ptr<T>::lookAt(size_t i, size_t j) const {
 template<typename T>
 T& Array2Ptr<T>::operator()(size_t i, size_t j) {
 	return (*array2Ptr)(i,j);
+}
+
+
+
+
+template<typename T>
+inline void Array2Ptr<T>::operator=(const Array2Ptr<T>& obj) {
+	*(this->array2Ptr) = *(obj.array2Ptr);
 }
 
 //这里记得并行优化

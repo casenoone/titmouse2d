@@ -31,7 +31,7 @@ public:
     double curlAtDataPoint(size_t i, size_t j);
 
 
-    function<T(size_t, size_t)> dataPosition() const;
+    function<Vector2<double>(size_t, size_t)> dataPosition() const;
 
     T sample(const Vector2<double>& x) const;
 
@@ -105,7 +105,7 @@ using CollocatedVectorGrid2Ptr = shared_ptr<CollocatedVectorGrid2<T>>;
 template<class T>
 CollocatedVectorGrid2<T>::CollocatedVectorGrid2() 
 {
-    _linearSampler = make_shared<LinearArraySampler2<T>>(_data, Vector2<double>(1.0, 1.0), Vector2<double>(0.0, 0.0));
+   
 }
 
 template<class T>
@@ -131,9 +131,9 @@ double CollocatedVectorGrid2<T>::curlAtDataPoint(size_t i, size_t j) {
 }
 
 template<class T>
-function<T(size_t, size_t)> CollocatedVectorGrid2<T>::dataPosition() const {
+function<Vector2<double>(size_t, size_t)> CollocatedVectorGrid2<T>::dataPosition() const {
     Vector2<double> dataOrigin_ = dataOrigin();
-    return [this, dataOrigin_](double i, double j) -> Vector2 {
+    return [this, dataOrigin_](double i, double j) -> Vector2<double> {
         return dataOrigin_ + this->gridSpacing() * Vector2<double>({ i, j });
     };
 }
@@ -165,7 +165,6 @@ double CollocatedVectorGrid2<T>::curl(const Vector2<double>& x) const {
 }
 
 
-//这里的Vector应该是什么类型的？
 template<class T>
 std::function<T(const Vector2<double>&)> CollocatedVectorGrid2<T>::sampler() const {
     return _sampler;
