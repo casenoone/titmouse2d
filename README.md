@@ -15,6 +15,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - collision detection（2D情况下任意几何形状的碰撞检测与处理）
 - FDM Grids such as CenteredGrid (有限差分计算用到的均匀网格结构)
 - PIC/FLIP scheme (PIC/FLIP映射方案)
+- Semi-Lagrangian advection solver(半拉格朗日对流求解器)
 - Pressure Possion Equation Solve (压力泊松方程求解)
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
@@ -25,4 +26,8 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - FLIP/PIC + 压力泊松方程求解自由表面流
 
 效果图：
+1.FLIP算法
 https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif
+
+2.advection测试
+https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif
