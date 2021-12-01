@@ -24,28 +24,7 @@ using namespace std;
 //速度场的存储：使用MAC网格
 //颜色场存于中心网格
 
-struct Circles {
-    Vector2<double> center;
-    double r;
-    vector<Color3<float>> colors;
-    vector<Vector2<double>> points;
-};
 
-
-void rotation(Circles& circle,double delta) {
-    
-    delta *= (kPiD / 180);
-    
-    int num = circle.points.size();
-    for (int i = 0; i < num; ++i) {
-        auto x = circle.points[i].x - 1.0;
-        auto y = circle.points[i].y - 1.0;
-        
-        circle.points[i].x = x * cos(delta) - y * sin(delta) + 1.0;
-        circle.points[i].y = x * sin(delta) + y * cos(delta) + 1.0;
-
-    }
-}
 
 static void key(unsigned char key, int x, int y)
 {
@@ -101,9 +80,6 @@ void drawLine(double x1, double y1, double x2, double y2) {
     glFlush();
 }
 
-
-
-Circles circle;
 
 Vector2<size_t> resolution(50, 50);
 Vector2<double> origin(0.0, 0.0);
@@ -201,8 +177,7 @@ int main(int argc, char** argv)
     }
 
 
-    //x * cos(delta) - y * sin(delta) + 1.0;
-    //x* sin(delta) + y * cos(delta) + 1.0;
+
     //设置一个旋转的速度场
     auto velSizeU = velocity->uSize();
 
@@ -227,10 +202,7 @@ int main(int argc, char** argv)
     }
 
 
-    auto temp = advectedData->sample(Vector2<double>(1,1));
-   // cout << temp.r << " " << temp.g << " " << temp.b << endl;
-    auto temp1 = (*advectedData)(25, 25);
-    //cout << temp1.r << " " << temp1.g << " " << temp1.b << endl;
+   
     glutKeyboardFunc(key);       //键盘按下去时
     glutIdleFunc(idle);          //空闲时
     glutReshapeFunc(resize);     //改变窗口大小时
