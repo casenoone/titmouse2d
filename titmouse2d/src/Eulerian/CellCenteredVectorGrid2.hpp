@@ -67,7 +67,7 @@ CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2
    
     auto newgridspacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
     this->resize(resolution, newgridspacing, origin, initialValue);
-    this->_linearSampler = make_shared<LinearArraySampler2<T>>(this->_data, newgridspacing, origin);
+    this->_linearSampler = make_shared<LinearArraySampler2<T>>(this->_data, newgridspacing, dataOrigin());
  
 }
 
@@ -87,6 +87,7 @@ Vector2<size_t> CellCenteredVectorGrid2<T>::dataSize() const {
 template<class T>
 Vector2<double> CellCenteredVectorGrid2<T>::dataOrigin() const {
     return this->origin() + this->gridSpacing() * 0.5;
+
 }
 
 

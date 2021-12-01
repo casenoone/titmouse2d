@@ -25,7 +25,8 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 	auto gridSpacing = advectedData->gridSpacing();
 
 	Array2Ptr<T> newData;
-	newData = data;
+	//newData = data;
+	newData.reSize(resolution.x, resolution.y, T());
 	
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
@@ -33,8 +34,10 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 			auto current_pos = posFunc(i, j);
 			auto current_vec = flow->sample(current_pos);
 			auto backTracedPoint = current_pos - current_vec * timeIntervalInSeconds;
+			
 			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2&& backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
 				newData(i, j) = advectedData->sample(backTracedPoint);
+				
 			}
 			else {
 				
@@ -49,7 +52,6 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 	}
 
 	data = newData;
-
 }
 
 #endif

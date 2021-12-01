@@ -88,7 +88,6 @@ T LinearArraySampler2<T>::operator()(const Array2Ptr<T>& accessor, const Vector2
     int i, j;
     double fx, fy;
     Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
-    
     auto& accessors = const_cast<Array2Ptr<T>&>(accessor);
     auto size = accessors.dataSize();
     int iSize = size.x;
