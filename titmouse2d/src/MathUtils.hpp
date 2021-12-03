@@ -2,13 +2,26 @@
 #define MATHUTILS_HPP
 
 #include <cmath>
+#include "ConstVar.h"
 
+//这里直接Ctrl CV了 doyub kim的代码
+//仅改了数据类型
 
 //计算平方
 template<class T>
 inline T sqr(const T& x)
 {
 	return x * x;
+}
+
+template <typename T>
+inline T square(T x) {
+	return x * x;
+}
+
+template <typename T>
+inline T cubic(T x) {
+	return x * x * x;
 }
 
 
@@ -21,6 +34,17 @@ inline T clamp(const T& factor, const T& min, const T& max) {
 		return min;
 	}
 	return factor;
+}
+
+
+template <typename T>
+inline T sign(T x) {
+	if (x >= 0) {
+		return 1;
+	}
+	else {
+		return -1;
+	}
 }
 
 
@@ -81,6 +105,8 @@ inline T bilerp(
 		ty);
 
 }
+
+
 
 
 #endif

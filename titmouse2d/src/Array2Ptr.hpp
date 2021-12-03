@@ -11,9 +11,18 @@ public:
 
 	Array2Ptr(const vector<vector<T>>& data);
 
+	Array2Ptr(const shared_ptr<Array2<T>>& ptr);
+
 	T lookAt(size_t i, size_t j) const;
 
 	T& operator()(size_t i, size_t j);
+
+	Array2Ptr<T> operator+(const Array2Ptr<T>& other)const;
+
+	Array2Ptr<T> operator-(const Array2Ptr<T>& other)const;
+
+	template<typename Scalar>
+	Array2Ptr<T> operator*(const Scalar& other)const;
 
 	void operator=(const Array2Ptr<T>& obj);
 
@@ -61,6 +70,13 @@ Array2Ptr<T>::Array2Ptr(const vector<vector<T>>& data) {
 	array2Ptr = make_shared<Array2<T>>(data);
 }
 
+
+template<typename T>
+Array2Ptr<T>::Array2Ptr(const shared_ptr<Array2<T>>& ptr) {
+	array2Ptr = ptr;
+}
+
+
 template<typename T>
 T Array2Ptr<T>::lookAt(size_t i, size_t j) const {
 	return array2Ptr->lookAt(i, j);
@@ -71,7 +87,24 @@ T& Array2Ptr<T>::operator()(size_t i, size_t j) {
 	return (*array2Ptr)(i,j);
 }
 
+template<typename T>
+Array2Ptr<T> Array2Ptr<T>::operator+(const Array2Ptr<T>& other)const {
+	Array2Ptr<T> result((*(this->array2Ptr)) + (*(other.array2Ptr)));
+	return result;
+}
 
+template<typename T>
+Array2Ptr<T> Array2Ptr<T>::operator-(const Array2Ptr<T>& other)const {
+	Array2Ptr<T> result((*(this->array2Ptr)) - (*(other.array2Ptr)));
+	return result;
+}
+
+template<typename T>
+template<typename Scalar>
+Array2Ptr<T> Array2Ptr<T>::operator*(const Scalar& other)const {
+	Array2Ptr<T> result((*(this->array2Ptr)) * other);
+	return result;
+}
 
 
 template<typename T>

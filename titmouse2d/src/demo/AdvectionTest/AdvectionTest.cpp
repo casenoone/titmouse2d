@@ -115,7 +115,7 @@ static void display(void)
             auto dataFunc = advectedData->dataPosition();
             auto pos = dataFunc(i, j);
             auto color = (*advectedData)(i, j);
-            drawPoint(pos, 4.0f, color);
+            drawPoint(pos, 3.5f, color);
         }
     }
 
@@ -185,7 +185,7 @@ int main(int argc, char** argv)
         for (int j = 0; j < velSizeU.y; ++j) {
             auto posFunc = velocity->uPosition();
             auto pos = posFunc(i, j);
-            auto tempVec = (pos - center1).getNormalize();
+            auto tempVec = (pos - center1);
             velocity->u(i,j) = tempVec.x * cos(kPiD / 2) - tempVec.y * sin(kPiD / 2);
         }
     }
@@ -196,7 +196,7 @@ int main(int argc, char** argv)
         for (int j = 0; j < velSizeV.y; ++j) {
             auto posFunc = velocity->vPosition();
             auto pos = posFunc(i, j);
-            auto tempVec = (pos - center1).getNormalize();
+            auto tempVec = (pos - center1);
             velocity->v(i, j) = tempVec.x * sin(kPiD / 2) + tempVec.y * cos(kPiD / 2);
         }
     }

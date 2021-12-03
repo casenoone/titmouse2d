@@ -11,7 +11,7 @@ public:
 	~AdvectionSolver2();
 
 	template<typename T>
-	void solve(const FaceCenteredGrid2Ptr &flow, CellCenteredVectorGrid2Ptr<T> advectedData, double timeIntervalInSeconds);
+	void solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVectorGrid2Ptr<T> advectedData, double timeIntervalInSeconds);
 
 public:
 
@@ -27,27 +27,24 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 	Array2Ptr<T> newData;
 	//newData = data;
 	newData.reSize(resolution.x, resolution.y, T());
-	
+
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
 			auto posFunc = advectedData->dataPosition();
 			auto current_pos = posFunc(i, j);
 			auto current_vec = flow->sample(current_pos);
-			auto midPoint = current_pos - 0.5 * timeIntervalInSeconds * current_vec;
-			auto midVel = flow->sample(midPoint);
-			
-			auto backTracedPoint = current_pos - timeIntervalInSeconds * midVel;
-			
-			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2&& backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
+			auto backTracedPoint = current_pos - current_vec * timeIntervalInSeconds;
+
+			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 && backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
 				newData(i, j) = advectedData->sample(backTracedPoint);
-				
+
 			}
 			else {
-				
+
 				double x, y;
 				x = clamp<double>(backTracedPoint.x, 0.0, 2.0);
 				y = clamp<double>(backTracedPoint.y, 0.0, 2.0);
-				newData(i, j) = advectedData->sample(Vector2<double>(x,y));
+				newData(i, j) = advectedData->sample(Vector2<double>(x, y));
 			}
 
 
@@ -56,5 +53,6 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 
 	data = newData;
 }
+
 
 #endif

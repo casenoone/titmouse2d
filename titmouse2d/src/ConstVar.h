@@ -22,6 +22,7 @@ constexpr double kMinD = std::numeric_limits<double>::min();
 
 constexpr size_t kMaxSize = std::numeric_limits<size_t>::max();
 
+constexpr size_t kZeroSize = 0;
 
 //网格法流体专用
 const int FLUID = 0;

@@ -7,9 +7,16 @@
 #include "../Array2Ptr.hpp"
 #include "../MathUtils.hpp"
 
+#include "../ConstVar.h"
+
 #include <iostream>
 
 //线性采样器
+//需要实现一个更高阶的插值技术
+//例如BFECC方法
+
+
+
 
 template<class T>
 class LinearArraySampler2 {
@@ -33,12 +40,16 @@ public:
         std::array<Vector2<int>, 4>* indices,
         std::array<double, 4>* weights);
 
-
+//这里需要改一下接口,这里本应该是私有成员
+//由于设计不当，这里不得不暂时改为公有
 public:
+    Array2Ptr<T> _accessor;
+
+private:
     Vector2<double> _gridSpacing;
     Vector2<double> _invGridSpacing;
     Vector2<double> _origin;
-    Array2Ptr<T> _accessor;
+   
 };
 
 template<typename T>
@@ -156,6 +167,10 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
     (*weights)[3] = fx * fy;
 
 }
+
+
+
+
 
 
 #endif

@@ -13,12 +13,21 @@ public:
 	Array2();
 	~Array2();
 
+	template<typename T>
+	using array2Ptr = shared_ptr<Array2<T>>;
+
 	Array2(const vector<vector<T>>& data);
 
 	T lookAt(size_t i,size_t j) const;
 
 	T& operator()(size_t i, size_t j);
 
+	array2Ptr<T> operator+(const Array2<T>& other)const;
+	
+	array2Ptr<T> operator-(const Array2<T>& other)const;
+
+	template<typename Scalar>
+	array2Ptr<T> operator*(const Scalar& other)const;
 
 	Size2 reSize(size_t nx, size_t ny);
 
@@ -87,6 +96,43 @@ T& Array2<T>::operator()(size_t i, size_t j) {
 }
 
 
+template<typename T>
+array2Ptr<T> Array2<T>::operator+(const Array2<T>& other)const {
+	auto ptr = make_shared<Array2<T>>();
+	ptr->reSize(_size.x, _size.y);
+	for (int i = 0; i < _size.x; ++i) {
+		for (int j = 0; j < _size.x; ++j) {
+			(*ptr)(i, j) = this->lookAt(i, j) + other.lookAt(i, j);
+		}
+	}
+	return ptr;
+}
+
+
+template<typename T>
+array2Ptr<T> Array2<T>::operator-(const Array2<T>& other)const {
+	auto ptr = make_shared<Array2<T>>();
+	ptr->reSize(_size.x, _size.y);
+	for (int i = 0; i < _size.x; ++i) {
+		for (int j = 0; j < _size.x; ++j) {
+			(*ptr)(i, j) = this->lookAt(i, j) - other.lookAt(i, j);
+		}
+	}
+	return ptr;
+}
+template<typename T>
+template<typename Scalar>
+array2Ptr<T> Array2<T>::operator*(const Scalar& other)const {
+	auto ptr = make_shared<Array2<T>>();
+	ptr->reSize(_size.x, _size.y);
+	for (int i = 0; i < _size.x; ++i) {
+		for (int j = 0; j < _size.x; ++j) {
+			(*ptr)(i, j) = this->lookAt(i, j) * other;
+		}
+	}
+	return ptr;
+
+}
 
 
 //这里记得并行优化
@@ -98,6 +144,7 @@ Size2 Array2<T>::reSize(size_t nx, size_t ny) {
 	}
 	Size2 l(nx, ny);
 	_size = l;
+	return _size;
 }
 
 template<typename T>
