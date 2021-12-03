@@ -120,6 +120,18 @@
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\demo\MarchingCube2D\mc_universe.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Geometry\ImplicitSurface2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Geometry\Ray2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Geometry\Sphere2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -285,6 +297,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\CellCenteredVectorGrid2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry\ImplicitSurface2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry\Sphere2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry\Ray2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

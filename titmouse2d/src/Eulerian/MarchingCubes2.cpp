@@ -17,9 +17,9 @@ MarchingCube2::MarchingCube2(const Vector2<size_t>& resolution,
 
 	auto k = domainSizeX / resolution.x;
 	auto m = Vector2<double>(k, k);
-	
+
 	data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
-	
+
 }
 
 
@@ -30,6 +30,46 @@ MarchingCube2::~MarchingCube2() {
 void MarchingCube2::setCircleList(vector<Circle>& circleList) {
 	_circleList = circleList;
 }
+
+
+void MarchingCube2::setScalarField(const VertexCenteredScalarGrid2Ptr& _data) {
+	data = _data;
+}
+
+
+void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet, 
+	const VertexCenteredScalarGrid2Ptr& _data) {
+
+	//计算顶点势能
+	setScalarField(_data);
+
+	Array2Ptr<double> num;
+
+	//获取顶点配置
+	getVoxelConfig(num);
+
+	auto size = data->resolution();
+	for (size_t j = 0; j < size.y; ++j) {
+		for (size_t i = 0; i < size.x; ++i) {
+			auto currentNum = (size_t)num(i, j);
+			auto inform = triangleTable[currentNum];
+			for (size_t k = 0; k < 4; k += 2) {
+				if (inform[k] != -1) {
+					auto p1 = calculateIso(inform[k], i, j);
+					auto p2 = calculateIso(inform[k + 1], i, j);
+					LineSegment L;
+					L.start = p1;
+					L.End = p2;
+					lineSet.push_back(L);
+				}
+
+			}
+		}
+	}
+
+
+}
+
 
 
 void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet) {
@@ -177,6 +217,9 @@ Vector2<double> MarchingCube2::calculateIso(size_t edge, size_t i, size_t j) {
 	}
 	//这里这个比例公式突然发现有点别扭，和书上的不一样，两种都试试
 	auto temp = (1 - value1) / (value2 - value1);
+	
+	//auto temp = (value1) / (value1 - value2);
+
 	//说明这是一条水平线
 	if (temp < 0)cout << temp << endl;
 
@@ -251,7 +294,7 @@ MarchingCube2::Builder& MarchingCube2::Builder::withDomainSizeX(double initialVa
 
 
 MarchingCube2Ptr MarchingCube2::Builder::makeShared() const {
-	
+
 	return std::shared_ptr<MarchingCube2>(
 		new MarchingCube2(
 			_resolution,
@@ -265,11 +308,11 @@ MarchingCube2Ptr MarchingCube2::Builder::makeShared() const {
 
 
 MarchingCube2 MarchingCube2::Builder::build()const {
-	
+
 	return MarchingCube2(
 		_resolution,
 		_gridOrigin,
 		_initialVal
 	);
-	
+
 }

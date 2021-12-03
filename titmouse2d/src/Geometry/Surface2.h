@@ -6,8 +6,6 @@ using namespace std;
 
 #include "../Vector2.hpp"
 
-//将这个类划分为显式曲面和隐式曲面
-//然后再配以显式和隐式之间的转换
 class Surface2 {
 public:
 	Surface2();

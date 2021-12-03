@@ -146,6 +146,7 @@
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
+    <ClCompile Include="src\demo\MarchingCube2D\mc_universe.cpp" />
     <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
@@ -166,7 +167,10 @@
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Geometry\Box2.cpp" />
     <ClCompile Include="src\Geometry\ExplicitSurface2.cpp" />
+    <ClCompile Include="src\Geometry\ImplicitSurface2.cpp" />
     <ClCompile Include="src\Geometry\Plane2.cpp" />
+    <ClCompile Include="src\Geometry\Ray2.cpp" />
+    <ClCompile Include="src\Geometry\Sphere2.cpp" />
     <ClCompile Include="src\Geometry\Surface2.cpp" />
     <ClCompile Include="src\Hybrid\FlipSolver2.cpp" />
     <ClCompile Include="src\Hybrid\PicSolver2.cpp" />
@@ -208,7 +212,10 @@
     <ClInclude Include="src\Eulerian\VertexCenteredScalarGrid2.h" />
     <ClInclude Include="src\Geometry\Box2.h" />
     <ClInclude Include="src\Geometry\ExplicitSurface2.h" />
+    <ClInclude Include="src\Geometry\ImplicitSurface2.h" />
     <ClInclude Include="src\Geometry\Plane2.h" />
+    <ClInclude Include="src\Geometry\Ray2.h" />
+    <ClInclude Include="src\Geometry\Sphere2.h" />
     <ClInclude Include="src\Geometry\Surface2.h" />
     <ClInclude Include="src\Hybrid\FlipSolver2.h" />
     <ClInclude Include="src\Hybrid\PicSolver2.h" />

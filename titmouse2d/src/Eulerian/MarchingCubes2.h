@@ -24,7 +24,7 @@ class MarchingCube2 {
 public:
 	MarchingCube2();
 	MarchingCube2(const Vector2<size_t>& resolution,
-		const Vector2<double>& origin ,
+		const Vector2<double>& origin,
 		double initialValue = 1.0,
 		double domainSizeX = 1.0);
 	~MarchingCube2();
@@ -37,6 +37,11 @@ public:
 	void getLineSegmentSet(vector<LineSegment>& lineSet);
 
 	void setCircleList(vector<Circle>& circleList);
+
+	void setScalarField(const VertexCenteredScalarGrid2Ptr& _data);
+
+	void getLineSegmentSet(vector<LineSegment>& lineSet,
+		const VertexCenteredScalarGrid2Ptr& _data);
 
 public:
 	//存放marchingcube算法重建表面时的标量场
@@ -67,7 +72,7 @@ class MarchingCube2::Builder {
 public:
 
 	Builder();
-	
+
 	~Builder();
 
 	Builder& withResolution(const Vector2<size_t>& resolution);
@@ -79,7 +84,7 @@ public:
 	Builder& withOrigin(double gridOriginX, double gridOriginY);
 
 	Builder& withInitialValue(double initialVal);
-	
+
 	Builder& withDomainSizeX(double initialVal);
 
 	MarchingCube2 build() const;
