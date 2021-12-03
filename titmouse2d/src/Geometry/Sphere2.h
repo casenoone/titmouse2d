@@ -7,7 +7,11 @@ public:
 
 	~Sphere2();
 
-	Sphere2(const Vector2<double>& center, const double& r);
+	Sphere2(const Vector2<double>& center, const double& r,
+		const Vector2<size_t>& resolution,
+		const Vector2<double>& origin,
+		double initialValue
+		);
 
 	Sphere2(const VertexCenteredScalarGrid2& other);
 
@@ -19,7 +23,7 @@ public:
 	double r();
 
 public:
-	void computeSdf();
+	virtual void computeSdf()override;
 
 private:
 	Vector2<double> _center;

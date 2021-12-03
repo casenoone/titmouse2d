@@ -1,7 +1,7 @@
 #include "ImplicitSurface2.h"
 
 ImplicitSurface2::ImplicitSurface2() {
-	_data = make_shared<VertexCenteredScalarGrid2>();
+	//_data = make_shared<VertexCenteredScalarGrid2>();
 }
 
 ImplicitSurface2::~ImplicitSurface2() {
@@ -9,7 +9,7 @@ ImplicitSurface2::~ImplicitSurface2() {
 }
 
 ImplicitSurface2::ImplicitSurface2(const VertexCenteredScalarGrid2& other) {
-	_data = make_shared<VertexCenteredScalarGrid2>(other);
+	//_data = make_shared<VertexCenteredScalarGrid2>(other);
 }
 
 Vector2<double> ImplicitSurface2::closestPoint(const Vector2<double>& otherPoint)const  {
