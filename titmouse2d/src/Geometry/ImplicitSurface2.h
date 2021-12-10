@@ -19,6 +19,8 @@ public:
 
 	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint) = 0;
 
+	virtual const VertexCenteredScalarGrid2Ptr sdf() const = 0;
+
 	virtual void computeSdf() = 0;
 
 //暂时设为private属性

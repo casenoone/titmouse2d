@@ -17,6 +17,8 @@ public:
 
 	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint) override;
 
+	virtual const VertexCenteredScalarGrid2Ptr sdf() const;
+
 public:
 	Vector2<double> center();
 
