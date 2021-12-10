@@ -13,6 +13,11 @@ double& ScalarGrid2::operator()(size_t i, size_t j) {
 	return _data(i, j);
 }
 
+double ScalarGrid2::lookAt(size_t i, size_t j)const {
+	return _data.lookAt(i, j);
+}
+
+
 Vector2<double> ScalarGrid2::gradientAtDataPoint(size_t i, size_t j) const {
 	return Vector2<double>(0.0, 0.0);
 }

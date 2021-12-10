@@ -132,6 +132,9 @@
     <ClCompile Include="src\Geometry\Sphere2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Eulerian\SimpleLevelSetSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -306,6 +309,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Geometry\Ray2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\SimpleLevelSetSolver2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

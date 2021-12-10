@@ -27,6 +27,8 @@ public:
 	//返回给定下标的数据
 	double& operator()(size_t i, size_t j);
 
+	double lookAt(size_t i, size_t j)const;
+
 	//返回给定点的梯度算子结果
 	Vector2<double> gradientAtDataPoint(size_t i, size_t j) const;
 

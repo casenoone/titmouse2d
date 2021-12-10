@@ -163,6 +163,7 @@
     <ClCompile Include="src\Eulerian\ScalarField2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\SimpleDiffuseSolver2.cpp" />
+    <ClCompile Include="src\Eulerian\SimpleLevelSetSolver2.cpp" />
     <ClCompile Include="src\Eulerian\SimplePressureSolver2.cpp" />
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Geometry\Box2.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="src\Eulerian\ScalarField2.h" />
     <ClInclude Include="src\Eulerian\ScalarGrid2.h" />
     <ClInclude Include="src\Eulerian\SimpleDiffuseSolver2.h" />
+    <ClInclude Include="src\Eulerian\SimpleLevelSetSolver2.h" />
     <ClInclude Include="src\Eulerian\SimplePressureSolver2.h" />
     <ClInclude Include="src\Eulerian\VectorField2.hpp" />
     <ClInclude Include="src\Eulerian\VectorGrid2.hpp" />
