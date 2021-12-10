@@ -66,7 +66,20 @@ void Sphere2::computeSdf() {
 			auto v2 = v.getLengthSquared();
 			auto r2 = r * r;
 
+			//最短距离
 			auto t = -dv - sqrt(dv2 - (v2 - r2));
+
+			//最近点
+			auto closestPoint = o + t * d;
+
+			//计算sdf的符号
+			auto sdf = t;
+			if (o.disSquare(c) <= r2) {
+				sdf = -t;
+			}
+
+			(*_data)(i, j) = sdf;
+			
 		}
 	}
 
