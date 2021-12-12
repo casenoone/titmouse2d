@@ -55,7 +55,11 @@ public:
 		const Vector2<double>& origin ,
 		double initialValue = 0.0);
 
-	
+	Array2Ptr<double>& datas();
+
+	const Array2Ptr<double> datas() const;
+
+	//void copyTo()const;
 
 protected:
 	Array2Ptr<double> _data;

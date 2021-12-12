@@ -16,15 +16,18 @@ public:
 	void reinitialize(const VertexCenteredScalarGrid2& inputSdf, double maxDistance,
 		VertexCenteredScalarGrid2Ptr& outputSdf);
 
-	void getDerivatives(const VertexCenteredScalarGrid2& inputSdf, Vector2<size_t> gridSpacing,
-		size_t i, size_t j, std::array<double, 2>* arr);
+	void getDerivatives(const Array2Ptr<double>& input, Vector2<double> gridSpacing,
+		size_t i, size_t j, std::array<double, 2>* dx, std::array<double, 2>* dy) const;
 
 private:
-	double sign(const VertexCenteredScalarGrid2& inputSdf, int i, int j) const;
+	double sign(const Array2Ptr<double>& input, int i, int j) const;
 
+	double pseudoTimeStep(const Array2Ptr<double>& input,
+		const Vector2<double>& gridSpacing);
+
+	int distanceToNumberOfIterations(double distance, double dtau);
 private:
-	int numberOfIterations = 20;
-
+	double _maxCfl = 0.5;
 };
 
 

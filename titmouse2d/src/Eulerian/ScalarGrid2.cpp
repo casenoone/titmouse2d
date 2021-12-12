@@ -27,6 +27,15 @@ double ScalarGrid2::laplacianAtDataPoint(size_t i, size_t j) const {
 	return 0.0;
 }
 
+Array2Ptr<double>& ScalarGrid2::datas() {
+	return _data;
+}
+
+
+const Array2Ptr<double> ScalarGrid2::datas() const {
+	return _data;
+}
+
 
 void ScalarGrid2::resize(const Vector2<size_t>& resolution,
 	const Vector2<double>& gridSpacing,

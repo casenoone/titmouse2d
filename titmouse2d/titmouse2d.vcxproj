@@ -179,6 +179,7 @@
     <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Numerical\Pde.hpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
