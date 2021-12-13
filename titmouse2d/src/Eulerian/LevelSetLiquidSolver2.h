@@ -19,9 +19,17 @@ public:
 
 	void extrapolateVelocityToAir();
 
+	static Builder builder();
+
 private:
 	void setMarkers();
 	
+	void computeSdfAdvection(double timeIntervalInSeconds);
+
+	virtual void onBeginAdvanceTimeStep(double timeIntervalInSeconds)override;
+
+	virtual void onEndAdvanceTimeStep(double timeIntervalInSeconds)override;
+
 
 private:
 

@@ -60,10 +60,9 @@ protected:
     
     const Vector2<double>& gravity() const;
 
-    void setFluidCellNum();
+    double cfl(double timeIntervalInSeconds) const;
 
-    //暂时不实现
-    //double cfl(double timeIntervalInSeconds) const;
+    void setFluidCellNum();
 
     double maxCfl() const;
 

@@ -98,6 +98,33 @@ void LevelSetLiquidSolver2::setMarkers() {
 
 
 
+void LevelSetLiquidSolver2::computeSdfAdvection(double timeIntervalInSeconds) {
+    _advectionSolver->solve(velocity(), sdf(), timeIntervalInSeconds);
+}
+
+
+void LevelSetLiquidSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds) {
+    //外推速度场
+    extrapolateVelocityToAir();
+
+    //计算流体网格标签以及流体网格编号
+    setMarkers();
+    setFluidCellNum();
+}
+
+
+
+void LevelSetLiquidSolver2::onEndAdvanceTimeStep(double timeIntervalInSeconds) {
+    computeSdfAdvection(timeIntervalInSeconds);
+    _levelsetSolver->reinitialize(*sdf(), 5, sdf());
+}
+
+LevelSetLiquidSolver2::Builder LevelSetLiquidSolver2::builder() {
+    return Builder();
+}
+
+
+
 LevelSetLiquidSolver2 LevelSetLiquidSolver2::Builder::build() const {
     auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
     return LevelSetLiquidSolver2(_resolution, gridSpacing, _gridOrigin);
@@ -105,7 +132,6 @@ LevelSetLiquidSolver2 LevelSetLiquidSolver2::Builder::build() const {
 
 
 LevelSetLiquidSolver2Ptr LevelSetLiquidSolver2::Builder::makeShared() const {
-    cout << 7878787887878 << endl;
     auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
     return std::shared_ptr<LevelSetLiquidSolver2>(
         new LevelSetLiquidSolver2(

@@ -117,8 +117,8 @@ auto levelsetLiquidSolver = LevelSetLiquidSolver2::builder()
 .makeShared();
 
 
-Vector2<double> centers(1.0, 1.0);
-double rs = 0.8;
+Vector2<double> centers(1.0, 0.6);
+double rs = 0.5;
 
 auto sphere1 = Sphere2(centers, rs, resolution, origin, 0.0);
 
@@ -135,8 +135,10 @@ static void display(void)
     glLoadIdentity();
     gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-    advectionSolver->solve(velocity, sphere1._data, 0.02);
+    //advectionSolver->solve(velocity, sphere1._data, 0.02);
 
+    levelsetLiquidSolver->onAdvanceTimeStep(0.01);
+    
     //levelsetSolver.reinitialize(*sphere1.sdf(), 5, sphere1._data);
 
     vector<LineSegment> lineSet;

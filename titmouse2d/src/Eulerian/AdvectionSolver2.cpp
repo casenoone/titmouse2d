@@ -8,6 +8,15 @@ AdvectionSolver2::~AdvectionSolver2() {
 
 }
 
+//速度场的advection
+void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
+	FaceCenteredGrid2Ptr advectedData,
+	double timeIntervalInSeconds) {
+
+
+
+}
+
 
 void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 	VertexCenteredScalarGrid2Ptr advectedData,

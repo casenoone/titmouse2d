@@ -21,6 +21,10 @@ public:
 		VertexCenteredScalarGrid2Ptr advectedData,
 		double timeIntervalInSeconds);
 
+	void solve(const FaceCenteredGrid2Ptr& flow,
+		FaceCenteredGrid2Ptr advectedData,
+		double timeIntervalInSeconds);
+
 public:
 
 };

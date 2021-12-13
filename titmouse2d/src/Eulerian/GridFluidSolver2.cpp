@@ -40,32 +40,31 @@ VertexCenteredScalarGrid2Ptr& GridFluidSolver2::sdf() {
 const Vector2<double>& GridFluidSolver2::gravity() const { return _gravity; }
 
 
-//暂时不实现
-////计算CFL条件数
-//double GridFluidSolver2::cfl(double timeIntervalInSeconds) const {
-//    auto vel = _grids->velocity();
-//    double maxVel = 0.0;
-//
-//    auto size = vel->resolution();
-//    size_t sizeX = size.x();
-//    size_t sizeY = size.y();
-//
-//    for (size_t i = 0; i < sizeX; ++i) {
-//        for (size_t j = 0; j < sizeY; ++j) {
-//            Vector2 v =
-//                vel->valueAtCellCenter(i, j) + _gravity * timeIntervalInSeconds;
-//            maxVel = std::max(maxVel, v.x());
-//            maxVel = std::max(maxVel, v.y());
-//        }
-//    }
-//
-//
-//
-//    Vector2 gridSpacing = _grids->gridSpacing();
-//    double minGridSize = std::min(gridSpacing.x(), gridSpacing.y());
-//
-//    return maxVel * timeIntervalInSeconds / minGridSize;
-//}
+//计算CFL条件数
+double GridFluidSolver2::cfl(double timeIntervalInSeconds) const {
+    auto vel = _grids->velocity();
+    double maxVel = 0.0;
+
+    auto size = vel->resolution();
+    size_t sizeX = size.x;
+    size_t sizeY = size.y;
+
+    for (size_t i = 0; i < sizeX; ++i) {
+        for (size_t j = 0; j < sizeY; ++j) {
+            Vector2<double> v =
+                vel->valueAtCellCenter(i, j) + _gravity * timeIntervalInSeconds;
+            maxVel = std::max(maxVel, v.x);
+            maxVel = std::max(maxVel, v.y);
+        }
+    }
+
+
+
+    auto  gridSpacing = _grids->gridSpacing();
+    double minGridSize = std::min(gridSpacing.x, gridSpacing.y);
+
+    return maxVel * timeIntervalInSeconds / minGridSize;
+}
 
 
 double GridFluidSolver2::maxCfl() const { return _maxCfl; }
@@ -98,8 +97,8 @@ void GridFluidSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
     beginAdvanceTimeStep(timeIntervalInSeconds);
     computeExternalForces(timeIntervalInSeconds);
-    computePressure(timeIntervalInSeconds);
     computeAdvection(timeIntervalInSeconds);
+    computePressure(timeIntervalInSeconds);
     endAdvanceTimeStep(timeIntervalInSeconds);
 }
 
@@ -109,6 +108,7 @@ void GridFluidSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds) {
 }
 
 void GridFluidSolver2::onEndAdvanceTimeStep(double timeIntervalInSeconds) {
+
 }
 
 
@@ -117,12 +117,12 @@ void GridFluidSolver2::computeExternalForces(double timeIntervalInSeconds) {
 }
 
 void GridFluidSolver2::computePressure(double timeIntervalInSeconds) {
-    
+    //_pressureSolver->solve(velocity(), cellCenterMarkers);
 }
 
-//暂时不实现
-void GridFluidSolver2::computeAdvection(double timeIntervalInSeconds) {
 
+void GridFluidSolver2::computeAdvection(double timeIntervalInSeconds) {
+   // _advectionSolver->solve(velocity(), velocity(), timeIntervalInSeconds);
 }
 
 
@@ -156,7 +156,9 @@ void GridFluidSolver2::beginAdvanceTimeStep(double timeIntervalInSeconds) {
 
 
 void GridFluidSolver2::endAdvanceTimeStep(double timeIntervalInSeconds) {
+
     onEndAdvanceTimeStep(timeIntervalInSeconds);
+
 }
 
 
