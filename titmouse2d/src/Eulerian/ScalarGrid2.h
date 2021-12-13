@@ -4,6 +4,7 @@
 #include "Grid2.h"
 #include "ScalarField2.h"
 #include "../Array2Ptr.hpp"
+#include "ArraySampler2.hpp"
 
 class ScalarGrid2 : public ScalarField2, public Grid2 {
 public:
@@ -37,7 +38,7 @@ public:
 
 	using DataPositionFunc = function<Vector2<double>(size_t, size_t)>;
 	
-	//暂时不实现
+
 	DataPositionFunc dataPosition() const;
 
 	double sample(const Vector2<double>& x) const override;
@@ -59,11 +60,14 @@ public:
 
 	const Array2Ptr<double> datas() const;
 
+	
+
 	//void copyTo()const;
 
 protected:
 	Array2Ptr<double> _data;
 
+	LinearArraySampler2Ptr<double> _linearSampler;
 };
 
 

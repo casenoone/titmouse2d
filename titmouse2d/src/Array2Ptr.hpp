@@ -36,7 +36,7 @@ public:
 
 	vector<vector<T>>* dataAccessor();
 
-	void swap(Array2Ptr<T>& other);
+	void Swap(Array2Ptr<T>& other);
 
 	T infnorm();
 
@@ -141,8 +141,8 @@ vector<vector<T>>* Array2Ptr<T>::dataAccessor() {
 }
 
 template<typename T>
-void Array2Ptr<T>::swap(Array2Ptr<T>& other) {
-	array2Ptr->swap(*(other->array2Ptr));
+void Array2Ptr<T>::Swap(Array2Ptr<T>& other) {
+	(*array2Ptr).Swap(*(other.array2Ptr));
 }
 
 template<typename T>

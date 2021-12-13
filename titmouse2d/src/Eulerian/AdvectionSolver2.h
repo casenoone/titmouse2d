@@ -3,6 +3,8 @@
 
 #include "FaceCenteredGrid2.h"
 #include "../Eulerian/CellCenteredVectorGrid2.hpp"
+#include "../Eulerian/CellCenteredScalarGrid2.h"
+#include "../Eulerian/VertexCenteredScalarGrid2.h"
 #include "../MathUtils.hpp"
 class AdvectionSolver2 {
 public:
@@ -11,11 +13,19 @@ public:
 	~AdvectionSolver2();
 
 	template<typename T>
-	void solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVectorGrid2Ptr<T> advectedData, double timeIntervalInSeconds);
+	void solve(const FaceCenteredGrid2Ptr& flow, 
+		CellCenteredVectorGrid2Ptr<T> advectedData, 
+		double timeIntervalInSeconds);
+
+	void solve(const FaceCenteredGrid2Ptr& flow,
+		VertexCenteredScalarGrid2Ptr advectedData,
+		double timeIntervalInSeconds);
 
 public:
 
 };
+
+typedef std::shared_ptr<AdvectionSolver2> AdvectionSolver2Ptr;
 
 
 template<typename T>
@@ -33,9 +43,15 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 			auto posFunc = advectedData->dataPosition();
 			auto current_pos = posFunc(i, j);
 			auto current_vec = flow->sample(current_pos);
-			auto backTracedPoint = current_pos - current_vec * timeIntervalInSeconds;
+			//auto backTracedPoint = current_pos - current_vec * timeIntervalInSeconds;
 
-			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 && backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
+			auto midPoint = current_pos - 0.5 * timeIntervalInSeconds * current_vec;
+			auto midVel = flow->sample(midPoint);
+
+			auto backTracedPoint = current_pos - timeIntervalInSeconds * midVel;
+
+			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 && 
+				backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
 				newData(i, j) = advectedData->sample(backTracedPoint);
 
 			}

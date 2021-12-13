@@ -1,6 +1,8 @@
 #ifndef CONSTVAR_H
 #define CONSTVAR_H
 
+#include <limits>
+#include <cmath>
 #include "Vector2.hpp"
 
 const double kPiD = 3.14159265358979323846264338327950288;

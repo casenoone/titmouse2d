@@ -37,7 +37,7 @@ public:
 
 	void set(const Array2<T>& other);
 
-	void swap(Array2<T>& other);
+	void Swap(Array2<T>& other);
 
 	T infnorm();
 
@@ -47,9 +47,6 @@ public:
 
 	void scaleAndIncrement(T scale, Array2<T>& a);
 
-	const vector<vector<T>>* constDataAccessor() const;
-
-	vector<vector<T>>* dataAccessor();
 
 	template<typename Callback>
 	void forEachIndex(Callback func) const;
@@ -175,8 +172,8 @@ void Array2<T>::set(const Array2<T>& other) {
 }
 
 template<typename T>
-void Array2<T>::swap(Array2<T>& other) {
-	std::swap(_data, *(other.dataAccessor()));
+void Array2<T>::Swap(Array2<T>& other) {
+	std::swap(_data, (other._data));
 }
 
 template<typename T>
@@ -221,15 +218,7 @@ void Array2<T>::scaleAndIncrement(T scale, Array2<T>& a) {
 	}
 }
 
-template<typename T>
-const vector<vector<T>>* Array2<T>::constDataAccessor() const {
-	return _data;
-}
 
-template<typename T>
-vector<vector<T>>* Array2<T>::dataAccessor() {
-	return _data;
-}
 
 template<typename T>
 template<typename Callback>

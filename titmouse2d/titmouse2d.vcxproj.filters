@@ -120,7 +120,7 @@
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\MarchingCube2D\mc_universe.cpp">
+    <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Geometry\ImplicitSurface2.cpp">
@@ -136,6 +136,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Numerical\Pde.hpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Eulerian\LevelSetLiquidSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\demo\LevelSetTest\levelsetLiquidSolverTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -315,6 +324,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Eulerian\SimpleLevelSetSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\LevelSetLiquidSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ArrayUtils.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Eulerian\sdf_utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

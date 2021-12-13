@@ -90,17 +90,15 @@ void SimpleLevelSetSolver2::reinitialize(const VertexCenteredScalarGrid2& inputS
 	Array2Ptr<double> input;
 	input.reSize(size.x, size.y);
 
-	double dtau = pseudoTimeStep(
-		input, gridSpacing);
-	int numberOfIterations
-		= distanceToNumberOfIterations(maxDistance, dtau);
-
-	
-	
 	//我擦，这里应该不会出错吧？
 	//应该不会，这里inputSdf是const类型，因此调用的是const版本的datas()
 	//const类型的也会调用重载运算符，没有问题！
 	input = inputSdf.datas();
+
+	double dtau = pseudoTimeStep(
+		input, gridSpacing);
+	int numberOfIterations
+		= distanceToNumberOfIterations(maxDistance, dtau);
 
 	for (int n = 0; n < numberOfIterations; ++n) {
 		//里面这层循环可以并行

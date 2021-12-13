@@ -4,6 +4,8 @@
 #include "FaceCenteredGrid2.h"
 #include "ScalarGrid2.h"
 
+#include "VertexCenteredScalarGrid2.h"
+
 class GridSystemData2 {
 public:
     GridSystemData2();
@@ -30,6 +32,7 @@ public:
 
 
     FaceCenteredGrid2Ptr& velocity();
+    VertexCenteredScalarGrid2Ptr& sdf();
 
 private:
     Vector2<size_t> _resolution;
@@ -37,7 +40,7 @@ private:
     Vector2<double> _origin;
 
     FaceCenteredGrid2Ptr _velocity;
-    
+    VertexCenteredScalarGrid2Ptr _sdf;
 };
 
 typedef std::shared_ptr<GridSystemData2> GridSystemData2Ptr;

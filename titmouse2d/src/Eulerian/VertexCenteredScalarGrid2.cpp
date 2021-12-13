@@ -16,6 +16,7 @@ VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
     auto size = resolution + Vector2<size_t>(1, 1);
     _data.reSize(size.x, size.y, initialValue);
    
+    this->_linearSampler = make_shared<LinearArraySampler2<double>>(this->_data, gridSpacing, dataOrigin());
 
 }
 
@@ -30,7 +31,7 @@ void VertexCenteredScalarGrid2::clearData(double initialValue) {
 //暂时不实现
 VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
     const VertexCenteredScalarGrid2& other) {
-    
+    (*this) = other;
 }
 
 

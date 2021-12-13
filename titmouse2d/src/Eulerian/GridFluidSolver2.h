@@ -7,6 +7,7 @@
 #include "../Collider2.h"
 
 #include "SimplePressureSolver2.h"
+#include "AdvectionSolver2.h"
 
 class GridFluidSolver2 {
 public:
@@ -17,6 +18,13 @@ public:
 	~GridFluidSolver2();
 
 	GridFluidSolver2(const Vector2<size_t>& resolution, const Vector2<double>& gridSpacing, const Vector2<double>& gridOrigin);
+
+    //暂时写一个这样的接口，将来会专门抽象出一个流体发射器
+    void setFluidSdf(const VertexCenteredScalarGrid2& _sdf);
+
+    const VertexCenteredScalarGrid2Ptr sdf()const;
+
+    VertexCenteredScalarGrid2Ptr& sdf();
 
     Vector2<size_t> resolution() const;
 
@@ -52,7 +60,7 @@ protected:
     
     const Vector2<double>& gravity() const;
 
-
+    void setFluidCellNum();
 
     //暂时不实现
     //double cfl(double timeIntervalInSeconds) const;
@@ -72,6 +80,7 @@ protected:
     Array2Ptr<int> cellCenterMarkers;
 
     SimplePressureSolver2Ptr _pressureSolver;
+    AdvectionSolver2Ptr _advectionSolver;
 
 private:
     Vector2<double> _gravity = Vector2<double>(0.0, -9.8);

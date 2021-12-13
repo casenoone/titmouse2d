@@ -8,8 +8,11 @@ GridFluidSolver2::GridFluidSolver2(
     const Vector2<double>& gridSpacing,
     const Vector2<double>& gridOrigin) {
 
+
     _grids = std::make_shared<GridSystemData2>(resolution, gridSpacing, gridOrigin);
     _pressureSolver = make_shared<SimplePressureSolver2>();
+    _advectionSolver = make_shared<AdvectionSolver2>();
+
 }
 
 GridFluidSolver2::~GridFluidSolver2() {}
@@ -18,6 +21,21 @@ GridFluidSolver2::~GridFluidSolver2() {}
 void GridFluidSolver2::accumulateForces(double timeIntervalInSeconds) {
 
 }
+
+
+void GridFluidSolver2::setFluidSdf(const VertexCenteredScalarGrid2& _sdf) {
+    _grids->sdf() = make_shared<VertexCenteredScalarGrid2>(_sdf);
+}
+
+const VertexCenteredScalarGrid2Ptr GridFluidSolver2::sdf()const {
+    return _grids->sdf();
+}
+
+VertexCenteredScalarGrid2Ptr& GridFluidSolver2::sdf() {
+    return _grids->sdf();
+}
+
+
 
 const Vector2<double>& GridFluidSolver2::gravity() const { return _gravity; }
 
@@ -150,5 +168,21 @@ void GridFluidSolver2::updateCollider(double timeIntervalInSeconds) {
 }
 
 
+void GridFluidSolver2::setFluidCellNum() {
+    int nums = 0;
+    auto size = resolution();
+    auto vel = velocity();
 
+    vel->solveSystemMarker.reSize(resolution().x, resolution().y, -1);
+
+    for (int j = 0; j < size.y; ++j) {
+        for (int i = 0; i < size.x; ++i) {
+            //如果格子被流体占据
+            if (cellCenterMarkers(i, j) == FLUID) {
+                vel->solveSystemMarker(i, j) = nums;
+                nums += 1;
+            }
+        }
+    }
+}
 

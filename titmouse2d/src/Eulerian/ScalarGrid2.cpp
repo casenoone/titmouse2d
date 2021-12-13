@@ -1,7 +1,7 @@
 #include "ScalarGrid2.h"
 
 ScalarGrid2::ScalarGrid2():_data(vector<vector<double>>()) {
-
+	
 }
 
 
@@ -15,6 +15,13 @@ double& ScalarGrid2::operator()(size_t i, size_t j) {
 
 double ScalarGrid2::lookAt(size_t i, size_t j)const {
 	return _data.lookAt(i, j);
+}
+
+
+double ScalarGrid2::sample(const Vector2<double>& x)const {
+	auto _sample = _linearSampler;
+	auto result = (*_sample)(this->_data, x);
+	return result;
 }
 
 
@@ -59,7 +66,7 @@ void ScalarGrid2::clearData(double initialValue) {
 	_data.reSize(res.x, res.y, initialValue);
 }
 
-//暂时不实现
+
 ScalarGrid2::DataPositionFunc ScalarGrid2::dataPosition() const {
 	Vector2<double> o = dataOrigin();
 	//从size_t转换到const double &需要收缩转换
@@ -69,9 +76,7 @@ ScalarGrid2::DataPositionFunc ScalarGrid2::dataPosition() const {
 }
 
 
-double ScalarGrid2::sample(const Vector2<double>& x) const {
-	return 0.0;
-}
+
 
 
 std::function<double(const Vector2<double>&)> ScalarGrid2::sampler() const {

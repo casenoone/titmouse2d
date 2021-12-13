@@ -146,7 +146,9 @@
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
-    <ClCompile Include="src\demo\MarchingCube2D\mc_universe.cpp" />
+    <ClCompile Include="src\demo\LevelSetTest\levelsetLiquidSolverTest.cpp" />
+    <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp" />
+    <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp" />
     <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
@@ -159,6 +161,7 @@
     <ClCompile Include="src\Eulerian\Grid2.cpp" />
     <ClCompile Include="src\Eulerian\GridFluidSolver2.cpp" />
     <ClCompile Include="src\Eulerian\GridSystemData2.cpp" />
+    <ClCompile Include="src\Eulerian\LevelSetLiquidSolver2.cpp" />
     <ClCompile Include="src\Eulerian\MarchingCubes2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarField2.cpp" />
     <ClCompile Include="src\Eulerian\ScalarGrid2.cpp" />
@@ -187,6 +190,7 @@
     <ClInclude Include="src\Array2.hpp" />
     <ClInclude Include="src\Array2Ptr.hpp" />
     <ClInclude Include="src\ArrayPtr.hpp" />
+    <ClInclude Include="src\ArrayUtils.hpp" />
     <ClInclude Include="src\boundingbox2.h" />
     <ClInclude Include="src\Collider2.h" />
     <ClInclude Include="src\ColliderSet2.h" />
@@ -203,10 +207,12 @@
     <ClInclude Include="src\Eulerian\Grid2.h" />
     <ClInclude Include="src\Eulerian\GridFluidSolver2.h" />
     <ClInclude Include="src\Eulerian\GridSystemData2.h" />
+    <ClInclude Include="src\Eulerian\LevelSetLiquidSolver2.h" />
     <ClInclude Include="src\Eulerian\MarchingCubes2.h" />
     <ClInclude Include="src\Eulerian\MarchingCubesTable2.h" />
     <ClInclude Include="src\Eulerian\ScalarField2.h" />
     <ClInclude Include="src\Eulerian\ScalarGrid2.h" />
+    <ClInclude Include="src\Eulerian\sdf_utils.h" />
     <ClInclude Include="src\Eulerian\SimpleDiffuseSolver2.h" />
     <ClInclude Include="src\Eulerian\SimpleLevelSetSolver2.h" />
     <ClInclude Include="src\Eulerian\SimplePressureSolver2.h" />
