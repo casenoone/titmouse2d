@@ -47,10 +47,10 @@ void LevelSetLiquidSolver2::extrapolateVelocityToAir() {
             }
             else {
                 uMarker(i, j) = 0;
-                u(i, j) = 0.0;
             }
         }
     }
+
 
 
     for (int i = 0; i < vMarker.dataSize().x; ++i) {
@@ -60,7 +60,6 @@ void LevelSetLiquidSolver2::extrapolateVelocityToAir() {
             }
             else {
                 vMarker(i, j) = 0;
-                v(i, j) = 0.0;
             }
         }
     }
@@ -68,7 +67,30 @@ void LevelSetLiquidSolver2::extrapolateVelocityToAir() {
 
     int depth = std::ceil(maxCfl());
     extrapolateToRegion(u, uMarker, depth, u);
-    extrapolateToRegion(v, uMarker, depth, v);
+    extrapolateToRegion(v, vMarker, 15, v);
+
+    for (int i = 0; i < u.dataSize().x; ++i) {
+        for (int j = 0; j < u.dataSize().y; ++j) {
+            if (i <= 0 || i >= u.dataSize().x - 1) {
+                //cout << u(i, j) << endl; //= 0;
+            }
+
+            /*if (j <= 0 || j >= flow->vSize().y - 1) {
+                v(i, j) = 0;
+            }*/
+        }
+    }
+
+
+    for (int i = 0; i < v.dataSize().x; ++i) {
+        for (int j = 0; j < v.dataSize().y; ++j) {
+           
+            //cout<< v(29, 29) << endl;
+            if (j <= 0 || j >= v.dataSize().y - 1) {
+               //cout << v(i, j) << endl;// = 0;
+            }
+        }
+    }
 
 }
 
@@ -115,8 +137,9 @@ void LevelSetLiquidSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds)
 
 
 void LevelSetLiquidSolver2::onEndAdvanceTimeStep(double timeIntervalInSeconds) {
+    extrapolateVelocityToAir();
     computeSdfAdvection(timeIntervalInSeconds);
-    _levelsetSolver->reinitialize(*sdf(), 5, sdf());
+    //_levelsetSolver->reinitialize(*sdf(), 5, sdf());
 }
 
 LevelSetLiquidSolver2::Builder LevelSetLiquidSolver2::builder() {

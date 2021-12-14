@@ -13,8 +13,70 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 	FaceCenteredGrid2Ptr advectedData,
 	double timeIntervalInSeconds) {
 
+	
+	auto sizeU = advectedData->uSize();
+	auto sizeV = advectedData->vSize();
+	auto u = advectedData->uDatas();
+	auto v = advectedData->vDatas();
+
+	Array2Ptr<double> newU, newV;
+	newU.reSize(sizeU.x, sizeU.y);
+	newV.reSize(sizeV.x, sizeV.y);
+
+	for (int i = 0; i < sizeU.x; ++i) {
+		for (int j = 0; j < sizeU.y; ++j) {
+			auto posFunc = advectedData->uPosition();
+			auto current_pos = posFunc(i, j);
+			auto current_vec = flow->sample(current_pos);
+			auto midPoint = current_pos - 0.5 * timeIntervalInSeconds * current_vec;
+			auto midVel = flow->sample(midPoint);
+
+			auto backTracedPoint = current_pos - timeIntervalInSeconds * midVel;
+
+			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 &&
+				backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
+				newU(i, j) = advectedData->sample(backTracedPoint).x;
+
+			}
+			else {
+
+				double x, y;
+				x = clamp<double>(backTracedPoint.x, 0.0, 2.0);
+				y = clamp<double>(backTracedPoint.y, 0.0, 2.0);
+				newU(i, j) = advectedData->sample(Vector2<double>(x, y)).x;
+			}
+		}
+	}
 
 
+
+	for (int i = 0; i < sizeV.x; ++i) {
+		for (int j = 0; j < sizeV.y; ++j) {
+			auto posFunc = advectedData->vPosition();
+			auto current_pos = posFunc(i, j);
+			auto current_vec = flow->sample(current_pos);
+			auto midPoint = current_pos - 0.5 * timeIntervalInSeconds * current_vec;
+			auto midVel = flow->sample(midPoint);
+
+			auto backTracedPoint = current_pos - timeIntervalInSeconds * midVel;
+
+			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 &&
+				backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
+				newV(i, j) = advectedData->sample(backTracedPoint).y;
+
+			}
+			else {
+
+				double x, y;
+				x = clamp<double>(backTracedPoint.x, 0.0, 2.0);
+				y = clamp<double>(backTracedPoint.y, 0.0, 2.0);
+				newV(i, j) = advectedData->sample(Vector2<double>(x, y)).y;
+			}
+		}
+	}
+
+	u = newU;
+	v = newV;
 }
 
 
@@ -24,7 +86,6 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 
 	auto dataSize = advectedData->dataSize();
 	auto data = advectedData->datas();
-	auto gridSpacing = advectedData->gridSpacing();
 
 	Array2Ptr<double> newData;
 	//newData = data;

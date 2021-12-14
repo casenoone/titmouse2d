@@ -39,6 +39,8 @@ int SimplePressureSolver2::fluidCellSize(const Array2Ptr<int>& markers) {
 			}
 		}
 	}
+	
+
 	return systemSize;
 }
 

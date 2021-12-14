@@ -97,7 +97,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 }
 
 
-Vector2<size_t> resolution(35, 35);
+Vector2<size_t> resolution(30, 30);
 Vector2<double> origin(0.0, 0.0);
 
 
@@ -117,8 +117,8 @@ auto levelsetLiquidSolver = LevelSetLiquidSolver2::builder()
 .makeShared();
 
 
-Vector2<double> centers(1.0, 0.6);
-double rs = 0.5;
+Vector2<double> centers(1.0, 0.7);
+double rs = 0.6;
 
 auto sphere1 = Sphere2(centers, rs, resolution, origin, 0.0);
 

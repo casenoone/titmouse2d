@@ -117,12 +117,12 @@ void GridFluidSolver2::computeExternalForces(double timeIntervalInSeconds) {
 }
 
 void GridFluidSolver2::computePressure(double timeIntervalInSeconds) {
-    //_pressureSolver->solve(velocity(), cellCenterMarkers);
+    _pressureSolver->solve(velocity(), cellCenterMarkers);
 }
 
 
 void GridFluidSolver2::computeAdvection(double timeIntervalInSeconds) {
-   // _advectionSolver->solve(velocity(), velocity(), timeIntervalInSeconds);
+    _advectionSolver->solve(velocity(), velocity(), timeIntervalInSeconds);
 }
 
 
