@@ -26,6 +26,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
  
 实现的流体算法：
 - FLIP/PIC + 压力泊松方程求解自由表面流
+- Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
 
 效果图：
 1.FLIP算法
