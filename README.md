@@ -29,8 +29,8 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
 
 
-1.FLIP算法
-![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
+- 1.FLIP算法
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
 
 2.advection测试
 
