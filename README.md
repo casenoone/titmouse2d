@@ -32,9 +32,8 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 1.FLIP算法
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
 
-2.advection测试
+- 2.advection测试
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif)
 
-![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif)
-
-3.level set free surface flow
-![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif)
+- 3.level set free surface flow
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif)
