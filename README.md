@@ -37,3 +37,6 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 
 - 3.level set free surface flow
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif)
+
+- 4.Marching cube2d
+- ![Image]( https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/marching%20cube2d.gif)
