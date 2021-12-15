@@ -22,8 +22,9 @@ void extrapolateToRegion(
     //这里可以并行优化
     for (int i = 0; i < size.x; ++i) {
         for (int j = 0; j < size.y; ++j) {
-            valid0(i, j) = valid1(i, j);
+            valid0(i, j) = valid.lookAt(i, j);
             output(i, j) = input.lookAt(i, j);
+
         }
     }
 
@@ -33,8 +34,8 @@ void extrapolateToRegion(
             for (int j = 0; j < size.y; ++j) {
                 T sum = T();
                 unsigned int count = 0;
-
                 if (!valid0(i, j)) {
+            
                     if (i + 1 < size.x && valid0(i + 1, j)) {
                         sum = sum + output(i + 1, j);
                         ++count;
@@ -54,7 +55,6 @@ void extrapolateToRegion(
                         sum = sum + output(i, j - 1);
                         ++count;
                     }
-
                     if (count > 0) {
                         output(i, j)
                             = sum / count;

@@ -67,12 +67,12 @@ void LevelSetLiquidSolver2::extrapolateVelocityToAir() {
 
     int depth = std::ceil(maxCfl());
     extrapolateToRegion(u, uMarker, depth, u);
-    extrapolateToRegion(v, vMarker, 15, v);
+    extrapolateToRegion(v, vMarker, depth, v);
 
     for (int i = 0; i < u.dataSize().x; ++i) {
         for (int j = 0; j < u.dataSize().y; ++j) {
             if (i <= 0 || i >= u.dataSize().x - 1) {
-                //cout << u(i, j) << endl; //= 0;
+                //u(i, j) = 0;
             }
 
             /*if (j <= 0 || j >= flow->vSize().y - 1) {
@@ -85,9 +85,8 @@ void LevelSetLiquidSolver2::extrapolateVelocityToAir() {
     for (int i = 0; i < v.dataSize().x; ++i) {
         for (int j = 0; j < v.dataSize().y; ++j) {
            
-            //cout<< v(29, 29) << endl;
             if (j <= 0 || j >= v.dataSize().y - 1) {
-               //cout << v(i, j) << endl;// = 0;
+               //v(i, j) = 0;
             }
         }
     }
@@ -139,7 +138,9 @@ void LevelSetLiquidSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds)
 void LevelSetLiquidSolver2::onEndAdvanceTimeStep(double timeIntervalInSeconds) {
     extrapolateVelocityToAir();
     computeSdfAdvection(timeIntervalInSeconds);
-    //_levelsetSolver->reinitialize(*sdf(), 5, sdf());
+    
+    //所以说这玩意儿到底起作用没？也看不出来啊
+    _levelsetSolver->reinitialize(*sdf(), 5, sdf());
 }
 
 LevelSetLiquidSolver2::Builder LevelSetLiquidSolver2::builder() {

@@ -97,7 +97,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 }
 
 
-Vector2<size_t> resolution(30, 30);
+Vector2<size_t> resolution(20, 20);
 Vector2<double> origin(0.0, 0.0);
 
 
@@ -117,16 +117,14 @@ auto levelsetLiquidSolver = LevelSetLiquidSolver2::builder()
 .makeShared();
 
 
-Vector2<double> centers(1.0, 0.7);
-double rs = 0.6;
+Vector2<double> centers(0.7, 1.5);
+double rs = 0.5;
 
 auto sphere1 = Sphere2(centers, rs, resolution, origin, 0.0);
 
 auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>(0, 0));
 
 auto advectionSolver = make_shared<AdvectionSolver2>();
-
-//levelsetLiquidSolve
 
 static void display(void)
 {
@@ -135,14 +133,11 @@ static void display(void)
     glLoadIdentity();
     gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-    //advectionSolver->solve(velocity, sphere1._data, 0.02);
 
-    levelsetLiquidSolver->onAdvanceTimeStep(0.01);
+    levelsetLiquidSolver->onAdvanceTimeStep(0.02);
     
-    //levelsetSolver.reinitialize(*sphere1.sdf(), 5, sphere1._data);
 
     vector<LineSegment> lineSet;
-    //mc->getLineSegmentSet(lineSet, sphere1.sdf());
     mc->getLineSegmentSet(lineSet, levelsetLiquidSolver->sdf());
 
 
@@ -151,6 +146,18 @@ static void display(void)
         auto end = i->End;
         drawLine(start.x, start.y, end.x, end.y);
     }
+
+    auto sdfSize = levelsetLiquidSolver->sdf()->dataSize();
+    for (int i = 0; i < sdfSize.x; ++i) {
+        for (int j = 0; j < sdfSize.y; ++j) {
+            auto posFunc = levelsetLiquidSolver->sdf()->dataPosition();
+            auto pos = posFunc(i, j);
+            if (levelsetLiquidSolver->sdf()->lookAt(i, j) <= 0) {
+                drawPoint(pos, 3.2f, Color3<float>(255, 0, 0));
+            }
+        }
+    }
+
 
     glutSwapBuffers();
 
@@ -227,6 +234,57 @@ int main(int argc, char** argv)
     glutDisplayFunc(display);    //绘制窗zz口显示时
 
     glutMainLoop();
+
+
+
+
+
+ // //这里是写入文件
+ ////记得重新算的时候要删掉 原来的文件夹
+ //int frame = 1000;
+ ////auto num = flipSolver->particleSystemData()->numberOfParticles();
+ ////auto position = flipSolver->particleSystemData()->positions();
+
+ //string outfilename = "1";
+
+ //int num = 0;
+
+ //system("mkdir LevelSet2");
+
+ //for (int i = 0; i < frame; i+= 1) {
+ //   
+ //    ofstream out("../titmouse2d/LevelSet2/"+outfilename + ".txt", ios::app);
+
+ //    auto sdfSize = levelsetLiquidSolver->sdf()->dataSize();
+ //    for (int i = 0; i < sdfSize.x; ++i) {
+ //        for (int j = 0; j < sdfSize.y; ++j) {
+ //            auto posFunc = levelsetLiquidSolver->sdf()->dataPosition();
+ //            auto pos = posFunc(i, j);
+ //            if (levelsetLiquidSolver->sdf()->lookAt(i, j) <= 0) {
+ //                ++num;
+ //                //drawPoint(pos, 3.2f, Color3<float>(255, 0, 0));
+ //            }
+ //        }
+ //    }
+
+
+ //    //然后，再写入像素数据
+ //    for (int i = 0; i < sdfSize.x; ++i) {
+ //        for (int j = 0; j < sdfSize.y; ++j) {
+ //            auto posFunc = levelsetLiquidSolver->sdf()->dataPosition();
+ //            auto pos = posFunc(i, j);
+ //            if (levelsetLiquidSolver->sdf()->lookAt(i, j) <= 0) {
+ //                out << pos.x << "," << pos.y << endl;
+ //            }
+ //        }
+ //    }
+
+ //    levelsetLiquidSolver->onAdvanceTimeStep(0.02);
+ //    auto temp1 = std::atoi(outfilename.c_str());
+ //    temp1++;
+ //    outfilename = std::to_string(temp1);
+ //    
+ //}
 
 
 

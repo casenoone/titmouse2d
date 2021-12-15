@@ -71,6 +71,7 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 
 			//网格单元是流体
 			if (markers.lookAt(i, j) == FLUID) {
+				
 				if (i + 1 < resolution.x) {
 					if (markers.lookAt(i + 1, j) == FLUID) {
 						A.insert(row, solveSystemMarker(i + 1, j), -invH);
@@ -110,9 +111,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				}
 
 				A.insert(row, solveSystemMarker(i, j), -coeff * invH);
-				
 				if (i <= 0 || i >= flow->uSize().x - 1) {
 					u(i, j) = 0;
+					
 				}
 
 				if (j <= 0 || j >= flow->vSize().y - 1) {
