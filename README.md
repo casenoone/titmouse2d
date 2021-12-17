@@ -1,6 +1,8 @@
 2d流体引擎
 titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021年10月3日。
 
+（封装那些ArrayPtr之类的类，完全没有必要，但是写完之后才发现没有必要，改动的话工程量太大了，在3D版本里再修改吧。。。）
+
 - C++ 11 （使用C++ 11标准）
 - basic vector operator（基本的向量操作）
 - basic array struct（基本的数组结构）
@@ -27,7 +29,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 实现的流体算法：
 - FLIP/PIC + 压力泊松方程求解自由表面流
 - Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
-- SPH algorthm （光滑粒子动力学算法）
+- SPH algorthm （光滑粒子动力学算法）（SPH的参数我也是醉了,凑合着玩玩吧）
 
 
 - 1.FLIP算法
@@ -41,3 +43,18 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 
 - 4.Marching cube2d
 - ![Image]( https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/marching%20cube2d.gif)
+
+- 5.SSPH
+- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif)
+
+
+即将实现的算法：
+- 1.APIC
+- 2.MPM
+- 3.LBM
+- 4.PBF
+- 5.shallow water solver
+- 6.BVH加速结构
+- 7.Explicit/Implicit Mass Spring System
+
+ 
