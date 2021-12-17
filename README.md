@@ -36,6 +36,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
 
 - 2.advection测试
+
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif)
 
 - 3.level set free surface flow
@@ -46,6 +47,9 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 
 - 5.SSPH
 - ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif)
+
+- 6.PIC
+- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif)
 
 
 即将实现的算法：
