@@ -64,4 +64,9 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 9.Eulerian Smoke Simulation
 - 10.Clebsch gauge fluid solver
 
+
+本程序的使用方法：
+
+没什么使用方法，配好GLUT之后，运行demo文件夹里的main.cpp文件即可
+
  
