@@ -47,4 +47,13 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 5.SSPH
 - ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif)
 
+
+即将实现的算法：
+- 1.APIC
+- 2.MPM
+- 3.LBM
+- 4.PBF
+- 5.shallow water solver
+- 6.BVH加速结构
+
  
