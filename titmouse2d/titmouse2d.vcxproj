@@ -153,6 +153,7 @@
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />
+    <ClCompile Include="src\demo\SphTest\SphTest.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp" />
@@ -181,6 +182,8 @@
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
+    <ClCompile Include="src\Lagrangian\SphSystemData2.cpp" />
+    <ClCompile Include="src\Lagrangian\SphSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Numerical\Pde.hpp" />
     <ClCompile Include="src\Size2.cpp" />
@@ -231,6 +234,10 @@
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
     <ClInclude Include="src\DenseMatrix.hpp" />
+    <ClInclude Include="src\Lagrangian\SphSpikyKernel2.h" />
+    <ClInclude Include="src\Lagrangian\SphStdKernel2.h" />
+    <ClInclude Include="src\Lagrangian\SphSystemData2.h" />
+    <ClInclude Include="src\Lagrangian\SphSystemSolver2.h" />
     <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussSeidelSolver.hpp" />
     <ClInclude Include="src\LinearSystem\MICCGSolver.hpp" />

@@ -53,6 +53,7 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particl
 	size_t x = idx.x;
 	size_t y = idx.y;
 
+
 	if (!IsYoverBorder(y) && !IsXoverBorder(x)) {
 		//如果该待求格子存在，那么取该格子里面的所有粒子，即currentParticles
 		auto currentParticles = grids[x][y];
@@ -74,6 +75,8 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particl
 void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions) {
 	clearData();
 	resetDataSize();
+
+
 
 	//grids里保存粒子映射后的编号
 	vector<vector<vector<size_t>>> grids;

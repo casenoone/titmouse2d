@@ -9,6 +9,9 @@ using namespace std;
 //不实现arrayAccessor类
 //API没有写全，随着项目的完善再增加吧
 
+//考虑给Array类加一个push方法
+
+
 template<class T>
 class Array {
 public:
@@ -32,6 +35,8 @@ public:
 	const vector<T>* constDataAccessor() const;
 	
 	vector<T>* dataAccessor() ;
+
+	void set(const vector<T>& data_);
 
 	void clear();
 
@@ -121,6 +126,11 @@ inline vector<T>* Array<T>::dataAccessor() {
 	return &_data;
 }
 
+template<typename T>
+void Array<T>::set(const vector<T>& data_) {
+	_data = data_;
+	_size = data_.size();
+}
 
 
 template<typename T>

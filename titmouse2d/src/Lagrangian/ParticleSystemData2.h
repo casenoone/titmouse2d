@@ -11,7 +11,7 @@ using namespace std;
 class ParticleSystemData2 {
 public:
 	ParticleSystemData2();
-	~ParticleSystemData2();
+	virtual ~ParticleSystemData2();
 
 	size_t &numberOfParticles();
 

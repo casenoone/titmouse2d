@@ -7,13 +7,8 @@
 
 const double kPiD = 3.14159265358979323846264338327950288;
 
-const double MASS = 1.0;
-
 const Vector2<double> GRAVITY(0.0, -9.8);
 
-const double DRAG_COEFFICIENT = 0.8;
-
-const double R = 0.08;
 
 //epsilonD指浮点数的最小数，可以理解为0
 constexpr double kEpsilonD = std::numeric_limits<double>::epsilon();
@@ -31,5 +26,16 @@ const int FLUID = 0;
 const int SOLID = -1;
 const int AIR = 1;
 
+
+
+
+//sph专用
+//注意搜索半径要小于gridspacing*2
+const double R = 0.08;
+const double MASS = 1.0;
+const double KERNEL_RADUIS = R;
+const double SPEEDOFSOUND = 0.005;
+const double EOSEXPONENT = 2.0;
+const double DRAG_COEFFICIENT = 0.8;
 
 #endif

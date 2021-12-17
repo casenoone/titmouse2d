@@ -28,6 +28,8 @@ public:
 
 	size_t dataSize() const;
 
+	void set(const vector<T>& data_);
+
 	void clear();
 
 	template<typename Callback>
@@ -97,6 +99,12 @@ template<typename T>
 inline size_t ArrayPtr<T>::dataSize() const {
 	return arrayPtr->dataSize();
 }
+
+template<typename T>
+inline void ArrayPtr<T>::set(const vector<T>& data_) {
+	arrayPtr->set(data_);
+}
+
 
 
 

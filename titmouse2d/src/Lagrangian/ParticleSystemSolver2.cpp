@@ -10,15 +10,19 @@ ParticleSystemSolver2::~ParticleSystemSolver2() {
 
 }
 
-void ParticleSystemSolver2::setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) {
+void ParticleSystemSolver2::setData(size_t numberOfParticles, 
+	ArrayPtr<Vector2<double>>& pos, 
+	size_t resolutionX, 
+	size_t resolutionY) {
 	_particleSystemData->numberOfParticles() = numberOfParticles;
 	_particleSystemData->positions() = pos;
 	_particleSystemData->velocities().reSize(numberOfParticles);
 	_particleSystemData->forces().reSize(numberOfParticles);
 	
-	
-	//初始化neighborSearche
+
+	////初始化neighborSearche
 	_particleSystemData->neighbor = make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
+	
 	_particleSystemData->neighbor->setNeiborList(pos);
 }
 
@@ -54,11 +58,12 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 	auto forces = _particleSystemData->forces();
 	auto velocities = _particleSystemData->velocities();
 	auto positions = _particleSystemData->positions();
-
+	
 
 	for (size_t i = 0; i < n; ++i) {
 		auto& newVelocity = _newVelocities[i];
-	
+	    
+
 		auto temp1 = velocities[i] + (forces[i] / MASS) * timeIntervalInSeconds;
 		newVelocity = temp1;
 
