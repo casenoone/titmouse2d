@@ -60,5 +60,8 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 5.shallow water solver
 - 6.BVH加速结构
 - 7.Explicit/Implicit Mass Spring System
+- 8.Vortex particles Method
+- 9.Eulerian Smoke Simulation
+- 10.Clebsch gauge fluid solver
 
  
