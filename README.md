@@ -36,6 +36,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
 
 - 2.advection测试
+
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif)
 
 - 3.level set free surface flow
@@ -47,6 +48,9 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 5.SSPH
 - ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif)
 
+- 6.PIC
+- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif)
+
 
 即将实现的算法：
 - 1.APIC
@@ -56,5 +60,13 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 5.shallow water solver
 - 6.BVH加速结构
 - 7.Explicit/Implicit Mass Spring System
+- 8.Vortex particles Method
+- 9.Eulerian Smoke Simulation
+- 10.Clebsch gauge fluid solver
+
+
+本程序的使用方法：
+
+没什么使用方法，配好GLUT之后，运行demo文件夹里的main.cpp文件即可
 
  
