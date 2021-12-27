@@ -155,7 +155,7 @@
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />
     <ClCompile Include="src\demo\SphTest\SphTest.cpp" />
-    <ClCompile Include="src\demo\vortex_method\vortexParticles.cpp" />
+    <ClCompile Include="src\demo\vortex_method\vortexParticleTest.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp" />
@@ -186,6 +186,8 @@
     <ClCompile Include="src\Lagrangian\ParticleSystemSolver2.cpp" />
     <ClCompile Include="src\Lagrangian\SphSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\SphSystemSolver2.cpp" />
+    <ClCompile Include="src\Lagrangian\VortexParticleSystemData2.cpp" />
+    <ClCompile Include="src\Lagrangian\VortexParticleSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Numerical\Pde.hpp" />
     <ClCompile Include="src\Size2.cpp" />
@@ -240,6 +242,8 @@
     <ClInclude Include="src\Lagrangian\SphStdKernel2.h" />
     <ClInclude Include="src\Lagrangian\SphSystemData2.h" />
     <ClInclude Include="src\Lagrangian\SphSystemSolver2.h" />
+    <ClInclude Include="src\Lagrangian\VortexParticleSystemData2.h" />
+    <ClInclude Include="src\Lagrangian\VortexParticleSystemSolver2.h" />
     <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussSeidelSolver.hpp" />
     <ClInclude Include="src\LinearSystem\MICCGSolver.hpp" />
@@ -250,6 +254,7 @@
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
     <ClInclude Include="src\MathUtils.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\random.h" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
     <ClInclude Include="src\SparseMatrix.hpp" />

@@ -9,6 +9,8 @@ const double kPiD = 3.14159265358979323846264338327950288;
 
 const Vector2<double> GRAVITY(0.0, -9.8);
 
+const double kE = 2.71828182845904523536028747135266249;
+
 
 //epsilonD指浮点数的最小数，可以理解为0
 constexpr double kEpsilonD = std::numeric_limits<double>::epsilon();

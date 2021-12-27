@@ -11,6 +11,29 @@ public:
 	
 	virtual ~VortexParticleSystemSolver2();
 
+	virtual void timeIntegration(double timeIntervalInSeconds)override;
+
+
+	virtual void onAdvanceTimeStep(double timeIntervalInSeconds)override;
+
+	VortexParticleSystemData2Ptr& vortexParticleData();
+
+	Vector2<double> computeUSingle(const Vector2<double>& pos, int i)const;
+
+	void setData(int numberOfParticles,
+		ArrayPtr<Vector2<double>>& pos,
+		int resolutionX,
+		int resolutionY);
+
+private:
+	void onBeginAdvanceTimeStep();
+
+	void onEndAdvanceTimeStep();
+
+
+private:
+	VortexParticleSystemData2Ptr _vortexParticleData;
+
 };
 
 

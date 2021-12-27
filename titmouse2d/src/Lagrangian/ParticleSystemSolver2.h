@@ -25,9 +25,6 @@ public:
 
 	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) ;
 
-	//Åö×²ÌåÏÈ²»Ğ´
-	//void setCollider(ColliderSet2& collider_);
-
 	void setCollider(const Collider2& collider);
 
 

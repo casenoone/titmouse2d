@@ -159,7 +159,13 @@
     <ClCompile Include="src\demo\MassSpringTest\implicitMassSpringTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\vortex_method\vortexParticles.cpp">
+    <ClCompile Include="src\demo\vortex_method\vortexParticleTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lagrangian\VortexParticleSystemData2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lagrangian\VortexParticleSystemSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -360,6 +366,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Lagrangian\SphSystemSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lagrangian\VortexParticleSystemData2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lagrangian\VortexParticleSystemSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\random.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
