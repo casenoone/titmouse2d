@@ -31,6 +31,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - FLIP/PIC + 压力泊松方程求解自由表面流
 - Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
 - SPH algorthm （光滑粒子动力学算法）（SPH的参数我也是醉了,凑合着玩玩吧）
+- Vortex Method(涡粒子法模拟流体)
 
 
 - 1.FLIP算法
