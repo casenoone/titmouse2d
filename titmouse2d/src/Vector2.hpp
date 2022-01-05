@@ -15,86 +15,86 @@ template<class T>
 class Vector2 {
 public:
 	Vector2();
-	
+
 	~Vector2();
-	
+
 	Vector2(const T& _x, const T& _y);
-	
+
 	//拷贝构造函数
 	Vector2(const Vector2<T>& var);
 
 	//用s来设置当前对象的属性
-	inline void set(const T& s);
+	void set(const T& s);
 
 	//运算符重载
-	inline Vector2<T> operator+(const Vector2<T>& vec) const;
+	Vector2<T> operator+(const Vector2<T>& vec) const;
 
-	inline Vector2<T> operator-(const Vector2<T>& vec) const;
+	Vector2<T> operator-(const Vector2<T>& vec) const;
 
-	inline Vector2<T> operator*(const T& r) const;
+	Vector2<T> operator*(const T& r) const;
 
-	inline Vector2<T> operator*(const Vector2<T>& r) const;
+	Vector2<T> operator*(const Vector2<T>& r) const;
 
-	inline Vector2<T> operator/(const T& r) const;
-	
+	Vector2<T> operator/(const T& r) const;
+
 	//这里为何要写一个template呢？
 	//那是因为该函数只是一个友元函数而非成员函数
 	//所以需要我们去指定其为模板函数
 	template<typename T>
 	friend Vector2<T> operator* (const T& r, const Vector2<T>& obj);
 
-	inline Vector2<T> operator/(const Vector2<T>& r) const;
+	Vector2<T> operator/(const Vector2<T>& r) const;
 
-	inline void operator=(const Vector2<T>& vec);
+	void operator=(const Vector2<T>& vec);
 
-	inline bool operator!=(const Vector2<T>& r)const;
+	bool operator!=(const Vector2<T>& r)const;
 
-	inline bool operator==(const Vector2<T>& r)const;
+	bool operator==(const Vector2<T>& r)const;
 
-	inline Vector2<T> operator+=(const Vector2<T>& vec) ;
+	Vector2<T> operator+=(const Vector2<T>& vec);
 
-	inline Vector2<T> operator-=(const Vector2<T>& vec) ;
+	Vector2<T> operator-=(const Vector2<T>& vec);
 
-	inline Vector2<T> operator*=(const T& r) ;
+	Vector2<T> operator*=(const T& r);
 
-	inline Vector2<T> operator*=(const Vector2<T>& r);
+	Vector2<T> operator*=(const Vector2<T>& r);
 
-	inline Vector2<T> operator/=(const T& r);
+	Vector2<T> operator/=(const T& r);
 
-	inline Vector2<T> operator/=(const Vector2<T>& r);
+	Vector2<T> operator/=(const Vector2<T>& r);
 
 	//点积运算
-	inline T dot(const Vector2<T>& vec) const;
+	T dot(const Vector2<T>& vec) const;
 
 	//获取向量长度
-	inline T getLength()const;
+	T getLength()const;
 
 	//获取向量长度的平方
-	inline T getLengthSquared()const;
+	T getLengthSquared()const;
 
 	//向量单位化，改变当前对象的属性
-	inline Vector2<T> normalize();
+	Vector2<T> normalize();
 
 	//获取单位化后的结果，但并不改变当前对象属性
-	inline Vector2<T> getNormalize()const;
+	Vector2<T> getNormalize()const;
 
 	//叉积运算
-	inline T cross(const Vector2<T>& vec)const;
+	T cross(const Vector2<T>& vec)const;
 
 	//求两vector之间的距离，此时vector代表点
-	inline T dis(const Vector2<T>& vec)const;
+	T dis(const Vector2<T>& vec)const;
 
 	//求两vector之间的距离的平方，此时vector代表点
-	inline T disSquare(const Vector2<T>& vec)const;
+	T disSquare(const Vector2<T>& vec)const;
 
 	//求vector最小的分量
-	inline T min()const;
+	T min()const;
 
 	//返回(v,v)/this
-	inline Vector2<T> rdiv(const T& v)const;
-	
+	Vector2<T> rdiv(const T& v)const;
+
 	//计算当前vector在normal上的投影
-	inline Vector2<T> projected(const Vector2<T>& normal) const;
+	Vector2<T> projected(const Vector2<T>& normal) const;
 
 public:
 	T x;
@@ -106,9 +106,9 @@ public:
 
 
 template<class T>
-Vector2<T>::Vector2():
-x(static_cast<T>(0)),
-y(static_cast<T>(0)){}
+Vector2<T>::Vector2() :
+	x(static_cast<T>(0)),
+	y(static_cast<T>(0)) {}
 
 
 template<class T>
@@ -120,7 +120,7 @@ Vector2<T>::~Vector2() {
 template<class T>
 Vector2<T>::Vector2(const T& _x, const T& _y) :
 	x(_x),
-	y(_y){}
+	y(_y) {}
 
 
 template<class T>
@@ -130,54 +130,54 @@ Vector2<T>::Vector2(const Vector2<T>& var) {
 }
 
 template<class T>
-inline void Vector2<T>::set(const T& s) {
+void Vector2<T>::set(const T& s) {
 	this->x = s.x;
 	this->y = s.y;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator+(const Vector2<T>& vec) const {
+Vector2<T> Vector2<T>::operator+(const Vector2<T>& vec) const {
 	Vector2<T> result(this->x + vec.x, this->y + vec.y);
 	return result;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator-(const Vector2<T>& vec) const {
+Vector2<T> Vector2<T>::operator-(const Vector2<T>& vec) const {
 	Vector2<T> result(this->x - vec.x, this->y - vec.y);
 	return result;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator*(const T& r) const {
+Vector2<T> Vector2<T>::operator*(const T& r) const {
 	Vector2<T> result(this->x * r, this->y * r);
 	return result;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator*(const Vector2<T>& r) const {
+Vector2<T> Vector2<T>::operator*(const Vector2<T>& r) const {
 	Vector2<T> result(this->x * r.x, this->y * r.y);
 	return result;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator/(const T& r) const {
+Vector2<T> Vector2<T>::operator/(const T& r) const {
 	Vector2<T> result(this->x / r, this->y / r);
 	return result;
 }
 
 template<class T>
-inline Vector2<T> operator* (const T& r, const Vector2<T>& obj)  {
+Vector2<T> operator* (const T& r, const Vector2<T>& obj) {
 	return obj * r;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator/(const Vector2<T>& r) const {
+Vector2<T> Vector2<T>::operator/(const Vector2<T>& r) const {
 	Vector2<T> result(this->x / r.x, this->y / r.y);
 	return result;
 }
 
 template<class T>
-inline void Vector2<T>::operator=(const Vector2<T>& vec) {
+void Vector2<T>::operator=(const Vector2<T>& vec) {
 	this->x = vec.x;
 	this->y = vec.y;
 }
@@ -185,7 +185,7 @@ inline void Vector2<T>::operator=(const Vector2<T>& vec) {
 
 //浮点数比较大小
 template<class T>
-inline bool Vector2<T>::operator!=(const Vector2<T>& r)const {
+bool Vector2<T>::operator!=(const Vector2<T>& r)const {
 	if (this->x == r.x && this->y == r.y) {
 		return false;
 	}
@@ -193,7 +193,7 @@ inline bool Vector2<T>::operator!=(const Vector2<T>& r)const {
 }
 
 template<class T>
-inline bool Vector2<T>::operator==(const Vector2<T>& r)const {
+bool Vector2<T>::operator==(const Vector2<T>& r)const {
 	if (this->x == r.x && this->y == r.y) {
 		return true;
 	}
@@ -201,61 +201,61 @@ inline bool Vector2<T>::operator==(const Vector2<T>& r)const {
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator+=(const Vector2<T>& vec)  {
+Vector2<T> Vector2<T>::operator+=(const Vector2<T>& vec) {
 	(*this) = (*this) + vec;
 	return *this;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator-=(const Vector2<T>& vec)  {
+Vector2<T> Vector2<T>::operator-=(const Vector2<T>& vec) {
 	(*this) = (*this) - vec;
 	return *this;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator*=(const T& r) {
+Vector2<T> Vector2<T>::operator*=(const T& r) {
 	(*this) = (*this) * r;
 	return *this;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator*=(const Vector2<T>& r) {
+Vector2<T> Vector2<T>::operator*=(const Vector2<T>& r) {
 	(*this) = (*this) * r;
 	return *this;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator/=(const T& r) {
+Vector2<T> Vector2<T>::operator/=(const T& r) {
 	(*this) = (*this) / r;
 	return *this;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::operator/=(const Vector2<T>& r) {
+Vector2<T> Vector2<T>::operator/=(const Vector2<T>& r) {
 	(*this) = (*this) / r;
 	return *this;
 }
 
 template<class T>
-inline T Vector2<T>::dot(const Vector2<T>& vec) const {
+T Vector2<T>::dot(const Vector2<T>& vec) const {
 	return this->x * vec.x + this->y * vec.y;
 }
 
 template<class T>
-inline T Vector2<T>::getLength()const {
+T Vector2<T>::getLength()const {
 	T length = sqrt(this->x * this->x + this->y * this->y);
 	return length;
 }
 
 
 template<class T>
-inline T Vector2<T>::getLengthSquared()const {
+T Vector2<T>::getLengthSquared()const {
 	T length = (this->x * this->x + this->y * this->y);
 	return length;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::normalize() {
+Vector2<T> Vector2<T>::normalize() {
 	double length = getLength();
 	if (length > 0) {
 		this->x /= length;
@@ -266,7 +266,7 @@ inline Vector2<T> Vector2<T>::normalize() {
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::getNormalize()const {
+Vector2<T> Vector2<T>::getNormalize()const {
 	T length = getLength();
 	if (length > 0) {
 		return Vector2<T>(x / length, y / length);
@@ -276,34 +276,34 @@ inline Vector2<T> Vector2<T>::getNormalize()const {
 }
 
 template<class T>
-inline T Vector2<T>::cross(const Vector2<T>& vec)const {
+T Vector2<T>::cross(const Vector2<T>& vec)const {
 	return (x * vec.y - vec.x * y);
 }
 
 template<class T>
-inline T Vector2<T>::dis(const Vector2<T>& vec)const {
+T Vector2<T>::dis(const Vector2<T>& vec)const {
 	auto result = sqrt((vec.x - x) * (vec.x - x) + (vec.y - y) * (vec.y - y));
 	return result;
 }
 
 template<class T>
-inline T Vector2<T>::disSquare(const Vector2<T>& vec)const {
+T Vector2<T>::disSquare(const Vector2<T>& vec)const {
 	return dis(vec) * dis(vec);
 }
 
 template<class T>
-inline T Vector2<T>::min()const {
+T Vector2<T>::min()const {
 	return std::min(x, y);
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::rdiv(const T& v)const {
+Vector2<T> Vector2<T>::rdiv(const T& v)const {
 	Vector2 result(v / this->x, v / this->y);
 	return result;
 }
 
 template<class T>
-inline Vector2<T> Vector2<T>::projected(const Vector2<T>& normal) const {
+Vector2<T> Vector2<T>::projected(const Vector2<T>& normal) const {
 	return *this - (normal * (this->dot(normal)));
 }
 

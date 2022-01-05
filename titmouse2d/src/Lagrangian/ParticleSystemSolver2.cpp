@@ -46,11 +46,15 @@ void ParticleSystemSolver2::endAdvanceTimeStep() {
 
 	positions.forEachIndex([&](size_t i) {
 		positions[i] = _newPositions[i];
+		_newPositions[i] = Vector2<double>();
 		});
 
 	velocities.forEachIndex([&](size_t i) {
 		velocities[i] = _newVelocities[i];
+		_newVelocities[i] = Vector2<double>();
 		});
+
+
 
 }
 void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {

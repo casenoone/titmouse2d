@@ -20,22 +20,31 @@ void VortexParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) 
 
 	auto n = _vortexParticleData->numberOfParticles();
 	auto positions = _vortexParticleData->positions();
+	auto forces = _vortexParticleData->forces();
+
+	//º∆À„÷ÿ¡¶
+	for (int i = 0; i < n; ++i) {
+		_newVelocities[i] += GRAVITY * timeIntervalInSeconds * 0.2;
+	}
+
 
 	for (int i = 0; i < n; ++i) {
-		Vector2<double> v;
 		for (int j = 0; j < n; ++j) {
 			if (i != j) {
-				v += computeUSingle(positions[i], j);
+				_newVelocities[i] += computeUSingle(positions[i], j);
 			}
 		}
-		_newPositions[i] = positions[i] + timeIntervalInSeconds * v;
+		
+		_newPositions[i] += positions[i] + timeIntervalInSeconds * _newVelocities[i];
 	}
+
+
 }
 
 void VortexParticleSystemSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	onBeginAdvanceTimeStep();
 	timeIntegration(timeIntervalInSeconds);
-	//ParticleSystemSolver2::resolveCollision();
+	ParticleSystemSolver2::resolveCollision();
 	onEndAdvanceTimeStep();
 }
 

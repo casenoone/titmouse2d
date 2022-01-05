@@ -15,6 +15,7 @@ using namespace std;
 
 #include "../../Lagrangian/VortexParticleSystemSolver2.h"
 
+#include "../../Geometry/Box2.h"
 static void key(unsigned char key, int x, int y)
 {
     switch (key)
@@ -156,6 +157,13 @@ int main(int argc, char** argv)
 
     
     vpSolver->setData(numberOfparticles, pos, res_x, res_y);
+
+    Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
+    Collider2 collider;
+    collider.push(box1);
+    vpSolver->setCollider(collider);
+
+
 
     glutKeyboardFunc(key);       //键盘按下去时
     glutIdleFunc(idle);          //空闲时
