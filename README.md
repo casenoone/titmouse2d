@@ -1,5 +1,5 @@
 2d流体引擎
-titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021年10月3日。
+titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2021年10月3日。
 
 （封装那些ArrayPtr之类的类，完全没有必要，但是写完之后才发现没有必要，改动的话工程量太大了，在3D版本里再修改吧。。。）
 
@@ -21,6 +21,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - PIC/FLIP scheme (PIC/FLIP映射方案)
 - Semi-Lagrangian advection solver(半拉格朗日对流求解器)
 - Pressure Possion Equation Solve (压力泊松方程求解)
+- vortex method(vortex particles method)(涡粒子法)
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
   - OpenGL/GLUT
@@ -30,6 +31,7 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - FLIP/PIC + 压力泊松方程求解自由表面流
 - Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
 - SPH algorthm （光滑粒子动力学算法）（SPH的参数我也是醉了,凑合着玩玩吧）
+- Vortex Method(涡粒子法模拟流体)
 
 
 - 1.FLIP算法
@@ -51,18 +53,19 @@ titmouse是一个开源的2d流体引擎（个人玩具），项目启动于2021
 - 6.PIC
 - ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif)
 
+- 7.Vortex Particles Method
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif)
 
 即将实现的算法：
-- 1.APIC
-- 2.MPM
-- 3.LBM
-- 4.PBF
-- 5.shallow water solver
-- 6.BVH加速结构
-- 7.Explicit/Implicit Mass Spring System
-- 8.Vortex particles Method
-- 9.Eulerian Smoke Simulation
-- 10.Clebsch gauge fluid solver
+- APIC
+- MPM
+- LBM
+- PBF
+- shallow water solver
+- BVH加速结构
+- Explicit/Implicit Mass Spring System
+- Eulerian Smoke Simulation
+- Clebsch gauge fluid solver
 
 
 本程序的使用方法：
