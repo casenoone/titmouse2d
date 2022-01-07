@@ -146,6 +146,7 @@
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
+    <ClCompile Include="src\demo\LBMTest\LBM_kamavortex.cpp" />
     <ClCompile Include="src\demo\LevelSetTest\levelsetLiquidSolverTest.cpp" />
     <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="src\Lagrangian\VortexParticleSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Numerical\Pde.hpp" />
+    <ClCompile Include="src\OtherMethod\LBM\LBMData2.h" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +256,7 @@
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
     <ClInclude Include="src\MathUtils.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
     <ClInclude Include="src\random.h" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
