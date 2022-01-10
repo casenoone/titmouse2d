@@ -105,7 +105,7 @@ static void display(void)
 
 	auto rho = LBMSolver->getRho();
 
-
+	float pointSize = 2.5f;
 	//可视化部分
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
@@ -120,16 +120,18 @@ static void display(void)
 				if (u_x < 0)u_x *= -1;
 				if (u_y < 0)u_y *= -1;
 
-				int r = (int)((u_x - minVel) / (maxVel - minVel) * 255.0);
+				double k1 = 1;
+
+				int r = (int)((u_x - minVel) / (maxVel - minVel) * 255.0) * k1;
 				if (r < 0) r = 0;
 				if (r > 255) r = 255;
-				int g = (int)((u_y - minVel) / (maxVel - minVel) * 255.0);
+				int g = (int)((u_y - minVel) / (maxVel - minVel) * 255.0) * k1;
 				if (g < 0) g = 0;
 				if (g > 255) g = 255;
-				int b = 255;
+				int b = 0;
 
 				Color3<double> color(r, g, b);
-				drawPoint(currentX, 3.0f, color);
+				drawPoint(currentX, pointSize, color);
 
 			}
 		}
@@ -142,7 +144,10 @@ static void display(void)
 				Vector2<double>(halfSpacing, halfSpacing);
 			auto temp = LBMSolver->getGridState(i, j);
 			if (temp == LBM_VELOCITY)
-				drawPoint(currentX, 4.5f, Color3<float>(1, 0, 0));
+				drawPoint(currentX, pointSize, Color3<float>(1, 0.4, 0));
+
+			if (temp == LBM_OBS)
+				drawPoint(currentX, pointSize, Color3<float>(0.5, 0.7, 0));
 
 		}
 	}
@@ -191,7 +196,7 @@ int main(int argc, char** argv)
 	//设置一个圆形的障碍物
 
 	double r1 = 0.2;
-	Vector2<double> center1(0.5, 1.0);
+	Vector2<double> center1(0.35, 1);
 
 	auto res = resolution;
 
@@ -216,7 +221,7 @@ int main(int argc, char** argv)
 
 	Array2Ptr<int> lbm_collider(temp1);
 
-	//LBMSolver->setCollider(lbm_collider);
+	LBMSolver->setCollider(lbm_collider);
 
 
 
