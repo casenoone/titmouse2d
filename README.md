@@ -22,6 +22,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - Semi-Lagrangian advection solver(半拉格朗日对流求解器)
 - Pressure Possion Equation Solve (压力泊松方程求解)
 - vortex method(vortex particles method)(涡粒子法)
+- LBM Method(格子-玻尔兹曼方法)
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
   - OpenGL/GLUT
@@ -32,6 +33,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
 - SPH algorthm （光滑粒子动力学算法）（SPH的参数我也是醉了,凑合着玩玩吧）
 - Vortex Method(涡粒子法模拟流体)
+- LBM（格子-玻尔兹曼方法）
 
 
 - 1.FLIP算法
@@ -56,10 +58,13 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - 7.Vortex Particles Method
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif)
 
+- 8.LBM(还没加湍流模型，目前只能模拟层流)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_unstable.gif)
+
+
 即将实现的算法：
 - APIC
 - MPM
-- LBM
 - PBF
 - shallow water solver
 - BVH加速结构
