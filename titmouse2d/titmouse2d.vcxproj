@@ -192,6 +192,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Numerical\Pde.hpp" />
     <ClCompile Include="src\OtherMethod\LBM\LBMData2.h" />
+    <ClCompile Include="src\OtherMethod\LBM\LBMSolver2.cpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>

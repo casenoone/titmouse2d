@@ -8,26 +8,38 @@ using namespace std;
 
 #include <array>
 
-const int OBS = 0;
-const int FLUID = 1;
+const int LBM_OBS = 0;
+const int LBM_FLUID = 1;
+const int LBM_VELOCITY = 2;
 
+#include "../../Eulerian/VertexCenteredScalarGrid2.h"
 
 class LBMSolver2 {
 public:
+
 	LBMSolver2() = default;
+
+	LBMSolver2(const Vector2<int>& resolution);
 
 	Vector2<int> resolution()const;
 
-	void setData();
+	void setCollider(const Array2Ptr<int>& collider);
 
-	void initLBM();
+	void onAdvancedTimeStep();
+
+	Array2Ptr<double> getRho()const;
+
+	const Vector2<double> velocityAt(int i, int j)const;
+
+
+	int getGridState(int i, int j)const;
+
+private:
 
 	void stream();
 
 	void collide();
 
-	void onAdvancedTimeStep();
-private:
 	auto getDensityVelocity(int i, int j);
 
 public:
@@ -38,9 +50,7 @@ private:
 };
 
 
-Vector2<int> LBMSolver2::resolution()const {
-	return _data.resolution();
-}
+
 
 
 

@@ -13,9 +13,9 @@ using namespace std;
 #include "../../Color3.hpp"
 #include "../../Vector2.hpp"
 
-#include "../../Lagrangian/VortexParticleSystemSolver2.h"
 
-#include "../../Geometry/Box2.h"
+#include "../../OtherMethod/LBM/LBMSolver2.h"
+
 static void key(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -43,7 +43,7 @@ void drawPoint(Vector2<double> pos, float size, Color3<float> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
-	glColor3f(color.r / 255.0, color.g / 255.0, color.b / 255.0);
+	glColor4f(color.r, color.g, color.b, 0);
 	glVertex3f((pos.x - 1) * 10, (pos.y - 1) * 10, 0);
 	glEnd();
 }
@@ -82,11 +82,17 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 	glFlush();
 }
 
-auto vpSolver = make_shared<VortexParticleSystemSolver2>();
+const double minVel = 0;
+const double maxVel = 0.1;
 
-int numberOfparticles = 100;
 
-double dt = 0.02;
+Vector2<int> resolution(70, 70);
+auto LBMSolver = make_shared<LBMSolver2>(resolution);
+auto spacing = 2.0 / resolution.x;
+auto halfSpacing = 0.5 * spacing;
+
+//障碍物
+vector<vector<int>> temp1;
 
 static void display(void)
 {
@@ -95,14 +101,51 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	vpSolver->onAdvanceTimeStep(dt);
+	LBMSolver->onAdvancedTimeStep();
 
-	for (int i = 0; i < numberOfparticles; ++i) {
+	auto rho = LBMSolver->getRho();
 
-		auto pos = vpSolver->vortexParticleData()->positions();
-		drawPoint(pos[i].x, pos[i].y);
+
+	//可视化部分
+	for (int i = 0; i < resolution.x; ++i) {
+		for (int j = 0; j < resolution.y; ++j) {
+			auto currentX = Vector2<double>(i, j) * spacing +
+				Vector2<double>(halfSpacing, halfSpacing);
+
+			auto temp = LBMSolver->getGridState(i, j);
+			if (temp != LBM_OBS) {
+				auto u_x = LBMSolver->velocityAt(i, j).x;
+				auto u_y = LBMSolver->velocityAt(i, j).y;
+
+				if (u_x < 0)u_x *= -1;
+				if (u_y < 0)u_y *= -1;
+
+				int r = (int)((u_x - minVel) / (maxVel - minVel) * 255.0);
+				if (r < 0) r = 0;
+				if (r > 255) r = 255;
+				int g = (int)((u_y - minVel) / (maxVel - minVel) * 255.0);
+				if (g < 0) g = 0;
+				if (g > 255) g = 255;
+				int b = 255;
+
+				Color3<double> color(r, g, b);
+				drawPoint(currentX, 3.0f, color);
+
+			}
+		}
 	}
 
+
+	for (int i = 0; i < resolution.x; ++i) {
+		for (int j = 0; j < resolution.y; ++j) {
+			auto currentX = Vector2<double>(i, j) * spacing +
+				Vector2<double>(halfSpacing, halfSpacing);
+			auto temp = LBMSolver->getGridState(i, j);
+			if (temp == LBM_VELOCITY)
+				drawPoint(currentX, 4.5f, Color3<float>(1, 0, 0));
+
+		}
+	}
 
 	glutSwapBuffers();
 
@@ -134,34 +177,47 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glutInitWindowSize(200, 200);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("titmouse2d");
 
-	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
+	//glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
+	float color1 = 0;
+	glClearColor(color1, color1, color1, 1);
 	glShadeModel(GL_FLAT);
 
-	int res_x = 30;
-	int res_y = res_x;
 
-	vector<Vector2<double>> tempPos;
+	//设置一个圆形的障碍物
 
-	for (int i = 0; i < numberOfparticles; ++i) {
-		auto x = random_double(0.2, 1);
-		auto y = random_double(0.7, 1.0);
-		Vector2<double> temp(x, y);
-		tempPos.push_back(temp);
+	double r1 = 0.2;
+	Vector2<double> center1(0.5, 1.0);
+
+	auto res = resolution;
+
+	temp1.resize(res.x);
+
+	for (int i = 0; i < res.x; ++i) {
+		temp1[i].resize(res.y);
+		for (int j = 0; j < res.y; ++j) {
+			auto currentX = Vector2<double>(i, j) * spacing +
+				Vector2<double>(halfSpacing, halfSpacing);
+
+			//cout << currentX.x << "," << currentX.y << "," << (currentX - center1).getLength() << endl;
+			if ((currentX - center1).getLength() < r1) {
+				temp1[i][j] = LBM_OBS;
+			}
+			else {
+				temp1[i][j] = LBM_FLUID;
+			}
+
+		}
 	}
 
-	ArrayPtr<Vector2<double>> pos(tempPos);
+	Array2Ptr<int> lbm_collider(temp1);
 
+	//LBMSolver->setCollider(lbm_collider);
 
-	vpSolver->setData(numberOfparticles, pos, res_x, res_y);
-
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
-	Collider2 collider;
-	collider.push(box1);
-	vpSolver->setCollider(collider);
 
 
 
