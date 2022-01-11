@@ -86,7 +86,7 @@ const double minVel = 0;
 const double maxVel = 0.1;
 
 
-Vector2<int> resolution(70, 70);
+Vector2<int> resolution(50, 50);
 auto LBMSolver = make_shared<LBMSolver2>(resolution);
 auto spacing = 2.0 / resolution.x;
 auto halfSpacing = 0.5 * spacing;
@@ -105,7 +105,7 @@ static void display(void)
 
 	auto rho = LBMSolver->getRho();
 
-	float pointSize = 2.5f;
+	float pointSize = 3.5f;
 	//可视化部分
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
@@ -221,7 +221,7 @@ int main(int argc, char** argv)
 
 	Array2Ptr<int> lbm_collider(temp1);
 
-	LBMSolver->setCollider(lbm_collider);
+	//LBMSolver->setCollider(lbm_collider);
 
 
 
