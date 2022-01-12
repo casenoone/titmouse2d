@@ -58,8 +58,8 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - 7.Vortex Particles Method
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif)
 
-- 8.LBM(还没加湍流模型，目前只能模拟层流)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_unstable.gif)
+- 8.LBM(湍流模型模拟顶盖流动)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif)
 
 
 即将实现的算法：
