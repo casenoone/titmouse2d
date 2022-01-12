@@ -3,6 +3,7 @@
 #include <cmath>
 #include <string>
 #include <vector>
+
 using namespace std;
 
 #include "../../ConstVar.h"
@@ -230,6 +231,11 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);    //绘制窗zz口显示时
 
 	glutMainLoop();
+
+
+
+
+
 
 
 

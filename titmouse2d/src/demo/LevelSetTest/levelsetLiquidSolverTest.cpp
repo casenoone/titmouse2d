@@ -8,7 +8,6 @@
 //#include "../../ConstVar.h"
 //
 //#include <GL/glut.h>
-//#include <cmath>
 //
 //#include "../../Color3.hpp"
 //#include "../../Vector2.hpp"

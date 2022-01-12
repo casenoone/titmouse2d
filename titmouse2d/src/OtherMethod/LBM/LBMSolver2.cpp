@@ -13,7 +13,7 @@ const int invert[9] = { 0, 2, 1, 4, 3, 8, 7, 6, 5 };
 
 const double omga = 2.0;
 
-const double ldc_velocity = 0.2;
+const double ldc_velocity = 0.23;
 const bool SMAGORINSKY = true;
 
 //这里没问题
