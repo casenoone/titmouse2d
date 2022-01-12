@@ -11,11 +11,10 @@ const int e_y[9] = { 0,0,0,1,-1,1,1,-1,-1 };
 
 const int invert[9] = { 0, 2, 1, 4, 3, 8, 7, 6, 5 };
 
-const double omga = 0.8;
+const double omga = 2.0;
 
-const double ldc_velocity = 0.07;
-
-const bool SMAGORINSKY = false;
+const double ldc_velocity = 0.2;
+const bool SMAGORINSKY = true;
 
 //这里没问题
 LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
@@ -36,9 +35,8 @@ LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
 				_g(i, j) = LBM_OBS;
 			}
 			//else if (j == res.y - 2 && i > border && i < res.x - (1 + border)) {
-			else if (i >= 1 && i <= res.x - 2 && j == res.y - 2) {
-				//else if (j >= downBorder && j <= upBorder && i > 1 && i < 3) {
-
+			else if (i >= 5 && i <= res.x - 3 && j == res.y - 2) {
+				//else if (j >= 1 && j <= res.y - 2 && i == 1) {
 				_g(i, j) = LBM_VELOCITY;
 			}
 
@@ -139,16 +137,16 @@ void LBMSolver2::collide() {
 				}
 
 				_data.rho(i, j) = rho;
-				_data.velocity(i, j).x = u_x;
-				_data.velocity(i, j).y = u_y;
+				_data.velocity(i, j).x = u_x / rho;
+				_data.velocity(i, j).y = u_y / rho;
 
 				continue;
 			}
 
 			auto values = getDensityVelocity(i, j);
 			auto rho = std::get<0>(values);
-			auto u_x = std::get<1>(values);
-			auto u_y = std::get<2>(values);
+			auto u_x = std::get<1>(values) / rho;
+			auto u_y = std::get<2>(values) / rho;
 
 			if (_g(i, j) == LBM_VELOCITY) {
 				u_x = ldc_velocity;
@@ -171,8 +169,8 @@ void LBMSolver2::collide() {
 			}
 
 			_data.rho(i, j) = rho;
-			_data.velocity(i, j).x = u_x;
-			_data.velocity(i, j).y = u_y;
+			_data.velocity(i, j).x = u_x / rho;
+			_data.velocity(i, j).y = u_y / rho;
 
 		}
 	}

@@ -86,7 +86,7 @@ const double minVel = 0;
 const double maxVel = 0.1;
 
 
-Vector2<int> resolution(50, 50);
+Vector2<int> resolution(40, 40);
 auto LBMSolver = make_shared<LBMSolver2>(resolution);
 auto spacing = 2.0 / resolution.x;
 auto halfSpacing = 0.5 * spacing;
@@ -105,7 +105,7 @@ static void display(void)
 
 	auto rho = LBMSolver->getRho();
 
-	float pointSize = 3.5f;
+	float pointSize = 4.0f;
 	//可视化部分
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
@@ -158,9 +158,7 @@ static void display(void)
 
 static void idle(void)
 {
-
 	glutPostRedisplay();
-
 }
 
 static void resize(int width, int height)
@@ -196,7 +194,7 @@ int main(int argc, char** argv)
 	//设置一个圆形的障碍物
 
 	double r1 = 0.2;
-	Vector2<double> center1(0.35, 1);
+	Vector2<double> center1(0.5, 1);
 
 	auto res = resolution;
 

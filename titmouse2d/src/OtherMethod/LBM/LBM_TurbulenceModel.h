@@ -72,6 +72,10 @@ inline void collideSmagorinsky(vector<double>& df, int flag) {
 	if (flag == LBM_VELOCITY) {
 		u_x = ldc_velocity;
 	}
+
+	u_x /= rho;
+	u_y /= rho;
+
 	for (l = 0; l < 9; l++) {
 		const double a = e_x[l] * u_x + e_y[l] * u_y;
 		feq[l] = w_l[l] * rho * (1 + 3 * a + 4.5 * a * a - 1.5 * (u_x * u_x + u_y * u_y));
