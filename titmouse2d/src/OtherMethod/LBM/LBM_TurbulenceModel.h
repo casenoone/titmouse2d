@@ -23,14 +23,14 @@ inline double getLesNoneqTensorCoeff(vector<double>& df, double feq[]) {
 	double Qo = 0.0;
 	for (int m = 0; m < 2; m++) {
 		double qadd = 0.0;
-		for (int l = 1; l < 9; l++) {
+		for (int l = 0; l < 9; l++) {
 			if (lesCoeffOffdiag[m][l] == 0.0) continue;
 			qadd += lesCoeffOffdiag[m][l] * (df[l] - feq[l]);
 		}
 		Qo += (qadd * qadd);
 		for (int m = 0; m < 2; m++) {
 			double qadd = 0.0;
-			for (int l = 1; l < 9; l++) {
+			for (int l = 0; l < 9; l++) {
 				if (lesCoeffDiag[m][l] == 0.0) continue;
 				qadd += lesCoeffDiag[m][l] * (df[l] - feq[l]);
 			}
@@ -110,7 +110,7 @@ inline void initSmagoArrays() {
 
 	for (int m = 0; m < 2; m++) {
 		for (int n = 0; n < 2; n++) {
-			for (int l = 1; l < 9; l++) {
+			for (int l = 0; l < 9; l++) {
 				double em;
 				switch (m) {
 				case 0: em = e_x[l]; break;

@@ -106,7 +106,7 @@ static void display(void)
 
 	auto rho = LBMSolver->getRho();
 
-	float pointSize = 4.0f;
+	float pointSize = 4.5f;
 	//可视化部分
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 	//设置一个圆形的障碍物
 
 	double r1 = 0.2;
-	Vector2<double> center1(0.5, 1);
+	Vector2<double> center1(0.4, 1);
 
 	auto res = resolution;
 

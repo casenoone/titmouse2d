@@ -4,19 +4,25 @@
 #include <array>
 #include <tuple>
 
-//const double w_l[9] = { 1.0 / 3, 1.0 / 18, 1.0 / 18, 1.0 / 18, 1.0 / 18, 1.0 / 18, 1.0 / 18, 1.0 / 18, 1.0 / 18 };
-const double w_l[9] = { 4.0 / 9, 1.0 / 9, 1.0 / 9, 1.0 / 9, 1.0 / 9, 1.0 / 36, 1.0 / 36, 1.0 / 36, 1.0 / 36 };
+//const double w_l[9] = { 1.0 / 3, 1.0 / 18, 1.0 / 18,
+//						1.0 / 18, 1.0 / 18,
+//						1.0 / 18, 1.0 / 18,
+//						1.0 / 18, 1.0 / 18 };
+
+const double w_l[9] = { 4.0 / 9, 1.0 / 9, 1.0 / 9,
+						1.0 / 9, 1.0 / 9, 1.0 / 36,
+						1.0 / 36, 1.0 / 36, 1.0 / 36 };
+
 const int e_x[9] = { 0,1,-1,0,0,1,-1,1,-1 };
 const int e_y[9] = { 0,0,0,1,-1,1,1,-1,-1 };
 
 const int invert[9] = { 0, 2, 1, 4, 3, 8, 7, 6, 5 };
 
-const double omga = 2.0;
+const double omga = 1.9;
 
-const double ldc_velocity = 0.23;
-const bool SMAGORINSKY = true;
+const double ldc_velocity = 0.09;
+const bool SMAGORINSKY = false;
 
-//这里没问题
 LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
 
 	if (SMAGORINSKY) initSmagoArrays();
@@ -34,9 +40,9 @@ LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
 			if (i == 0 || i == res.x - 1 || j == 0 || j == res.y - 1) {
 				_g(i, j) = LBM_OBS;
 			}
-			//else if (j == res.y - 2 && i > border && i < res.x - (1 + border)) {
+			//else if (j == res.y - 10 && i > border && i < res.x - (1 + border)) {
 			else if (i >= 5 && i <= res.x - 3 && j == res.y - 2) {
-				//else if (j >= 1 && j <= res.y - 2 && i == 1) {
+				//else if (j >= 1 && j <= res.y - 2 && i == 2) {
 				_g(i, j) = LBM_VELOCITY;
 			}
 
@@ -74,7 +80,6 @@ Vector2<int> LBMSolver2::resolution()const {
 }
 
 
-//这里没有问题
 void LBMSolver2::stream() {
 
 	auto res = resolution();
@@ -84,7 +89,9 @@ void LBMSolver2::stream() {
 			for (int l = 0; l < 9; ++l) {
 				auto l_inv = invert[l];
 				if (_g(i, j) != LBM_OBS) {
-					if (_g(i + e_x[l_inv], j + e_y[l_inv]) == LBM_OBS) {
+					auto new_i = i + e_x[l_inv];
+					auto new_j = j + e_y[l_inv];
+					if (_g(new_i, new_j) == LBM_OBS) {
 						_data.f_(i, j)[l] = _data.f(i, j)[l_inv];
 					}
 					else {
@@ -100,7 +107,6 @@ void LBMSolver2::stream() {
 //这个函数必须在被调用之前就定义
 
 
-//这里没有问题
 auto LBMSolver2::getDensityVelocity(int i, int j) {
 	double rho, u_x, u_y;
 	rho = u_x = u_y = 0.0;
@@ -137,6 +143,7 @@ void LBMSolver2::collide() {
 				}
 
 				_data.rho(i, j) = rho;
+
 				_data.velocity(i, j).x = u_x / rho;
 				_data.velocity(i, j).y = u_y / rho;
 
@@ -152,28 +159,35 @@ void LBMSolver2::collide() {
 				u_x = ldc_velocity;
 			}
 
+
+
+
 			for (int l = 0; l < 9; ++l) {
 				auto a = e_x[l] * u_x + e_y[l] * u_y;
 
-				//auto f_eq = w_l[l] * (rho + 1.5 * (u_x * u_x + u_y * u_y) + 3 * a + 4.5 * a * a);
+				//auto f_eq = w_l[l] * (rho - 1.5 * (u_x * u_x + u_y * u_y) + 3 * a + 4.5 * a * a);
 				auto f_eq = w_l[l] * rho * (1 + 3 * a + 4.5 * a * a - 1.5 * (u_x * u_x + u_y * u_y));
 				_data.f(i, j)[l] = (1 - omga) * _data.f_(i, j)[l] + omga * f_eq;
 			}
 
 
-			rho = 0; u_x = 0; u_y = 0;
+
+			/*rho = 0; u_x = 0; u_y = 0;
 			for (int l = 0; l < 9; ++l) {
 				rho += _data.f(i, j)[l];
 				u_x += e_x[l] * _data.f(i, j)[l];
 				u_y += e_y[l] * _data.f(i, j)[l];
-			}
+			}*/
 
 			_data.rho(i, j) = rho;
 			_data.velocity(i, j).x = u_x / rho;
 			_data.velocity(i, j).y = u_y / rho;
 
+
 		}
 	}
+
+
 }
 
 
