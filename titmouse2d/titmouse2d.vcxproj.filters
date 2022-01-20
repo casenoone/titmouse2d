@@ -177,6 +177,9 @@
     <ClCompile Include="src\OtherMethod\LBM\LBMSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -390,6 +393,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\OtherMethod\LBM\LBM_TurbulenceModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\PBF\PBFSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\PBF\PBFData2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lagrangian\SphPoly6Kernel2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

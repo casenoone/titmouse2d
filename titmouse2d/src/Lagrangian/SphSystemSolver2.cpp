@@ -34,7 +34,7 @@ void SphSystemSolver2::accumulateForces(double timeStepInSeconds) {
 
 void SphSystemSolver2::setData(int numberOfParticles, ArrayPtr<Vector2<double>>& pos, int resolutionX, int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
-	
+
 	auto particles = sphSystemData();
 	auto neighbor = particles->neighbor->neighBors();
 
@@ -77,14 +77,14 @@ void SphSystemSolver2::accumulatePressureForce(double timeStepInSeconds) {
 
 	//这里的p是什么？它就是用EOS方程算出来的那个东西
 	//记得要初始化p
-	auto &p = particles->pressures();
-	auto &f = particles->forces();
+	auto& p = particles->pressures();
+	auto& f = particles->forces();
 	//书上这里写错了好像
 	computePressure();
 
 	accumulatePressureForce(x, d, p, f);
 
-	
+
 }
 
 double computePressureFromEos(
@@ -123,15 +123,15 @@ void SphSystemSolver2::computePressure() {
 	for (int i = 0; i < numberOfParticles; ++i) {
 		//这里的eosExponet()是什么意思？先用EOSEXPONENT代替
 		p[i] = computePressureFromEos(d[i], targetDensity, eosScale, EOSEXPONENT, negativePressureScale);
-		
+
 	}
 }
 
 
 
-void SphSystemSolver2::accumulatePressureForce(ArrayPtr<Vector2<double>> positions, 
-	ArrayPtr<double> densities, 
-	ArrayPtr<double> pressures, 
+void SphSystemSolver2::accumulatePressureForce(ArrayPtr<Vector2<double>> positions,
+	ArrayPtr<double> densities,
+	ArrayPtr<double> pressures,
 	ArrayPtr<Vector2<double>> pressureForces) {
 	auto particles = sphSystemData();
 	auto forces = particles->forces();
@@ -149,7 +149,7 @@ void SphSystemSolver2::accumulatePressureForce(ArrayPtr<Vector2<double>> positio
 				auto dir = (positions[j] - positions[i]) / dist;
 				pressureForces[i] = pressureForces[i] - kernel.gradient(dist, dir) * (pressures[i] / (densities[i] * densities[i])
 					+ pressures[j] / (densities[j] * densities[j])) * MASS;
-			
+
 			}
 		}
 	}
@@ -187,8 +187,6 @@ void SphSystemSolver2::computePseudoViscosity() {
 
 //其实这里的绑定执行一次就可以了
 SphSystemData2Ptr& SphSystemSolver2::sphSystemData() {
-
-	_sphSystemData = std::dynamic_pointer_cast<SphSystemData2>(_particleSystemData);
 	return _sphSystemData;
 }
 

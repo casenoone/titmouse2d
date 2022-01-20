@@ -170,15 +170,6 @@ void LBMSolver2::collide() {
 				_data.f(i, j)[l] = (1 - omga) * _data.f_(i, j)[l] + omga * f_eq;
 			}
 
-
-
-			/*rho = 0; u_x = 0; u_y = 0;
-			for (int l = 0; l < 9; ++l) {
-				rho += _data.f(i, j)[l];
-				u_x += e_x[l] * _data.f(i, j)[l];
-				u_y += e_y[l] * _data.f(i, j)[l];
-			}*/
-
 			_data.rho(i, j) = rho;
 			_data.velocity(i, j).x = u_x / rho;
 			_data.velocity(i, j).y = u_y / rho;
