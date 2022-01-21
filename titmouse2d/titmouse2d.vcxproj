@@ -151,6 +151,7 @@
     <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp" />
     <ClCompile Include="src\demo\MassSpringTest\implicitMassSpringTest.cpp" />
+    <ClCompile Include="src\demo\PBF\PBFTest.cpp" />
     <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
     <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />

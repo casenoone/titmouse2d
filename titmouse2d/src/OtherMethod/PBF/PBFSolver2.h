@@ -86,21 +86,6 @@ inline void PBFSolver2::findNeighborParticles(const ArrayPtr<Vector2<double>>& p
 }
 
 
-inline void PBFSolver2::initDensity() {
 
-	int n = pbfData()->numberOfParticles();
-	auto pos = pbfData()->positions();
-	findNeighborParticles(pos);
-
-	auto neighbor = pbfData()->neighbor->neighBors();
-
-	for (int i = 0; i < n; ++i) {
-		auto m = neighbor[i].size();
-		for (int j = 0; j < m; ++j) {
-
-		}
-	}
-
-}
 
 #endif

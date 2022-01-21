@@ -180,6 +180,9 @@
     <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\demo\PBF\PBFTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">

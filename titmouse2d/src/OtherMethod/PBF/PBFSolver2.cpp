@@ -6,6 +6,8 @@
 //这个密度怎么取？
 const double rho0 = 100;
 
+const double pbfKR = KERNEL_RADUIS;
+
 void PBFSolver2::setData(int numberOfParticles,
 	ArrayPtr<Vector2<double>>& pos,
 	int resolutionX,
@@ -54,16 +56,26 @@ void PBFSolver2::initDensity() {
 	auto pos = pbfData()->positions();
 	findNeighborParticles(pos);
 
-	auto tempNeighbor = pbfData()->neighbor->neighBors();
+	auto neighbor = pbfData()->neighbor->neighBors();
 	vector<double> tempData;
 
-	SphPolyKernel2 kernel(KERNEL_RADUIS);
+	SphPolyKernel2 kernel(pbfKR);
 
 	for (int i = 0; i < n; ++i) {
-		auto m = tempNeighbor[i].size();
-		for (int j = 0; j < m; ++j) {
-
+		double tempDen = 0;
+		auto currentP = pos(i);
+		for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); ++iter) {
+			auto neighborP = pos(*iter);
+			double dis = currentP.dis(neighborP);
+			double weight = kernel(dis);
+			tempDen += weight;
 		}
+		if (neighbor[i].size() == 0) {
+			tempDen = 0.1;
+		}
+		tempData.push_back(tempDen);
 	}
+
+	pbfData()->densities().set(tempData);
 
 }
