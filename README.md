@@ -65,12 +65,15 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 即将实现的算法：
 - APIC
 - MPM
+- IISPH
 - PBF
 - shallow water solver
 - BVH加速结构
 - Explicit/Implicit Mass Spring System
 - Eulerian Smoke Simulation
 - Clebsch gauge fluid solver
+- Multigrid Method
+- FVM
 
 
 本程序的使用方法：
