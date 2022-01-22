@@ -238,6 +238,7 @@
     <ClInclude Include="src\Geometry\Ray2.h" />
     <ClInclude Include="src\Geometry\Sphere2.h" />
     <ClInclude Include="src\Geometry\Surface2.h" />
+    <ClInclude Include="src\Hybrid\ApicSolver2.h" />
     <ClInclude Include="src\Hybrid\FlipSolver2.h" />
     <ClInclude Include="src\Hybrid\PicSolver2.h" />
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
@@ -262,6 +263,7 @@
     <ClInclude Include="src\Matrix.hpp" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBM_TurbulenceModel.h" />
+    <ClInclude Include="src\OtherMethod\MPM\MPMSolver2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFData2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFSolver2.h" />
     <ClInclude Include="src\random.h" />

@@ -14,8 +14,8 @@ using namespace std;
 #include "../../Color3.hpp"
 #include "../../Vector2.hpp"
 
-
-#include "../../OtherMethod/LBM/LBMSolver2.h"
+#include "../../Geometry/Box2.h"
+#include "../../OtherMethod/PBF/PBFSolver2.h"
 
 static void key(unsigned char key, int x, int y)
 {
@@ -83,18 +83,8 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 	glFlush();
 }
 
-const double minVel = 0;
-const double maxVel = 0.1;
-
-
-Vector2<int> resolution(40, 40);
-auto LBMSolver = make_shared<LBMSolver2>(resolution);
-auto spacing = 2.0 / resolution.x;
-auto halfSpacing = 0.5 * spacing;
-
-//障碍物
-vector<vector<int>> temp1;
-
+auto pbfSolver = make_shared<PBFSolver2>();
+int numberOfParticles = 0;
 static void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -102,55 +92,11 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	LBMSolver->onAdvancedTimeStep();
+	pbfSolver->onAdvanceTimeStep(0.01);
+	for (int i = 0; i < numberOfParticles; ++i) {
+		auto pos = pbfSolver->pbfData()->positions();
+		drawPoint(pos[i].x, pos[i].y);
 
-	auto rho = LBMSolver->getRho();
-
-	float pointSize = 4.5f;
-	//可视化部分
-	for (int i = 0; i < resolution.x; ++i) {
-		for (int j = 0; j < resolution.y; ++j) {
-			auto currentX = Vector2<double>(i, j) * spacing +
-				Vector2<double>(halfSpacing, halfSpacing);
-
-			auto temp = LBMSolver->getGridState(i, j);
-			if (temp != LBM_OBS) {
-				auto u_x = LBMSolver->velocityAt(i, j).x;
-				auto u_y = LBMSolver->velocityAt(i, j).y;
-
-				if (u_x < 0)u_x *= -1;
-				if (u_y < 0)u_y *= -1;
-
-				double k1 = 1;
-
-				int r = (int)((u_x - minVel) / (maxVel - minVel) * 255.0) * k1;
-				if (r < 0) r = 0;
-				if (r > 255) r = 255;
-				int g = (int)((u_y - minVel) / (maxVel - minVel) * 255.0) * k1;
-				if (g < 0) g = 0;
-				if (g > 255) g = 255;
-				int b = 0;
-
-				Color3<double> color(r, g, b);
-				drawPoint(currentX, pointSize, color);
-
-			}
-		}
-	}
-
-
-	for (int i = 0; i < resolution.x; ++i) {
-		for (int j = 0; j < resolution.y; ++j) {
-			auto currentX = Vector2<double>(i, j) * spacing +
-				Vector2<double>(halfSpacing, halfSpacing);
-			auto temp = LBMSolver->getGridState(i, j);
-			if (temp == LBM_VELOCITY)
-				drawPoint(currentX, pointSize, Color3<float>(1, 0.4, 0));
-
-			if (temp == LBM_OBS)
-				drawPoint(currentX, pointSize, Color3<float>(0.5, 0.7, 0));
-
-		}
 	}
 
 	glutSwapBuffers();
@@ -192,36 +138,34 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 
-	//设置一个圆形的障碍物
 
-	double r1 = 0.2;
-	Vector2<double> center1(0.4, 1);
+	int res_x = 20;
+	int res_y = 20;
 
-	auto res = resolution;
+	vector<Vector2<double>> temp_pos;
 
-	temp1.resize(res.x);
-
-	for (int i = 0; i < res.x; ++i) {
-		temp1[i].resize(res.y);
-		for (int j = 0; j < res.y; ++j) {
-			auto currentX = Vector2<double>(i, j) * spacing +
-				Vector2<double>(halfSpacing, halfSpacing);
-
-			//cout << currentX.x << "," << currentX.y << "," << (currentX - center1).getLength() << endl;
-			if ((currentX - center1).getLength() < r1) {
-				temp1[i][j] = LBM_OBS;
-			}
-			else {
-				temp1[i][j] = LBM_FLUID;
-			}
-
+	for (double i = 0.5; i < 1.5; i += 0.05) {
+		for (double j = 0.4; j < 1.6; j += 0.05) {
+			Vector2<double> temp(i, j);
+			temp_pos.push_back(temp);
+			numberOfParticles++;
 		}
 	}
+	cout << "粒子数目：" << numberOfParticles << endl;
+	ArrayPtr<Vector2<double>> pos(temp_pos);
 
-	Array2Ptr<int> lbm_collider(temp1);
+	pbfSolver->setData(numberOfParticles, pos, res_x, res_y);
 
-	//LBMSolver->setCollider(lbm_collider);
+	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
 
+	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0.3, 0.3), Vector2<double>(0.6, 0.6), false);
+
+
+	Collider2 collider;
+
+	collider.push(box1);
+	//collider.push(box2);
+	pbfSolver->setCollider(collider);
 
 
 

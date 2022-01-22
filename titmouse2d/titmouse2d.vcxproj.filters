@@ -407,5 +407,11 @@
     <ClInclude Include="src\Lagrangian\SphPoly6Kernel2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Hybrid\ApicSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\MPM\MPMSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

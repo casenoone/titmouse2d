@@ -24,8 +24,6 @@ private:
 
 	void onEndAdvanceTimeStep();
 
-	void timeIntegration(double timeIntervalInSeconds);
-
 	void predictPosition(double timeIntervalInSeconds);
 
 	void calculateLambda();
@@ -73,15 +71,18 @@ inline void PBFSolver2::predictPosition(double timeIntervalInSeconds) {
 }
 
 inline void PBFSolver2::applyForce(double timeIntervalInSeconds) {
+	auto n = pbfData()->numberOfParticles();
 
+	pbfData()->forces().clear();
+	pbfData()->forces().reSize(n);
 	ParticleSystemSolver2::accumlateExternalForces();
 
-	auto n = pbfData()->numberOfParticles();
 	auto forces = pbfData()->forces();
 	auto velocity = pbfData()->velocities();
 
 	for (int i = 0; i < n; ++i) {
 		_newVelocities[i] = velocity[i] + timeIntervalInSeconds * forces[i];
+		//cout << forces[i].y << endl;
 	}
 }
 
@@ -93,11 +94,22 @@ inline void PBFSolver2::findNeighborParticles(const ArrayPtr<Vector2<double>>& p
 
 
 inline void PBFSolver2::updatePositions() {
+	auto n = pbfData()->numberOfParticles();
+	auto delta_p = pbfData()->deltaP();
 
+	for (int i = 0; i < n; ++i) {
+		_newPositions[i] += delta_p(i);
+	}
 }
 
 inline void PBFSolver2::updateVelocites(double timeIntervalInSeconds) {
 	auto n = pbfData()->numberOfParticles();
+	auto pos = pbfData()->positions();
+
+	for (int i = 0; i < n; ++i) {
+		_newVelocities(i) = (_newPositions[i] - pos[i]) / timeIntervalInSeconds;
+	}
+
 }
 
 #endif
