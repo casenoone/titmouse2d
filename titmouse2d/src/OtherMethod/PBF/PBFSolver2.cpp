@@ -2,9 +2,7 @@
 #include "../../Lagrangian/SphPoly6Kernel2.h"
 #include "../../Lagrangian/SphSpikyKernel2.h"
 
-
-//这个密度怎么取？
-const double rho0 = 100;
+const double rho0 = 1.0;
 
 const double pbfKR = KERNEL_RADUIS;
 
@@ -21,6 +19,7 @@ void PBFSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
 
 void PBFSolver2::onBeginAdvanceTimeStep() {
+	auto n = pbfData()->numberOfParticles();
 
 }
 
@@ -36,12 +35,42 @@ void PBFSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 void PBFSolver2::calculateLambda() {
 
-	const double k = 0.5;
-
+	const double epsilon = 0.1;
 	auto n = pbfData()->numberOfParticles();
+	auto neighbors = pbfData()->neighbor->neighBors();
+	auto pos = _newPositions;
+	auto density = pbfData()->densities();
+	auto lambda = pbfData()->lambda();
 
+	SphSpikyKernel2 kernel(pbfKR);
+
+	//eq(8),eq(10)
 	for (int i = 0; i < n; ++i) {
+		auto currentP = pos(i);
+		Vector2<double> c_grad_temp(0.0, 0.0);
+		double c_grad_norm = 0.0;
+		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
+			auto neighborP = pos(*j);
+			if (i == *j) {
+				for (auto k = neighbors[i].begin(); k != neighbors[i].end(); ++k) {
+					auto dis = pos(i).dis(pos(*k));
+					if (dis > 0.0) {
+						auto direction = (pos(*k) - pos(i)) / dis;
+						c_grad_temp += kernel.gradient(dis, direction);
+					}
 
+				}
+			}
+			else {
+				auto dis = pos(i).dis(pos(*j));
+				auto direction = (pos(*j) - pos(i)) / dis;
+				c_grad_temp = kernel.gradient(dis, direction);
+			}
+		}
+
+		c_grad_norm += ((c_grad_temp / rho0).getLengthSquared());
+		auto c_i = (density(i) / rho0) - 1;   //eq(1)
+		lambda(i) = -c_i / (c_grad_norm + epsilon);   //eq(11)
 	}
 }
 
@@ -53,7 +82,7 @@ void PBFSolver2::iterSolve() {
 void PBFSolver2::initDensity() {
 
 	int n = pbfData()->numberOfParticles();
-	auto pos = pbfData()->positions();
+	auto pos = _newPositions;
 	findNeighborParticles(pos);
 
 	auto neighbor = pbfData()->neighbor->neighBors();
@@ -79,3 +108,36 @@ void PBFSolver2::initDensity() {
 	pbfData()->densities().set(tempData);
 
 }
+
+
+void PBFSolver2::calculate_delta_p() {
+	const double k = 0.1;
+	const int n = 4;
+	const double delta_q = 0.2 * pbfKR;
+
+	int numberOfParticles = pbfData()->numberOfParticles();
+	auto neighbors = pbfData()->neighbor->neighBors();
+	auto pos = _newPositions;
+	auto lambda = pbfData()->lambda();
+	auto delta_p = pbfData()->deltaP();
+
+	SphSpikyKernel2 kernel(pbfKR);
+
+	for (int i = 0; i < numberOfParticles; ++i) {
+		auto currentP = pos(i);
+		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
+			auto neighborP = pos(*j);
+			auto dis = neighborP.dis(currentP);
+			double S_corr = -k * std::pow((kernel(dis) / kernel(delta_q)), n);
+			if (dis > 0.0) {
+				auto direction = (neighborP - currentP) / dis;
+				delta_p(i) += (lambda(i) + lambda(*j) + S_corr) * kernel.gradient(dis, direction);
+			}
+
+		}
+		delta_p(i) /= rho0;
+	}
+
+}
+
+

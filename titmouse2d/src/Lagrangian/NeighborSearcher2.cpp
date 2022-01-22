@@ -61,7 +61,7 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particl
 		for (auto iter = currentParticles.begin(); iter != currentParticles.end(); iter++) {
 			auto pos1 = positions.lookAt(*iter);
 			auto pos2 = positions.lookAt(particleId);
-			if (*iter != particleId) {
+			if (true/**iter != particleId*/) {
 				if (IsNeighbor(pos1, pos2, R) == true) {
 					_data[particleId].push_back(*iter);
 				}
@@ -90,9 +90,9 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 	}
 
 	int particleIdx = 0;
-	
+
 	positions.forEachIndex([&](size_t i) {
-	
+
 		double maxWidth = 2;
 		double maxHeight = 2;
 		double tempX = positions.lookAt(i).x;
@@ -125,15 +125,15 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 
 		grids[gridX][gridY].push_back(particleIdx);
 		particleIdx++;
-		
-	});
+
+		});
 
 
 
 	particleIdx = 0;
-	
+
 	positions.forEachIndex([&](size_t i) {
-		
+
 		auto current = gridPositons[particleIdx];
 		Vector2<size_t> top(current.x, current.y + 1);
 		Vector2<size_t> down(current.x, current.y - 1);
@@ -155,10 +155,10 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 		forEachNeighborGrid(rightDown, particleIdx, grids, positions);
 
 		particleIdx++;
-		
-	});
-	
-	
+
+		});
+
+
 }
 
 vector<vector<size_t>>& NeighborSearcher2::neighBors() {

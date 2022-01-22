@@ -38,6 +38,12 @@ private:
 
 	void initDensity();
 
+	void calculate_delta_p();
+
+	void updatePositions();
+
+	void updateVelocites(double timeIntervalInSeconds);
+
 
 private:
 	PBFData2Ptr _pbfData;
@@ -86,6 +92,12 @@ inline void PBFSolver2::findNeighborParticles(const ArrayPtr<Vector2<double>>& p
 }
 
 
+inline void PBFSolver2::updatePositions() {
 
+}
+
+inline void PBFSolver2::updateVelocites(double timeIntervalInSeconds) {
+	auto n = pbfData()->numberOfParticles();
+}
 
 #endif
