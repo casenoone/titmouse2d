@@ -20,15 +20,15 @@ void PBFSolver2::setData(int numberOfParticles,
 }
 
 void PBFSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	onBeginAdvanceTimeStep(); //没问题
-	applyForce(timeIntervalInSeconds); //没有问题
-	predictPosition(timeIntervalInSeconds); //没有问题
-	findNeighborParticles(_newPositions); //没有问题
-	initDensity(); //没有问题
-	iterSolve();   //没有问题
-	updateVelocites(timeIntervalInSeconds);  //没有问题
-	ParticleSystemSolver2::resolveCollision();  //或许这里有问题？也没有问题啊
-	onEndAdvanceTimeStep();  //没有问题
+	onBeginAdvanceTimeStep();
+	applyForce(timeIntervalInSeconds);
+	predictPosition(timeIntervalInSeconds);
+	findNeighborParticles(_newPositions);
+	initDensity();
+	iterSolve();
+	updateVelocites(timeIntervalInSeconds);
+	ParticleSystemSolver2::resolveCollision();
+	onEndAdvanceTimeStep();
 }
 
 
