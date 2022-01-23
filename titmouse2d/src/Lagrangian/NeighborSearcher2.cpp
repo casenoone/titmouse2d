@@ -62,7 +62,8 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particl
 			auto pos1 = positions.lookAt(*iter);
 			auto pos2 = positions.lookAt(particleId);
 			if (true/**iter != particleId*/) {
-				if (IsNeighbor(pos1, pos2, R) == true) {
+				double r = 0.15;
+				if (IsNeighbor(pos1, pos2, r) == true) {
 					_data[particleId].push_back(*iter);
 				}
 			}

@@ -17,6 +17,7 @@ using namespace std;
 #include "../../Geometry/Box2.h"
 #include "../../OtherMethod/PBF/PBFSolver2.h"
 
+#include "../../random.h"
 static void key(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -92,7 +93,7 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	pbfSolver->onAdvanceTimeStep(0.01);
+	pbfSolver->onAdvanceTimeStep(0.05);
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto pos = pbfSolver->pbfData()->positions();
 		drawPoint(pos[i].x, pos[i].y);
@@ -144,13 +145,14 @@ int main(int argc, char** argv)
 
 	vector<Vector2<double>> temp_pos;
 
-	for (double i = 0.5; i < 1.5; i += 0.05) {
-		for (double j = 0.4; j < 1.6; j += 0.05) {
-			Vector2<double> temp(i, j);
-			temp_pos.push_back(temp);
-			numberOfParticles++;
-		}
+	numberOfParticles = 500;
+	for (int i = 0; i < numberOfParticles; ++i) {
+		auto x = random_double(0.8, 1.5);
+		auto y = random_double(1.0, 1.5);
+		Vector2<double> temp(x, y);
+		temp_pos.push_back(temp);
 	}
+
 	cout << "Á£×ÓÊýÄ¿£º" << numberOfParticles << endl;
 	ArrayPtr<Vector2<double>> pos(temp_pos);
 
@@ -158,7 +160,7 @@ int main(int argc, char** argv)
 
 	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
 
-	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0.3, 0.3), Vector2<double>(0.6, 0.6), false);
+	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0., 0.2), Vector2<double>(1.8, 0.2), false);
 
 
 	Collider2 collider;

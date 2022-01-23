@@ -17,11 +17,11 @@ struct SphPolyKernel2 {
 };
 
 
-inline SphPolyKernel2::SphPolyKernel2(double h_) :h(h_), h2(h_* h_), h8(h2* h2* h2) {
+inline SphPolyKernel2::SphPolyKernel2(double h_) :h(h_), h2(h_* h_), h8(h2* h2* h2* h2) {
 
 }
 inline double SphPolyKernel2::operator()(double distance)const {
-	if (distance >= h) {
+	if (distance >= h || distance <= 0) {
 		return 0.0;
 	}
 	else {

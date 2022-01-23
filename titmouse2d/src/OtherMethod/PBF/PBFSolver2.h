@@ -82,7 +82,6 @@ inline void PBFSolver2::applyForce(double timeIntervalInSeconds) {
 
 	for (int i = 0; i < n; ++i) {
 		_newVelocities[i] = velocity[i] + timeIntervalInSeconds * forces[i];
-		//cout << forces[i].y << endl;
 	}
 }
 
@@ -98,7 +97,14 @@ inline void PBFSolver2::updatePositions() {
 	auto delta_p = pbfData()->deltaP();
 
 	for (int i = 0; i < n; ++i) {
+		//if (i == 0)
+			//cout << "1:" << _newPositions[0].y << endl;
 		_newPositions[i] += delta_p(i);
+		//if (i == 0)
+			//cout << "2:" << delta_p(0).y << endl;
+			//if (i == 0)
+				//cout << "3:" << _newPositions[0].y << endl;
+
 	}
 }
 

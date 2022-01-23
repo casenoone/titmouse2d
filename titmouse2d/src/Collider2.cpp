@@ -30,8 +30,8 @@ void Collider2::getClosestPoint(
 	}
 
 	result->distance = (*resultIter)->_surfaceQueryResult.distance;
-	result->normal   = (*resultIter)->_surfaceQueryResult.normal;
-	result->point    = (*resultIter)->_surfaceQueryResult.point;
+	result->normal = (*resultIter)->_surfaceQueryResult.normal;
+	result->point = (*resultIter)->_surfaceQueryResult.point;
 
 	//cout << result->normal.x << " " << result->normal.y << endl;
 
@@ -50,7 +50,7 @@ void Collider2::resolveCollision(
 	getClosestPoint(*position, &colliderPoint);
 	//cout << colliderPoint.distance << endl;
 	if (isPenetrating(colliderPoint, *position, 0.00001)) {
-		
+
 
 		Vector2<double> targetNormal = colliderPoint.normal;
 		Vector2<double> targetPoint = colliderPoint.point + targetNormal * radius;
@@ -86,7 +86,7 @@ void Collider2::resolveCollision(
 		}
 
 		*position = targetPoint;
-		
+
 	}
 
 }
@@ -102,7 +102,7 @@ bool Collider2::isPenetrating(
 	auto OP = position - colliderPoint.point;
 	auto result = OP.dot(colliderPoint.normal);
 
-	if (result < 0 && OP.getLengthSquared()<0.01) {
+	if (result < 0 && OP.getLengthSquared() < 10) {
 		return true;
 	}
 

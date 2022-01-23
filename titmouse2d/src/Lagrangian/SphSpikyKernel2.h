@@ -32,13 +32,16 @@ inline double SphSpikyKernel2::operator()(double distance)const {
 }
 
 inline double SphSpikyKernel2::firstDerivative(double distance)const {
-	if (distance >= h) {
+	if (distance >= h || distance <= 0.0) {
 		return 0.0;
 	}
 	else {
-		double x = 1.0 - distance / h;
+		//double x = 1.0 - distance / h;
 
-		return -45.0 / (kPiD * h4) * x * x;
+		//return -45.0 / (kPiD * h4) * x * x;
+		double x = (h - distance);
+		return (-45.0 / (kPiD * h5 * h)) * x * x;
+
 	}
 }
 
