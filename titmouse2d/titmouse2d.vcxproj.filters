@@ -413,5 +413,11 @@
     <ClInclude Include="src\OtherMethod\MPM\MPMSolver2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TempMovingCollider2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

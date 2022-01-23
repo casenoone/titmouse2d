@@ -18,6 +18,8 @@ using namespace std;
 #include "../../OtherMethod/PBF/PBFSolver2.h"
 
 #include "../../random.h"
+#include "../../TempMovingCollider2.h"
+
 static void key(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -94,11 +96,13 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	pbfSolver->onAdvanceTimeStep(0.05);
+	auto movingPos_x = pbfSolver->movingColliderPos;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto pos = pbfSolver->pbfData()->positions();
 		drawPoint(pos[i].x, pos[i].y);
-
+		drawLine(movingPos_x, 0.0, movingPos_x, 2.0);
 	}
+
 
 	glutSwapBuffers();
 
@@ -145,10 +149,10 @@ int main(int argc, char** argv)
 
 	vector<Vector2<double>> temp_pos;
 
-	numberOfParticles = 500;
+	numberOfParticles = 1500;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = random_double(0.8, 1.5);
-		auto y = random_double(1.0, 1.5);
+		auto y = random_double(0.02, 1.0);
 		Vector2<double> temp(x, y);
 		temp_pos.push_back(temp);
 	}
@@ -171,12 +175,49 @@ int main(int argc, char** argv)
 
 
 
+
+
+
+	//这里是写入文件
+//记得重新算的时候要删掉 原来的文件夹
+	int frame = 1000;
+	auto num = pbfSolver->pbfData()->numberOfParticles();
+	auto position = pbfSolver->pbfData()->positions();
+
+
+	int interval = 1;
+
+	string outfilename = "1";
+
+	system("mkdir PBFData1");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		ofstream out("../titmouse2d/PBFData1/" + outfilename + ".txt", ios::app);
+
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			out << x << "," << y << endl;
+		}
+		pbfSolver->onAdvanceTimeStep(0.05);
+		auto movingP = pbfSolver->movingColliderPos;
+		out << movingP << "," << 0.0 << endl;
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+
+
+	}
+
+
+
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗zz口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 

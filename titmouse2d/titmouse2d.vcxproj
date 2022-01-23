@@ -261,6 +261,7 @@
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
     <ClInclude Include="src\MathUtils.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBM_TurbulenceModel.h" />
     <ClInclude Include="src\OtherMethod\MPM\MPMSolver2.h" />
@@ -271,6 +272,7 @@
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
     <ClInclude Include="src\SparseMatrix.hpp" />
     <ClInclude Include="src\SparseMatrixPtr.hpp" />
+    <ClInclude Include="src\TempMovingCollider2.h" />
     <ClInclude Include="src\Vector2.hpp" />
     <ClInclude Include="src\VectorN.hpp" />
     <ClInclude Include="src\VectorNPtr.hpp" />

@@ -1,7 +1,7 @@
 #include "PBFSolver2.h"
 #include "../../Lagrangian/SphPoly6Kernel2.h"
 #include "../../Lagrangian/SphSpikyKernel2.h"
-
+#include "../../TempMovingCollider2.h"
 
 const double rho0 = 1.0;
 
@@ -28,6 +28,9 @@ void PBFSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	iterSolve();
 	updateVelocites(timeIntervalInSeconds);
 	ParticleSystemSolver2::resolveCollision();
+
+	//求解移动边界的碰撞
+	setMovingColliderPos(resolveMovingCollision(_newPositions, _newVelocities));
 	onEndAdvanceTimeStep();
 }
 

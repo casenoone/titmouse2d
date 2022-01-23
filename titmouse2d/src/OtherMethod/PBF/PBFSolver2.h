@@ -42,6 +42,10 @@ private:
 
 	void updateVelocites(double timeIntervalInSeconds);
 
+	void setMovingColliderPos(double pos);
+
+public:
+	double movingColliderPos = 0.0;
 
 private:
 	PBFData2Ptr _pbfData;
@@ -49,6 +53,10 @@ private:
 
 };
 
+
+inline void PBFSolver2::setMovingColliderPos(double pos) {
+	movingColliderPos = pos;
+}
 
 inline PBFSolver2::PBFSolver2() {
 	_particleSystemData = make_shared<PBFData2>();
