@@ -13,7 +13,7 @@ public:
 	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
 
 private:
-		
+
 	//计算residual
 	void computResidual(const SparseMatrixPtr<T>& A);
 
@@ -25,7 +25,7 @@ private:
 	void computeD();
 
 private:
-	
+
 
 	VectorNPtr<T> _r1;
 
@@ -59,10 +59,10 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 	auto delta_old = 0.0;
 	auto minR2 = this->_minR * this->_minR;
 
-	while (delta_new > minR2*delta0 && this->_iterNum <= this->_maxIterNum) {
+	while (delta_new > minR2 * delta0 && this->_iterNum <= this->_maxIterNum) {
 		computeAlpha(A);
 		x = x + _alpha * _d;
-		if (this->_iterNum+1 % 50 == 0) {
+		if (this->_iterNum + 1 % 50 == 0) {
 			this->correctResidual(A, x, b);
 			_r1 = this->_r;
 		}
@@ -83,7 +83,7 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 
 		this->_r = _r1;
 		this->_iterNum++;
-		
+
 	}
 	//cout << this->_minR << endl;
 	//cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << endl;

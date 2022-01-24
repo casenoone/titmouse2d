@@ -21,11 +21,9 @@ void SimplePressureSolver2::solve(FaceCenteredGrid2Ptr flow, const Array2Ptr<int
 	int size = fluidCellSize(markers);
 	VectorNPtr<double> x(size);
 	constructMatrix(flow, markers, x, size);
-	applyGradientandUpdateVel(flow, markers, x); 
-
+	applyGradientandUpdateVel(flow, markers, x);
 }
 
-//非常适合OpenMP并行呀！
 int SimplePressureSolver2::fluidCellSize(const Array2Ptr<int>& markers) {
 	int systemSize = 0;
 
@@ -34,20 +32,20 @@ int SimplePressureSolver2::fluidCellSize(const Array2Ptr<int>& markers) {
 #pragma omp parallel for reduction(+:systemSize)
 	for (int i = 0; i < markersSize.x; ++i) {
 		for (int j = 0; j < markersSize.y; ++j) {
-			if (markers.lookAt(i,j) == FLUID) {
-				systemSize+=1;
+			if (markers.lookAt(i, j) == FLUID) {
+				systemSize += 1;
 			}
 		}
 	}
-	
+
 
 	return systemSize;
 }
 
 
-void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow, 
+void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	const Array2Ptr<int>& markers,
-	VectorNPtr<double> &x,int systemSize) {
+	VectorNPtr<double>& x, int systemSize) {
 
 	auto& solveSystemMarker = flow->solveSystemMarker;
 	auto& u = flow->uDatas();
@@ -71,17 +69,17 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 
 			//网格单元是流体
 			if (markers.lookAt(i, j) == FLUID) {
-				
+
 				if (i + 1 < resolution.x) {
 					if (markers.lookAt(i + 1, j) == FLUID) {
 						A.insert(row, solveSystemMarker(i + 1, j), -invH);
 					}
 				}
-				
+
 				else {
 					++coeff;
 				}
-			
+
 				if (i - 1 >= 0) {
 					if (markers.lookAt(i - 1, j) == FLUID) {
 						A.insert(row, solveSystemMarker(i - 1, j), -invH);
@@ -113,20 +111,20 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				A.insert(row, solveSystemMarker(i, j), -coeff * invH);
 				if (i <= 0 || i >= flow->uSize().x - 1) {
 					u(i, j) = 0;
-					
+
 				}
 
 				if (j <= 0 || j >= flow->vSize().y - 1) {
 					v(i, j) = 0;
 				}
-				
+
 				b[row] = -(u(i + 1, j) - u(i, j) + v(i, j + 1) - v(i, j));
 				++row;
 			}
-			
+
 		}
 	}
-	
+
 	//千万不要忘记build（）
 	A.build();
 
@@ -143,9 +141,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	//JacobiSolver.compute(A, x, b);
 }
 
-void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow, 
+void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,
 	const Array2Ptr<int>& markers,
-	VectorNPtr<double> &x) {
+	VectorNPtr<double>& x) {
 
 
 	auto& u = flow->uDatas();
@@ -157,7 +155,7 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 	auto& solveSystemMarker = flow->solveSystemMarker;
 
 	auto sizeU = flow->uSize();
-	
+
 	omp_set_num_threads(23);
 #pragma omp parallel for 
 	for (int j = 0; j < sizeU.y; ++j) {
@@ -171,7 +169,7 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 				if (markers.lookAt(i - 1, j) == FLUID && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
 					auto col0 = solveSystemMarker(i - 1, j);
-					u(i, j) -=(x[col1] - x[col0]) * invH;
+					u(i, j) -= (x[col1] - x[col0]) * invH;
 				}
 				//如果左边是气体，右边是流体
 				if (markers.lookAt(i - 1, j) == AIR && markers.lookAt(i, j) == FLUID) {
@@ -204,19 +202,19 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 				if (markers.lookAt(i, j - 1) == FLUID && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
 					auto col0 = solveSystemMarker(i, j - 1);
-					v(i, j) -=(x[col1] - x[col0]) * invH;
+					v(i, j) -= (x[col1] - x[col0]) * invH;
 				}
 				//如果下是气体，上边是流体
 
 				if (markers.lookAt(i, j - 1) == AIR && markers.lookAt(i, j) == FLUID) {
 					auto col1 = solveSystemMarker(i, j);
-					v(i, j) -=x[col1] * invH;
+					v(i, j) -= x[col1] * invH;
 				}
 				//如果下边是流体，上边是气体
 
 				if (markers.lookAt(i, j - 1) == FLUID && markers.lookAt(i, j) == AIR) {
 					auto col0 = solveSystemMarker(i, j - 1);
-					v(i, j) +=(x[col0]) * invH;
+					v(i, j) += (x[col0]) * invH;
 				}
 
 
