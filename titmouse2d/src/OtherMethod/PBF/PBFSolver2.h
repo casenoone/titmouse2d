@@ -17,7 +17,7 @@ public:
 		int resolutionY);
 
 public:
-	PBFData2Ptr& pbfData();
+	PBFData2Ptr pbfData();
 
 private:
 	void onBeginAdvanceTimeStep();
@@ -64,7 +64,7 @@ inline PBFSolver2::PBFSolver2() {
 	_pbfData = std::dynamic_pointer_cast<PBFData2>(_particleSystemData);
 }
 
-inline PBFData2Ptr& PBFSolver2::pbfData() {
+inline PBFData2Ptr PBFSolver2::pbfData() {
 	return _pbfData;
 }
 
@@ -105,14 +105,7 @@ inline void PBFSolver2::updatePositions() {
 	auto delta_p = pbfData()->deltaP();
 
 	for (int i = 0; i < n; ++i) {
-		//if (i == 0)
-			//cout << "1:" << _newPositions[0].y << endl;
 		_newPositions[i] += delta_p(i);
-		//if (i == 0)
-			//cout << "2:" << delta_p(0).y << endl;
-			//if (i == 0)
-				//cout << "3:" << _newPositions[0].y << endl;
-
 	}
 }
 

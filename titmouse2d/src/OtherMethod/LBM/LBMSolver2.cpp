@@ -4,6 +4,7 @@
 #include <array>
 #include <tuple>
 
+//错误的D2Q9
 //const double w_l[9] = { 1.0 / 3, 1.0 / 18, 1.0 / 18,
 //						1.0 / 18, 1.0 / 18,
 //						1.0 / 18, 1.0 / 18,
@@ -18,8 +19,10 @@ const int e_y[9] = { 0,0,0,1,-1,1,1,-1,-1 };
 
 const int invert[9] = { 0, 2, 1, 4, 3, 8, 7, 6, 5 };
 
+//非湍流模型下不能超过1.9
 const double omga = 1.9;
 
+//非湍流模型下不能超过0.1
 const double ldc_velocity = 0.09;
 const bool SMAGORINSKY = false;
 
@@ -105,8 +108,6 @@ void LBMSolver2::stream() {
 
 //注意这里用了自动推导类型的形式
 //这个函数必须在被调用之前就定义
-
-
 auto LBMSolver2::getDensityVelocity(int i, int j) {
 	double rho, u_x, u_y;
 	rho = u_x = u_y = 0.0;
@@ -165,6 +166,7 @@ void LBMSolver2::collide() {
 			for (int l = 0; l < 9; ++l) {
 				auto a = e_x[l] * u_x + e_y[l] * u_y;
 
+				//错误的f_eq计算公式
 				//auto f_eq = w_l[l] * (rho - 1.5 * (u_x * u_x + u_y * u_y) + 3 * a + 4.5 * a * a);
 				auto f_eq = w_l[l] * rho * (1 + 3 * a + 4.5 * a * a - 1.5 * (u_x * u_x + u_y * u_y));
 				_data.f(i, j)[l] = (1 - omga) * _data.f_(i, j)[l] + omga * f_eq;

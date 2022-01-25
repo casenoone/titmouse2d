@@ -146,6 +146,7 @@
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
+    <ClCompile Include="src\demo\IISPHTest\IISPHTest.cpp" />
     <ClCompile Include="src\demo\LBMTest\LBM_kamavortex.cpp" />
     <ClCompile Include="src\demo\LevelSetTest\levelsetLiquidSolverTest.cpp" />
     <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp" />
@@ -192,6 +193,7 @@
     <ClCompile Include="src\Lagrangian\VortexParticleSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Numerical\Pde.hpp" />
+    <ClCompile Include="src\OtherMethod\IISPH\IISPHSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\LBM\LBMData2.h" />
     <ClCompile Include="src\OtherMethod\LBM\LBMSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp" />
@@ -261,12 +263,14 @@
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
     <ClInclude Include="src\MathUtils.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\OtherMethod\IISPH\IISPHData2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBM_TurbulenceModel.h" />
     <ClInclude Include="src\OtherMethod\MPM\MPMSolver2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFData2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFSolver2.h" />
+    <ClInclude Include="src\OtherMethod\PCISPH\PCISPHSolver2.h" />
     <ClInclude Include="src\random.h" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />

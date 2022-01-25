@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-//有空把这里的原理搞明白
 //基类与父类的类型转换
 SphSystemSolver2::SphSystemSolver2() {
 	_particleSystemData = make_shared<SphSystemData2>();

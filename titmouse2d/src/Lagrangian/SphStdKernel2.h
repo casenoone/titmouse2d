@@ -22,12 +22,11 @@ inline SphStdKernel2::SphStdKernel2(double kernelRadius)
 	: h(kernelRadius), h2(h* h), h3(h2* h), h5(h3* h2) {}
 
 inline double SphStdKernel2 :: operator()(double distance)const {
-	if (distance * distance >= h2) {
+	if (distance * distance >= h2 || distance <= 0) {
 		return 0.0;
 	}
 	else {
 		double x = 1.0 - distance * distance / h2;
-		//double kPiD = 0.0; //这个值设为多少？
 		return 315.0 / (64.0 * kPiD * h3) * x * x * x;
 	}
 }

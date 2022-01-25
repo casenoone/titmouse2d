@@ -2,11 +2,79 @@
 #define IISPHSOLVER2_H
 
 #include "../../Lagrangian/SphSystemSolver2.h"
+#include "IISPHData2.h"
 
-class IISPHSolver2 : public SphSystemSolver2 {
+
+const double iisph_rho0 = 1.0;
+
+//核函数半径
+const double iisphKR = 0.10;
+
+//搜索半径
+const double iisph_h = 0;
+
+class IISphSolver2 : public SphSystemSolver2 {
 public:
-	IISPHSolver2() = default;
+	IISphSolver2();
+
+	virtual void onAdvanceTimeStep(double timeIntervalInSeconds)override;
+
+	void setData(int numberOfParticles,
+		ArrayPtr<Vector2<double>>& pos,
+		int resolutionX,
+		int resolutionY);
+
+	IISphData2Ptr iisphData();
+
+	//这一步已经完成了邻居搜索
+	void initDensity();
+
+	void computeAdv(double timeIntervalInSeconds);
+
+	void computeD_ii(double timeIntervalInSeconds);
+
+	void computeA_ii(double timeIntervalInSeconds);
+
+	void computePressure();
+
+	void iterPressureSolver();
+
+	void timeIntegration(double timeIntervalInSeconds)override;
+
+private:
+	IISphData2Ptr _iisphData;
+};
+
+
+inline IISphSolver2::IISphSolver2() {
+	_particleSystemData = make_shared<IISphData2>();
+	_iisphData = make_shared<IISphData2>();
+	_iisphData = std::dynamic_pointer_cast<IISphData2>(_particleSystemData);
 }
+
+
+inline IISphData2Ptr IISphSolver2::iisphData() {
+	return _iisphData;
+}
+
+
+inline void IISphSolver2::initDensity() {
+	_iisphData->initDensity();
+}
+
+
+inline void IISphSolver2::computeAdv(double timeIntervalInSeconds) {
+
+	ParticleSystemSolver2::accumlateExternalForces();
+	auto forces = iisphData()->forces();
+	auto velocities = iisphData()->velocities();
+	auto n = iisphData()->numberOfParticles();
+
+	for (int i = 0; i < n; ++i) {
+		_newVelocities[i] = velocities[i] + timeIntervalInSeconds * forces[i];
+	}
+}
+
 
 
 
