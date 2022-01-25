@@ -70,6 +70,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - APIC
 - MPM
 - IISPH
+- PCISPH
 - shallow water solver
 - BVH加速结构
 - Explicit/Implicit Mass Spring System
