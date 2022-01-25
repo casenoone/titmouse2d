@@ -63,13 +63,14 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif)
 
 - 9.PBF(参数和SPH一样恶心。。。)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf1.gif)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf2.gif)
 
 
 即将实现的算法：
 - APIC
 - MPM
 - IISPH
+- PCISPH
 - shallow water solver
 - BVH加速结构
 - Explicit/Implicit Mass Spring System
