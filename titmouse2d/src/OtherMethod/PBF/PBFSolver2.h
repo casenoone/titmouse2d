@@ -1,6 +1,6 @@
 #ifndef PBFSOLVER2_H
 #define PBFSOLVER2_H
-
+#include <omp.h>
 
 #include "../../Lagrangian/ParticleSystemSolver2.h"
 #include "PBFData2.h"
