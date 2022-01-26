@@ -4,9 +4,6 @@
 #include "../../Lagrangian/SphSystemSolver2.h"
 #include "IISPHData2.h"
 
-
-const double iisph_rho0 = 1.0;
-
 //ºËº¯Êý°ë¾¶
 const double iisphKR = 0.10;
 
@@ -35,9 +32,7 @@ public:
 
 	void computeA_ii(double timeIntervalInSeconds);
 
-	void computePressure();
-
-	void iterPressureSolver();
+	void iterPressureSolver(double timeIntervalInSeconds);
 
 	void timeIntegration(double timeIntervalInSeconds)override;
 
