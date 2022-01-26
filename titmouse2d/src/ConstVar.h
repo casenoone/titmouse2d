@@ -38,6 +38,6 @@ const double MASS = 1.0;
 const double KERNEL_RADUIS = R;
 const double SPEEDOFSOUND = 0.005;
 const double EOSEXPONENT = 2.0;
-const double DRAG_COEFFICIENT = 0.8;
+const double DRAG_COEFFICIENT = 0.5;
 
 #endif

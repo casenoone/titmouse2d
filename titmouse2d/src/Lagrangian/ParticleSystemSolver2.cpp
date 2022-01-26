@@ -129,7 +129,7 @@ void ParticleSystemSolver2::accumlateExternalForces() {
 		forces[i] = forces[i] + force;
 
 		//Drag Forces
-		//forces[i] = forces[i] + velocities[i] * (-DRAG_COEFFICIENT);
+		forces[i] = forces[i] + velocities[i] * (-DRAG_COEFFICIENT);
 	}
 
 

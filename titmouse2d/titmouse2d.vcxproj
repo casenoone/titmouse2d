@@ -246,6 +246,7 @@
     <ClInclude Include="src\Lagrangian\NeighborSearcher2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemSolver2.h" />
     <ClInclude Include="src\DenseMatrix.hpp" />
+    <ClInclude Include="src\Lagrangian\SphM4SplineKernel2.h" />
     <ClInclude Include="src\Lagrangian\SphPoly6Kernel2.h" />
     <ClInclude Include="src\Lagrangian\SphSpikyKernel2.h" />
     <ClInclude Include="src\Lagrangian\SphStdKernel2.h" />

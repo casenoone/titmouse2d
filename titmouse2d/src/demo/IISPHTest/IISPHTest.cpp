@@ -95,7 +95,7 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	iisphSolver->onAdvanceTimeStep(0.02);
+	iisphSolver->onAdvanceTimeStep(0.01);
 	//auto movingPos_x = pbfSolver->movingColliderPos;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto pos = iisphSolver->iisphData()->positions();
@@ -149,10 +149,10 @@ int main(int argc, char** argv)
 
 	vector<Vector2<double>> temp_pos;
 
-	numberOfParticles = 400;
+	numberOfParticles = 1000;
 	for (int i = 0; i < numberOfParticles; ++i) {
-		auto x = random_double(0.8, 1.5);
-		auto y = random_double(0.02, 1.0);
+		auto x = random_double(0.8, 1.3);
+		auto y = random_double(0.1, 0.7);
 		Vector2<double> temp(x, y);
 		temp_pos.push_back(temp);
 	}
@@ -178,37 +178,35 @@ int main(int argc, char** argv)
 
 
 
-	//	//这里是写入文件
-	////记得重新算的时候要删掉 原来的文件夹
-	//	int frame = 1000;
-	//	auto num = pbfSolver->pbfData()->numberOfParticles();
-	//	auto position = pbfSolver->pbfData()->positions();
-	//
-	//
-	//	int interval = 1;
-	//
-	//	string outfilename = "1";
-	//
-	//	system("mkdir PBFData1");
-	//
-	//	for (int i = 0; i < frame; i += 1) {
-	//
-	//		ofstream out("../titmouse2d/PBFData1/" + outfilename + ".txt", ios::app);
-	//
-	//		for (int n = 0; n < num; ++n) {
-	//			auto x = position[n].x;
-	//			auto y = position[n].y;
-	//			out << x << "," << y << endl;
-	//		}
-	//		pbfSolver->onAdvanceTimeStep(0.05);
-	//		auto movingP = pbfSolver->movingColliderPos;
-	//		out << movingP << "," << 0.0 << endl;
-	//		auto temp1 = std::atoi(outfilename.c_str());
-	//		temp1++;
-	//		outfilename = std::to_string(temp1);
-	//
-	//
-	//	}
+	//这里是写入文件
+//记得重新算的时候要删掉 原来的文件夹
+	int frame = 1000;
+	auto num = iisphSolver->iisphData()->numberOfParticles();
+	auto position = iisphSolver->iisphData()->positions();
+
+
+	int interval = 1;
+
+	string outfilename = "1";
+
+	system("mkdir IISPH2");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		ofstream out("../titmouse2d/IISPH2/" + outfilename + ".txt", ios::app);
+
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			out << x << "," << y << endl;
+		}
+		iisphSolver->onAdvanceTimeStep(0.01);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+
+		cout << "当前解算到第" << i << "步，还有" << frame - i << "步" << endl;
+	}
 
 
 
@@ -217,7 +215,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗zz口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 

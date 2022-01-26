@@ -5,7 +5,7 @@
 #include "IISPHData2.h"
 
 //ºËº¯Êý°ë¾¶
-const double iisphKR = 0.10;
+const double iisphKR = 0.05;
 
 //ËÑË÷°ë¾¶
 const double iisph_h = 0;

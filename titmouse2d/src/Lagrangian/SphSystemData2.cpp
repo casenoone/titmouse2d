@@ -1,5 +1,5 @@
 #include "SphSystemData2.h"
-
+#include "SphPoly6Kernel2.h"
 
 SphSystemData2::SphSystemData2() {
 
@@ -27,8 +27,8 @@ void SphSystemData2::initDensity() {
 	//遍历每一个粒子
 
 	//这里可作优化
-	SphStdKernel2 kernel(KERNEL_RADUIS);
-
+	//SphStdKernel2 kernel(KERNEL_RADUIS);
+	SphPolyKernel2 kernel(KERNEL_RADUIS);
 	for (int i = 0; i < tempNumberOfParticles; ++i) {
 		//遍历当前粒子的邻近粒子
 		double tempDensities = 0;
@@ -40,9 +40,10 @@ void SphSystemData2::initDensity() {
 			tempDensities += weight;
 		}
 		if (tempNeighbor[i].size() == 0) {
-			tempDensities = 0.1;
+			tempDensities = 0.001;
 		}
 		tempData.push_back(tempDensities);
+		//cout << tempDensities << endl;
 	}
 
 	_densities.set(tempData);
@@ -83,9 +84,9 @@ void SphSystemData2::updateDensities() {
 }
 
 void SphSystemData2::clearDensities() {
-	
+
 	auto size = _densities.dataSize();
-	
+
 	for (int i = 0; i < size; ++i) {
 		_densities[i] = 0;
 	}
@@ -118,7 +119,7 @@ Vector2<double> SphSystemData2::gradientAt(size_t i, ArrayPtr<double>& values) {
 
 }
 
-double SphSystemData2::laplacianAt(size_t i, const ArrayPtr<double> &values) {
+double SphSystemData2::laplacianAt(size_t i, const ArrayPtr<double>& values) {
 	double sum = 0.0;
 	auto p = positions();
 	auto d = densities();

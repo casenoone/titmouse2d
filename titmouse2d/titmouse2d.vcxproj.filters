@@ -431,5 +431,8 @@
     <ClInclude Include="src\OtherMethod\IISPH\IISPHData2.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Lagrangian\SphM4SplineKernel2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

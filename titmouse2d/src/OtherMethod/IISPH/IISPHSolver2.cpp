@@ -1,8 +1,9 @@
 #include "IISPHSolver2.h"
+#include "../../Lagrangian/SphM4SplineKernel2.h"
 
 const double iisph_omega = 0.5;
 
-const double iisph_rho0 = 1.0;
+const double iisph_rho0 = 0.5;
 
 
 void IISphSolver2::setData(int numberOfParticles,
@@ -10,19 +11,18 @@ void IISphSolver2::setData(int numberOfParticles,
 	int resolutionX,
 	int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
-
+	initPressure();
 }
 
 void IISphSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	ParticleSystemSolver2::beginAdvanceTimeStep();
-	ParticleSystemSolver2::initSearchList(_iisphData->positions());
-	initDensity();
-	initPressure();
-	computeAdv(timeIntervalInSeconds);
-	computeD_ii(timeIntervalInSeconds);
-	computeA_ii(timeIntervalInSeconds);
-	iterPressureSolver(timeIntervalInSeconds);
-	timeIntegration(timeIntervalInSeconds);
+	ParticleSystemSolver2::beginAdvanceTimeStep(); //没问题
+	ParticleSystemSolver2::initSearchList(_iisphData->positions());  //没问题
+	initDensity();  //没问题
+	computeAdv(timeIntervalInSeconds); //没问题
+	computeD_ii(timeIntervalInSeconds);//没问题
+	computeA_ii(timeIntervalInSeconds);//没问题
+	iterPressureSolver(timeIntervalInSeconds);//没问题
+	timeIntegration(timeIntervalInSeconds);//没问题
 	ParticleSystemSolver2::resolveCollision();
 	ParticleSystemSolver2::endAdvanceTimeStep();
 }
@@ -39,6 +39,7 @@ void IISphSolver2::computeD_ii(double timeIntervalInSeconds) {
 	d_ii.reSize(n);
 
 	SphSpikyKernel2 kernel(iisphKR);
+	//SphM4SplineKernel2 kernel(iisphKR);
 
 	for (int i = 0; i < n; ++i) {
 		auto currentP = pos[i];
@@ -50,7 +51,9 @@ void IISphSolver2::computeD_ii(double timeIntervalInSeconds) {
 			auto dis = currentP.dis(neighborP);
 			auto direction = (neighborP - currentP).normalize();
 
-			temp_d_ii += kernel.gradient(dis, direction) / rho2;
+			if (rho2 > 0.0 && dis > 0.0) {
+				temp_d_ii += kernel.gradient(dis, direction) / rho2;
+			}
 		}
 		temp_d_ii *= -t2;
 		d_ii[i] = temp_d_ii;
@@ -74,6 +77,7 @@ void IISphSolver2::computeA_ii(double timeIntervalInSeconds) {
 	adv_densities.reSize(n);
 
 	SphSpikyKernel2 kernel(iisphKR);
+	//SphM4SplineKernel2 kernel(iisphKR);
 
 	//计算预测密度
 	for (int i = 0; i < n; ++i) {
@@ -99,16 +103,18 @@ void IISphSolver2::computeA_ii(double timeIntervalInSeconds) {
 	for (int i = 0; i < n; ++i) {
 		double rho_adv = 0.0;
 		auto currentP = pos[i];
-		auto rho_i2 = densities[i];
+		auto rho_i2 = densities[i] * densities[i];
 		auto temp_a_ii = 0.0;
 		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
 			auto neighborP = pos[*j];
 			auto dis = neighborP.dis(currentP);
 			auto d_ji_direction = (currentP - neighborP).normalize();
 			auto direction = -1.0 * d_ji_direction;
+			if (dis > 0 && rho_i2 > 0) {
+				auto d_ji = -t2 / rho_i2 * kernel.gradient(dis, d_ji_direction);
+				temp_a_ii += (d_ii[i] - d_ji).dot(kernel.gradient(dis, direction));
+			}
 
-			auto d_ji = -t2 / rho_i2 * kernel.gradient(dis, d_ji_direction);
-			temp_a_ii += (d_ii[i] - d_ji).dot(kernel.gradient(dis, direction));
 		}
 		a_ii[i] = temp_a_ii;
 	}
@@ -116,7 +122,7 @@ void IISphSolver2::computeA_ii(double timeIntervalInSeconds) {
 
 //先不考虑误差项，通过最大迭代次数来停止迭代
 void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
-	int maxIterNum = 50;
+	int maxIterNum = 20;
 	int l = 0;
 	double t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto n = _iisphData->numberOfParticles();
@@ -125,6 +131,9 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 	d_ij_p_j.reSize(n);
 
 	SphSpikyKernel2 kernel(iisphKR);
+	//SphM4SplineKernel2 kernel(iisphKR);
+
+
 	auto densities = iisphData()->densities();
 	auto pos = _iisphData->positions();
 	auto pressure = _iisphData->pressures();
@@ -137,11 +146,14 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 
 			auto temp_d_ij = Vector2<double>(0.0, 0.0);
 			for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
-				auto rho_j2 = densities[*j];
+				auto rho_j2 = densities[*j] * densities[*j];
 				auto neighborP = pos[*j];
 				auto dis = neighborP.dis(currentP);
 				auto direction = (neighborP - currentP);
-				temp_d_ij += (pressure[*j] * kernel.gradient(dis, direction)) / rho_j2;
+				if (dis > 0 && rho_j2 > 0) {
+					temp_d_ij += (pressure[*j] * kernel.gradient(dis, direction)) / rho_j2;
+				}
+
 
 			}
 			temp_d_ij *= -t2;
@@ -155,24 +167,29 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 		//计算压强
 		for (int i = 0; i < n; ++i) {
 			auto term1 = (1 - iisph_omega) * pressure[i];
+			if (a_ii[i] == 0.0) {
+				pressure[i] = 0.0;
+				continue;
+			}
 			auto term2 = iisph_omega / a_ii[i];
 			auto term3 = iisph_rho0 - rho_adv[i];
 			double term4 = 0.0;
-
 			auto rho_i2 = densities[i] * densities[i];
 			auto currentP = pos[i];
+			auto term41 = d_ij_p_j[i];
 			for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
 				auto neighborP = pos[*j];
 				auto dis = neighborP.dis(currentP);
 				auto direction = (neighborP - currentP).normalize();
 
-				auto term41 = d_ij_p_j[i];
 				auto term42 = d_ii[*j] * pressure[*j];
 				auto term43 = Vector2<double>(0.0, 0.0);
 
 				auto d_ji_direction = (currentP - neighborP).normalize();
-				auto d_ji = -t2 / rho_i2 * kernel.gradient(dis, d_ji_direction);
-				term43 = d_ij_p_j[*j] - d_ji * pressure[i];
+				if (rho_i2 > 0.0 && dis > 0) {
+					auto d_ji = -t2 / rho_i2 * kernel.gradient(dis, d_ji_direction);
+					term43 = d_ij_p_j[*j] - d_ji * pressure[i];
+				}
 
 				term4 += (term41 + term42 + term43).dot(kernel.gradient(dis, direction));
 			}
@@ -194,6 +211,7 @@ void IISphSolver2::timeIntegration(double timeIntervalInSeconds) {
 	auto neighbors = _iisphData->neighbor->neighBors();
 
 	SphSpikyKernel2 kernel(iisphKR);
+	//SphM4SplineKernel2 kernel(iisphKR);
 
 	for (int i = 0; i < n; ++i) {
 		auto currentP = pos[i];
@@ -205,9 +223,10 @@ void IISphSolver2::timeIntegration(double timeIntervalInSeconds) {
 			auto direction = (neighborP - currentP).normalize();
 
 			auto rho_j2 = densities[*j] * densities[*j];
-
-			tempPressureForce += ((pressure[i] / rho_i2) + (pressure[*j]) / rho_j2) *
-				(kernel.gradient(dis, direction));
+			if (rho_i2 > 0.0 && rho_j2 > 0.0 && dis > 0.0) {
+				tempPressureForce += ((pressure[i] / rho_i2) + (pressure[*j]) / rho_j2) *
+					(kernel.gradient(dis, direction));
+			}
 		}
 		tempPressureForce *= -1.0;
 		//cout << tempPressureForce.y << endl;
