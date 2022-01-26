@@ -35,6 +35,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - Vortex Method(涡粒子法模拟流体)
 - LBM（格子-玻尔兹曼方法）
 - PBF
+- IISPH(隐式不可压缩SPH)
 
 
 - 1.FLIP算法
@@ -62,14 +63,16 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - 8.LBM(湍流模型模拟顶盖流动)
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif)
 
-- 9.PBF(参数和SPH一样恶心。。。)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf2.gif)
+- 9.IISPH(没完全写对)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/iisph_titmouse2d.gif
+)
 
+- 10.PBF(参数和SPH一样恶心。。。)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf2.gif)
 
 即将实现的算法：
 - APIC
 - MPM
-- IISPH
 - PCISPH
 - shallow water solver
 - BVH加速结构
