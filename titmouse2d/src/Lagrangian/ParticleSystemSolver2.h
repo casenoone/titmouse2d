@@ -17,16 +17,17 @@ using namespace std;
 
 class ParticleSystemSolver2 {
 public:
-	
+
 	class Builder;
-	
+
 	ParticleSystemSolver2();
 	~ParticleSystemSolver2();
 
-	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) ;
+	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY);
 
 	void setCollider(const Collider2& collider);
 
+	void initSearchList(const ArrayPtr<Vector2<double>> pos);
 
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
 
@@ -41,15 +42,15 @@ protected:
 	//ColliderSet2 _collider;
 
 	virtual void beginAdvanceTimeStep();
-	
+
 	virtual void endAdvanceTimeStep();
-	
+
 	virtual void timeIntegration(double timeIntervalInSeconds);
-	
+
 	virtual void resolveCollision();
-	
+
 	virtual void accumlateExternalForces();
-	
+
 	void clearForces(ArrayPtr<Vector2<double>>& forces);
 
 	ArrayPtr<Vector2<double>> _newPositions;
@@ -57,5 +58,12 @@ protected:
 	ArrayPtr<Vector2<double>> _newVelocities;
 
 };
+
+
+inline void ParticleSystemSolver2::initSearchList(const ArrayPtr<Vector2<double>> pos) {
+	auto neighbors = _particleSystemData->neighbor;
+	neighbors->setNeiborList(pos);
+}
+
 
 #endif

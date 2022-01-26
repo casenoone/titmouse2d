@@ -26,6 +26,10 @@ public:
 	//这一步已经完成了邻居搜索
 	void initDensity();
 
+
+
+	void initPressure();
+
 	void computeAdv(double timeIntervalInSeconds);
 
 	void computeD_ii(double timeIntervalInSeconds);
@@ -57,6 +61,11 @@ inline void IISphSolver2::initDensity() {
 	_iisphData->initDensity();
 }
 
+inline void IISphSolver2::initPressure() {
+	auto n = iisphData()->numberOfParticles();
+	auto pressure = _iisphData->pressures();
+	pressure.reSize(n);
+}
 
 inline void IISphSolver2::computeAdv(double timeIntervalInSeconds) {
 

@@ -15,7 +15,7 @@ using namespace std;
 #include "../../Vector2.hpp"
 
 #include "../../Geometry/Box2.h"
-#include "../../OtherMethod/PBF/PBFSolver2.h"
+#include "../../OtherMethod/IISPH/IISPHSolver2.h"
 
 #include "../../random.h"
 #include "../../TempMovingCollider2.h"
@@ -86,7 +86,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 	glFlush();
 }
 
-auto pbfSolver = make_shared<PBFSolver2>();
+auto iisphSolver = make_shared<IISphSolver2>();
 int numberOfParticles = 0;
 static void display(void)
 {
@@ -95,12 +95,12 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	pbfSolver->onAdvanceTimeStep(0.05);
-	auto movingPos_x = pbfSolver->movingColliderPos;
+	iisphSolver->onAdvanceTimeStep(0.02);
+	//auto movingPos_x = pbfSolver->movingColliderPos;
 	for (int i = 0; i < numberOfParticles; ++i) {
-		auto pos = pbfSolver->pbfData()->positions();
+		auto pos = iisphSolver->iisphData()->positions();
 		drawPoint(pos[i].x, pos[i].y);
-		drawLine(movingPos_x, 0.0, movingPos_x, 2.0);
+		//drawLine(movingPos_x, 0.0, movingPos_x, 2.0);
 	}
 
 
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
 
 	vector<Vector2<double>> temp_pos;
 
-	numberOfParticles = 1500;
+	numberOfParticles = 400;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = random_double(0.8, 1.5);
 		auto y = random_double(0.02, 1.0);
@@ -160,7 +160,7 @@ int main(int argc, char** argv)
 	cout << "Á£×ÓÊýÄ¿£º" << numberOfParticles << endl;
 	ArrayPtr<Vector2<double>> pos(temp_pos);
 
-	pbfSolver->setData(numberOfParticles, pos, res_x, res_y);
+	iisphSolver->setData(numberOfParticles, pos, res_x, res_y);
 
 	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
 
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
 
 	collider.push(box1);
 	//collider.push(box2);
-	pbfSolver->setCollider(collider);
+	iisphSolver->setCollider(collider);
 
 
 

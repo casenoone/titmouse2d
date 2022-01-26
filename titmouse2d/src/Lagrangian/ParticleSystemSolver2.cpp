@@ -30,7 +30,9 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles,
 void ParticleSystemSolver2::beginAdvanceTimeStep() {
 	size_t n = _particleSystemData->numberOfParticles();
 
+	_newPositions.clear();
 	_newPositions.reSize(n);
+	_newVelocities.clear();
 	_newVelocities.reSize(n);
 
 	clearForces(_particleSystemData->forces());
@@ -46,13 +48,10 @@ void ParticleSystemSolver2::endAdvanceTimeStep() {
 
 	positions.forEachIndex([&](size_t i) {
 		positions[i] = _newPositions[i];
-		//cout << _newPositions[i].y << endl;
-		_newPositions[i] = Vector2<double>();
 		});
 
 	velocities.forEachIndex([&](size_t i) {
 		velocities[i] = _newVelocities[i];
-		_newVelocities[i] = Vector2<double>();
 		});
 
 

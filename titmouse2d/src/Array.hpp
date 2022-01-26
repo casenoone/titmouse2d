@@ -33,8 +33,8 @@ public:
 	size_t dataSize() const;
 
 	const vector<T>* constDataAccessor() const;
-	
-	vector<T>* dataAccessor() ;
+
+	vector<T>* dataAccessor();
 
 	void set(const vector<T>& data_);
 
@@ -45,7 +45,7 @@ public:
 
 
 	template <typename Callback>
-	void parallelForEachIndex(Callback func) ;
+	void parallelForEachIndex(Callback func);
 
 
 
@@ -72,9 +72,11 @@ Array<T>::~Array() {
 template<typename T>
 Array<T>::Array(const vector<T>& data) {
 	_data = data;
-	_size = _data.size();	
+	_size = _data.size();
 }
 
+
+//这里要改进一下
 template<typename T>
 inline void Array<T>::clear() {
 	_data.clear();
@@ -111,7 +113,7 @@ size_t Array<T>::reSize(size_t n, T initValue) {
 }
 
 template<typename T>
-inline size_t Array<T>::dataSize() const{
+inline size_t Array<T>::dataSize() const {
 	return _size;
 }
 
@@ -135,7 +137,7 @@ void Array<T>::set(const vector<T>& data_) {
 
 template<typename T>
 template<typename Callback>
-void Array<T>::forEachIndex(Callback func) const{
+void Array<T>::forEachIndex(Callback func) const {
 	for (size_t i = 0; i < _size; ++i) {
 		func(i);
 	}

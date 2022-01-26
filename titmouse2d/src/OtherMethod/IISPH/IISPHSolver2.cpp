@@ -9,11 +9,22 @@ void IISphSolver2::setData(int numberOfParticles,
 	ArrayPtr<Vector2<double>>& pos,
 	int resolutionX,
 	int resolutionY) {
+	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
 
 }
 
 void IISphSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-
+	ParticleSystemSolver2::beginAdvanceTimeStep();
+	ParticleSystemSolver2::initSearchList(_iisphData->positions());
+	initDensity();
+	initPressure();
+	computeAdv(timeIntervalInSeconds);
+	computeD_ii(timeIntervalInSeconds);
+	computeA_ii(timeIntervalInSeconds);
+	iterPressureSolver(timeIntervalInSeconds);
+	timeIntegration(timeIntervalInSeconds);
+	ParticleSystemSolver2::resolveCollision();
+	ParticleSystemSolver2::endAdvanceTimeStep();
 }
 
 
@@ -77,7 +88,7 @@ void IISphSolver2::computeA_ii(double timeIntervalInSeconds) {
 		}
 		adv_densities[i] = densities[i] + timeIntervalInSeconds * temp;
 
-		//压强初始化
+		////压强初始化
 		pressure[i] *= 0.5;
 	}
 
@@ -153,7 +164,7 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 			for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
 				auto neighborP = pos[*j];
 				auto dis = neighborP.dis(currentP);
-				auto direction = (neighborP - currentP);
+				auto direction = (neighborP - currentP).normalize();
 
 				auto term41 = d_ij_p_j[i];
 				auto term42 = d_ii[*j] * pressure[*j];
@@ -174,5 +185,34 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 
 
 void IISphSolver2::timeIntegration(double timeIntervalInSeconds) {
+	auto n = _iisphData->numberOfParticles();
+	auto pos = _iisphData->positions();
+	auto vel = _iisphData->velocities();
+
+	auto densities = iisphData()->densities();
+	auto pressure = _iisphData->pressures();
+	auto neighbors = _iisphData->neighbor->neighBors();
+
+	SphSpikyKernel2 kernel(iisphKR);
+
+	for (int i = 0; i < n; ++i) {
+		auto currentP = pos[i];
+		auto tempPressureForce = Vector2<double>(0.0, 0.0);
+		auto rho_i2 = densities[i] * densities[i];
+		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
+			auto neighborP = pos[*j];
+			auto dis = neighborP.dis(currentP);
+			auto direction = (neighborP - currentP).normalize();
+
+			auto rho_j2 = densities[*j] * densities[*j];
+
+			tempPressureForce += ((pressure[i] / rho_i2) + (pressure[*j]) / rho_j2) *
+				(kernel.gradient(dis, direction));
+		}
+		tempPressureForce *= -1.0;
+		//cout << tempPressureForce.y << endl;
+		_newVelocities[i] += timeIntervalInSeconds * tempPressureForce;
+		_newPositions[i] = pos[i] + timeIntervalInSeconds * _newVelocities[i];
+	}
 
 }
