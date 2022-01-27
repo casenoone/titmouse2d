@@ -149,10 +149,10 @@ int main(int argc, char** argv)
 
 	vector<Vector2<double>> temp_pos;
 
-	numberOfParticles = 1000;
+	numberOfParticles = 400;
 	for (int i = 0; i < numberOfParticles; ++i) {
-		auto x = random_double(0.8, 1.3);
-		auto y = random_double(0.1, 0.7);
+		auto x = random_double(0.8, 1.5);
+		auto y = random_double(0.2, 1.5);
 		Vector2<double> temp(x, y);
 		temp_pos.push_back(temp);
 	}
@@ -189,11 +189,11 @@ int main(int argc, char** argv)
 
 	string outfilename = "1";
 
-	system("mkdir IISPH2");
+	system("mkdir IISPH3");
 
 	for (int i = 0; i < frame; i += 1) {
 
-		ofstream out("../titmouse2d/IISPH2/" + outfilename + ".txt", ios::app);
+		ofstream out("../titmouse2d/IISPH3/" + outfilename + ".txt", ios::app);
 
 		for (int n = 0; n < num; ++n) {
 			auto x = position[n].x;

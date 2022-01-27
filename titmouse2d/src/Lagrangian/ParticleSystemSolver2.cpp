@@ -1,6 +1,6 @@
 #include "ParticleSystemSolver2.h"
 #include "../ConstVar.h"
-
+#include "../random.h"
 
 ParticleSystemSolver2::ParticleSystemSolver2() {
 	_particleSystemData = make_shared<ParticleSystemData2>();
@@ -86,7 +86,9 @@ void ParticleSystemSolver2::resolveCollision() {
 
 
 	for (size_t i = 0; i < n; ++i) {
-		_collider.resolveCollision(0.000000011, 0.00001, &_newPositions[i], &_newVelocities[i]);
+		//_collider.resolveCollision(0.000000011, 0.00001, &_newPositions[i], &_newVelocities[i]);
+		_collider.resolveCollision(0.011 * random_double(0.0, 1.0), 0.00001, &_newPositions[i], &_newVelocities[i]);
+
 	}
 
 	//for (int i = 0; i < n; ++i) {

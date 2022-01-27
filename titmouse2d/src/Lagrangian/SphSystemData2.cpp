@@ -40,7 +40,7 @@ void SphSystemData2::initDensity() {
 			tempDensities += weight;
 		}
 		if (tempNeighbor[i].size() == 0) {
-			tempDensities = 0.001;
+			tempDensities = 1.0;
 		}
 		tempData.push_back(tempDensities);
 		//cout << tempDensities << endl;

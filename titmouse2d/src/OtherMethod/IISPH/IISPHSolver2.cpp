@@ -1,9 +1,10 @@
 #include "IISPHSolver2.h"
 #include "../../Lagrangian/SphM4SplineKernel2.h"
+#include "../../TempMovingCollider2.h"
 
 const double iisph_omega = 0.5;
 
-const double iisph_rho0 = 0.5;
+const double iisph_rho0 = 0.00000001;
 
 
 void IISphSolver2::setData(int numberOfParticles,
@@ -24,6 +25,8 @@ void IISphSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	iterPressureSolver(timeIntervalInSeconds);//没问题
 	timeIntegration(timeIntervalInSeconds);//没问题
 	ParticleSystemSolver2::resolveCollision();
+	//setMovingColliderPos(resolveMovingCollision(_newPositions, _newVelocities));
+
 	ParticleSystemSolver2::endAdvanceTimeStep();
 }
 
@@ -117,12 +120,14 @@ void IISphSolver2::computeA_ii(double timeIntervalInSeconds) {
 
 		}
 		a_ii[i] = temp_a_ii;
+		if (a_ii[i] == 0.0)
+			a_ii[i] = 0.1;
 	}
 }
 
 //先不考虑误差项，通过最大迭代次数来停止迭代
 void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
-	int maxIterNum = 20;
+	int maxIterNum = 15;
 	int l = 0;
 	double t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto n = _iisphData->numberOfParticles();
@@ -168,11 +173,12 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 		for (int i = 0; i < n; ++i) {
 			auto term1 = (1 - iisph_omega) * pressure[i];
 			if (a_ii[i] == 0.0) {
-				pressure[i] = 0.0;
-				continue;
+				//pressure[i] = 0.0;
+				//continue;
+				//cout << 99 << endl;
 			}
 			auto term2 = iisph_omega / a_ii[i];
-			auto term3 = iisph_rho0 - rho_adv[i];
+			auto term3 = std::min(0.0, iisph_rho0 - rho_adv[i]);
 			double term4 = 0.0;
 			auto rho_i2 = densities[i] * densities[i];
 			auto currentP = pos[i];
@@ -194,8 +200,9 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 				term4 += (term41 + term42 + term43).dot(kernel.gradient(dis, direction));
 			}
 
-			pressure[i] = term1 + term2 * (term3 - term4);
 
+			pressure[i] = term1 + term2 * (term3 - term4);
+			//cout << term3 << endl;
 		}
 	}
 }
@@ -232,6 +239,7 @@ void IISphSolver2::timeIntegration(double timeIntervalInSeconds) {
 		//cout << tempPressureForce.y << endl;
 		_newVelocities[i] += timeIntervalInSeconds * tempPressureForce;
 		_newPositions[i] = pos[i] + timeIntervalInSeconds * _newVelocities[i];
+		//cout << _newPositions[i].y << endl;
 	}
 
 }

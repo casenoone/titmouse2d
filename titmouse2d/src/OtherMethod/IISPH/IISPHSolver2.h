@@ -5,7 +5,7 @@
 #include "IISPHData2.h"
 
 //核函数半径
-const double iisphKR = 0.05;
+const double iisphKR = 0.08;
 
 //搜索半径
 const double iisph_h = 0;
@@ -23,10 +23,7 @@ public:
 
 	IISphData2Ptr iisphData();
 
-	//这一步已经完成了邻居搜索
 	void initDensity();
-
-
 
 	void initPressure();
 
@@ -64,7 +61,7 @@ inline void IISphSolver2::initDensity() {
 inline void IISphSolver2::initPressure() {
 	auto n = iisphData()->numberOfParticles();
 	auto pressure = _iisphData->pressures();
-	pressure.reSize(n);
+	pressure.reSize(n, 0.0);
 }
 
 inline void IISphSolver2::computeAdv(double timeIntervalInSeconds) {
