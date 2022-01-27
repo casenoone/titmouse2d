@@ -64,9 +64,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif)
 
 - 9.IISPH
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/iisph2.gif
-
-)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/iisph2.gif)
 
 - 10.PBF(参数和SPH一样恶心。。。)
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf2.gif)
