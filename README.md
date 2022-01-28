@@ -18,7 +18,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - Implicit/Explicit transform (显式/隐式曲面转换)
 - SDFs(常用几何形状的sdf计算)
 - FDM Grids such as CenteredGrid (有限差分计算用到的均匀网格结构)
-- PIC/FLIP scheme (PIC/FLIP映射方案)
+- PIC/FLIP/APIC scheme (PIC/FLIP/APIC映射方案)
 - Semi-Lagrangian advection solver(半拉格朗日对流求解器)
 - Pressure Possion Equation Solve (压力泊松方程求解)
 - vortex method(vortex particles method)(涡粒子法)
@@ -29,7 +29,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
   - OpenMP
  
 实现的流体算法：
-- FLIP/PIC + 压力泊松方程求解自由表面流
+- APIC/FLIP/PIC + 压力泊松方程求解自由表面流
 - Euleian LevelSet free surface flow （纯欧拉视角下的levelset自由表面流体模拟）
 - SPH algorthm （光滑粒子动力学算法）（SPH的参数我也是醉了,凑合着玩玩吧）
 - Vortex Method(涡粒子法模拟流体)
