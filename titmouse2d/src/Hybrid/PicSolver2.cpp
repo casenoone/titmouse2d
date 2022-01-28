@@ -28,6 +28,7 @@ void PicSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds) {
 
 
 void PicSolver2::computePressure(double timeIntervalInSeconds) {
+	//cout << cellCenterMarkers.dataSize().x << endl;
 	_pressureSolver->solve(velocity(), cellCenterMarkers);
 
 }
@@ -55,7 +56,6 @@ void PicSolver2::computeAdvection(double timeIntervalInSeconds) {
 
 
 void PicSolver2::transferFromParticlesToGrids() {
-
 	auto flow = gridSystemData()->velocity();
 	auto positions = _particles->positions();
 	auto velocities = _particles->velocities();
@@ -133,7 +133,6 @@ void PicSolver2::transferFromParticlesToGrids() {
 			}
 		}
 	}
-
 	setMarkers();
 	setFluidCellNum();
 

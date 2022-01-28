@@ -144,6 +144,7 @@
     <ClCompile Include="src\Collider2.cpp" />
     <ClCompile Include="src\ColliderSet2.cpp" />
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
+    <ClCompile Include="src\demo\ApicTest\ApicTest.cpp" />
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
     <ClCompile Include="src\demo\IISPHTest\IISPHTest.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="src\Geometry\Ray2.cpp" />
     <ClCompile Include="src\Geometry\Sphere2.cpp" />
     <ClCompile Include="src\Geometry\Surface2.cpp" />
+    <ClCompile Include="src\Hybrid\ApicSolver2.cpp" />
     <ClCompile Include="src\Hybrid\FlipSolver2.cpp" />
     <ClCompile Include="src\Hybrid\PicSolver2.cpp" />
     <ClCompile Include="src\Lagrangian\NeighborSearcher2.cpp" />
