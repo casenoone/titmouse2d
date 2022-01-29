@@ -64,7 +64,7 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto apicSolver = ApicSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(30, 30))
+.withResolution(Vector2<size_t>(40, 40))
 .makeShared();
 
 

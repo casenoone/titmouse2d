@@ -34,7 +34,7 @@ void ApicSolver2::transferFromParticlesToGrids() {
 	Vector2<double> upper;
 	upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
 	upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
-	//cout << upper.x << " " << upper.y << endl;
+
 	auto  bbox = BoundingBox2(lower, upper);
 
 	_cX.reSize(numberOfParticles);
