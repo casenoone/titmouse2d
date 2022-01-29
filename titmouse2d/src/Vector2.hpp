@@ -102,6 +102,9 @@ public:
 
 };
 
+using Vector2D = Vector2<double>;
+using Vector2F = Vector2<float>;
+using Vector2I = Vector2<int>;
 
 
 

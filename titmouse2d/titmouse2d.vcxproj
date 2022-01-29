@@ -153,6 +153,7 @@
     <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp" />
     <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp" />
     <ClCompile Include="src\demo\MassSpringTest\implicitMassSpringTest.cpp" />
+    <ClCompile Include="src\demo\MPMTest\mpmtest.cpp" />
     <ClCompile Include="src\demo\PBF\PBFTest.cpp" />
     <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
     <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
@@ -198,10 +199,12 @@
     <ClCompile Include="src\OtherMethod\IISPH\IISPHSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\LBM\LBMData2.h" />
     <ClCompile Include="src\OtherMethod\LBM\LBMSolver2.cpp" />
+    <ClCompile Include="src\OtherMethod\MPM\MPMSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Matrix2x2.hpp" />
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\Array2.hpp" />
     <ClInclude Include="src\Array2Ptr.hpp" />
@@ -270,6 +273,7 @@
     <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBM_TurbulenceModel.h" />
+    <ClInclude Include="src\OtherMethod\MPM\MPMData2.h" />
     <ClInclude Include="src\OtherMethod\MPM\MPMSolver2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFData2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFSolver2.h" />

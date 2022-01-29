@@ -195,6 +195,12 @@
     <ClCompile Include="src\Hybrid\ApicSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\demo\MPMTest\mpmtest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OtherMethod\MPM\MPMSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -438,6 +444,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Lagrangian\SphM4SplineKernel2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Matrix2x2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\MPM\MPMData2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

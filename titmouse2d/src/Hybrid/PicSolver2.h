@@ -60,6 +60,7 @@ protected:
 
 	ParticleSystemData2Ptr _particles;
 
+	//这个貌似是为了外推速度场用的，但是对于pic/flip，外推速度场怎么操作呢？目的是什么？
 	Array2Ptr<double>_uMarkers;
 	Array2Ptr<double> _vMarkers;
 };
