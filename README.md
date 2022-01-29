@@ -64,7 +64,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - 9.IISPH
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/iisph2.gif)
 
-- 10.IISPH
+- 10.APIC
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/apic.gif)
 
 - 11.PBF(参数和SPH一样恶心。。。)
