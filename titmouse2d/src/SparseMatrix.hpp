@@ -33,7 +33,7 @@ public:
 	Triplet();
 	Triplet(size_t _row, size_t _column, T _value);
 	~Triplet();
-	void mapToOne(size_t i,size_t j);
+	void mapToOne(size_t i, size_t j);
 
 	bool operator<(const Triplet<T>& t) const;
 
@@ -59,12 +59,12 @@ Triplet<T>::~Triplet() {
 }
 
 template<typename T>
-Triplet<T>::Triplet(size_t _row, size_t _column, T _value):row(_row),column(_column),value(_value) {
-	
+Triplet<T>::Triplet(size_t _row, size_t _column, T _value) :row(_row), column(_column), value(_value) {
+
 }
 
 template<typename T>
-void Triplet<T>::mapToOne(size_t i,size_t j) {
+void Triplet<T>::mapToOne(size_t i, size_t j) {
 	k = row * j + j;
 }
 
@@ -92,10 +92,10 @@ bool Triplet<T>::operator>(const Triplet<T>& t) const {
 template<class T>
 class SparseMatrix {
 public:
-	
+
 	template<typename T>
 	using sparseMatrixPtr = shared_ptr<SparseMatrix<T>>;
-	
+
 	SparseMatrix();
 
 	SparseMatrix(const size_t& row, const size_t& column);
@@ -104,14 +104,14 @@ public:
 
 	virtual ~SparseMatrix();
 
-	
+
 
 	void insert(size_t i, size_t j, const T r);
 
 	T operator()(size_t i, size_t j) const;
 
 	void operator=(const SparseMatrix& mat);
-	
+
 	//矩阵右乘列向量
 	vectorNPtr<T> operator*(const VectorN<T>& vec) const;
 
@@ -135,7 +135,7 @@ public:
 
 	//矩阵与矩阵相减
 	sparseMatrixPtr<T> operator-(const SparseMatrix<T>& mat) const;
-	
+
 	T lookAt(size_t i, size_t j)const;
 
 	template<typename Callback>
@@ -188,7 +188,7 @@ SparseMatrix<T>::SparseMatrix() {
 }
 
 template<class T>
-SparseMatrix<T>::SparseMatrix(const size_t& row, const size_t& column):_row(row),_column(column) {
+SparseMatrix<T>::SparseMatrix(const size_t& row, const size_t& column) :_row(row), _column(column) {
 	_tempData = new vector<Triplet<T>>();
 	_rowIndices.resize(row + 1);
 
@@ -221,7 +221,7 @@ SparseMatrix<T>::~SparseMatrix() {
 //首先将元素插入临时的三元组中，再把三元组转换为CSR
 
 template<class T>
-void SparseMatrix<T>::insert(size_t i,size_t j, const T r) {
+void SparseMatrix<T>::insert(size_t i, size_t j, const T r) {
 
 	Triplet<T> temp(i, j, r);
 	temp.mapToOne(_row, _column);
@@ -247,20 +247,20 @@ void SparseMatrix<T>::build() {
 
 	//首先放置首元素
 	auto size = _tempData->size();
-//#pragma omp parallel for num_threads(20) reduction(+:tempRow)
+	//#pragma omp parallel for num_threads(20) reduction(+:tempRow)
 	for (int i = 0; i < size; ++i) {
 		if ((*_tempData)[i].row != tempIdx) {
 			tempIdx = (*_tempData)[i].row;
-			
+
 			//偏移量
 			_rowIndices[tempRow] = i;
-			tempRow+=1;
+			tempRow += 1;
 		}
 
 		_columnOffsets[i] = (*_tempData)[i].column;
 		_data[i] = (*_tempData)[i].value;
 
-		
+
 	}
 
 	delete _tempData;
@@ -290,7 +290,7 @@ sparseMatrixPtr<T> SparseMatrix<T>::inverseForLMatrix() const {
 			}
 			temp *= -L_ii_inv;
 		}
-	});
+		});
 
 	result->build();
 	return result;
@@ -338,7 +338,7 @@ void SparseMatrix<T>::operator=(const SparseMatrix& mat) {
 
 
 template<class T>
-T SparseMatrix<T>::operator()(size_t i, size_t j) const{
+T SparseMatrix<T>::operator()(size_t i, size_t j) const {
 	if (_valuedNum == 0) {
 		return static_cast<T>(0);
 	}
@@ -397,7 +397,7 @@ vectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 	for (size_t i = 0; i < this->_row; ++i) {
 		//获取该行首元素偏移量
 		auto row_offset = _rowIndices[i];
-		
+
 		//获取该行元素的个数
 		auto e_num = getRowElementNum(i);
 
@@ -408,13 +408,13 @@ vectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 			//当前元素的列号
 			auto n = row_offset + count;
 			auto e_col_num = _columnOffsets[n];
-			
+
 			result += (_data[n] * vec.lookAt(e_col_num));
 			count++;
 		}
 
 		temp.push_back(result);
-		
+
 	}
 
 	auto resultP = make_shared<VectorN<T>>(temp);
@@ -426,14 +426,14 @@ vectorNPtr<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 
 
 template<class T>
-vectorNPtr<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat){
+vectorNPtr<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat) {
 	vector<T> temp;
-    
+
 	auto _column = mat.size().y;
 
 	for (size_t j = 0; j < _column; ++j) {
 		T result = static_cast<T>(0);
-		for(int i = 0; i < vec.dataSize(); ++i){
+		for (int i = 0; i < vec.dataSize(); ++i) {
 			result += vec.lookAt(i) * mat(i, j);
 		}
 		temp.push_back(result);
@@ -454,7 +454,7 @@ sparseMatrixPtr<T> SparseMatrix<T>::operator*(const SparseMatrix<T>& mat) const 
 
 	auto resultSize = Size2(this->_row, mat._column);
 	auto  resultMat = make_shared<SparseMatrix<T>>(resultSize.x, resultSize.y);
-	
+
 
 	for (size_t i = 0; i < this->_row; ++i) {
 		//获取该行首元素偏移量
@@ -462,7 +462,7 @@ sparseMatrixPtr<T> SparseMatrix<T>::operator*(const SparseMatrix<T>& mat) const 
 
 		//获取该行元素的个数
 		auto e_num = getRowElementNum(i);
-		
+
 
 		for (size_t j = 0; j < mat._column; ++j) {
 			T result = static_cast<T>(0);
@@ -473,7 +473,7 @@ sparseMatrixPtr<T> SparseMatrix<T>::operator*(const SparseMatrix<T>& mat) const 
 				auto e_col_num = _columnOffsets[n];
 
 				result += _data[n] * mat(e_col_num, j);
-				
+
 				count++;
 			}
 			resultMat->insert(i, j, result);
@@ -488,12 +488,12 @@ sparseMatrixPtr<T> SparseMatrix<T>::operator*(const SparseMatrix<T>& mat) const 
 //矩阵与数相乘
 template<class T>
 sparseMatrixPtr<T> SparseMatrix<T>::operator*(const T& r) const {
-	
+
 	auto resultMat = make_shared<SparseMatrix<T>>(this->_row, this->_column);
-	
+
 	(*resultMat) = (*this);
-	
-	for (size_t i= 0; i < _valuedNum; ++i) {
+
+	for (size_t i = 0; i < _valuedNum; ++i) {
 		resultMat->_data[i] *= r;
 	}
 
@@ -509,7 +509,7 @@ void SparseMatrix<T>::operator*=(const T& r) {
 
 
 template<class T>
-sparseMatrixPtr<T> operator*(const T& r,const SparseMatrix<T>& mat) {
+sparseMatrixPtr<T> operator*(const T& r, const SparseMatrix<T>& mat) {
 	return (*this) * r;
 }
 
@@ -520,7 +520,7 @@ template<class T>
 sparseMatrixPtr<T> SparseMatrix<T>::operator+(const SparseMatrix<T>& mat) const {
 	auto resultMat = make_shared<SparseMatrix<T>>(this->_row, this->_column);
 	this->forEachIndex([&](size_t i, size_t j) {
-		resultMat->insert(i,j,this->lookAt(i, j) + mat.lookAt(i, j));
+		resultMat->insert(i, j, this->lookAt(i, j) + mat.lookAt(i, j));
 		});
 
 	resultMat->build();
@@ -532,8 +532,8 @@ template<class T>
 sparseMatrixPtr<T> SparseMatrix<T>::operator-(const SparseMatrix<T>& mat) const {
 	auto resultMat = make_shared<SparseMatrix<T>>(this->_row, this->_column);
 	this->forEachIndex([&](size_t i, size_t j) {
-		resultMat->insert(i,j,this->lookAt(i, j) - mat.lookAt(i, j));
-	});
+		resultMat->insert(i, j, this->lookAt(i, j) - mat.lookAt(i, j));
+		});
 
 	resultMat->build();
 	return resultMat;
@@ -553,3 +553,22 @@ void SparseMatrix<T>::forEachIndex(Callback func) const {
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -20,7 +20,7 @@ public:
 
 	void transferFromParticlesToGrids(double timeIntervalInSeconds);
 
-	void transferFromGridsToParticles();
+	void transferFromGridsToParticles(double timeIntervalInSeconds);
 
 private:
 	MPMData2Ptr _mpmData;

@@ -26,12 +26,20 @@ public:
 
 	Matrix2x2<T> operator+(const Matrix2x2<T>& mat)const;
 
+	Matrix2x2<T> operator+=(const Matrix2x2<T>& mat);
+
+	Matrix2x2<T> operator-(const Matrix2x2<T>& mat)const;
+
 	Matrix2x2<T> operator*(T num)const;
+
+	Matrix2x2<T> operator/(T num)const;
 
 	template<class B>
 	friend Matrix2x2<B> operator*(B num, const Matrix2x2<B>& mat);
 
 	Vector2<T> operator*(const Vector2<T>& vec)const;
+
+	T trace()const;
 
 private:
 	std::array<T, 4> _data;
@@ -74,7 +82,18 @@ Matrix2x2<T>  Matrix2x2<T>::operator*(T num)const {
 }
 
 template<class T>
-Matrix2x2<T> operator*(T num, const Matrix2x2<T>& mat) {
+Matrix2x2<T>  Matrix2x2<T>::operator/(T num)const {
+
+	Matrix2x2<T> result;
+	for (int i = 0; i < 4; ++i) {
+		result._data[i] = _data[i] / num;
+	}
+	return result;
+}
+
+
+template<class B>
+Matrix2x2<B> operator*(B num, const Matrix2x2<B>& mat) {
 	return mat * num;
 }
 
@@ -86,6 +105,30 @@ Matrix2x2<T> Matrix2x2<T>::operator+(const Matrix2x2<T>& mat)const {
 		result._data[i] = _data[i] + mat._data[i];
 	}
 	return result;
+}
+
+
+template<class T>
+Matrix2x2<T> Matrix2x2<T>::operator-(const Matrix2x2<T>& mat)const {
+	Matrix2x2<T> result;
+	for (int i = 0; i < 4; ++i) {
+		result._data[i] = _data[i] - mat._data[i];
+	}
+	return result;
+}
+
+
+template<class T>
+Matrix2x2<T> Matrix2x2<T>::operator+=(const Matrix2x2<T>& mat) {
+	for (int i = 0; i < 4; ++i) {
+		_data[i] += mat._data[i];
+	}
+	return *this;
+}
+
+template<class T>
+T Matrix2x2<T>::trace()const {
+	return _data[0] + _data[2];
 }
 
 
