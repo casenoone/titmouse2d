@@ -9,6 +9,11 @@ class MPMSolver2 {
 public:
 	MPMSolver2() = default;
 
+	MPMSolver2(
+		const Vector2<size_t>& resolution,
+		const Vector2<double>& gridSpacing,
+		const Vector2<double>& gridOrigin);
+
 	const MPMData2Ptr const mpmData()const;
 
 	void onAdvanceTimeStep(double timeIntervalInSeconds);
@@ -23,11 +28,12 @@ public:
 	void transferFromGridsToParticles(double timeIntervalInSeconds);
 
 private:
+	void initMPMData();
+
 	MPMData2Ptr _mpmData;
 
-	double MPM_E = 400.0;
+	double MPM_E = 400;
 
-	//记得初始化它
 	double mpm_vol;
 
 	double mpm_mass;
@@ -38,6 +44,15 @@ private:
 
 inline const MPMData2Ptr const MPMSolver2::mpmData()const {
 	return _mpmData;
+}
+
+
+inline MPMSolver2::MPMSolver2(
+	const Vector2<size_t>& resolution,
+	const Vector2<double>& gridSpacing,
+	const Vector2<double>& gridOrigin) {
+	_mpmData = make_shared<MPMData2>(resolution, gridSpacing, gridOrigin);
+
 }
 
 #endif

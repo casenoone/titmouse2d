@@ -1,7 +1,7 @@
 #include "ScalarGrid2.h"
 
-ScalarGrid2::ScalarGrid2():_data(vector<vector<double>>()) {
-	
+ScalarGrid2::ScalarGrid2() :_data(vector<vector<double>>()) {
+
 }
 
 
@@ -52,7 +52,7 @@ void ScalarGrid2::resize(const Vector2<size_t>& resolution,
 	_resolution = resolution;
 	_gridSpacing = gridSpacing;
 	_origin = origin;
-	
+
 	auto size = dataSize();
 
 	_data.reSize(size.x, size.y, initialValue);
@@ -96,6 +96,13 @@ double ScalarGrid2::laplacian(const Vector2<double>& x) const {
 
 
 void ScalarGrid2::fill(double value) {
+
+	auto size = dataSize();
+	for (size_t i = 0; i < size.x; ++i) {
+		for (size_t j = 0; j < size.y; ++j) {
+			_data(i, j) = value;
+		}
+	}
 
 }
 

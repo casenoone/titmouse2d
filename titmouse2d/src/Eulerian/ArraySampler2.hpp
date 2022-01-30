@@ -181,9 +181,10 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
 	//为的是保证权重之和为1
 
 
-	//这里的origin指的是背景网格的起点，而非每一个小cell里的起点
-	Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
+	//这里的origin指的是背景网格数据点的起点，而非每一个小cell里的起点
 
+
+	Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
 
 	auto size = _accessor.dataSize();
 

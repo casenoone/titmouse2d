@@ -12,7 +12,7 @@ using namespace std;
 template<class T>
 class Matrix2x2 {
 public:
-	Matrix2x2() = default;
+	Matrix2x2();
 
 	~Matrix2x2() {
 
@@ -45,6 +45,13 @@ private:
 	std::array<T, 4> _data;
 };
 
+template<class T>
+Matrix2x2<T>::Matrix2x2() {
+	_data[0] = 0;
+	_data[1] = 0;
+	_data[2] = 0;
+	_data[3] = 0;
+}
 
 template<class T>
 Matrix2x2<T>::Matrix2x2(T x1, T y1, T x2, T y2) {
@@ -128,7 +135,7 @@ Matrix2x2<T> Matrix2x2<T>::operator+=(const Matrix2x2<T>& mat) {
 
 template<class T>
 T Matrix2x2<T>::trace()const {
-	return _data[0] + _data[2];
+	return _data[0] + _data[3];
 }
 
 

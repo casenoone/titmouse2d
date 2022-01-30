@@ -2,13 +2,19 @@
 #include "../../boundingbox2.h"
 
 void MPMSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-
+	transferFromParticlesToGrids(timeIntervalInSeconds);
+	transferFromGridsToParticles(timeIntervalInSeconds);
 }
 
 void MPMSolver2::setData(int numberOfParticles,
 	ArrayPtr<Vector2<double>>& pos,
 	int resolutionX,
 	int resolutionY) {
+	_mpmData->positions() = pos;
+	_mpmData->numberOfParticles() = numberOfParticles;
+	_mpmData->forces().reSize(numberOfParticles);
+	_mpmData->velocities().reSize(numberOfParticles);
+	initMPMData();
 
 }
 
@@ -35,12 +41,13 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 
 
 	flow->fill(Vector2D());
-
+	mass->fill(0.0);
 	auto size = flow->dataSize();
 	auto& grid_v = flow->datas();
-	auto grid_m = _mpmData->g_mass->datas();
+	auto grid_m = mass->datas();
 
 	Array2Ptr<double> weight;
+	weight.reSize(flow->resolution().x, flow->resolution().y, 0.0);
 
 	LinearArraySampler2<Vector2<double>> sampler(
 		grid_v,
@@ -49,7 +56,6 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 	);
 
 	for (int i = 0; i < n; ++i) {
-
 		auto stress = -timeIntervalInSeconds * 4 * MPM_E * mpm_vol *
 			(J(i) - 1) / (gridSpacing.x * gridSpacing.x);
 
@@ -63,20 +69,32 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 			bbox.upperCorner.y - hh.y);
 
 		auto affine = Matrix2x2<double>(stress, 0, 0, stress) + mpm_mass * C(i);
-
 		std::array<Vector2<int>, 4> indices;
 		std::array<double, 4> weights;
+
 
 		sampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
 		for (int j = 0; j < 4; ++j) {
 			auto gridPos = posFunc(indices[j].x, indices[j].y);
 			auto dpos = gridPos - posClamped;
+
+
+
+
+			//grid_v(indices[j].x, indices[j].y) += velocities[i] * weights[j];
+
+			//grid_m(indices[j].x, indices[j].y) += weights[j];
+			//weight(indices[j].x, indices[j].y) += weights[j];
+			//cout << grid_m(indices[j].x, indices[j].y) << "   " << weight(indices[j].x, indices[j].y) << endl;
+
 			grid_v(indices[j].x, indices[j].y) += (mpm_mass * velocities[i] + affine * dpos) * weights[j];
 			grid_m(indices[j].x, indices[j].y) += weights[j] * mpm_mass;
 		}
 	}
 
-	int bound = 3;
+
+
+	int bound = 2;
 	int res_X = flow->resolution().x;
 	for (int i = 0; i < grid_m.dataSize().x; ++i) {
 		for (int j = 0; j < grid_m.dataSize().y; ++j) {
@@ -85,7 +103,7 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 			}
 			//MPM的边界处理在网格上，这里暂时把重力临时累加到这里
 			//注意MPM的边界处理
-			grid_v(i, j).y += timeIntervalInSeconds * GRAVITY.y;
+			grid_v(i, j).y += timeIntervalInSeconds * -15;
 			if (i < bound && grid_v(i, j).x < 0.0)
 				grid_v(i, j).x = 0.0;
 			if (i > res_X - bound && grid_v(i, j).x > 0.0)
@@ -117,8 +135,6 @@ void MPMSolver2::transferFromGridsToParticles(double timeIntervalInSeconds) {
 
 	auto  bbox = BoundingBox2(lower, upper);
 
-
-	flow->fill(Vector2D());
 
 	auto size = flow->dataSize();
 	auto& grid_v = flow->datas();
@@ -157,13 +173,34 @@ void MPMSolver2::transferFromGridsToParticles(double timeIntervalInSeconds) {
 			auto gridPos = posFunc(indices[j].x, indices[j].y);
 			auto dpos = gridPos - posClamped;
 			auto g_v = grid_v(indices[j].x, indices[j].y);
+
 			//由于数据结构设计上的缺陷，这里暂时这样凑合着实现一下外积
-			Matrix2x2<double> mat(g_v.x * dpos.x, g_v.y * dpos.y, g_v.y * dpos.x, g_v.y * dpos.y);
+			Matrix2x2<double> mat(g_v.x * dpos.x, g_v.x * dpos.y, g_v.y * dpos.x, g_v.y * dpos.y);
 			new_C += 4 * weights[j] * mat / dx2;
 		}
 		velocities[i] = flow->sample(positions[i]);
+		//cout << velocities[0].y << endl;
 		positions[i] += timeIntervalInSeconds * velocities[i];
-		J[i] *= 1 + timeIntervalInSeconds * new_C.trace();
 		C[i] = new_C;
+		J[i] *= 1 + timeIntervalInSeconds * new_C.trace();
+		//cout << J[i] << endl;
 	}
+}
+
+
+void MPMSolver2::initMPMData() {
+	auto J = _mpmData->J;
+	auto C = _mpmData->C;
+	auto n = _mpmData->numberOfParticles();
+
+	J.reSize(n);
+	C.reSize(n);
+
+	for (int i = 0; i < n; ++i) {
+		J[i] = 1.0;
+	}
+	auto mpm_rho = 1;
+	auto dx = _mpmData->g_velocity->gridSpacing();
+	mpm_vol = std::pow(0.5 * dx.x, 2.0);
+	mpm_mass = mpm_vol * mpm_rho;
 }

@@ -6,7 +6,7 @@
 class PCISPHSolver2 : public SphSystemSolver2 {
 public:
 	PCISPHSolver2() = default;
-}
+};
 
 
 

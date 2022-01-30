@@ -9,11 +9,13 @@ using namespace std;
 #include "../../Geometry/Box2.h"
 #include "../../Geometry/Plane2.h"
 
-#include "../../Hybrid/ApicSolver2.h"
-
+#include "../../OtherMethod/MPM/MPMSolver2.h"
 #include "../../Matrix2x2.hpp"
 #include <GL/glut.h>
 #include <cmath>
+
+#include "../../random.h"
+
 static void key(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -49,30 +51,14 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
-	for (auto i = surfaceSet.begin(); i != surfaceSet.end(); ++i) {
-		auto surface = (*i)->_data;
-		for (auto j = surface.begin(); j != surface.end(); ++j) {
-			auto start = j->start;
-			auto end = j->end;
 
-			drawLine(start.x, start.y, end.x, end.y);
-		}
-	}
-}
+Vector2<size_t> mpm_res(90, 90);
+Vector2D mpm_gs(2.0 / mpm_res.x, 2.0 / mpm_res.x);
+Vector2D mpm_origin(0.0, 0.0);
 
+auto mpmSolver = make_shared<MPMSolver2>(mpm_res, mpm_gs, mpm_origin);
 
-auto apicSolver = ApicSolver2::builder()
-.withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(20, 20))
-.makeShared();
-
-
-double dt = 0.02;
-Collider2 collider;
-
-vector<ExplicitSurface2Ptr> surfaceSet;
-
+double dt = 2e-4;
 
 
 static void display(void)
@@ -85,17 +71,13 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 
-
-	auto num = apicSolver->particleSystemData()->numberOfParticles();
-	auto& pos = apicSolver->particleSystemData()->positions();
+	auto num = mpmSolver->mpmData()->numberOfParticles();
+	auto& pos = mpmSolver->mpmData()->positions();
 	for (size_t i = 0; i < num; ++i) {
 		drawPoint(pos[i].x, pos[i].y);
 	}
 
-
-
-	apicSolver->onAdvanceTimeStep(dt);
-	drawColliders(surfaceSet);
+	mpmSolver->onAdvanceTimeStep(dt);
 	glutSwapBuffers();
 
 }
@@ -134,13 +116,13 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 
-	int numberOfParticles = 400;
+	int numberOfParticles = 7000;
 	int resolutionX = 10;
 	int resolutionY = 10;
 	vector <Vector2<double>> temp1;
 	for (int i = 0; i < numberOfParticles; ++i) {
-		auto x = rand() / double(RAND_MAX) + 0.3;
-		auto y = rand() / double(RAND_MAX) + 0.95;
+		auto x = random_double(0.7, 1.3);
+		auto y = random_double(0.1, 1.9);
 		Vector2<double> temp(x, y);
 		temp1.push_back(temp);
 	}
@@ -153,62 +135,40 @@ int main(int argc, char** argv)
 	Box2Ptr box3 = make_shared<Box2>(Vector2<double>(0.6, 0.6), Vector2<double>(1.0, 0.7), false);
 	Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.7, 0.8), Vector2<double>(1.0, 0.8), false);
 
-	surfaceSet.push_back(box1);
-	//surfaceSet.push_back(box2);
-	//surfaceSet.push_back(box3);
-	//surfaceSet.push_back(plane1);
 
 
-	collider.push(box1);
-	//collider.push(box2);
-	//collider.push(box3);
-	//collider.push(plane1);
-
-	apicSolver->setCollider(collider);
-	apicSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
-
-
-	Matrix2x2<double> mat(1.0, 2.0, 3.0, 4.0);
-	Vector2<double> vec(5.0, 6.0);
-	auto vecNew = mat * vec;
-	cout << vecNew.x << " " << vecNew.y << endl;
-	double num1 = 2;
+	mpmSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
 
 
 
-	//
-	//
-	//	//这里是写入文件
-	////记得重新算的时候要删掉 原来的文件夹
-	//	int frame = 1000;
-	//	auto num = apicSolver->particleSystemData()->numberOfParticles();
-	//	auto position = apicSolver->particleSystemData()->positions();
-	//
-	//
-	//	int interval = 1;
-	//
-	//	string outfilename = "1";
-	//
-	//	system("mkdir ApicData1");
-	//
-	//	for (int i = 0; i < frame; i += 1) {
-	//
-	//		ofstream out("../titmouse2d/ApicData1/" + outfilename + ".txt", ios::app);
-	//
-	//		for (int n = 0; n < num; ++n) {
-	//			auto x = position[n].x;
-	//			auto y = position[n].y;
-	//			out << x << "," << y << endl;
-	//		}
-	//		apicSolver->onAdvanceTimeStep(dt);
-	//		auto temp1 = std::atoi(outfilename.c_str());
-	//		temp1++;
-	//		outfilename = std::to_string(temp1);
-	//
-	//	}
-	//
+	//这里是写入文件
+//记得重新算的时候要删掉 原来的文件夹
+	int frame = 9999999999999999;
+	auto num = mpmSolver->mpmData()->numberOfParticles();
+	auto position = mpmSolver->mpmData()->positions();
 
 
+	int interval = 1;
+
+	string outfilename = "1";
+
+	system("mkdir MPMData");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		ofstream out("../titmouse2d/MPMData/" + outfilename + ".txt", ios::app);
+
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			out << x << "," << y << endl;
+		}
+		mpmSolver->onAdvanceTimeStep(dt);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+
+	}
 
 
 
@@ -228,7 +188,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 

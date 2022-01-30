@@ -9,6 +9,10 @@ class MPMData2 : public ParticleSystemData2 {
 public:
 	MPMData2() = default;
 
+	MPMData2(
+		const Vector2<size_t>& resolution,
+		const Vector2<double>& gridSpacing,
+		const Vector2<double>& gridOrigin);
 public:
 
 	//Õ¯∏Ò Ù–‘
@@ -23,5 +27,14 @@ public:
 
 using MPMData2Ptr = shared_ptr<MPMData2>;
 
+inline MPMData2::MPMData2(
+	const Vector2<size_t>& resolution,
+	const Vector2<double>& gridSpacing,
+	const Vector2<double>& gridOrigin) {
+
+	g_velocity = make_shared<CellCenteredVectorGrid2<Vector2D>>(resolution, gridOrigin, Vector2D());
+	g_mass = make_shared<CellCenteredScalarGrid2>(resolution, gridOrigin, 0.0);
+
+}
 
 #endif
