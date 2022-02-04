@@ -16,8 +16,8 @@ class SphSystemData2 : public ParticleSystemData2 {
 public:
 	SphSystemData2();
 	virtual ~SphSystemData2();
-	ArrayPtr<double>& densities();
-	ArrayPtr<double>& pressures();
+	ArrayPtr<double> densities();
+	ArrayPtr<double> pressures();
 
 	//初始化粒子密度场
 	void initDensity();
@@ -25,7 +25,7 @@ public:
 	void updateDensities();
 	void clearDensities();
 
-	
+
 	Vector2<double> gradientAt(size_t i, ArrayPtr<double>& values);
 	double laplacianAt(size_t i, const ArrayPtr<double>& values);
 private:

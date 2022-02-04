@@ -64,7 +64,7 @@
 //
 //auto apicSolver = ApicSolver2::builder()
 //.withOrigin(Vector2<double>(0.0, 0.0))
-//.withResolution(Vector2<size_t>(40, 40))
+//.withResolution(Vector2<size_t>(30, 30))
 //.makeShared();
 //
 //
@@ -134,7 +134,7 @@
 //	glShadeModel(GL_FLAT);
 //
 //
-//	int numberOfParticles = 2000;
+//	int numberOfParticles = 500;
 //	int resolutionX = 10;
 //	int resolutionY = 10;
 //	vector <Vector2<double>> temp1;
@@ -176,35 +176,35 @@
 //
 //
 //
-//
-//	//这里是写入文件
-////记得重新算的时候要删掉 原来的文件夹
-//	int frame = 1000;
-//	auto num = apicSolver->particleSystemData()->numberOfParticles();
-//	auto position = apicSolver->particleSystemData()->positions();
-//
-//
-//	int interval = 1;
-//
-//	string outfilename = "1";
-//
-//	system("mkdir ApicData1");
-//
-//	for (int i = 0; i < frame; i += 1) {
-//
-//		ofstream out("../titmouse2d/ApicData1/" + outfilename + ".txt", ios::app);
-//
-//		for (int n = 0; n < num; ++n) {
-//			auto x = position[n].x;
-//			auto y = position[n].y;
-//			out << x << "," << y << endl;
-//		}
-//		apicSolver->onAdvanceTimeStep(dt);
-//		auto temp1 = std::atoi(outfilename.c_str());
-//		temp1++;
-//		outfilename = std::to_string(temp1);
-//
-//	}
+//	//
+//	//	//这里是写入文件
+//	////记得重新算的时候要删掉 原来的文件夹
+//	//	int frame = 1000;
+//	//	auto num = apicSolver->particleSystemData()->numberOfParticles();
+//	//	auto position = apicSolver->particleSystemData()->positions();
+//	//
+//	//
+//	//	int interval = 1;
+//	//
+//	//	string outfilename = "1";
+//	//
+//	//	system("mkdir ApicData1");
+//	//
+//	//	for (int i = 0; i < frame; i += 1) {
+//	//
+//	//		ofstream out("../titmouse2d/ApicData1/" + outfilename + ".txt", ios::app);
+//	//
+//	//		for (int n = 0; n < num; ++n) {
+//	//			auto x = position[n].x;
+//	//			auto y = position[n].y;
+//	//			out << x << "," << y << endl;
+//	//		}
+//	//		apicSolver->onAdvanceTimeStep(dt);
+//	//		auto temp1 = std::atoi(outfilename.c_str());
+//	//		temp1++;
+//	//		outfilename = std::to_string(temp1);
+//	//
+//	//	}
 //
 //
 //
@@ -227,7 +227,7 @@
 //	glutReshapeFunc(resize);     //改变窗口大小时
 //	glutDisplayFunc(display);    //绘制窗口显示时
 //
-//	//glutMainLoop();
+//	glutMainLoop();
 //
 //
 //

@@ -10,11 +10,11 @@ SphSystemData2::~SphSystemData2() {
 
 }
 
-ArrayPtr<double>& SphSystemData2::densities() {
+ArrayPtr<double> SphSystemData2::densities() {
 	return _densities;
 }
 
-ArrayPtr<double>& SphSystemData2::pressures() {
+ArrayPtr<double> SphSystemData2::pressures() {
 	return _pressures;
 }
 

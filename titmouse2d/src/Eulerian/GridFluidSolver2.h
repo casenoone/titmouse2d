@@ -19,74 +19,74 @@ public:
 
 	GridFluidSolver2(const Vector2<size_t>& resolution, const Vector2<double>& gridSpacing, const Vector2<double>& gridOrigin);
 
-    //暂时写一个这样的接口，将来会专门抽象出一个流体发射器
-    void setFluidSdf(const VertexCenteredScalarGrid2& _sdf);
+	//暂时写一个这样的接口，将来会专门抽象出一个流体发射器
+	void setFluidSdf(const VertexCenteredScalarGrid2& _sdf);
 
-    const VertexCenteredScalarGrid2Ptr sdf()const;
+	const VertexCenteredScalarGrid2Ptr sdf()const;
 
-    VertexCenteredScalarGrid2Ptr& sdf();
+	VertexCenteredScalarGrid2Ptr& sdf();
 
-    Vector2<size_t> resolution() const;
+	Vector2<size_t> resolution() const;
 
-    Vector2<double> gridSpacing() const;
+	Vector2<double> gridSpacing() const;
 
-    Vector2<double> gridOrigin() const;
+	Vector2<double> gridOrigin() const;
 
-    virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
+	virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
 
-    static Builder builder();
+	static Builder builder();
 
 protected:
 
-    virtual void onBeginAdvanceTimeStep(double timeIntervalInSeconds);
+	virtual void onBeginAdvanceTimeStep(double timeIntervalInSeconds);
 
-    virtual void onEndAdvanceTimeStep(double timeIntervalInSeconds);
+	virtual void onEndAdvanceTimeStep(double timeIntervalInSeconds);
 
-    virtual void computeExternalForces(double timeIntervalInSeconds);
+	virtual void computeExternalForces(double timeIntervalInSeconds);
 
-    virtual void accumulateForces(double timeIntervalInSeconds);
+	virtual void accumulateForces(double timeIntervalInSeconds);
 
-    virtual void computePressure(double timeIntervalInSeconds);
+	virtual void computePressure(double timeIntervalInSeconds);
 
-    virtual void computeAdvection(double timeIntervalInSeconds);
+	virtual void computeAdvection(double timeIntervalInSeconds);
 
-    void computeGravity(double timeIntervalInSeconds);
+	void computeGravity(double timeIntervalInSeconds);
 
-    void beginAdvanceTimeStep(double timeIntervalInSeconds);
+	void beginAdvanceTimeStep(double timeIntervalInSeconds);
 
-    void endAdvanceTimeStep(double timeIntervalInSeconds);
+	void endAdvanceTimeStep(double timeIntervalInSeconds);
 
-    void updateCollider(double timeIntervalInSeconds);
-    
-    const Vector2<double>& gravity() const;
+	void updateCollider(double timeIntervalInSeconds);
 
-    double cfl(double timeIntervalInSeconds) const;
+	const Vector2<double>& gravity() const;
 
-    void setFluidCellNum();
+	double cfl(double timeIntervalInSeconds) const;
 
-    double maxCfl() const;
+	void setFluidCellNum();
 
-    //暂时不实现
+	double maxCfl() const;
+
+	//暂时不实现
    // void setMaxCfl(double newCfl);
 
-    const GridSystemData2Ptr& gridSystemData() const;
+	const GridSystemData2Ptr& gridSystemData() const;
 
-    FaceCenteredGrid2Ptr velocity();
+	FaceCenteredGrid2Ptr velocity();
 
 
 protected:
-    //标记网格是否被粒子占用
-    Array2Ptr<int> cellCenterMarkers;
+	//标记网格是否被粒子占用
+	Array2Ptr<int> cellCenterMarkers;
 
-    SimplePressureSolver2Ptr _pressureSolver;
-    AdvectionSolver2Ptr _advectionSolver;
+	SimplePressureSolver2Ptr _pressureSolver;
+	AdvectionSolver2Ptr _advectionSolver;
 
-private:
-    Vector2<double> _gravity = Vector2<double>(0.0, -9.8);
-    double _viscosityCoefficient = 0.0;
-    double _maxCfl = 5.0;
+protected:
+	Vector2<double> _gravity = Vector2<double>(0.0, -9.8);
+	double _viscosityCoefficient = 0.0;
+	double _maxCfl = 5.0;
 
-    GridSystemData2Ptr _grids;
+	GridSystemData2Ptr _grids;
 };
 
 
@@ -97,14 +97,14 @@ typedef std::shared_ptr<GridFluidSolver2> GridFluidSolver2Ptr;
 template <typename DerivedBuilder>
 class GridFluidSolverBuilderBase2 {
 public:
-    DerivedBuilder& withResolution(const Vector2<size_t>& resolution);
+	DerivedBuilder& withResolution(const Vector2<size_t>& resolution);
 
-    DerivedBuilder& withOrigin(const Vector2<double>& gridOrigin);
+	DerivedBuilder& withOrigin(const Vector2<double>& gridOrigin);
 
 protected:
-    Vector2<size_t> _resolution;
-    Vector2<double> _gridSpacing;
-    Vector2<double> _gridOrigin;
+	Vector2<size_t> _resolution;
+	Vector2<double> _gridSpacing;
+	Vector2<double> _gridOrigin;
 
 };
 
@@ -112,28 +112,28 @@ protected:
 
 template <typename T>
 T& GridFluidSolverBuilderBase2<T>::withResolution(const Vector2<size_t>& resolution) {
-    _resolution = resolution;
-    return static_cast<T&>(*this);
+	_resolution = resolution;
+	return static_cast<T&>(*this);
 }
 
 
 template <typename T>
 T& GridFluidSolverBuilderBase2<T>::withOrigin(const Vector2<double>& gridOrigin) {
-    _gridOrigin = gridOrigin;
-    return static_cast<T&>(*this);
+	_gridOrigin = gridOrigin;
+	return static_cast<T&>(*this);
 }
 
 
 class GridFluidSolver2::Builder final
-    : public GridFluidSolverBuilderBase2<GridFluidSolver2::Builder> {
+	: public GridFluidSolverBuilderBase2<GridFluidSolver2::Builder> {
 public:
-    GridFluidSolver2 build() const;
+	GridFluidSolver2 build() const;
 
-    GridFluidSolver2Ptr makeShared() const {
-        
-        auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
-        return std::make_shared<GridFluidSolver2>(_resolution, gridSpacing, _gridOrigin);
-    }
+	GridFluidSolver2Ptr makeShared() const {
+
+		auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+		return std::make_shared<GridFluidSolver2>(_resolution, gridSpacing, _gridOrigin);
+	}
 };
 
 #endif

@@ -146,6 +146,7 @@
     <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
     <ClCompile Include="src\demo\ApicTest\ApicTest.cpp" />
     <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
+    <ClCompile Include="src\demo\EulerianSmokeTest\EulerianSmokeTest.cpp" />
     <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
     <ClCompile Include="src\demo\IISPHTest\IISPHTest.cpp" />
     <ClCompile Include="src\demo\LBMTest\LBM_kamavortex.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="src\demo\vortex_method\vortexParticleTest.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
+    <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp" />
     <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp" />
     <ClCompile Include="src\Eulerian\fdm_utils.hpp" />
     <ClCompile Include="src\Eulerian\Field2.cpp" />
@@ -204,6 +206,8 @@
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.h" />
+    <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
     <ClInclude Include="src\Matrix2x2.hpp" />
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\Array2.hpp" />

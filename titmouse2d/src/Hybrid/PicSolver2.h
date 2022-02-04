@@ -25,7 +25,8 @@ public:
 	const ParticleSystemData2Ptr& particleSystemData() const;
 
 	//临时测试使用,后期改成Builder里构建
-	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY);
+	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos,
+		size_t resolutionX, size_t resolutionY);
 
 	void onBeginAdvanceTimeStep(double timeIntervalInSeconds) override;
 
@@ -38,9 +39,6 @@ public:
 	Collider2 collider;
 
 protected:
-
-	//暂时不实现
-	//void computeViscosity(double timeIntervalInSeconds)override;
 
 	void computePressure(double timeIntervalInSeconds)override;
 

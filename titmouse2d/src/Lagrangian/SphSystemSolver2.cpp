@@ -76,8 +76,8 @@ void SphSystemSolver2::accumulatePressureForce(double timeStepInSeconds) {
 
 	//这里的p是什么？它就是用EOS方程算出来的那个东西
 	//记得要初始化p
-	auto& p = particles->pressures();
-	auto& f = particles->forces();
+	auto p = particles->pressures();
+	auto f = particles->forces();
 	//书上这里写错了好像
 	computePressure();
 
