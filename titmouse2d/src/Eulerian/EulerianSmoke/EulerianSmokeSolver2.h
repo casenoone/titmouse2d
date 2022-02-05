@@ -4,6 +4,9 @@
 #include "../GridFluidSolver2.h"
 #include "EulerianSmokeGridData2.h"
 
+//实现论文Visual Simulation of Smoke ,Ronald Fedkiw,Jos Stam, 2004
+//不过这里使用有限差分而不是有限体积
+
 class EulerianSmokeSolver2 : public GridFluidSolver2 {
 public:
 
@@ -24,7 +27,20 @@ public:
 
 	EulerianSmokeGridData2Ptr eulerianSmokeData();
 
+	void addDensity();
+
+	void addTemperature();
+
+	void accumulateVorticityConfinement();
+
+	void onAdvanceTimeStep(double timeIntervalInSeconds)override;
+
 	static Builder builder();
+
+protected:
+	void computePressure(double timeIntervalInSeconds)override;
+
+	void computeAdvection(double timeIntervalInSeconds) override;
 
 private:
 	EulerianSmokeGridData2Ptr _eulerianSmokeData;
@@ -62,18 +78,52 @@ EulerianSmokeGridData2Ptr EulerianSmokeSolver2::eulerianSmokeData() {
 
 
 void EulerianSmokeSolver2::setMarkers() {
-
+	//cellCenterMarkers(xss, yss) = FLUID;
 }
 
 void EulerianSmokeSolver2::setFluidCellNum() {
+	//vel->solveSystemMarker.reSize(resolution().x, resolution().y, -1);
+	//for (int j = 0; j < size.y; ++j) {
+	//	for (int i = 0; i < size.x; ++i) {
+	//		//如果格子被流体占据
+	//		if (cellCenterMarkers(i, j) == FLUID) {
+	//			vel->solveSystemMarker(i, j) = nums;
+	//			nums += 1;
+	//		}
+	//	}
+	//}
+}
+
+
+void EulerianSmokeSolver2::computePressure(double timeIntervalInSeconds) {
+	_pressureSolver->solve(velocity(), cellCenterMarkers);
+}
+
+
+void EulerianSmokeSolver2::computeAdvection(double timeIntervalInSeconds) {
+	auto vel = _eulerianSmokeData->velocity();
+	auto density = _eulerianSmokeData->densities();
+	auto temperature = _eulerianSmokeData->temperature();
+
+	_advectionSolver->solve(vel, vel, timeIntervalInSeconds);
+	_advectionSolver->solve(vel, density, timeIntervalInSeconds);
+	_advectionSolver->solve(vel, temperature, timeIntervalInSeconds);
+}
+
+
+void EulerianSmokeSolver2::addDensity() {
 
 }
 
 
+void EulerianSmokeSolver2::addTemperature() {
+
+}
 
 
+void EulerianSmokeSolver2::accumulateVorticityConfinement() {
 
-
+}
 
 
 

@@ -12,9 +12,9 @@ public:
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& origin);
 
-	const CellCenteredScalarGrid2Ptr const densities()const;
+	CellCenteredScalarGrid2Ptr  densities();
 
-	const CellCenteredScalarGrid2Ptr const temperature()const;
+	CellCenteredScalarGrid2Ptr  temperature();
 
 private:
 	CellCenteredScalarGrid2Ptr _densities;
@@ -29,15 +29,16 @@ EulerianSmokeGridData2::EulerianSmokeGridData2(
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& origin) :GridSystemData2(resolution, gridSpacing, origin) {
 
-	//对密度和温度初始化
+	_densities = make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
+	_temperature = make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
 
 }
 
-const CellCenteredScalarGrid2Ptr const EulerianSmokeGridData2::densities()const {
+CellCenteredScalarGrid2Ptr  EulerianSmokeGridData2::densities() {
 	return _densities;
 }
 
-const CellCenteredScalarGrid2Ptr const EulerianSmokeGridData2::temperature()const {
+CellCenteredScalarGrid2Ptr  EulerianSmokeGridData2::temperature() {
 	return _temperature;
 }
 

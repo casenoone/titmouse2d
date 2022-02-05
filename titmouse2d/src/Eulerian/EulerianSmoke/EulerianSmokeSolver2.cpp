@@ -1,6 +1,13 @@
 #include "EulerianSmokeSolver2.h"
 
 
+void EulerianSmokeSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
+
+
+
+}
+
+
 
 EulerianSmokeSolver2::Builder EulerianSmokeSolver2::builder() {
 	return Builder();

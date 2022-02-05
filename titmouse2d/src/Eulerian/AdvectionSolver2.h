@@ -13,8 +13,8 @@ public:
 	~AdvectionSolver2();
 
 	template<typename T>
-	void solve(const FaceCenteredGrid2Ptr& flow, 
-		CellCenteredVectorGrid2Ptr<T> advectedData, 
+	void solve(const FaceCenteredGrid2Ptr& flow,
+		CellCenteredVectorGrid2Ptr<T> advectedData,
 		double timeIntervalInSeconds);
 
 	void solve(const FaceCenteredGrid2Ptr& flow,
@@ -23,6 +23,10 @@ public:
 
 	void solve(const FaceCenteredGrid2Ptr& flow,
 		FaceCenteredGrid2Ptr advectedData,
+		double timeIntervalInSeconds);
+
+	void solve(const FaceCenteredGrid2Ptr& flow,
+		CellCenteredScalarGrid2Ptr advectedData,
 		double timeIntervalInSeconds);
 
 public:
@@ -54,7 +58,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 
 			auto backTracedPoint = current_pos - timeIntervalInSeconds * midVel;
 
-			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 && 
+			if (backTracedPoint.x >= 0 && backTracedPoint.x <= 2 &&
 				backTracedPoint.y >= 0 && backTracedPoint.y <= 2) {
 				newData(i, j) = advectedData->sample(backTracedPoint);
 
