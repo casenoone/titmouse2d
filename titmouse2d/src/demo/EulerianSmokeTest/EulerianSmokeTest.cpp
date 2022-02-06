@@ -4,13 +4,9 @@
 #include <string>
 using namespace std;
 
+#include "../../Color3.hpp"
 
-#include "../../Lagrangian/ParticleSystemSolver2.h"
-#include "../../Geometry/Box2.h"
-#include "../../Geometry/Plane2.h"
-
-#include "../../Hybrid/ApicSolver2.h"
-
+#include "../../Eulerian/EulerianSmoke/EulerianSmokeSolver2.h"
 
 #include <GL/glut.h>
 #include <cmath>
@@ -37,6 +33,18 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
+
+void drawPoint(Vector2D pos, Color3<double> color, float size)
+{
+	//在后缓存绘制图形，就一个点
+	glPointSize(size);//缺省是1
+	glBegin(GL_POINTS);
+	glColor3f(color.r / 255, color.g / 255, color.b / 255);
+	glVertex3f((pos.x - 1) * 10, (pos.y - 1) * 10, 0);
+	glEnd();
+}
+
+
 void drawLine(double x1, double y1, double x2, double y2) {
 
 	glLineWidth(1);//设置线段宽度
@@ -49,29 +57,15 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
-	for (auto i = surfaceSet.begin(); i != surfaceSet.end(); ++i) {
-		auto surface = (*i)->_data;
-		for (auto j = surface.begin(); j != surface.end(); ++j) {
-			auto start = j->start;
-			auto end = j->end;
-
-			drawLine(start.x, start.y, end.x, end.y);
-		}
-	}
-}
 
 
-auto apicSolver = ApicSolver2::builder()
+auto smokeSolver = EulerianSmokeSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(30, 30))
+.withResolution(Vector2<size_t>(50, 50))
 .makeShared();
 
+double dt = 0.01;
 
-double dt = 0.02;
-Collider2 collider;
-
-vector<ExplicitSurface2Ptr> surfaceSet;
 
 
 
@@ -84,18 +78,23 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
+	auto size = smokeSolver->resolution();
+	auto rho = smokeSolver->eulerianSmokeData()->densities();
+	smokeSolver->onAdvanceTimeStep(dt);
 
+	for (int i = 0; i < size.x; ++i) {
+		for (int j = 0; j < size.y; ++j) {
+			auto posFunc = rho->cellCenterPosition();
+			auto pos = posFunc(i, j);
+			auto current_rho = rho->lookAt(i, j);
 
-	auto num = apicSolver->particleSystemData()->numberOfParticles();
-	auto& pos = apicSolver->particleSystemData()->positions();
-	for (size_t i = 0; i < num; ++i) {
-		drawPoint(pos[i].x, pos[i].y);
+			Color3<double> color(current_rho, current_rho, current_rho);
+			drawPoint(pos, color, 3.5);
+		}
 	}
 
 
 
-	apicSolver->onAdvanceTimeStep(dt);
-	drawColliders(surfaceSet);
 	glutSwapBuffers();
 
 }
@@ -130,84 +129,47 @@ int main(int argc, char** argv)
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("titmouse2d");
 
-	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
+	//glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
+	glClearColor(0.0, 0.0, 0.0, 1);
 	glShadeModel(GL_FLAT);
 
 
-	int numberOfParticles = 500;
-	int resolutionX = 10;
-	int resolutionY = 10;
-	vector <Vector2<double>> temp1;
-	for (int i = 0; i < numberOfParticles; ++i) {
-		auto x = rand() / double(RAND_MAX) + 0.3;
-		auto y = rand() / double(RAND_MAX) + 0.95;
-		Vector2<double> temp(x, y);
-		temp1.push_back(temp);
+
+
+
+
+	//这里是写入文件
+   //记得重新算的时候要删掉 原来的文件夹
+	int frame = 1000;
+
+	string outfilename = "1";
+
+	int num = 0;
+
+	system("mkdir EulerianSmoke1");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		ofstream out("../titmouse2d/EulerianSmoke1/" + outfilename + ".txt", ios::app);
+
+		auto size = smokeSolver->resolution();
+		auto rho = smokeSolver->eulerianSmokeData()->densities();
+		for (int i = 0; i < size.x; ++i) {
+			for (int j = 0; j < size.y; ++j) {
+				auto posFunc = rho->cellCenterPosition();
+				auto pos = posFunc(i, j);
+
+				out << pos.x << "," << pos.y << "," << rho->lookAt(i, j) << endl;
+			}
+		}
+
+
+		smokeSolver->onAdvanceTimeStep(0.008);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+
 	}
-
-	ArrayPtr<Vector2<double>> pos(temp1);
-
-
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
-	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0.1, 0.1), Vector2<double>(1.9, 1.9), true);
-	Box2Ptr box3 = make_shared<Box2>(Vector2<double>(0.6, 0.6), Vector2<double>(1.0, 0.7), false);
-	Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.7, 0.8), Vector2<double>(1.0, 0.8), false);
-
-	surfaceSet.push_back(box1);
-	//surfaceSet.push_back(box2);
-	//surfaceSet.push_back(box3);
-	//surfaceSet.push_back(plane1);
-
-
-	collider.push(box1);
-	//collider.push(box2);
-	//collider.push(box3);
-	//collider.push(plane1);
-
-	apicSolver->setCollider(collider);
-	apicSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);
-
-
-
-
-
-
-
-
-
-
-	//
-	//	//这里是写入文件
-	////记得重新算的时候要删掉 原来的文件夹
-	//	int frame = 1000;
-	//	auto num = apicSolver->particleSystemData()->numberOfParticles();
-	//	auto position = apicSolver->particleSystemData()->positions();
-	//
-	//
-	//	int interval = 1;
-	//
-	//	string outfilename = "1";
-	//
-	//	system("mkdir ApicData1");
-	//
-	//	for (int i = 0; i < frame; i += 1) {
-	//
-	//		ofstream out("../titmouse2d/ApicData1/" + outfilename + ".txt", ios::app);
-	//
-	//		for (int n = 0; n < num; ++n) {
-	//			auto x = position[n].x;
-	//			auto y = position[n].y;
-	//			out << x << "," << y << endl;
-	//		}
-	//		apicSolver->onAdvanceTimeStep(dt);
-	//		auto temp1 = std::atoi(outfilename.c_str());
-	//		temp1++;
-	//		outfilename = std::to_string(temp1);
-	//
-	//	}
-
-
-
 
 
 
@@ -227,7 +189,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 

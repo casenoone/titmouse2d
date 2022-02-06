@@ -21,6 +21,7 @@ double ScalarGrid2::lookAt(size_t i, size_t j)const {
 double ScalarGrid2::sample(const Vector2<double>& x)const {
 	auto _sample = _linearSampler;
 	auto result = (*_sample)(this->_data, x);
+
 	return result;
 }
 

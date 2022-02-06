@@ -66,7 +66,6 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	for (int j = 0; j < resolution.y; ++j) {
 		for (int i = 0; i < resolution.x; ++i) {
 			int coeff = -4;
-
 			//网格单元是流体
 			if (markers.lookAt(i, j) == FLUID) {
 
@@ -121,7 +120,6 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				b[row] = -(u(i + 1, j) - u(i, j) + v(i, j + 1) - v(i, j));
 				++row;
 			}
-
 		}
 	}
 

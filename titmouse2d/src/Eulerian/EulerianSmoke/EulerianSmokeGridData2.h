@@ -24,7 +24,7 @@ private:
 
 typedef std::shared_ptr<EulerianSmokeGridData2> EulerianSmokeGridData2Ptr;
 
-EulerianSmokeGridData2::EulerianSmokeGridData2(
+inline EulerianSmokeGridData2::EulerianSmokeGridData2(
 	const Vector2<size_t>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& origin) :GridSystemData2(resolution, gridSpacing, origin) {
@@ -34,11 +34,11 @@ EulerianSmokeGridData2::EulerianSmokeGridData2(
 
 }
 
-CellCenteredScalarGrid2Ptr  EulerianSmokeGridData2::densities() {
+inline CellCenteredScalarGrid2Ptr  EulerianSmokeGridData2::densities() {
 	return _densities;
 }
 
-CellCenteredScalarGrid2Ptr  EulerianSmokeGridData2::temperature() {
+inline CellCenteredScalarGrid2Ptr  EulerianSmokeGridData2::temperature() {
 	return _temperature;
 }
 

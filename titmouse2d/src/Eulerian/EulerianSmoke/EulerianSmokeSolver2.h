@@ -7,6 +7,10 @@
 //实现论文Visual Simulation of Smoke ,Ronald Fedkiw,Jos Stam, 2004
 //不过这里使用有限差分而不是有限体积
 
+const double smoke_alpha = 0.1;
+const double smoke_beta = 8;
+const double amb_tempra = 0.0;
+
 class EulerianSmokeSolver2 : public GridFluidSolver2 {
 public:
 
@@ -21,17 +25,7 @@ public:
 
 	virtual ~EulerianSmokeSolver2();
 
-	void setMarkers();
-
-	void setFluidCellNum();
-
 	EulerianSmokeGridData2Ptr eulerianSmokeData();
-
-	void addDensity();
-
-	void addTemperature();
-
-	void accumulateVorticityConfinement();
 
 	void onAdvanceTimeStep(double timeIntervalInSeconds)override;
 
@@ -41,6 +35,21 @@ protected:
 	void computePressure(double timeIntervalInSeconds)override;
 
 	void computeAdvection(double timeIntervalInSeconds) override;
+
+	void setMarkers();
+
+	void setFluidCellNum();
+
+	void addDensity();
+
+	void addTemperature();
+
+	//涡量存储在中心标量网格上
+	void accumulateVorticityConfinement();
+
+	void accumulateBuoyancyForce(double timeIntervalInSeconds);
+
+	virtual void computeExternalForces(double timeIntervalInSeconds)override;
 
 private:
 	EulerianSmokeGridData2Ptr _eulerianSmokeData;
@@ -52,11 +61,11 @@ typedef std::shared_ptr<EulerianSmokeSolver2> EulerianSmokeSolver2Ptr;
 
 
 
-EulerianSmokeSolver2::EulerianSmokeSolver2() {
+inline EulerianSmokeSolver2::EulerianSmokeSolver2() {
 
 }
 
-EulerianSmokeSolver2::EulerianSmokeSolver2(
+inline EulerianSmokeSolver2::EulerianSmokeSolver2(
 	const Vector2<size_t>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) :GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
@@ -68,39 +77,24 @@ EulerianSmokeSolver2::EulerianSmokeSolver2(
 }
 
 
-EulerianSmokeSolver2::~EulerianSmokeSolver2() {
+inline EulerianSmokeSolver2::~EulerianSmokeSolver2() {
 
 }
 
-EulerianSmokeGridData2Ptr EulerianSmokeSolver2::eulerianSmokeData() {
+inline EulerianSmokeGridData2Ptr EulerianSmokeSolver2::eulerianSmokeData() {
 	return _eulerianSmokeData;
 }
 
 
-void EulerianSmokeSolver2::setMarkers() {
-	//cellCenterMarkers(xss, yss) = FLUID;
-}
-
-void EulerianSmokeSolver2::setFluidCellNum() {
-	//vel->solveSystemMarker.reSize(resolution().x, resolution().y, -1);
-	//for (int j = 0; j < size.y; ++j) {
-	//	for (int i = 0; i < size.x; ++i) {
-	//		//如果格子被流体占据
-	//		if (cellCenterMarkers(i, j) == FLUID) {
-	//			vel->solveSystemMarker(i, j) = nums;
-	//			nums += 1;
-	//		}
-	//	}
-	//}
-}
 
 
-void EulerianSmokeSolver2::computePressure(double timeIntervalInSeconds) {
+
+inline void EulerianSmokeSolver2::computePressure(double timeIntervalInSeconds) {
 	_pressureSolver->solve(velocity(), cellCenterMarkers);
 }
 
 
-void EulerianSmokeSolver2::computeAdvection(double timeIntervalInSeconds) {
+inline void EulerianSmokeSolver2::computeAdvection(double timeIntervalInSeconds) {
 	auto vel = _eulerianSmokeData->velocity();
 	auto density = _eulerianSmokeData->densities();
 	auto temperature = _eulerianSmokeData->temperature();
@@ -111,19 +105,22 @@ void EulerianSmokeSolver2::computeAdvection(double timeIntervalInSeconds) {
 }
 
 
-void EulerianSmokeSolver2::addDensity() {
+
+
+inline void EulerianSmokeSolver2::accumulateVorticityConfinement() {
 
 }
 
 
-void EulerianSmokeSolver2::addTemperature() {
+inline void EulerianSmokeSolver2::computeExternalForces(double timeIntervalInSeconds) {
+	//smoke其实没必要加重力
+	//computeGravity(timeIntervalInSeconds);
 
+	accumulateBuoyancyForce(timeIntervalInSeconds);
+
+	//accumulateVorticityConfinement();
 }
 
-
-void EulerianSmokeSolver2::accumulateVorticityConfinement() {
-
-}
 
 
 
