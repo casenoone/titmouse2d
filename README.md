@@ -73,8 +73,11 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/apic.gif)
 
 - 12.MLS-MPM(用了双线性插值，粘成这个样子，中间还有一块蜜汁突起，也可能是代码写错了)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/mls_mpm_linear.gif
-)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/mls_mpm_linear.gif)
+
+- 13.Eulerian Smoke(双线性插值，midpoint，边界还有点bug没解决)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/eulerian_smoke.gif)
+
 
 
 即将实现的算法：
