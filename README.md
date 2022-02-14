@@ -89,7 +89,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - Explicit/Implicit Mass Spring System
 - Clebsch gauge fluid solver
 - Multigrid Method
-- FVM
+- FVM（有限体积法）
 - FMM(快速多极展开)
 
 
