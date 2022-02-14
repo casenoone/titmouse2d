@@ -7,10 +7,12 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - 基本的稠密矩阵结构及操作
 - CSR稀疏矩阵结构以及相关操作
 - Iterative Solve Linea System：
-  -  Steepest Descent method(最速下降法)
+  - Steepest Descent method(最速下降法)
   - ConjugateGradient method(共轭梯度法)
   - Jaocobi method(雅可比迭代法)
   - Gauss-Seidel method(高斯赛德法)
+  - Relaxation jacobi
+  - Successive over relaxation
 - 基于网格的粒子邻近搜索结构
 - 2D情况下任意几何形状的碰撞检测与处理
 - 显式/隐式曲面转换
