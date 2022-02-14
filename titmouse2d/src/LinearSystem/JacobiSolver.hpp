@@ -12,7 +12,7 @@
 const double eps = 2.718281828459;
 
 template<class T>
-class JacobiSolver : public IterativeSystemSolver<T>{
+class JacobiSolver : public IterativeSystemSolver<T> {
 public:
 	JacobiSolver();
 	~JacobiSolver();
@@ -22,7 +22,7 @@ public:
 
 	SparseMatrixPtr<T> computeD(const SparseMatrixPtr<T>& A) const;
 
-	
+
 };
 
 
@@ -68,8 +68,8 @@ void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, con
 	auto relerr = err;
 	while (this->_iterNum <= this->_maxIterNum) {
 		auto D = computeD(A);
-		
-		
+
+
 		auto R = A - D;
 
 		SparseMatrixPtr<T> D_inv(A.size().x, A.size().y);
@@ -84,17 +84,15 @@ void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, con
 		D_inv.build();
 
 		x = D_inv * (b - R * x);
-		
+
 		err = (b - A * x).norm();
 		if (err <= this->_minR) {
 			break;
 		}
 		this->_iterNum++;
 
-		//cout << x[0] << endl;
 
 	}
-	cout << "迭代次数：" << this->_iterNum << "当前误差：" << err << endl;
 }
 
 

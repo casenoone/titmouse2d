@@ -17,12 +17,12 @@ Box2::~Box2() {
 /***********/
 /*****3*****/
 
-Box2::Box2(const Vector2<double>& _lowerCorner, 
+Box2::Box2(const Vector2<double>& _lowerCorner,
 	const Vector2<double>& _upperCorner,
-	bool IsFliped):
-	lowerCorner(_lowerCorner),upperCorner(_upperCorner)
+	bool IsFliped) :
+	lowerCorner(_lowerCorner), upperCorner(_upperCorner)
 {
-	
+
 	Vector2<double> A(lowerCorner.x, upperCorner.y);
 	Vector2<double> B = upperCorner;
 	Vector2<double> C(upperCorner.x, lowerCorner.y);
@@ -50,9 +50,9 @@ Box2::Box2(const Vector2<double>& _lowerCorner,
 		_data.push_back(e3);
 		_data.push_back(e4);
 	}
-	
 
-	
+
+
 
 }
 
@@ -63,6 +63,7 @@ Box2::Box2(const Box2& other) {
 
 
 Vector2<double> Box2::closestPoint(const Vector2<double>& otherPoint)const {
+
 	return ExplicitSurface2::closestPoint(otherPoint);
 }
 

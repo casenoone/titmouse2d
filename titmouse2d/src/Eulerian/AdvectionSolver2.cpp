@@ -140,7 +140,6 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 			auto posFunc = advectedData->dataPosition();
 			auto current_pos = posFunc(i, j);
 			auto current_vec = flow->sample(current_pos);
-			//auto backTracedPoint = current_pos - current_vec * timeIntervalInSeconds;
 
 			auto midPoint = current_pos - 0.5 * timeIntervalInSeconds * current_vec;
 			auto midVel = flow->sample(midPoint);

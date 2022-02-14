@@ -2,8 +2,8 @@
 
 #include "Ray2.h"
 
-Sphere2::Sphere2():
-_center(Vector2<double>()),_r(1.0)
+Sphere2::Sphere2() :
+	_center(Vector2<double>()), _r(1.0)
 {
 
 }
@@ -17,21 +17,39 @@ Sphere2::Sphere2(const Vector2<double>& center, const double& r,
 	const Vector2<double>& origin,
 	double initialValue
 ) :
-_center(center),_r(r)
+	_center(center), _r(r)
 {
 	_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
+
+	//这个方法应该单独拎出来，把resolution传给computeSdf这个方法
 	computeSdf();
 }
 
-Sphere2::Sphere2(const VertexCenteredScalarGrid2& other):
-ImplicitSurface2(other)
+Sphere2::Sphere2(const VertexCenteredScalarGrid2& other) :
+	ImplicitSurface2(other)
 {
 
 
 }
+
+
+//注意这个函数的意义
+//一般我们使用隐式曲面，有两种情形：
+//1.需要一个sdf，那么这个函数就没什么用处，
+//2.有些曲面比如圆、椭圆等，在与粒子作碰撞检测时就无需sdf，直接通过联立公式进行判断，这时就需要用到此方法
 Surface2::SurfaceQueryResult Sphere2::getClosedInformation(const Vector2<double>& otherPoint) {
-	SurfaceQueryResult a;
-	return a;
+	Surface2::SurfaceQueryResult result;
+
+
+
+
+
+	//result.distance = ;
+	//result.normal = ;
+	//result.point = ;
+	//result.velocity = ;
+
+	return result;
 }
 
 
@@ -62,7 +80,7 @@ void Sphere2::computeSdf() {
 			auto v = o - c;
 
 			//由网格节点指向圆心的射线
-			Ray2 ray(o,(c-o).getNormalize());
+			Ray2 ray(o, (c - o).getNormalize());
 			auto d = ray.orientation();
 			auto r = _r;
 
@@ -86,9 +104,9 @@ void Sphere2::computeSdf() {
 			}
 
 			(*_data)(i, j) = sdf;
-			
+
 		}
 	}
 
-	
+
 }

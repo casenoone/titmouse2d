@@ -14,7 +14,7 @@ VortexParticleSystemSolver2::VortexParticleSystemSolver2() {
 
 VortexParticleSystemSolver2::~VortexParticleSystemSolver2() {
 
-}                
+}
 
 void VortexParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 
@@ -24,7 +24,7 @@ void VortexParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) 
 
 	//计算重力
 	for (int i = 0; i < n; ++i) {
-		_newVelocities[i] += GRAVITY * timeIntervalInSeconds * 0.2;
+		_newVelocities[i] += GRAVITY * timeIntervalInSeconds * 0.7;
 	}
 
 
@@ -34,7 +34,7 @@ void VortexParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) 
 				_newVelocities[i] += computeUSingle(positions[i], j);
 			}
 		}
-		
+
 		_newPositions[i] += positions[i] + timeIntervalInSeconds * _newVelocities[i];
 	}
 
@@ -80,12 +80,12 @@ void VortexParticleSystemSolver2::setData(int numberOfParticles,
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
 
 	_vortexParticleData->vorticities().reSize(numberOfParticles);
-	
+
 	auto vorticity = _vortexParticleData->vorticities();
 
 	//为了方便测试，给每个粒子赋一个随机的涡量
 	for (int i = 0; i < numberOfParticles; ++i) {
-		//vorticity[i] = random_double(-0.01, 0.01);
-		vorticity[i] = 0.001;
+		vorticity[i] = random_double(-0.01, 0.01);
+		//vorticity[i] = 0.001;
 	}
 }

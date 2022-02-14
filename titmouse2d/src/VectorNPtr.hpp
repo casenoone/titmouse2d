@@ -5,7 +5,7 @@
 #include "ArrayPtr.hpp"
 
 template<class T>
-class VectorNPtr : public ArrayPtr<T>{
+class VectorNPtr : public ArrayPtr<T> {
 public:
 
 	VectorNPtr();
@@ -22,20 +22,20 @@ public:
 	T norm() const;
 
 	T norm2() const;
-	
-	
+
+
 
 	//重载向量和向量相乘
 	T operator*(const VectorNPtr<T>& vel) const;
 
-	void operator*=(const T & r);
+	void operator*=(const T& r);
 
 	//向量和数乘
 
 	VectorNPtr<T> operator*(const T r) const;
 
 	template<class T>
-	friend vectorNPtr<T> operator*(const T r, const VectorNPtr<T>& vel);
+	friend VectorNPtr<T> operator*(const T r, const VectorNPtr<T>& vel);
 
 	//向量相加
 	VectorNPtr<T> operator+(const VectorNPtr<T>& vel) const;
@@ -72,11 +72,11 @@ VectorNPtr<T>::~VectorNPtr() {
 //一失足成千古恨，这里本没必要搞这个类的
 //但是。。。等写3D版本的时候再改正吧
 template<class T>
-VectorNPtr<T>::VectorNPtr(const vector<T>& data){
-	vectorNPtr = make_shared<VectorN<T>>(data);	
+VectorNPtr<T>::VectorNPtr(const vector<T>& data) {
+	vectorNPtr = make_shared<VectorN<T>>(data);
 	//绑定基类指针
 	this->arrayPtr = this->vectorNPtr;
-	
+
 }
 
 template<class T>
@@ -87,15 +87,15 @@ VectorNPtr<T>::VectorNPtr(int len) {
 
 
 template<class T>
-shared_ptr<VectorN<T>> VectorNPtr<T>::getVectorNPtr() const{
-	
+shared_ptr<VectorN<T>> VectorNPtr<T>::getVectorNPtr() const {
+
 	return vectorNPtr;
 }
 
 
 template<class T>
 T VectorNPtr<T>::operator*(const VectorNPtr<T>& vel) const {
-	
+
 	T k = (*(this->vectorNPtr)) * (*(vel.vectorNPtr));
 	return k;
 }
@@ -115,7 +115,7 @@ VectorNPtr<T> VectorNPtr<T>::operator*(const T r) const {
 
 
 template<class T>
-vectorNPtr<T> operator*(const T r, const VectorNPtr<T>& vel) {
+VectorNPtr<T> operator*(const T r, const VectorNPtr<T>& vel) {
 	return (*(vel.vectorNPtr) * r);
 }
 
@@ -130,7 +130,7 @@ VectorNPtr<T> VectorNPtr<T>::operator+(const VectorNPtr<T>& vel) const {
 
 template<class T>
 VectorNPtr<T> VectorNPtr<T>::operator-(const VectorNPtr<T>& vel) const {
-	
+
 	VectorNPtr<T> result;
 	result.vectorNPtr = *(this->vectorNPtr) - (*(vel.vectorNPtr));
 	return result;

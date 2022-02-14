@@ -2,6 +2,9 @@
 #include "../LinearSystem/ConjugateGradientSolver.hpp"
 #include "../LinearSystem/SteepestDescentSolver.hpp"
 #include "../LinearSystem/JacobiSolver.hpp"
+#include "../LinearSystem/SORsolver.hpp"
+#include "../LinearSystem/RelaxedJacobiSolver.hpp"
+
 #include "../ConstVar.h"
 
 
@@ -131,12 +134,17 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	GaussSeidelSolver<double> gauSolver;
 	SteepestDescentSolver<double> steepSolver;
 	JacobiSolver<double> JacobiSolver;
+	RelaxedJacobiSolver<double> rjSolver(0.5);
+	SORSolver<double> sorSolver(1.67);
 
 	//线性系统求解可作并行优化
 	cgSolver.compute(A, x, b);
 	//gauSolver.compute(A, x, b);
 	//steepSolver.compute(A, x, b);
 	//JacobiSolver.compute(A, x, b);
+	//rjSolver.compute(A, x, b);
+	//sorSolver.compute(A, x, b);
+
 }
 
 void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,

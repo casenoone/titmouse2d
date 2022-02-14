@@ -11,7 +11,7 @@ public:
 		const Vector2<size_t>& resolution,
 		const Vector2<double>& origin,
 		double initialValue
-		);
+	);
 
 	Sphere2(const VertexCenteredScalarGrid2& other);
 

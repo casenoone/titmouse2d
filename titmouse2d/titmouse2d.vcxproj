@@ -208,6 +208,7 @@
   <ItemGroup>
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
+    <ClInclude Include="src\LinearSystem\RelaxedJacobiSolver.hpp" />
     <ClInclude Include="src\Matrix2x2.hpp" />
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\Array2.hpp" />

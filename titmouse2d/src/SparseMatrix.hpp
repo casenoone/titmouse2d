@@ -201,7 +201,7 @@ SparseMatrix<T>::SparseMatrix(const vector<vector<T>>& mat) :_row(mat.size()), _
 
 	size_t sizeX = mat.size();
 	size_t sizeY = mat[0].size();
-#pragma omp parallel for num_threads(20) 
+	//#pragma omp parallel for num_threads(20) 
 	for (size_t i = 0; i < sizeX; ++i) {
 		for (size_t j = 0; j < sizeY; ++j) {
 			if (mat[i][j] != 0) {

@@ -8,8 +8,7 @@ void EulerianSmokeSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	addTemperature();
 	computeExternalForces(timeIntervalInSeconds);
 	computeAdvection(timeIntervalInSeconds);
-	addDensity();
-	addTemperature();
+
 	setMarkers();
 	setFluidCellNum();
 	computePressure(timeIntervalInSeconds);

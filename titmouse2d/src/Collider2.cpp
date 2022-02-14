@@ -23,6 +23,7 @@ void Collider2::getClosestPoint(
 	for (auto i = _surfaces.begin(); i != _surfaces.end(); ++i) {
 		(*i)->getClosedInformation(queryPoint);
 		auto surfaceInformation = (*i)->_surfaceQueryResult;
+		//cout << surfaceInformation.distance << endl;
 		if (surfaceInformation.distance < minDis) {
 			minDis = surfaceInformation.distance;
 			resultIter = i;
@@ -32,8 +33,6 @@ void Collider2::getClosestPoint(
 	result->distance = (*resultIter)->_surfaceQueryResult.distance;
 	result->normal = (*resultIter)->_surfaceQueryResult.normal;
 	result->point = (*resultIter)->_surfaceQueryResult.point;
-
-	//cout << result->normal.x << " " << result->normal.y << endl;
 
 }
 
