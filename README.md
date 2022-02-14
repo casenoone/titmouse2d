@@ -32,8 +32,10 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - SPH algorthm （光滑粒子动力学算法）（SPH的参数我也是醉了,凑合着玩玩吧）
 - Vortex Method(涡粒子法模拟流体)
 - LBM（格子-玻尔兹曼方法）
+- MPM
 - PBF
 - IISPH(隐式不可压缩SPH)
+- Eulerian Smoke 
 
 
 - 1.FLIP算法
@@ -73,20 +75,22 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/apic.gif)
 
 - 12.MLS-MPM(用了双线性插值，粘成这个样子，中间还有一块蜜汁突起，也可能是代码写错了)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/mls_mpm_linear.gif
-)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/mls_mpm_linear.gif)
+
+- 13.Eulerian Smoke(双线性插值，midpoint，边界还有点bug没解决，还没有加vorticity force)
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/eulerian_smoke.gif)
+
 
 
 即将实现的算法：
-- MPM
 - PCISPH
 - shallow water solver
 - BVH加速结构
 - Explicit/Implicit Mass Spring System
-- Eulerian Smoke Simulation
 - Clebsch gauge fluid solver
 - Multigrid Method
-- FVM
+- FVM（有限体积法）
+- FMM(快速多极展开)
 
 
 
