@@ -40,10 +40,10 @@ inline T clamp(const T& factor, const T& min, const T& max) {
 template <typename T>
 inline T sign(T x) {
 	if (x >= 0) {
-		return 1;
+		return static_cast<T>(1);
 	}
 	else {
-		return -1;
+		return static_cast<T>(-1);
 	}
 }
 

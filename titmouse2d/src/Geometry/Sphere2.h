@@ -1,3 +1,7 @@
+#ifndef SPHERE2_H
+#define SPHERE2_H
+
+
 #include "ImplicitSurface2.h"
 
 
@@ -33,3 +37,7 @@ private:
 	double _r;
 
 };
+
+
+
+#endif

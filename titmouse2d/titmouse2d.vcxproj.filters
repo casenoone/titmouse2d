@@ -54,12 +54,6 @@
     <ClCompile Include="src\Eulerian\MarchingCubes2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Eulerian\FaceCenteredGrid2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -70,9 +64,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Eulerian\GridSystemData2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\PicTest\Pictest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\boundingbox2.cpp">
@@ -96,12 +87,6 @@
     <ClCompile Include="src\Geometry\Plane2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\freefalling\freefalling.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\FlipTest\FlipTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Hybrid\FlipSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -112,15 +97,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Geometry\ImplicitSurface2.cpp">
@@ -141,25 +117,10 @@
     <ClCompile Include="src\Eulerian\LevelSetLiquidSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\LevelSetTest\levelsetLiquidSolverTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Lagrangian\SphSystemData2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Lagrangian\SphSystemSolver2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\SphTest\SphTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\MassSpringTest\implicitMassSpringTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\vortex_method\vortexParticleTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Lagrangian\VortexParticleSystemData2.cpp">
@@ -171,40 +132,25 @@
     <ClCompile Include="src\OtherMethod\LBM\LBMData2.h">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\LBMTest\LBM_kamavortex.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\OtherMethod\LBM\LBMSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\PBF\PBFTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\IISPHTest\IISPHTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\OtherMethod\IISPH\IISPHSolver2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\demo\ApicTest\ApicTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Hybrid\ApicSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\MPMTest\mpmtest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\OtherMethod\MPM\MPMSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\demo\EulerianSmokeTest\EulerianSmokeTest.cpp">
+    <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp">
+    <ClCompile Include="src\Geometry\Heart2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -465,6 +411,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\LinearSystem\RelaxedJacobiSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry\Heart2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

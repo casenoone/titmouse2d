@@ -37,7 +37,7 @@ void MarchingCube2::setScalarField(const VertexCenteredScalarGrid2Ptr& _data) {
 }
 
 
-void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet, 
+void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet,
 	const VertexCenteredScalarGrid2Ptr& _data) {
 
 
@@ -144,9 +144,9 @@ void MarchingCube2::getVoxelConfig(Array2Ptr<double>& num) {
 			double value2 = (*data)(i + 1, j);
 			double value1 = (*data)(i + 1, j + 1);
 			double value0 = (*data)(i, j + 1);
-			
+
 			int temp_value = 0;
-			
+
 			if (value0 > temp_value) {
 				value0 = 1;
 			}
@@ -228,11 +228,11 @@ Vector2<double> MarchingCube2::calculateIso(size_t edge, size_t i, size_t j) {
 	}
 	//这里这个比例公式突然发现有点别扭，和书上的不一样，两种都试试
 	auto temp = (0 - value1) / (value2 - value1);
-	
+
 	//auto temp = (value1) / (value1 - value2);
 
 	//说明这是一条水平线
-	if (temp < 0)cout <<"水平线：" << temp << endl;
+	if (temp < 0)cout << "水平线：" << temp << endl;
 
 	if (fabs(p1.y - p2.y) < 0.0000001) {
 		result.x = p1.x + h * temp;

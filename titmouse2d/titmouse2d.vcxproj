@@ -27,7 +27,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -143,25 +143,6 @@
     <ClCompile Include="src\boundingbox2.cpp" />
     <ClCompile Include="src\Collider2.cpp" />
     <ClCompile Include="src\ColliderSet2.cpp" />
-    <ClCompile Include="src\demo\AdvectionTest\AdvectionTest.cpp" />
-    <ClCompile Include="src\demo\ApicTest\ApicTest.cpp" />
-    <ClCompile Include="src\demo\CellCenteredVectorGridTest.cpp" />
-    <ClCompile Include="src\demo\EulerianSmokeTest\EulerianSmokeTest.cpp" />
-    <ClCompile Include="src\demo\FlipTest\FlipTest.cpp" />
-    <ClCompile Include="src\demo\IISPHTest\IISPHTest.cpp" />
-    <ClCompile Include="src\demo\LBMTest\LBM_kamavortex.cpp" />
-    <ClCompile Include="src\demo\LevelSetTest\levelsetLiquidSolverTest.cpp" />
-    <ClCompile Include="src\demo\LevelSetTest\levelsetTest.cpp" />
-    <ClCompile Include="src\demo\MarchingCube2D\implicitSurfaceTest.cpp" />
-    <ClCompile Include="src\demo\MassSpringTest\implicitMassSpringTest.cpp" />
-    <ClCompile Include="src\demo\MPMTest\mpmtest.cpp" />
-    <ClCompile Include="src\demo\PBF\PBFTest.cpp" />
-    <ClCompile Include="src\demo\PicTest\Pictest.cpp" />
-    <ClCompile Include="src\demo\freefalling\freefalling.cpp" />
-    <ClCompile Include="src\demo\IterativeSolverTest\IterativeSolverTest.cpp" />
-    <ClCompile Include="src\demo\MarchingCube2D\MarchingCube2DTest.cpp" />
-    <ClCompile Include="src\demo\SphTest\SphTest.cpp" />
-    <ClCompile Include="src\demo\vortex_method\vortexParticleTest.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp" />
@@ -181,6 +162,7 @@
     <ClCompile Include="src\Eulerian\VertexCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Geometry\Box2.cpp" />
     <ClCompile Include="src\Geometry\ExplicitSurface2.cpp" />
+    <ClCompile Include="src\Geometry\Heart2.cpp" />
     <ClCompile Include="src\Geometry\ImplicitSurface2.cpp" />
     <ClCompile Include="src\Geometry\Plane2.cpp" />
     <ClCompile Include="src\Geometry\Ray2.cpp" />
@@ -208,6 +190,7 @@
   <ItemGroup>
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
+    <ClInclude Include="src\Geometry\Heart2.h" />
     <ClInclude Include="src\LinearSystem\RelaxedJacobiSolver.hpp" />
     <ClInclude Include="src\Matrix2x2.hpp" />
     <ClInclude Include="src\Array.hpp" />
