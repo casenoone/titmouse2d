@@ -25,7 +25,7 @@ titmouse是一个菜鸡写的2d流体引擎（个人玩具），项目启动于2
 - LBM Method(格子-玻尔兹曼方法)
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
-  - OpenGL/GLUT
+  - OpenGL/GLUT/GLAD/GLFW
   - OpenMP
  
 实现的流体算法：
