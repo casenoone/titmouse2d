@@ -52,7 +52,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2<size_t> mpm_res(90, 90);
+Vector2<size_t> mpm_res(30, 30);
 Vector2D mpm_gs(2.0 / mpm_res.x, 2.0 / mpm_res.x);
 Vector2D mpm_origin(0.0, 0.0);
 
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 
-	int numberOfParticles = 7000;
+	int numberOfParticles = 1000;
 	int resolutionX = 10;
 	int resolutionY = 10;
 	vector <Vector2<double>> temp1;
