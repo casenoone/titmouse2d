@@ -29,6 +29,7 @@ public:
 		Vector2<double>* velocity
 	);
 
+	bool IsNull()const;
 
 public:
 	vector<Surface2Ptr> _surfaces;
@@ -55,5 +56,9 @@ private:
 	double _frictionCoeffient = 0.0;
 };
 
+inline bool Collider2::IsNull()const {
+	if (_surfaces.empty())return true;
+	return false;
+}
 
 #endif

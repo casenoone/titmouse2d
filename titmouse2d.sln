@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FreeFalling2d", "FreeFallin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL", "OpenGL\OpenGL.vcxproj", "{F2DCCE0E-43ED-4F15-B6CB-059C9727FE88}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VortexSheetBoundary", "VortexSheetBoundary\VortexSheetBoundary.vcxproj", "{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -181,6 +183,14 @@ Global
 		{F2DCCE0E-43ED-4F15-B6CB-059C9727FE88}.Release|x64.Build.0 = Release|x64
 		{F2DCCE0E-43ED-4F15-B6CB-059C9727FE88}.Release|x86.ActiveCfg = Release|Win32
 		{F2DCCE0E-43ED-4F15-B6CB-059C9727FE88}.Release|x86.Build.0 = Release|Win32
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Debug|x64.ActiveCfg = Debug|x64
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Debug|x64.Build.0 = Debug|x64
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Debug|x86.ActiveCfg = Debug|Win32
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Debug|x86.Build.0 = Debug|Win32
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Release|x64.ActiveCfg = Release|x64
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Release|x64.Build.0 = Release|x64
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Release|x86.ActiveCfg = Release|Win32
+		{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,6 +11,7 @@ public:
 
 	ArrayPtr<double>& vorticities();
 
+
 private:
 
 	//二维情况下，涡量是标量

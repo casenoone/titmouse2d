@@ -3,6 +3,8 @@
 
 #include "VertexCenteredScalarGrid2.h"
 
+#include "../Geometry/ExplicitSurface2.h"
+
 struct Edge {
 	Vector2<double> p1;
 	Vector2<double> p2;
@@ -39,6 +41,9 @@ public:
 	void setCircleList(vector<Circle>& circleList);
 
 	void setScalarField(const VertexCenteredScalarGrid2Ptr& _data);
+
+	void getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
+		const VertexCenteredScalarGrid2Ptr& _data);
 
 	void getLineSegmentSet(vector<LineSegment>& lineSet,
 		const VertexCenteredScalarGrid2Ptr& _data);

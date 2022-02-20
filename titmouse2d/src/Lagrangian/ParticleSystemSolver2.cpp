@@ -74,7 +74,6 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 		auto& newPosition = _newPositions[i];
 		auto temp2 = positions[i] + newVelocity * timeIntervalInSeconds;
 		newPosition = temp2;
-		//cout << timeIntervalInSeconds << endl;
 	}
 
 }
@@ -83,18 +82,12 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 void ParticleSystemSolver2::resolveCollision() {
 	size_t n = _particleSystemData->numberOfParticles();
 	auto& velocities = _particleSystemData->velocities();
+	if (_collider.IsNull() == false) {
+		for (size_t i = 0; i < n; ++i) {
+			_collider.resolveCollision(0.011 * random_double(0.0, 1.0), 0.00001, &_newPositions[i], &_newVelocities[i]);
 
-
-	for (size_t i = 0; i < n; ++i) {
-		//_collider.resolveCollision(0.000000011, 0.00001, &_newPositions[i], &_newVelocities[i]);
-		_collider.resolveCollision(0.011 * random_double(0.0, 1.0), 0.00001, &_newPositions[i], &_newVelocities[i]);
-
+		}
 	}
-
-	//for (int i = 0; i < n; ++i) {
-	//	//cout << _newPositions[i].y << endl;
-	//}
-
 }
 
 

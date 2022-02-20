@@ -17,9 +17,9 @@ Sphere2::Sphere2(const Vector2<double>& center, const double& r,
 	const Vector2<double>& origin,
 	double initialValue
 ) :
-	_center(center), _r(r)
+	_center(center), _r(r), ImplicitSurface2(resolution, origin, initialValue)
 {
-	_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
+	//_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
 
 	//这个方法应该单独拎出来，把resolution传给computeSdf这个方法
 	computeSdf();

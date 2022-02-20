@@ -37,6 +37,53 @@ void MarchingCube2::setScalarField(const VertexCenteredScalarGrid2Ptr& _data) {
 }
 
 
+//重载一个版本
+//在这里需要计算法线，即sdf的梯度
+void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
+	const VertexCenteredScalarGrid2Ptr& _data) {
+
+
+	//计算顶点势能
+	setScalarField(_data);
+
+	auto resolution = _data->resolution();
+
+	for (int i = 0; i < resolution.x; ++i) {
+		for (int j = 0; j < resolution.y; ++j) {
+			//cout << (*_data)(i,j) << endl;
+		}
+	}
+
+	Array2Ptr<double> num;
+
+	//获取顶点配置
+	getVoxelConfig(num);
+
+	auto size = data->resolution();
+	for (size_t j = 0; j < size.y; ++j) {
+		for (size_t i = 0; i < size.x; ++i) {
+			auto currentNum = (size_t)num(i, j);
+			auto inform = triangleTable[currentNum];
+			for (size_t k = 0; k < 4; k += 2) {
+				if (inform[k] != -1) {
+					auto p1 = calculateIso(inform[k], i, j);
+					auto p2 = calculateIso(inform[k + 1], i, j);
+					SurfaceElement2 L;
+					L.start = p1;
+					L.end = p2;
+					auto midPoint = 0.5 * (p1 + p2);
+					L.normal = _data->gradient(midPoint);
+					SurfaceSet.push_back(L);
+				}
+
+			}
+		}
+	}
+
+
+}
+
+
 void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet,
 	const VertexCenteredScalarGrid2Ptr& _data) {
 

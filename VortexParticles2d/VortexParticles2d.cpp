@@ -32,7 +32,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(2.05f);//缺省是1
+	glPointSize(3.0f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * 10, (y - 1) * 10, 0);
@@ -84,7 +84,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 
 auto vpSolver = make_shared<VortexParticleSystemSolver2>();
 
-int numberOfparticles = 100;
+int numberOfparticles = 300;
 
 double dt = 0.02;
 
@@ -147,8 +147,8 @@ int main(int argc, char** argv)
 	vector<Vector2<double>> tempPos;
 
 	for (int i = 0; i < numberOfparticles; ++i) {
-		auto x = random_double(0.2, 1);
-		auto y = random_double(0.7, 1.0);
+		auto x = random_double(0.7, 1.3);
+		auto y = random_double(0.1, 0.4);
 		Vector2<double> temp(x, y);
 		tempPos.push_back(temp);
 	}
@@ -161,7 +161,7 @@ int main(int argc, char** argv)
 	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
 	Collider2 collider;
 	collider.push(box1);
-	vpSolver->setCollider(collider);
+	//vpSolver->setCollider(collider);
 
 
 

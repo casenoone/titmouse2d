@@ -20,9 +20,9 @@ public:
 
 public:
 	Vector2<double> start;
-	
+
 	Vector2<double> end;
-	
+
 	Vector2<double> normal;
 
 };
@@ -31,8 +31,8 @@ public:
 
 //也应该为其写一个Builder类
 //后期再写吧
-class ExplicitSurface2 : public Surface2{
-public:	
+class ExplicitSurface2 : public Surface2 {
+public:
 	ExplicitSurface2();
 
 	virtual ~ExplicitSurface2();
@@ -47,8 +47,6 @@ public:
 
 
 
-
-
 public:
 
 	vector<SurfaceElement2> _data;
@@ -59,3 +57,4 @@ public:
 using ExplicitSurface2Ptr = shared_ptr<ExplicitSurface2>;
 
 #endif
+
