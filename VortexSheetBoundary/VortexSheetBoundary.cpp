@@ -53,7 +53,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2<size_t> resolution(15, 15);
+Vector2<size_t> resolution(7, 7);
 Vector2<double> origin(0.0, 0.0);
 
 Vector2D center1(1.0, 1.0);
@@ -78,6 +78,11 @@ static void display(void)
 		auto start = i->start;
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
+
+		////可视化法线
+		//auto midPoint = 0.5 * (start + end);
+		//auto normalEnd = midPoint + 0.2 * i->normal;
+		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
 
 

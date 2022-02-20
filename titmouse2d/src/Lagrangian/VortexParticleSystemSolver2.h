@@ -8,7 +8,7 @@ class VortexParticleSystemSolver2 : public ParticleSystemSolver2 {
 
 public:
 	VortexParticleSystemSolver2();
-	
+
 	virtual ~VortexParticleSystemSolver2();
 
 	virtual void timeIntegration(double timeIntervalInSeconds)override;
@@ -24,6 +24,10 @@ public:
 		ArrayPtr<Vector2<double>>& pos,
 		int resolutionX,
 		int resolutionY);
+
+	void setPanels(ExplicitSurface2Ptr surfaces);
+
+	void emitParticlesFromPanel();
 
 private:
 	void onBeginAdvanceTimeStep();

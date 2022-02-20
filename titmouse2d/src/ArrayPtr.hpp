@@ -28,6 +28,9 @@ public:
 
 	size_t dataSize() const;
 
+	void push(const T& e);
+
+
 	void set(const vector<T>& data_);
 
 	void clear();
@@ -52,7 +55,7 @@ ArrayPtr<T>::~ArrayPtr() {
 
 template<typename T>
 ArrayPtr<T>::ArrayPtr(const vector<T>& data) {
-	
+
 	arrayPtr = make_shared<Array<T>>(data);
 }
 
@@ -91,13 +94,18 @@ size_t ArrayPtr<T>::reSize(size_t n) {
 
 template<typename T>
 size_t ArrayPtr<T>::reSize(size_t n, T initValue) {
-	arrayPtr->reSize(n,initValue);
+	arrayPtr->reSize(n, initValue);
 	return n;
 }
 
 template<typename T>
 inline size_t ArrayPtr<T>::dataSize() const {
 	return arrayPtr->dataSize();
+}
+
+template<typename T>
+void ArrayPtr<T>::push(const T& e) {
+	return arrayPtr->push(e);
 }
 
 template<typename T>

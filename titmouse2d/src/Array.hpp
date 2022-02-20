@@ -5,11 +5,8 @@
 using namespace std;
 #include <vector>
 
-//暂时不实现动态扩容
 //不实现arrayAccessor类
 //API没有写全，随着项目的完善再增加吧
-
-//考虑给Array类加一个push方法
 
 
 template<class T>
@@ -31,6 +28,9 @@ public:
 	size_t reSize(size_t n, T initValue);
 
 	size_t dataSize() const;
+
+	//从尾处添加元素
+	void push(const T& e);
 
 	const vector<T>* constDataAccessor() const;
 
@@ -113,12 +113,18 @@ size_t Array<T>::reSize(size_t n, T initValue) {
 }
 
 template<typename T>
-inline size_t Array<T>::dataSize() const {
+size_t Array<T>::dataSize() const {
 	return _size;
 }
 
 template<typename T>
-inline const vector<T>* Array<T>::constDataAccessor() const {
+void Array<T>::push(const T& e) {
+	++_size;
+	_data.push_back(e);
+}
+
+template<typename T>
+const vector<T>* Array<T>::constDataAccessor() const {
 	return &_data;
 }
 

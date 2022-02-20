@@ -1,5 +1,7 @@
 #include "ScalarGrid2.h"
 
+#include <array>
+
 ScalarGrid2::ScalarGrid2() :_data(vector<vector<double>>()) {
 
 }
@@ -27,7 +29,16 @@ double ScalarGrid2::sample(const Vector2<double>& x)const {
 
 
 Vector2<double> ScalarGrid2::gradientAtDataPoint(size_t i, size_t j) const {
-	return Vector2<double>(0.0, 0.0);
+	const auto ds = _data.dataSize();
+
+	double left = _data.lookAt((i > 0) ? i - 1 : i, j);
+	double right = _data.lookAt((i + 1 < ds.x) ? i + 1 : i, j);
+	double down = _data.lookAt(i, (j > 0) ? j - 1 : j);
+	double up = _data.lookAt(i, (j + 1 < ds.y) ? j + 1 : j);
+
+	return 0.5 * Vector2D(right - left, up - down)
+		/ gridSpacing();
+
 }
 
 
@@ -87,7 +98,20 @@ std::function<double(const Vector2<double>&)> ScalarGrid2::sampler() const {
 
 
 Vector2<double> ScalarGrid2::gradient(const Vector2<double>& x) const {
-	return Vector2<double>(0.0, 0.0);
+
+	auto sampler = _linearSampler;
+
+	std::array<Vector2I, 4> indices;
+	std::array<double, 4> weights;
+
+	sampler->getCoordinatesAndWeights(x, &indices, &weights);
+
+	Vector2D result;
+
+	for (int i = 0; i < 4; ++i) {
+		result += weights[i] * gradientAtDataPoint(indices[i].x, indices[i].y);
+	}
+	return result;
 }
 
 

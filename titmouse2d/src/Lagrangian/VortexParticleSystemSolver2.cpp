@@ -89,3 +89,25 @@ void VortexParticleSystemSolver2::setData(int numberOfParticles,
 		vorticity[i] = 0.001;
 	}
 }
+
+void VortexParticleSystemSolver2::setPanels(ExplicitSurface2Ptr surfaces) {
+	_vortexParticleData->panelSet = surfaces;
+}
+
+void VortexParticleSystemSolver2::emitParticlesFromPanel() {
+	auto data = _vortexParticleData;
+	auto n = data->numberOfParticles();
+	auto panels = data->panelSet;
+
+	//遍历每个panel，在panel上随机生成粒子
+	//还得建一个panel粒子的索引，便于边界处理时读取粒子的速度
+
+	auto panelNum = panels->size();
+
+	for (auto i = 0; i < panelNum; ++i) {
+		const auto p = panels->lookAt(i);
+		auto midPoint = 0.5 * (p.start + p.end);
+
+
+	}
+}

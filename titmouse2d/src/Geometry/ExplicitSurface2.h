@@ -18,6 +18,7 @@ public:
 
 	SurfaceElement2(Vector2<double> _start, Vector2<double> _end, Vector2<double> _normal);
 
+
 public:
 	Vector2<double> start;
 
@@ -45,7 +46,13 @@ public:
 
 	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
 
+	int size()const;
 
+	SurfaceElement2& operator()(int i);
+
+	SurfaceElement2& operator[](int i);
+
+	const SurfaceElement2& lookAt(int i)const;
 
 public:
 
@@ -55,6 +62,24 @@ public:
 };
 
 using ExplicitSurface2Ptr = shared_ptr<ExplicitSurface2>;
+
+
+inline SurfaceElement2& ExplicitSurface2::operator()(int i) {
+	return _data[i];
+}
+
+inline SurfaceElement2& ExplicitSurface2::operator[](int i) {
+	return _data[i];
+}
+
+inline const SurfaceElement2& ExplicitSurface2::lookAt(int i)const {
+	return _data[i];
+}
+
+
+inline int ExplicitSurface2::size()const {
+	return _data.size();
+}
 
 #endif
 

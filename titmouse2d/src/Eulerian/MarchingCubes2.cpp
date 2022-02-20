@@ -48,12 +48,6 @@ void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
 
 	auto resolution = _data->resolution();
 
-	for (int i = 0; i < resolution.x; ++i) {
-		for (int j = 0; j < resolution.y; ++j) {
-			//cout << (*_data)(i,j) << endl;
-		}
-	}
-
 	Array2Ptr<double> num;
 
 	//获取顶点配置
@@ -72,7 +66,8 @@ void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
 					L.start = p1;
 					L.end = p2;
 					auto midPoint = 0.5 * (p1 + p2);
-					L.normal = _data->gradient(midPoint);
+					auto tempN = _data->gradient(midPoint);
+					L.normal = tempN.getNormalize();
 					SurfaceSet.push_back(L);
 				}
 
@@ -168,8 +163,8 @@ void MarchingCube2::calculateWeight() {
 		for (size_t i = 0; i < size.x; ++i) {
 			auto positionFunc = data->dataPosition();
 			auto currentP = positionFunc(i, j);
-			//cout << positionFunc(20, 20).x() << "," << positionFunc(20, 20).y() << endl;
 			auto circleNum = _circleList.size();
+
 			for (size_t k = 0; k < circleNum; ++k) {
 				//r^2/d^2
 				(*data)(i, j) += sqr(_circleList[k].r) / currentP.disSquare(_circleList[k].center);
@@ -276,11 +271,7 @@ Vector2<double> MarchingCube2::calculateIso(size_t edge, size_t i, size_t j) {
 	//这里这个比例公式突然发现有点别扭，和书上的不一样，两种都试试
 	auto temp = (0 - value1) / (value2 - value1);
 
-	//auto temp = (value1) / (value1 - value2);
-
 	//说明这是一条水平线
-	if (temp < 0)cout << "水平线：" << temp << endl;
-
 	if (fabs(p1.y - p2.y) < 0.0000001) {
 		result.x = p1.x + h * temp;
 		result.y = p1.y;

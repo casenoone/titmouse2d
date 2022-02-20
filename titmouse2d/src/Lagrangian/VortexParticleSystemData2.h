@@ -3,6 +3,8 @@
 
 #include "ParticleSystemData2.h"
 
+#include "../Geometry/ExplicitSurface2.h"
+
 class VortexParticleSystemData2 : public ParticleSystemData2 {
 public:
 	VortexParticleSystemData2();
@@ -11,6 +13,11 @@ public:
 
 	ArrayPtr<double>& vorticities();
 
+public:
+	ExplicitSurface2Ptr panelSet;
+
+	//保存每一帧从panel中点发射出来的粒子的索引
+	ArrayPtr<int> midleList;
 
 private:
 
