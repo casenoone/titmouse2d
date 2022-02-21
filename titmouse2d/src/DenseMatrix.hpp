@@ -175,7 +175,7 @@ vectorNPtr<T> DenseMatrix<T>::getVec(size_t idx) const {
 
 
 template<typename T>
-T& DenseMatrix<T>::lookAt(size_t i, size_t j) const{
+T& DenseMatrix<T>::lookAt(size_t i, size_t j) const {
 	auto result = 0;
 
 	//如果是列优先
@@ -191,7 +191,7 @@ T& DenseMatrix<T>::lookAt(size_t i, size_t j) const{
 template<typename T>
 T& DenseMatrix<T>::operator()(size_t i, size_t j) {
 	auto result = 0;
-	
+
 	//如果是列优先
 	if (_order == COLUMN) {
 		return (*_data[j])[i];
@@ -210,13 +210,13 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator+(const DenseMatrix<T>& mat) const {
 	if (mat._size == this->_size) {
 
 		vector<vector<T>> temp(_size.x, vector<T>(_size.y));
-		
-		this->forEachIndex([&](size_t i,size_t j) {
-		
+
+		this->forEachIndex([&](size_t i, size_t j) {
+
 			temp[i][j] = this->lookAt(i, j) + mat.lookAt(i, j);
 
-		});
-		
+			});
+
 		DenseMatrixPtr<T> result = make_shared<DenseMatrix<T>>(_size.x, _size.y, temp);
 		return result;
 
@@ -275,7 +275,7 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator*(const T r) const {
 	vector<vector<T>> temp(_size.x, vector<T>(_size.y));
 	this->forEachIndex([&](size_t i, size_t j) {
 		temp[i][j] = r * this->lookAt(i, j);
-	});
+		});
 	DenseMatrixPtr<T> result = make_shared<DenseMatrix>(_size.x, _size.y, temp);
 	return result;
 }

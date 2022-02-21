@@ -7,10 +7,14 @@ using namespace std;
 #include <vector>
 
 #include "../titmouse2d/src/Geometry/Sphere2.h"
+#include "../titmouse2d/src/Lagrangian/VortexParticleSystemSolver2.h"
 
 #include <GL/glut.h>
 
+#include <windows.h>
 
+
+static void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
 static void key(unsigned char key, int x, int y)
 {
@@ -53,15 +57,20 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2<size_t> resolution(7, 7);
+Vector2<size_t> resolution(17, 17);
 Vector2<double> origin(0.0, 0.0);
 
-Vector2D center1(1.0, 1.0);
-double r1 = 0.3;
+Vector2D center1(0.6, 1.0);
+double r1 = 0.2;
 
 auto sphere1 = make_shared<Sphere2>(center1, r1, resolution);
 
 auto explicitSphere1 = sphere1->transformToExplicitSurface();
+
+auto vpSolver = make_shared<VortexParticleSystemSolver2>();
+
+
+double dt = 0.02;
 
 static void display(void)
 {
@@ -70,7 +79,15 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
+	vpSolver->onAdvanceTimeStep(dt);
 
+	int numberOfParticles = vpSolver->vortexParticleData()->numberOfParticles();
+
+	for (int i = 0; i < numberOfParticles; ++i) {
+
+		auto pos = vpSolver->vortexParticleData()->positions();
+		drawPoint(pos[i].x, pos[i].y);
+	}
 
 
 
@@ -123,8 +140,13 @@ int main(int argc, char** argv)
 	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
 	glShadeModel(GL_FLAT);
 
+	vpSolver->setPanels(explicitSphere1);
 
+	vpSolver->emitParticlesFromPanel();
 
+	UINT timerId = 1;
+	MSG msg;
+	SetTimer(NULL, timerId, 3000, TimerProc);
 
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时
@@ -140,3 +162,8 @@ int main(int argc, char** argv)
 }
 
 
+void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
+{
+	vpSolver->emitParticlesFromPanel();
+	cout << "当前系统粒子数：" << vpSolver->vortexParticleData()->numberOfParticles() << endl;
+}

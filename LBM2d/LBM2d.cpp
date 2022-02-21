@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 	//设置一个圆形的障碍物
 
 	double r1 = 0.2;
-	Vector2<double> center1(0.4, 1);
+	Vector2<double> center1(0.4, 1.0);
 
 	auto res = resolution;
 

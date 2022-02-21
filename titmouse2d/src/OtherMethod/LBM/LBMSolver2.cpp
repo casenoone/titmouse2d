@@ -45,7 +45,7 @@ LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
 			}
 			//else if (j == res.y - 10 && i > border && i < res.x - (1 + border)) {
 			else if (i >= 5 && i <= res.x - 3 && j == res.y - 2) {
-				//else if (j >= 1 && j <= res.y - 2 && i == 2) {
+				//else if (j >= 1 && j <= res.y - 1 && i == 0) {
 				_g(i, j) = LBM_VELOCITY;
 			}
 
@@ -69,12 +69,13 @@ void LBMSolver2::setCollider(const Array2Ptr<int>& collider) {
 
 	for (int i = 0; i < res.x; ++i) {
 		for (int j = 0; j < res.y; ++j) {
-			if (i != 0 && i != res.x - 1 && j != 0 && j != res.y - 1) {
-				if (collider.lookAt(i, j) == LBM_OBS)
-					_g(i, j) = LBM_OBS;
-			}
+			if (collider.lookAt(i, j) == LBM_OBS)
+				_g(i, j) = LBM_OBS;
+
 		}
 	}
+
+
 }
 
 

@@ -4,7 +4,11 @@
 
 #include "../random.h"
 
+#include <iostream>
+
 const double eps = 0.00001;
+
+const Vector2D vs_vec = Vector2D(0.01, 0.0);
 
 VortexParticleSystemSolver2::VortexParticleSystemSolver2() {
 	_particleSystemData = make_shared<VortexParticleSystemData2>();
@@ -24,27 +28,28 @@ void VortexParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) 
 
 	//计算重力
 	for (int i = 0; i < n; ++i) {
-		_newVelocities[i] += GRAVITY * timeIntervalInSeconds * -0.7;
+		//_newVelocities[i] += GRAVITY * timeIntervalInSeconds * -0.7;
+		//cout << _newVelocities[0].x << endl;
 	}
 
 
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) {
+		/*for (int j = 0; j < n; ++j) {
 			if (i != j) {
 				_newVelocities[i] += computeUSingle(positions[i], j);
 			}
-		}
+		}*/
 
-		_newPositions[i] += positions[i] + timeIntervalInSeconds * _newVelocities[i];
+		_newPositions[i] = positions[i] + timeIntervalInSeconds * _newVelocities[i];
 	}
 
 
 }
 
 void VortexParticleSystemSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	onBeginAdvanceTimeStep();
+	//onBeginAdvanceTimeStep();
 	timeIntegration(timeIntervalInSeconds);
-	ParticleSystemSolver2::resolveCollision();
+	//ParticleSystemSolver2::resolveCollision();
 	onEndAdvanceTimeStep();
 }
 
@@ -86,8 +91,10 @@ void VortexParticleSystemSolver2::setData(int numberOfParticles,
 	//为了方便测试，给每个粒子赋一个随机的涡量
 	for (int i = 0; i < numberOfParticles; ++i) {
 		//vorticity[i] = random_double(-0.01, 0.01);
-		vorticity[i] = 0.001;
+		vorticity[i] = 0.000;
 	}
+
+
 }
 
 void VortexParticleSystemSolver2::setPanels(ExplicitSurface2Ptr surfaces) {
@@ -98,7 +105,7 @@ void VortexParticleSystemSolver2::emitParticlesFromPanel() {
 	auto data = _vortexParticleData;
 	auto n = data->numberOfParticles();
 	auto panels = data->panelSet;
-
+	auto pos = data->positions();
 	//遍历每个panel，在panel上随机生成粒子
 	//还得建一个panel粒子的索引，便于边界处理时读取粒子的速度
 
@@ -108,6 +115,26 @@ void VortexParticleSystemSolver2::emitParticlesFromPanel() {
 		const auto p = panels->lookAt(i);
 		auto midPoint = 0.5 * (p.start + p.end);
 
+		//在边界附近随机生成粒子
+
+		auto line = (p.end - p.start).getNormalize();
+		auto panelLength = (p.end - p.start).getLength();
+
+		int emitNum = 3;
+		for (int j = 0; j < emitNum; ++j) {
+
+			auto lambda = random_double(0.0, panelLength);
+			auto ppos = p.start + lambda * line;
+
+			ppos += random_double(0.0, 0.03) * p.normal;
+
+			pos.push(ppos);
+			data->vorticities().push(0.0);
+			_newVelocities.push(vs_vec);
+			_newPositions.push(Vector2D());
+
+			data->numberOfParticles()++;
+		}
 
 	}
 }

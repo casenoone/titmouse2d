@@ -9,6 +9,8 @@ using namespace std;
 
 #include "Vector2.hpp"
 
+//注意深浅拷贝的问题
+
 template<class T>
 class Matrix2x2 {
 public:
