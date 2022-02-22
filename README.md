@@ -84,7 +84,7 @@ titmouse是一个2d离线流体引擎（个人玩具）
 
 
 
-即将实现的算法：
+即将实现的算法或数据结构：
 - PCISPH
 - shallow water solver
 - BVH加速结构
@@ -93,6 +93,7 @@ titmouse是一个2d离线流体引擎（个人玩具）
 - Multigrid Method
 - FVM（有限体积法）
 - FMM(快速多极展开)
+- 更适合物理模拟的稀疏矩阵结构
 
 
 
