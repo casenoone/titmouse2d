@@ -203,7 +203,6 @@
     <ClInclude Include="src\ColliderSet2.h" />
     <ClInclude Include="src\Color3.hpp" />
     <ClInclude Include="src\ConstVar.h" />
-    <ClInclude Include="src\DenseMatrixPtr.hpp" />
     <ClInclude Include="src\Eulerian\AdvectionSolver2.h" />
     <ClInclude Include="src\Eulerian\ArraySampler2.hpp" />
     <ClInclude Include="src\Eulerian\CellCenteredScalarGrid2.h" />
