@@ -9,7 +9,7 @@ public:
 	GaussSeidelSolver() = default;
 
 	//求解Ax = b
-	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
+	void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b);
 
 };
 
@@ -17,22 +17,22 @@ public:
 //这里的计算采用分量形式，不用矩阵格式
 //因为矩阵格式要写LU分解，懒得写了
 template<class T>
-void GaussSeidelSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
+void GaussSeidelSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
 	this->_r = (b - A * x);
 	auto x1 = x;
 	auto err = this->_r.norm();
 	while (this->_iterNum <= this->_maxIterNum) {
 
-		//size_t 是无符号数
-		x1.forEachIndex([&](size_t i) {
+		//int 是无符号数
+		x1.forEachIndex([&](int i) {
 			T term1 = 0.0;
 			T term2 = 0.0;
-			for (size_t j = 0; j + 1 <= i; ++j) {
+			for (int j = 0; j + 1 <= i; ++j) {
 
 				term1 += A.lookAt(i, j) * x1[j];
 			}
 
-			for (size_t j = i + 1; j < A.size().y; ++j) {
+			for (int j = i + 1; j < A.size().y; ++j) {
 				term2 += A.lookAt(i, j) * x[j];
 			}
 

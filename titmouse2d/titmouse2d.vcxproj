@@ -195,8 +195,6 @@
     <ClInclude Include="src\Matrix2x2.hpp" />
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\Array2.hpp" />
-    <ClInclude Include="src\Array2Ptr.hpp" />
-    <ClInclude Include="src\ArrayPtr.hpp" />
     <ClInclude Include="src\ArrayUtils.hpp" />
     <ClInclude Include="src\boundingbox2.h" />
     <ClInclude Include="src\Collider2.h" />
@@ -269,11 +267,9 @@
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
     <ClInclude Include="src\SparseMatrix.hpp" />
-    <ClInclude Include="src\SparseMatrixPtr.hpp" />
     <ClInclude Include="src\TempMovingCollider2.h" />
     <ClInclude Include="src\Vector2.hpp" />
     <ClInclude Include="src\VectorN.hpp" />
-    <ClInclude Include="src\VectorNPtr.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

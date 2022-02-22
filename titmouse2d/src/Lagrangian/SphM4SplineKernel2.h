@@ -2,7 +2,7 @@
 #define SPHM4SPLINEKERNEL2_H
 
 #include "../Vector2.hpp"
-#include "../ArrayPtr.hpp"
+#include "../Array.hpp"
 #include "../ConstVar.h"
 
 struct SphM4SplineKernel2 {

@@ -5,19 +5,19 @@
 void EulerianSmokeSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
 	addDensity();
-	addTemperature();
-	computeExternalForces(timeIntervalInSeconds);
-	computeAdvection(timeIntervalInSeconds);
+	//addTemperature();
+	//computeExternalForces(timeIntervalInSeconds);
+	//computeAdvection(timeIntervalInSeconds);
 
-	setMarkers();
-	setFluidCellNum();
-	computePressure(timeIntervalInSeconds);
+	//setMarkers();
+	//setFluidCellNum();
+	//computePressure(timeIntervalInSeconds);
 
 }
 
 void EulerianSmokeSolver2::addDensity() {
-	Vector2I lower(20, 0);
-	Vector2I upper(26, 1);
+	Vector2I lower(1, 3);
+	Vector2I upper(3, 7);
 
 	auto density = _eulerianSmokeData->densities()->datas();
 

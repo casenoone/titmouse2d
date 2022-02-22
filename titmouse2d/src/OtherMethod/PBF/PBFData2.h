@@ -8,31 +8,31 @@ public:
 	PBFData2() = default;
 
 public:
-	ArrayPtr<double> densities();
+	Array<double> densities();
 
-	ArrayPtr<double> lambda();
+	Array<double> lambda();
 
-	ArrayPtr<Vector2<double>> deltaP();
+	Array<Vector2<double>> deltaP();
 
 private:
-	ArrayPtr<double> _densities;
-	ArrayPtr<double> _lambda;
-	ArrayPtr<Vector2<double>> _deltaP;
+	Array<double> _densities;
+	Array<double> _lambda;
+	Array<Vector2<double>> _deltaP;
 };
 
 using PBFData2Ptr = shared_ptr<PBFData2>;
 
 
-inline ArrayPtr<double> PBFData2::densities() {
+inline Array<double> PBFData2::densities() {
 	return _densities;
 }
 
-inline ArrayPtr<double> PBFData2::lambda() {
+inline Array<double> PBFData2::lambda() {
 	return _lambda;
 }
 
 
-inline ArrayPtr<Vector2<double>> PBFData2::deltaP() {
+inline Array<Vector2<double>> PBFData2::deltaP() {
 	return _deltaP;
 }
 

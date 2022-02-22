@@ -21,7 +21,7 @@ public:
 	Vector2<double> computeUSingle(const Vector2<double>& pos, int i)const;
 
 	void setData(int numberOfParticles,
-		ArrayPtr<Vector2<double>>& pos,
+		Array<Vector2<double>>& pos,
 		int resolutionX,
 		int resolutionY);
 

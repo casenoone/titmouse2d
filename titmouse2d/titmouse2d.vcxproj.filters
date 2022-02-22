@@ -200,18 +200,6 @@
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\ArrayPtr.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Array2Ptr.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VectorNPtr.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\SparseMatrixPtr.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>

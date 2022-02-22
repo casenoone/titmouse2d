@@ -2,7 +2,7 @@
 #define FACECENTEREDGRID2_H
 
 #include "VectorGrid2.hpp"
-#include "../Array2Ptr.hpp"
+#include "../Array2.hpp"
 #include "../Eulerian/ArraySampler2.hpp"
 
 class FaceCenteredGrid2 final : public VectorGrid2<Vector2<double>> {
@@ -12,8 +12,8 @@ public:
 
 	FaceCenteredGrid2();
 
-	FaceCenteredGrid2(const Vector2<size_t>& resolution,
-		const Vector2<double>& origin ,
+	FaceCenteredGrid2(const Vector2<int>& resolution,
+		const Vector2<double>& origin,
 		const Vector2<double>& initialValue);
 
 	FaceCenteredGrid2(const FaceCenteredGrid2& other);
@@ -26,15 +26,15 @@ public:
 
 	FaceCenteredGrid2& operator=(const FaceCenteredGrid2& other);
 
-	double& u(size_t i, size_t j);
+	double& u(int i, int j);
 
-	double& v(size_t i, size_t j);
+	double& v(int i, int j);
 
-	Vector2<double> valueAtCellCenter(size_t i, size_t j);
+	Vector2<double> valueAtCellCenter(int i, int j);
 
-	double divergenceAtCellCenter(size_t i, size_t j);
+	double divergenceAtCellCenter(int i, int j);
 
-	double curlAtCellCenter(size_t i, size_t j);
+	double curlAtCellCenter(int i, int j);
 
 	DataPositionFunc uPosition() const;
 
@@ -45,8 +45,8 @@ public:
 	Size2 vSize();
 
 	//这里想一个更好的实现方式
-	Array2Ptr<double>& uDatas();
-	Array2Ptr<double>& vDatas();
+	Array2<double>& uDatas();
+	Array2<double>& vDatas();
 
 	Vector2<double> uOrigin() const;
 
@@ -70,12 +70,12 @@ public:
 	//在求解线性系统时，往往只求解流体所在部分
 	//所以用该成员去标识线性系统中未知量系数的序号
 	//我们令其初始化为空气
-	Array2Ptr<int> solveSystemMarker;
+	Array2<int> solveSystemMarker;
 
 	static Builder builder();
 
 protected:
-	void onResize(const Vector2<size_t>& resolution, const Vector2<double>& gridSpacing,
+	void onResize(const Vector2<int>& resolution, const Vector2<double>& gridSpacing,
 		const Vector2<double>& origin, const Vector2<double>& initialValue) final;
 
 
@@ -86,8 +86,8 @@ protected:
 
 
 private:
-	Array2Ptr<double> _dataU;
-	Array2Ptr<double> _dataV;
+	Array2<double> _dataU;
+	Array2<double> _dataV;
 	Vector2<double> _dataOriginU;
 	Vector2<double> _dataOriginV;
 

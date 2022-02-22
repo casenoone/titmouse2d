@@ -4,7 +4,7 @@
 #include <iostream>
 using namespace std;
 
-#include "../ArrayPtr.hpp"
+#include "../Array.hpp"
 #include "../Vector2.hpp"
 
 #include "ParticleSystemData2.h"
@@ -23,11 +23,11 @@ public:
 	ParticleSystemSolver2();
 	~ParticleSystemSolver2();
 
-	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY);
+	void setData(int numberOfParticles, Array<Vector2<double>>& pos, int resolutionX, int resolutionY);
 
 	void setCollider(const Collider2& collider);
 
-	void initSearchList(const ArrayPtr<Vector2<double>> pos);
+	void initSearchList(const Array<Vector2<double>> pos);
 
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
 
@@ -51,16 +51,16 @@ protected:
 
 	virtual void accumlateExternalForces();
 
-	void clearForces(ArrayPtr<Vector2<double>>& forces);
+	void clearForces(Array<Vector2<double>>& forces);
 
-	ArrayPtr<Vector2<double>> _newPositions;
+	Array<Vector2<double>> _newPositions;
 
-	ArrayPtr<Vector2<double>> _newVelocities;
+	Array<Vector2<double>> _newVelocities;
 
 };
 
 
-inline void ParticleSystemSolver2::initSearchList(const ArrayPtr<Vector2<double>> pos) {
+inline void ParticleSystemSolver2::initSearchList(const Array<Vector2<double>> pos) {
 	auto neighbors = _particleSystemData->neighbor;
 	neighbors->setNeiborList(pos);
 }

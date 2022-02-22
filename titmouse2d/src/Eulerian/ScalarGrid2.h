@@ -3,7 +3,7 @@
 
 #include "Grid2.h"
 #include "ScalarField2.h"
-#include "../Array2Ptr.hpp"
+#include "../Array2.hpp"
 #include "ArraySampler2.hpp"
 
 class ScalarGrid2 : public ScalarField2, public Grid2 {
@@ -18,26 +18,26 @@ public:
 
 	virtual ~ScalarGrid2();
 
-	virtual Vector2<size_t> dataSize()const = 0;
-	
+	virtual Vector2<int> dataSize()const = 0;
+
 	virtual Vector2<double> dataOrigin()const = 0;
 
 	//暂时不实现
 	//virtual std::shared_ptr<ScalarGrid2> clone() const = 0;
 
 	//返回给定下标的数据
-	double& operator()(size_t i, size_t j);
+	double& operator()(int i, int j);
 
-	double lookAt(size_t i, size_t j)const;
+	double lookAt(int i, int j)const;
 
 	//返回给定点的梯度算子结果
-	Vector2<double> gradientAtDataPoint(size_t i, size_t j) const;
+	Vector2<double> gradientAtDataPoint(int i, int j) const;
 
-	double laplacianAtDataPoint(size_t i, size_t j) const;
-	
+	double laplacianAtDataPoint(int i, int j) const;
 
-	using DataPositionFunc = function<Vector2<double>(size_t, size_t)>;
-	
+
+	using DataPositionFunc = function<Vector2<double>(int, int)>;
+
 
 	DataPositionFunc dataPosition() const;
 
@@ -51,21 +51,21 @@ public:
 
 	void fill(double value);
 
-	void resize(const Vector2<size_t>& resolution,
+	void resize(const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
-		const Vector2<double>& origin ,
+		const Vector2<double>& origin,
 		double initialValue = 0.0);
 
-	Array2Ptr<double>& datas();
+	Array2<double>& datas();
 
-	const Array2Ptr<double> datas() const;
+	const Array2<double> datas() const;
 
-	
+
 
 	//void copyTo()const;
 
 protected:
-	Array2Ptr<double> _data;
+	Array2<double> _data;
 
 	LinearArraySampler2Ptr<double> _linearSampler;
 };
@@ -86,7 +86,7 @@ public:
 	virtual ~ScalarGridBuilder2();
 
 	virtual ScalarGrid2Ptr build(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridOrigin,
 		double initialVal) const = 0;
 };

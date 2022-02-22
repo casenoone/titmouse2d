@@ -1,36 +1,36 @@
 #ifndef ITERATIVESYSTEMSOLVER_HPP
 #define ITERATIVESYSTEMSOLVER_HPP
 
-#include "../SparseMatrixPtr.hpp"
-#include "../VectorNPtr.hpp"
+#include "../SparseMatrix.hpp"
+#include "../VectorN.hpp"
 
 template <class T>
 class IterativeSystemSolver {
 public:
 	IterativeSystemSolver();
-	
+
 	virtual ~IterativeSystemSolver();
 
-	virtual void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) = 0;
+	virtual void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) = 0;
 
 	//设置容许的最小误差
 	void setMinError(T minValue);
 
 	//矫正residual
-	void correctResidual(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
+	void correctResidual(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b);
 
 protected:
 	//误差
-	VectorNPtr<T> _r;
+	VectorN<T> _r;
 
 	//最小误差
-	T _minR = 1e-9;
+	T _minR = 1e-7;
 
 	//记录迭代次数
-	size_t _iterNum = 0;
+	int _iterNum = 0;
 
 	//最大迭代次数
-	size_t _maxIterNum = 1000;
+	int _maxIterNum = 300;
 };
 
 
@@ -54,7 +54,7 @@ void IterativeSystemSolver<T>::setMinError(T minValue) {
 
 
 template<class T>
-void IterativeSystemSolver<T>::correctResidual(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
+void IterativeSystemSolver<T>::correctResidual(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
 	this->_r = b - A * x;
 }
 

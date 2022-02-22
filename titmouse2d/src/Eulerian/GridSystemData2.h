@@ -11,7 +11,7 @@ public:
 	GridSystemData2();
 
 	GridSystemData2(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& origin);
 
@@ -20,11 +20,11 @@ public:
 	virtual ~GridSystemData2();
 
 	void resize(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& origin);
 
-	Vector2<size_t> resolution() const;
+	Vector2<int> resolution() const;
 
 	Vector2<double> gridSpacing() const;
 
@@ -35,7 +35,7 @@ public:
 	VertexCenteredScalarGrid2Ptr& sdf();
 
 private:
-	Vector2<size_t> _resolution;
+	Vector2<int> _resolution;
 	Vector2<double> _gridSpacing;
 	Vector2<double> _origin;
 

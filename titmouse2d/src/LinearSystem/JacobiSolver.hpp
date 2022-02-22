@@ -2,8 +2,8 @@
 #define JACOBISOLVER_HPP
 
 #include "IterativeSystemSolver.hpp"
-#include "../SparseMatrixPtr.hpp"
-#include "../VectorNPtr.hpp"
+#include "../SparseMatrix.hpp"
+#include "../VectorN.hpp"
 
 //这里可以进一步优化内存
 //暂时不管了，用到的时候再优化
@@ -18,9 +18,9 @@ public:
 	~JacobiSolver();
 
 	//求解Ax = b
-	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
+	void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b);
 
-	SparseMatrixPtr<T> computeD(const SparseMatrixPtr<T>& A) const;
+	SparseMatrix<T> computeD(const SparseMatrix<T>& A) const;
 
 
 };
@@ -38,10 +38,10 @@ JacobiSolver<T>::~JacobiSolver() {
 }
 
 template<class T>
-SparseMatrixPtr<T> JacobiSolver<T>::computeD(const SparseMatrixPtr<T>& A) const {
-	SparseMatrixPtr<T> D(A.size().x, A.size().y);
+SparseMatrix<T> JacobiSolver<T>::computeD(const SparseMatrix<T>& A) const {
+	SparseMatrix<T> D(A.size().x, A.size().y);
 
-	for (size_t i = 0; i < A.size().x; ++i) {
+	for (int i = 0; i < A.size().x; ++i) {
 
 		auto value = A.lookAt(i, i);
 		if (value == 0)value = 1.0;
@@ -62,7 +62,7 @@ SparseMatrixPtr<T> JacobiSolver<T>::computeD(const SparseMatrixPtr<T>& A) const 
 //将A分解为D和R
 //其中D为对角矩阵
 template<class T>
-void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
+void JacobiSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
 	this->_r = (b - A * x);
 	auto err = this->_r.norm();
 	auto relerr = err;
@@ -72,9 +72,9 @@ void JacobiSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, con
 
 		auto R = A - D;
 
-		SparseMatrixPtr<T> D_inv(A.size().x, A.size().y);
-		for (size_t i = 0; i < A.size().x; ++i) {
-			size_t j = i;
+		SparseMatrix<T> D_inv(A.size().x, A.size().y);
+		for (int i = 0; i < A.size().x; ++i) {
+			int j = i;
 			auto value = A.lookAt(i, j);
 			if (value == 0)value = 1.0;
 

@@ -69,7 +69,7 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto picSolver = PicSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(20, 20))
+.withResolution(Vector2<int>(20, 20))
 .makeShared();
 
 ParticleSystemSolver2 solver;
@@ -93,7 +93,7 @@ static void display(void)
 
 	auto num = picSolver->particleSystemData()->numberOfParticles();
 	auto& pos = picSolver->particleSystemData()->positions();
-	for (size_t i = 0; i < num; ++i) {
+	for (int i = 0; i < num; ++i) {
 		drawPoint(pos[i].x, pos[i].y, 3.0f);
 	}
 
@@ -152,7 +152,7 @@ int main(int argc, char** argv)
 		temp1.push_back(temp);
 	}
 
-	ArrayPtr<Vector2<double>> pos(temp1);
+	Array<Vector2<double>> pos(temp1);
 
 
 

@@ -5,10 +5,10 @@
 using namespace std;
 
 #include "FaceCenteredGrid2.h"
-#include "../VectorNPtr.hpp"
-#include "../SparseMatrixPtr.hpp"
+#include "../VectorN.hpp"
+#include "../SparseMatrix.hpp"
 
-#include "../Array2Ptr.hpp"
+#include "../Array2.hpp"
 
 class SimplePressureSolver2 {
 public:
@@ -16,18 +16,18 @@ public:
 
 	~SimplePressureSolver2();
 
-	void solve(FaceCenteredGrid2Ptr flow, const Array2Ptr<int>& markers);
+	void solve(FaceCenteredGrid2Ptr flow, const Array2<int>& markers);
 
 private:
-	int fluidCellSize(const Array2Ptr<int>& markers);
+	int fluidCellSize(const Array2<int>& markers);
 
 	void constructMatrix(FaceCenteredGrid2Ptr& flow,
-		const Array2Ptr<int>& markers,
-		VectorNPtr<double>& x, int systemSize);
+		const Array2<int>& markers,
+		VectorN<double>& x, int systemSize);
 
 	void applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,
-		const Array2Ptr<int>& markers,
-		VectorNPtr<double>& x);
+		const Array2<int>& markers,
+		VectorN<double>& x);
 
 };
 

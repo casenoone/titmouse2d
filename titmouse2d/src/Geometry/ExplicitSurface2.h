@@ -8,7 +8,7 @@ using namespace std;
 
 #include "Surface2.h"
 #include "../Vector2.hpp"
-#include "../ArrayPtr.hpp"
+#include "../Array.hpp"
 
 class SurfaceElement2 {
 public:

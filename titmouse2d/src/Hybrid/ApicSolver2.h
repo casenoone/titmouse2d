@@ -13,7 +13,7 @@ public:
 	ApicSolver2() = default;
 
 	ApicSolver2(
-		const Vector2<size_t>& resolutions,
+		const Vector2<int>& resolutions,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
@@ -29,8 +29,8 @@ protected:
 	void transferFromGridsToParticles() override;
 
 private:
-	ArrayPtr<Vector2<double>> _cX;
-	ArrayPtr<Vector2<double>> _cY;
+	Array<Vector2<double>> _cX;
+	Array<Vector2<double>> _cY;
 };
 
 

@@ -63,7 +63,7 @@ LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
 
 }
 
-void LBMSolver2::setCollider(const Array2Ptr<int>& collider) {
+void LBMSolver2::setCollider(const Array2<int>& collider) {
 
 	auto res = resolution();
 
@@ -185,7 +185,7 @@ void LBMSolver2::collide() {
 }
 
 
-Array2Ptr<double> LBMSolver2::getRho()const {
+Array2<double> LBMSolver2::getRho()const {
 	return _data.rho;
 }
 

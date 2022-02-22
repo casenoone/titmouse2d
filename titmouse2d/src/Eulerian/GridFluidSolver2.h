@@ -17,7 +17,7 @@ public:
 
 	~GridFluidSolver2();
 
-	GridFluidSolver2(const Vector2<size_t>& resolution, const Vector2<double>& gridSpacing, const Vector2<double>& gridOrigin);
+	GridFluidSolver2(const Vector2<int>& resolution, const Vector2<double>& gridSpacing, const Vector2<double>& gridOrigin);
 
 	//暂时写一个这样的接口，将来会专门抽象出一个流体发射器
 	void setFluidSdf(const VertexCenteredScalarGrid2& _sdf);
@@ -26,7 +26,7 @@ public:
 
 	VertexCenteredScalarGrid2Ptr& sdf();
 
-	Vector2<size_t> resolution() const;
+	Vector2<int> resolution() const;
 
 	Vector2<double> gridSpacing() const;
 
@@ -76,7 +76,7 @@ protected:
 
 protected:
 	//标记网格是否被粒子占用
-	Array2Ptr<int> cellCenterMarkers;
+	Array2<int> cellCenterMarkers;
 
 	SimplePressureSolver2Ptr _pressureSolver;
 	AdvectionSolver2Ptr _advectionSolver;
@@ -97,12 +97,12 @@ typedef std::shared_ptr<GridFluidSolver2> GridFluidSolver2Ptr;
 template <typename DerivedBuilder>
 class GridFluidSolverBuilderBase2 {
 public:
-	DerivedBuilder& withResolution(const Vector2<size_t>& resolution);
+	DerivedBuilder& withResolution(const Vector2<int>& resolution);
 
 	DerivedBuilder& withOrigin(const Vector2<double>& gridOrigin);
 
 protected:
-	Vector2<size_t> _resolution;
+	Vector2<int> _resolution;
 	Vector2<double> _gridSpacing;
 	Vector2<double> _gridOrigin;
 
@@ -111,7 +111,7 @@ protected:
 
 
 template <typename T>
-T& GridFluidSolverBuilderBase2<T>::withResolution(const Vector2<size_t>& resolution) {
+T& GridFluidSolverBuilderBase2<T>::withResolution(const Vector2<int>& resolution) {
 	_resolution = resolution;
 	return static_cast<T&>(*this);
 }

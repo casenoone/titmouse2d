@@ -13,7 +13,7 @@ PicSolver2::~PicSolver2() {
 
 
 PicSolver2::PicSolver2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin)
 	: GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
@@ -28,9 +28,7 @@ void PicSolver2::onBeginAdvanceTimeStep(double timeIntervalInSeconds) {
 
 
 void PicSolver2::computePressure(double timeIntervalInSeconds) {
-	//cout << cellCenterMarkers.dataSize().x << endl;
 	_pressureSolver->solve(velocity(), cellCenterMarkers);
-
 }
 
 
@@ -59,7 +57,7 @@ void PicSolver2::transferFromParticlesToGrids() {
 	auto flow = gridSystemData()->velocity();
 	auto positions = _particles->positions();
 	auto velocities = _particles->velocities();
-	size_t numberOfParticles = _particles->numberOfParticles();
+	int numberOfParticles = _particles->numberOfParticles();
 
 	flow->fill(Vector2<double>(0.0, 0.0));
 	auto sizeU = flow->uSize();
@@ -67,9 +65,9 @@ void PicSolver2::transferFromParticlesToGrids() {
 	auto& u = flow->uDatas();
 	auto& v = flow->vDatas();
 
-	Array2Ptr<double> uWeight;
+	Array2<double> uWeight;
 	uWeight.reSize(sizeU.x, sizeU.y, 0.0);
-	Array2Ptr<double> vWeight;
+	Array2<double> vWeight;
 	vWeight.reSize(sizeV.x, sizeV.y, 0.0);
 
 	_uMarkers.reSize(u.dataSize().x, u.dataSize().y, 0.0);
@@ -142,9 +140,9 @@ void PicSolver2::transferFromGridsToParticles() {
 	auto flow = gridSystemData()->velocity();
 	auto positions = _particles->positions();
 	auto velocities = _particles->velocities();
-	size_t numberOfParticles = _particles->numberOfParticles();
+	int numberOfParticles = _particles->numberOfParticles();
 
-	for (size_t i = 0; i < numberOfParticles; ++i) {
+	for (int i = 0; i < numberOfParticles; ++i) {
 		//注意这个sample怎么写
 		velocities[i] = flow->sample(positions[i]);
 	}
@@ -292,7 +290,7 @@ const ParticleSystemData2Ptr& PicSolver2::particleSystemData() const {
 	return _particles;
 }
 
-void PicSolver2::setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos, size_t resolutionX, size_t resolutionY) {
+void PicSolver2::setData(int numberOfParticles, Array<Vector2<double>>& pos, int resolutionX, int resolutionY) {
 	_particles->positions() = pos;
 	_particles->numberOfParticles() = numberOfParticles;
 	_particles->forces().reSize(numberOfParticles);

@@ -8,7 +8,7 @@ const double iisph_rho0 = 0.00000001;
 
 
 void IISphSolver2::setData(int numberOfParticles,
-	ArrayPtr<Vector2<double>>& pos,
+	Array<Vector2<double>>& pos,
 	int resolutionX,
 	int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
@@ -16,16 +16,16 @@ void IISphSolver2::setData(int numberOfParticles,
 }
 
 void IISphSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	ParticleSystemSolver2::beginAdvanceTimeStep(); //没问题
-	ParticleSystemSolver2::initSearchList(_iisphData->positions());  //没问题
-	initDensity();  //没问题
-	computeAdv(timeIntervalInSeconds); //没问题
-	computeD_ii(timeIntervalInSeconds);//没问题
-	computeA_ii(timeIntervalInSeconds);//没问题
-	iterPressureSolver(timeIntervalInSeconds);//没问题
-	timeIntegration(timeIntervalInSeconds);//没问题
+	ParticleSystemSolver2::beginAdvanceTimeStep();
+	ParticleSystemSolver2::initSearchList(_iisphData->positions());
+	initDensity();
+	computeAdv(timeIntervalInSeconds);
+	computeD_ii(timeIntervalInSeconds);
+	computeA_ii(timeIntervalInSeconds);
+	iterPressureSolver(timeIntervalInSeconds);
+	timeIntegration(timeIntervalInSeconds);
 	ParticleSystemSolver2::resolveCollision();
-	//setMovingColliderPos(resolveMovingCollision(_newPositions, _newVelocities));
+	////setMovingColliderPos(resolveMovingCollision(_newPositions, _newVelocities));
 
 	ParticleSystemSolver2::endAdvanceTimeStep();
 }
@@ -132,7 +132,7 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 	double t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto n = _iisphData->numberOfParticles();
 
-	ArrayPtr<Vector2<double>> d_ij_p_j;
+	Array<Vector2<double>> d_ij_p_j;
 	d_ij_p_j.reSize(n);
 
 	SphSpikyKernel2 kernel(iisphKR);
@@ -236,10 +236,9 @@ void IISphSolver2::timeIntegration(double timeIntervalInSeconds) {
 			}
 		}
 		tempPressureForce *= -1.0;
-		//cout << tempPressureForce.y << endl;
+
 		_newVelocities[i] += timeIntervalInSeconds * tempPressureForce;
 		_newPositions[i] = pos[i] + timeIntervalInSeconds * _newVelocities[i];
-		//cout << _newPositions[i].y << endl;
 	}
 
 }

@@ -57,7 +57,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2<size_t> resolution(17, 17);
+Vector2<int> resolution(17, 17);
 Vector2<double> origin(0.0, 0.0);
 
 Vector2D center1(0.6, 1.0);

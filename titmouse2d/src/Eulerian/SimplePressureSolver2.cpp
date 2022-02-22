@@ -20,14 +20,15 @@ SimplePressureSolver2::~SimplePressureSolver2() {
 }
 
 
-void SimplePressureSolver2::solve(FaceCenteredGrid2Ptr flow, const Array2Ptr<int>& markers) {
+void SimplePressureSolver2::solve(FaceCenteredGrid2Ptr flow, const Array2<int>& markers) {
 	int size = fluidCellSize(markers);
-	VectorNPtr<double> x(size);
+	VectorN<double> x(size);
+
 	constructMatrix(flow, markers, x, size);
 	applyGradientandUpdateVel(flow, markers, x);
 }
 
-int SimplePressureSolver2::fluidCellSize(const Array2Ptr<int>& markers) {
+int SimplePressureSolver2::fluidCellSize(const Array2<int>& markers) {
 	int systemSize = 0;
 
 	auto markersSize = markers.dataSize();
@@ -47,8 +48,8 @@ int SimplePressureSolver2::fluidCellSize(const Array2Ptr<int>& markers) {
 
 
 void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
-	const Array2Ptr<int>& markers,
-	VectorNPtr<double>& x, int systemSize) {
+	const Array2<int>& markers,
+	VectorN<double>& x, int systemSize) {
 
 	auto& solveSystemMarker = flow->solveSystemMarker;
 	auto& u = flow->uDatas();
@@ -60,8 +61,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	auto invH = 1 / H;
 	auto invH2 = invH * invH;
 
-	VectorNPtr<double> b(systemSize);
-	SparseMatrixPtr<double> A(systemSize, systemSize);
+	VectorN<double> b(systemSize);
+
+	SparseMatrix<double> A(systemSize, systemSize);
 
 	int row = 0;
 
@@ -119,9 +121,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				if (j <= 0 || j >= flow->vSize().y - 1) {
 					v(i, j) = 0;
 				}
-
 				b[row] = -(u(i + 1, j) - u(i, j) + v(i, j + 1) - v(i, j));
 				++row;
+
 			}
 		}
 	}
@@ -131,25 +133,25 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 
 
 	ConjugateGradientSolver<double> cgSolver;
-	GaussSeidelSolver<double> gauSolver;
-	SteepestDescentSolver<double> steepSolver;
-	JacobiSolver<double> JacobiSolver;
-	RelaxedJacobiSolver<double> rjSolver(0.5);
-	SORSolver<double> sorSolver(1.67);
+	//GaussSeidelSolver<double> gauSolver;
+	//SteepestDescentSolver<double> steepSolver;
+	//JacobiSolver<double> JacobiSolver;
+	//RelaxedJacobiSolver<double> rjSolver(0.5);
+	//SORSolver<double> sorSolver(1.67);
 
-	//线性系统求解可作并行优化
+	////线性系统求解可作并行优化
 	cgSolver.compute(A, x, b);
-	//gauSolver.compute(A, x, b);
-	//steepSolver.compute(A, x, b);
-	//JacobiSolver.compute(A, x, b);
-	//rjSolver.compute(A, x, b);
-	//sorSolver.compute(A, x, b);
+	////gauSolver.compute(A, x, b);
+	////steepSolver.compute(A, x, b);
+	////JacobiSolver.compute(A, x, b);
+	////rjSolver.compute(A, x, b);
+	////sorSolver.compute(A, x, b);
 
 }
 
 void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,
-	const Array2Ptr<int>& markers,
-	VectorNPtr<double>& x) {
+	const Array2<int>& markers,
+	VectorN<double>& x) {
 
 
 	auto& u = flow->uDatas();

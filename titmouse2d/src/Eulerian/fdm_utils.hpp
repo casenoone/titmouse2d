@@ -2,7 +2,7 @@
 #define FDM_UTILS_HPP
 
 #include "../Vector2.hpp"
-#include "../Array2Ptr.hpp"
+#include "../Array2.hpp"
 
 #include <iostream>
 using namespace std;
@@ -10,16 +10,16 @@ using namespace std;
 template<class T>
 Vector2<T> gradient2(const Array2<T>& data,
 	const Vector2<T>& gridSpacing,
-	size_t i,
-	size_t j);
+	int i,
+	int j);
 
 
 template<class T>
 T laplacian2(
 	const Array2<T>& data,
 	const Vector2<T>& gridSpacing,
-	size_t i,
-	size_t j);
+	int i,
+	int j);
 
 
 
@@ -27,8 +27,8 @@ T laplacian2(
 template<class T>
 Vector2<T> gradient2(const Array2<T>& data,
 	const Vector2<T>& gridSpacing,
-	size_t i,
-	size_t j) {
+	int i,
+	int j) {
 
 	auto tempData = data;
 	Vector2<T> ds = tempData.dataSize();
@@ -46,8 +46,8 @@ Vector2<T> gradient2(const Array2<T>& data,
 template<class T>
 T laplacian2(const Array2<T>& data,
 	const Vector2<T>& gridSpacing,
-	size_t i,
-	size_t j) {
+	int i,
+	int j) {
 	auto tempData = data;
 
 	double center = tempData(i, j);

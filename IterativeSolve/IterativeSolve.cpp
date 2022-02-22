@@ -9,7 +9,9 @@ using namespace std;
 #include "../titmouse2d/src/LinearSystem/RelaxedJacobiSolver.hpp"
 #include "../titmouse2d/src/LinearSystem/SORsolver.hpp"
 #include "../titmouse2d/src/LinearSystem/RelaxedJacobiSolver.hpp"
+#include "../titmouse2d/src/Matrix2x2.hpp"
 
+#include "../titmouse2d/src/Eulerian/VertexCenteredScalarGrid2.h"
 
 #include <array>
 
@@ -43,7 +45,7 @@ int main() {
 			{0.,-1.,4.}
 	};*/
 
-	SparseMatrixPtr<double> A(A_data);
+	SparseMatrix<double> A(A_data);
 
 
 
@@ -51,8 +53,8 @@ int main() {
 	//vector<double> b_used = { 1.,4.,-3. };
 	vector<double> x_used;
 	x_used.resize(5);
-	VectorNPtr<double> b(b_used);
-	VectorNPtr<double> x(x_used);
+	VectorN<double> b(b_used);
+	VectorN<double> x(x_used);
 
 
 
@@ -65,7 +67,7 @@ int main() {
 	//sorSolver.compute(A, x, b);
 	rjbSolver.compute(A, x, b);
 
-	x.forEachIndex([&](size_t i) {
+	x.forEachIndex([&](int i) {
 		cout << x[i] << endl;
 		});
 
@@ -74,9 +76,9 @@ int main() {
 
 	//该算例的正确答案： 0.499999 1  -0.49999 
 
+	auto vx = make_shared<VertexCenteredScalarGrid2>(Vector2<int>(10, 10));
 
-
-
+	cout << vx->sample(Vector2D(0.5, 0.5)) << endl;;
 
 	return 0;
 }

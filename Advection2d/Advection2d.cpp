@@ -81,7 +81,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-Vector2<size_t> resolution(50, 50);
+Vector2<int> resolution(40, 40);
 Vector2<double> origin(0.0, 0.0);
 Color3<double> red(255, 0.0, 0.0);
 
@@ -186,7 +186,7 @@ int main(int argc, char** argv)
 			auto posFunc = velocity->uPosition();
 			auto pos = posFunc(i, j);
 			auto tempVec = (pos - center1);
-			//velocity->u(i, j) = tempVec.x * cos(kPiD / 2) - tempVec.y * sin(kPiD / 2);
+			velocity->u(i, j) = tempVec.x * cos(kPiD / 2) - tempVec.y * sin(kPiD / 2);
 		}
 	}
 
@@ -197,8 +197,7 @@ int main(int argc, char** argv)
 			auto posFunc = velocity->vPosition();
 			auto pos = posFunc(i, j);
 			auto tempVec = (pos - center1);
-			//velocity->v(i, j) = tempVec.x * sin(kPiD / 2) + tempVec.y * cos(kPiD / 2);
-			//velocity->v(i, j) = 2;
+			velocity->v(i, j) = tempVec.x * sin(kPiD / 2) + tempVec.y * cos(kPiD / 2);
 		}
 	}
 

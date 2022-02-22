@@ -73,7 +73,7 @@ static void display(void)
 
 	auto num = solver._particleSystemData->numberOfParticles();
 	auto& pos = solver._particleSystemData->positions();
-	for (size_t i = 0; i < num; ++i) {
+	for (int i = 0; i < num; ++i) {
 		drawPoint(pos[i].x, pos[i].y);
 	}
 
@@ -128,7 +128,7 @@ int main(int argc, char** argv)
 		temp1.push_back(temp);
 	}
 
-	ArrayPtr<Vector2<double>> pos(temp1);
+	Array<Vector2<double>> pos(temp1);
 
 
 

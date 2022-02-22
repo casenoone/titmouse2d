@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	ArrayPtr<Vector2<double>> pos(temp_pos);
+	Array<Vector2<double>> pos(temp_pos);
 
 	sphSolver->setData(numberOfParticles, pos, res_x, res_y);
 

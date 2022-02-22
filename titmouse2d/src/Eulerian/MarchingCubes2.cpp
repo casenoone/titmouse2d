@@ -10,7 +10,7 @@ MarchingCube2::MarchingCube2() {
 
 
 
-MarchingCube2::MarchingCube2(const Vector2<size_t>& resolution,
+MarchingCube2::MarchingCube2(const Vector2<int>& resolution,
 	const Vector2<double>& origin,
 	double initialValue,
 	double domainSizeX) {
@@ -48,17 +48,17 @@ void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
 
 	auto resolution = _data->resolution();
 
-	Array2Ptr<double> num;
+	Array2<double> num;
 
 	//获取顶点配置
 	getVoxelConfig(num);
 
 	auto size = data->resolution();
-	for (size_t j = 0; j < size.y; ++j) {
-		for (size_t i = 0; i < size.x; ++i) {
-			auto currentNum = (size_t)num(i, j);
+	for (int j = 0; j < size.y; ++j) {
+		for (int i = 0; i < size.x; ++i) {
+			auto currentNum = (int)num(i, j);
 			auto inform = triangleTable[currentNum];
-			for (size_t k = 0; k < 4; k += 2) {
+			for (int k = 0; k < 4; k += 2) {
 				if (inform[k] != -1) {
 					auto p1 = calculateIso(inform[k], i, j);
 					auto p2 = calculateIso(inform[k + 1], i, j);
@@ -88,23 +88,17 @@ void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet,
 
 	auto resolution = _data->resolution();
 
-	for (int i = 0; i < resolution.x; ++i) {
-		for (int j = 0; j < resolution.y; ++j) {
-			//cout << (*_data)(i,j) << endl;
-		}
-	}
-
-	Array2Ptr<double> num;
+	Array2<double> num;
 
 	//获取顶点配置
 	getVoxelConfig(num);
 
 	auto size = data->resolution();
-	for (size_t j = 0; j < size.y; ++j) {
-		for (size_t i = 0; i < size.x; ++i) {
-			auto currentNum = (size_t)num(i, j);
+	for (int j = 0; j < size.y; ++j) {
+		for (int i = 0; i < size.x; ++i) {
+			auto currentNum = (int)num(i, j);
 			auto inform = triangleTable[currentNum];
-			for (size_t k = 0; k < 4; k += 2) {
+			for (int k = 0; k < 4; k += 2) {
 				if (inform[k] != -1) {
 					auto p1 = calculateIso(inform[k], i, j);
 					auto p2 = calculateIso(inform[k + 1], i, j);
@@ -127,17 +121,17 @@ void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet) {
 
 	//计算顶点势能
 	calculateWeight();
-	Array2Ptr<double> num;
+	Array2<double> num;
 
 	//获取顶点配置
 	getVoxelConfig(num);
 
 	auto size = data->resolution();
-	for (size_t j = 0; j < size.y; ++j) {
-		for (size_t i = 0; i < size.x; ++i) {
-			auto currentNum = (size_t)num(i, j);
+	for (int j = 0; j < size.y; ++j) {
+		for (int i = 0; i < size.x; ++i) {
+			auto currentNum = (int)num(i, j);
 			auto inform = triangleTable[currentNum];
-			for (size_t k = 0; k < 4; k += 2) {
+			for (int k = 0; k < 4; k += 2) {
 				if (inform[k] != -1) {
 					auto p1 = calculateIso(inform[k], i, j);
 					auto p2 = calculateIso(inform[k + 1], i, j);
@@ -159,13 +153,13 @@ void MarchingCube2::calculateWeight() {
 
 	data->clearData(0.0);
 	auto size = data->dataSize();
-	for (size_t j = 0; j < size.y; ++j) {
-		for (size_t i = 0; i < size.x; ++i) {
+	for (int j = 0; j < size.y; ++j) {
+		for (int i = 0; i < size.x; ++i) {
 			auto positionFunc = data->dataPosition();
 			auto currentP = positionFunc(i, j);
-			auto circleNum = _circleList.size();
+			int circleNum = _circleList.size();
 
-			for (size_t k = 0; k < circleNum; ++k) {
+			for (int k = 0; k < circleNum; ++k) {
 				//r^2/d^2
 				(*data)(i, j) += sqr(_circleList[k].r) / currentP.disSquare(_circleList[k].center);
 			}
@@ -174,14 +168,14 @@ void MarchingCube2::calculateWeight() {
 }
 
 
-void MarchingCube2::getVoxelConfig(Array2Ptr<double>& num) {
+void MarchingCube2::getVoxelConfig(Array2<double>& num) {
 
 	auto size = data->resolution();
 	num.reSize(size.x, size.y, 0.0);
-	for (size_t j = 0; j < size.y; ++j) {
-		for (size_t i = 0; i < size.x; ++i) {
+	for (int j = 0; j < size.y; ++j) {
+		for (int i = 0; i < size.x; ++i) {
 
-			size_t nodeNum = 0;
+			int nodeNum = 0;
 			double value3 = (*data)(i, j);
 			double value2 = (*data)(i + 1, j);
 			double value1 = (*data)(i + 1, j + 1);
@@ -219,7 +213,7 @@ void MarchingCube2::getVoxelConfig(Array2Ptr<double>& num) {
 
 
 
-			nodeNum = value3 + value2 * 2 + value1 * 4 + value0 * 8;
+			nodeNum = static_cast<int>(value3 + value2 * 2 + value1 * 4 + value0 * 8);
 			num(i, j) = nodeNum;
 		}
 	}
@@ -228,7 +222,7 @@ void MarchingCube2::getVoxelConfig(Array2Ptr<double>& num) {
 
 
 
-Vector2<double> MarchingCube2::calculateIso(size_t edge, size_t i, size_t j) {
+Vector2<double> MarchingCube2::calculateIso(int edge, int i, int j) {
 	int start = edge;
 
 	Vector2<double> p1, p2;
@@ -301,12 +295,12 @@ MarchingCube2::Builder MarchingCube2::builder() {
 }
 
 
-MarchingCube2::Builder& MarchingCube2::Builder::withResolution(const Vector2<size_t>& resolution) {
+MarchingCube2::Builder& MarchingCube2::Builder::withResolution(const Vector2<int>& resolution) {
 	_resolution = resolution;
 	return *this;
 }
 
-MarchingCube2::Builder& MarchingCube2::Builder::withResolution(size_t resolutionX, size_t resolutionY) {
+MarchingCube2::Builder& MarchingCube2::Builder::withResolution(int resolutionX, int resolutionY) {
 	_resolution.x = resolutionX;
 	_resolution.y = resolutionY;
 	return *this;

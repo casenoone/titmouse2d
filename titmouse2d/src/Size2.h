@@ -13,13 +13,13 @@ public:
 	Size2();
 	~Size2();
 
-	Size2(size_t _x, size_t _y);
+	Size2(int _x, int _y);
 
-    bool operator==(const Size2 r) const;
+	bool operator==(const Size2 r) const;
 
 public:
-	size_t x;
-	size_t y;
+	int x;
+	int y;
 };
 
 inline bool Size2::operator==(const Size2 r) const {

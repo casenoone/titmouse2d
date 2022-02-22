@@ -12,7 +12,7 @@ public:
 	~Sphere2();
 
 	Sphere2(const Vector2<double>& center, const double& r,
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& origin = Vector2D(),
 		double initialValue = 0.0
 	);

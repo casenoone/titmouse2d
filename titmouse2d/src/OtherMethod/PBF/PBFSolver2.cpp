@@ -13,7 +13,7 @@ const double pbf_h = 0;
 
 
 void PBFSolver2::setData(int numberOfParticles,
-	ArrayPtr<Vector2<double>>& pos,
+	Array<Vector2<double>>& pos,
 	int resolutionX,
 	int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);

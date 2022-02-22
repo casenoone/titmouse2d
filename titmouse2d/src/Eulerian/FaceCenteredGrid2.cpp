@@ -13,7 +13,7 @@ FaceCenteredGrid2::FaceCenteredGrid2() :
 
 
 
-FaceCenteredGrid2::FaceCenteredGrid2(const Vector2<size_t>& resolution,
+FaceCenteredGrid2::FaceCenteredGrid2(const Vector2<int>& resolution,
 	const Vector2<double>& origin,
 	const Vector2<double>& initialValue) :
 	_uLinearSampler(_dataU, Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2<double>(0.0, 2.0 / resolution.y * 0.5))),
@@ -53,11 +53,11 @@ FaceCenteredGrid2& FaceCenteredGrid2::operator=(
 	return *this;
 }
 
-double& FaceCenteredGrid2::u(size_t i, size_t j) { return _dataU(i, j); }
+double& FaceCenteredGrid2::u(int i, int j) { return _dataU(i, j); }
 
-double& FaceCenteredGrid2::v(size_t i, size_t j) { return _dataV(i, j); }
+double& FaceCenteredGrid2::v(int i, int j) { return _dataV(i, j); }
 
-Vector2<double> FaceCenteredGrid2::valueAtCellCenter(size_t i, size_t j) {
+Vector2<double> FaceCenteredGrid2::valueAtCellCenter(int i, int j) {
 
 	return Vector2<double>(_dataU(i, j) + _dataU(i + 1, j),
 		_dataV(i, j) + _dataV(i, j + 1)) * 0.5;
@@ -65,7 +65,7 @@ Vector2<double> FaceCenteredGrid2::valueAtCellCenter(size_t i, size_t j) {
 
 
 
-double FaceCenteredGrid2::divergenceAtCellCenter(size_t i, size_t j) {
+double FaceCenteredGrid2::divergenceAtCellCenter(int i, int j) {
 
 	auto gs = gridSpacing();
 
@@ -78,7 +78,7 @@ double FaceCenteredGrid2::divergenceAtCellCenter(size_t i, size_t j) {
 }
 
 
-double FaceCenteredGrid2::curlAtCellCenter(size_t i, size_t j) {
+double FaceCenteredGrid2::curlAtCellCenter(int i, int j) {
 	auto res = resolution();
 
 
@@ -122,11 +122,11 @@ Size2 FaceCenteredGrid2::uSize() {
 
 Size2 FaceCenteredGrid2::vSize() { return _dataV.dataSize(); }
 
-Array2Ptr<double>& FaceCenteredGrid2::uDatas() {
+Array2<double>& FaceCenteredGrid2::uDatas() {
 	return _dataU;
 }
 
-Array2Ptr<double>& FaceCenteredGrid2::vDatas() {
+Array2<double>& FaceCenteredGrid2::vDatas() {
 	return _dataV;
 }
 
@@ -155,16 +155,16 @@ void FaceCenteredGrid2::fill(const Vector2<double>& value) {
 
 	auto sizeU = uSize();
 
-	for (size_t i = 0; i < sizeU.x; ++i) {
-		for (size_t j = 0; j < sizeU.y; ++j) {
+	for (int i = 0; i < sizeU.x; ++i) {
+		for (int j = 0; j < sizeU.y; ++j) {
 			_dataU(i, j) = value.x;
 		}
 	}
 
 
 	auto sizeV = vSize();
-	for (size_t i = 0; i < sizeV.x; ++i) {
-		for (size_t j = 0; j < sizeV.y; ++j) {
+	for (int i = 0; i < sizeV.x; ++i) {
+		for (int j = 0; j < sizeV.y; ++j) {
 			_dataV(i, j) = value.y;
 		}
 	}
@@ -245,13 +245,13 @@ double FaceCenteredGrid2::curl(const Vector2<double>& x) const {
 
 
 
-void FaceCenteredGrid2::onResize(const Vector2<size_t>& resolution,
+void FaceCenteredGrid2::onResize(const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& origin,
 	const Vector2<double>& initialValue) {
-	if (resolution != Vector2<size_t>(0, 0)) {
-		auto ures = resolution + Vector2<size_t>(1, 0);
-		auto vres = resolution + Vector2<size_t>(0, 1);
+	if (resolution != Vector2<int>(0, 0)) {
+		auto ures = resolution + Vector2<int>(1, 0);
+		auto vres = resolution + Vector2<int>(0, 1);
 		_dataU.reSize(ures.x, ures.y, initialValue.x);
 		_dataV.reSize(vres.x, vres.y, initialValue.y);
 

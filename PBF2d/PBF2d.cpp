@@ -158,7 +158,7 @@ int main(int argc, char** argv)
 	}
 
 	cout << "粒子数目：" << numberOfParticles << endl;
-	ArrayPtr<Vector2<double>> pos(temp_pos);
+	Array<Vector2<double>> pos(temp_pos);
 
 	pbfSolver->setData(numberOfParticles, pos, res_x, res_y);
 

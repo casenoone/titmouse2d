@@ -182,7 +182,7 @@ static int get_exts(void) {
 		num_exts_i = 0;
 		glGetIntegerv(GL_NUM_EXTENSIONS, &num_exts_i);
 		if (num_exts_i > 0) {
-			exts_i = (char**)malloc((size_t)num_exts_i * (sizeof * exts_i));
+			exts_i = (char**)malloc((int)num_exts_i * (sizeof * exts_i));
 		}
 
 		if (exts_i == NULL) {
@@ -191,7 +191,7 @@ static int get_exts(void) {
 
 		for (index = 0; index < (unsigned)num_exts_i; index++) {
 			const char* gl_str_tmp = (const char*)glGetStringi(GL_EXTENSIONS, index);
-			size_t len = strlen(gl_str_tmp);
+			int len = strlen(gl_str_tmp);
 
 			char* local_str = (char*)malloc((len + 1) * sizeof(char));
 			if (local_str != NULL) {
@@ -1762,7 +1762,7 @@ static void find_coreGL(void) {
 	if (!version) return;
 
 	for (i = 0; prefixes[i]; i++) {
-		const size_t length = strlen(prefixes[i]);
+		const int length = strlen(prefixes[i]);
 		if (strncmp(version, prefixes[i], length) == 0) {
 			version += length;
 			break;

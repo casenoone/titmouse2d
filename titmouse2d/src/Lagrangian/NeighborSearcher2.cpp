@@ -15,7 +15,7 @@ void NeighborSearcher2::resetDataSize() {
 
 }
 
-NeighborSearcher2::NeighborSearcher2(size_t resolutionX, size_t resolutionY, size_t numberOfParticles)
+NeighborSearcher2::NeighborSearcher2(int resolutionX, int resolutionY, int numberOfParticles)
 	:_resolutionX(resolutionX), _resolutionY(resolutionY), _numberOfParticles(numberOfParticles) {
 	resetDataSize();
 }
@@ -24,14 +24,14 @@ void NeighborSearcher2::clearData() {
 	_data.clear();
 }
 
-bool NeighborSearcher2::IsXoverBorder(size_t idx) {
+bool NeighborSearcher2::IsXoverBorder(int idx) {
 	if (idx < 0 || idx >= _resolutionX) {
 		return true;
 	}
 	return false;
 }
 
-bool NeighborSearcher2::IsYoverBorder(size_t idx) {
+bool NeighborSearcher2::IsYoverBorder(int idx) {
 	if (idx < 0 || idx >= _resolutionY) {
 		return true;
 	}
@@ -47,11 +47,11 @@ bool NeighborSearcher2::IsNeighbor(Vector2<double>& pos1, Vector2<double>& pos2,
 }
 
 
-void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particleId, vector<vector<vector<size_t>>>& grids, const ArrayPtr<Vector2<double>>& positions) {
+void NeighborSearcher2::forEachNeighborGrid(Vector2<int>& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2<double>>& positions) {
 
 	//idx是待求格子的坐标
-	size_t x = idx.x;
-	size_t y = idx.y;
+	int x = idx.x;
+	int y = idx.y;
 
 
 	if (!IsYoverBorder(y) && !IsXoverBorder(x)) {
@@ -73,17 +73,17 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<size_t>& idx, size_t particl
 
 }
 
-void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions) {
+void NeighborSearcher2::setNeiborList(const Array<Vector2<double>>& positions) {
 	clearData();
 	resetDataSize();
 
 
 
 	//grids里保存粒子映射后的编号
-	vector<vector<vector<size_t>>> grids;
+	vector<vector<vector<int>>> grids;
 
 	//gridPositions保存了粒子的映射坐标
-	vector<Vector2<size_t>> gridPositons;
+	vector<Vector2<int>> gridPositons;
 	//对格子进行初始化
 	grids.resize(_resolutionX);
 	for (auto iter = grids.begin(); iter != grids.end(); iter++) {
@@ -92,7 +92,7 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 
 	int particleIdx = 0;
 
-	positions.forEachIndex([&](size_t i) {
+	positions.forEachIndex([&](int i) {
 
 		double maxWidth = 2;
 		double maxHeight = 2;
@@ -102,9 +102,9 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 		double scaleX = maxWidth / _resolutionX;
 		double scaleY = maxHeight / _resolutionY;
 
-		size_t gridX = floor(tempX / scaleX);
-		size_t gridY = floor(tempY / scaleY);
-		size_t k = 1;
+		int gridX = floor(tempX / scaleX);
+		int gridY = floor(tempY / scaleY);
+		int k = 1;
 
 		if (gridX >= _resolutionX) {
 			gridX = _resolutionX - k;
@@ -121,7 +121,7 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 		if (gridY < 0) {
 			gridY = 0;
 		}
-		Vector2<size_t> pos(gridX, gridY);
+		Vector2<int> pos(gridX, gridY);
 		gridPositons.push_back(pos);
 
 		grids[gridX][gridY].push_back(particleIdx);
@@ -133,17 +133,17 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 
 	particleIdx = 0;
 
-	positions.forEachIndex([&](size_t i) {
+	positions.forEachIndex([&](int i) {
 
 		auto current = gridPositons[particleIdx];
-		Vector2<size_t> top(current.x, current.y + 1);
-		Vector2<size_t> down(current.x, current.y - 1);
-		Vector2<size_t> left(current.x - 1, current.y);
-		Vector2<size_t> right(current.x + 1, current.y);
-		Vector2<size_t> leftTop(current.x - 1, current.y + 1);
-		Vector2<size_t> rightTop(current.x + 1, current.y + 1);
-		Vector2<size_t> leftDown(current.x - 1, current.y - 1);
-		Vector2<size_t> rightDown(current.x + 1, current.y - 1);
+		Vector2<int> top(current.x, current.y + 1);
+		Vector2<int> down(current.x, current.y - 1);
+		Vector2<int> left(current.x - 1, current.y);
+		Vector2<int> right(current.x + 1, current.y);
+		Vector2<int> leftTop(current.x - 1, current.y + 1);
+		Vector2<int> rightTop(current.x + 1, current.y + 1);
+		Vector2<int> leftDown(current.x - 1, current.y - 1);
+		Vector2<int> rightDown(current.x + 1, current.y - 1);
 
 		forEachNeighborGrid(current, particleIdx, grids, positions);
 		forEachNeighborGrid(top, particleIdx, grids, positions);
@@ -162,6 +162,6 @@ void NeighborSearcher2::setNeiborList(const ArrayPtr<Vector2<double>>& positions
 
 }
 
-vector<vector<size_t>>& NeighborSearcher2::neighBors() {
+vector<vector<int>>& NeighborSearcher2::neighBors() {
 	return _data;
 }

@@ -9,49 +9,49 @@ GridSystemData2::~GridSystemData2() {
 
 
 GridSystemData2::GridSystemData2(
-    const Vector2<size_t>& resolution,
-    const Vector2<double>& gridSpacing,
-    const Vector2<double>& origin) {
-    _velocity = std::make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>());
-    
-    resize(resolution, gridSpacing, origin);
+	const Vector2<int>& resolution,
+	const Vector2<double>& gridSpacing,
+	const Vector2<double>& origin) {
+	_velocity = std::make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>());
+
+	resize(resolution, gridSpacing, origin);
 }
 
 GridSystemData2::GridSystemData2(const GridSystemData2& other) {
- 
+
 }
 
 
 void GridSystemData2::resize(
-    const Vector2<size_t>& resolution,
-    const Vector2<double>& gridSpacing,
-    const Vector2<double>& origin) {
-    _resolution = resolution;
-    _gridSpacing = gridSpacing;
-    _origin = origin;
+	const Vector2<int>& resolution,
+	const Vector2<double>& gridSpacing,
+	const Vector2<double>& origin) {
+	_resolution = resolution;
+	_gridSpacing = gridSpacing;
+	_origin = origin;
 
 }
 
 
 
-Vector2<size_t> GridSystemData2::resolution() const {
-    return _resolution;
+Vector2<int> GridSystemData2::resolution() const {
+	return _resolution;
 }
 
 Vector2<double> GridSystemData2::gridSpacing() const {
-    return _gridSpacing;
+	return _gridSpacing;
 }
 
 Vector2<double> GridSystemData2::origin() const {
-    return _origin;
+	return _origin;
 }
 
 
 FaceCenteredGrid2Ptr& GridSystemData2::velocity() {
-    return _velocity;
+	return _velocity;
 }
 
 
 VertexCenteredScalarGrid2Ptr& GridSystemData2::sdf() {
-    return _sdf;
+	return _sdf;
 }

@@ -8,7 +8,7 @@ public:
 	EulerianSmokeGridData2() = default;
 
 	EulerianSmokeGridData2(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& origin);
 
@@ -25,7 +25,7 @@ private:
 typedef std::shared_ptr<EulerianSmokeGridData2> EulerianSmokeGridData2Ptr;
 
 inline EulerianSmokeGridData2::EulerianSmokeGridData2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& origin) :GridSystemData2(resolution, gridSpacing, origin) {
 

@@ -19,7 +19,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 	auto u = advectedData->uDatas();
 	auto v = advectedData->vDatas();
 
-	Array2Ptr<double> newU, newV;
+	Array2<double> newU, newV;
 	newU.reSize(sizeU.x, sizeU.y);
 	newV.reSize(sizeV.x, sizeV.y);
 
@@ -44,6 +44,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 				x = clamp<double>(backTracedPoint.x, 0.0, 2.0);
 				y = clamp<double>(backTracedPoint.y, 0.0, 2.0);
 				newU(i, j) = advectedData->sample(Vector2<double>(x, y)).x;
+				//cout << newU(i, j) << endl;
 			}
 		}
 	}
@@ -88,7 +89,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 	auto dataSize = advectedData->dataSize();
 	auto data = advectedData->datas();
 
-	Array2Ptr<double> newData;
+	Array2<double> newData;
 	//newData = data;
 	newData.reSize(dataSize.x, dataSize.y, 0.0);
 
@@ -131,7 +132,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow,
 	auto dataSize = advectedData->dataSize();
 	auto data = advectedData->datas();
 
-	Array2Ptr<double> newData;
+	Array2<double> newData;
 	//newData = data;
 	newData.reSize(dataSize.x, dataSize.y, 0.0);
 

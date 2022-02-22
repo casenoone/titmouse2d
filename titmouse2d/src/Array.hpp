@@ -8,6 +8,8 @@ using namespace std;
 //不实现arrayAccessor类
 //API没有写全，随着项目的完善再增加吧
 
+//改成由共享指针管理的类
+//实现浅拷贝
 
 template<class T>
 class Array {
@@ -17,24 +19,21 @@ public:
 
 	Array(const vector<T>& data);
 
-	T lookAt(size_t idx) const;
+	T lookAt(int idx) const;
 
-	T& operator[](size_t idx);
+	T& operator[](int idx);
 
-	T& operator()(size_t idx);
+	T& operator()(int idx);
 
-	size_t reSize(size_t n);
+	int reSize(int n);
 
-	size_t reSize(size_t n, T initValue);
+	int reSize(int n, T initValue);
 
-	size_t dataSize() const;
+	int dataSize() const;
 
 	//从尾处添加元素
 	void push(const T& e);
 
-	const vector<T>* constDataAccessor() const;
-
-	vector<T>* dataAccessor();
 
 	void set(const vector<T>& data_);
 
@@ -44,15 +43,12 @@ public:
 	void forEachIndex(Callback func) const;
 
 
-	template <typename Callback>
-	void parallelForEachIndex(Callback func);
-
 
 
 protected:
-	vector<T> _data;
+	shared_ptr<vector<T>> _data;
 
-	size_t _size;
+	int _size;
 };
 
 template<typename T>
@@ -61,7 +57,8 @@ using arrayPtr = shared_ptr<Array<T>>;
 
 template<typename T>
 Array<T>::Array() {
-
+	_data = make_shared<vector<T>>();
+	_size = 0;
 }
 
 template<typename T>
@@ -69,90 +66,80 @@ Array<T>::~Array() {
 
 }
 
+
 template<typename T>
 Array<T>::Array(const vector<T>& data) {
-	_data = data;
-	_size = _data.size();
+
+	_data = make_shared<vector<T>>();
+
+	(*_data) = data;
+	_size = (*_data).size();
 }
 
 
 //这里要改进一下
 template<typename T>
 inline void Array<T>::clear() {
-	_data.clear();
-	_data.resize(_size);
+	(*_data).clear();
+	(*_data).resize(_size);
 }
 
 template<typename T>
-inline T Array<T>::lookAt(size_t idx) const {
-	return _data[idx];
+inline T Array<T>::lookAt(int idx) const {
+	return (*_data)[idx];
 }
 
 template<typename T>
-inline T& Array<T>::operator[](size_t idx) {
-	return _data[idx];
+inline T& Array<T>::operator[](int idx) {
+	return (*_data)[idx];
 }
 
 template<typename T>
-inline T& Array<T>::operator()(size_t idx) {
-	return _data[idx];
+inline T& Array<T>::operator()(int idx) {
+	return (*_data)[idx];
 }
 
 template<typename T>
-size_t Array<T>::reSize(size_t n) {
+int Array<T>::reSize(int n) {
 	_size = n;
-	_data.resize(n);
+	(*_data).resize(n);
 	return _size;
 }
 
 template<typename T>
-size_t Array<T>::reSize(size_t n, T initValue) {
+int Array<T>::reSize(int n, T initValue) {
 	_size = n;
-	_data.assign(n, initValue);
+	(*_data).assign(n, initValue);
 	return _size;
 }
 
 template<typename T>
-size_t Array<T>::dataSize() const {
+int Array<T>::dataSize() const {
 	return _size;
 }
 
 template<typename T>
 void Array<T>::push(const T& e) {
 	++_size;
-	_data.push_back(e);
-}
-
-template<typename T>
-const vector<T>* Array<T>::constDataAccessor() const {
-	return &_data;
+	(*_data).push_back(e);
 }
 
 
-template<typename T>
-inline vector<T>* Array<T>::dataAccessor() {
-	return &_data;
-}
 
 template<typename T>
 void Array<T>::set(const vector<T>& data_) {
-	_data = data_;
-	_size = data_.size();
+	(*_data) = data_;
+	_size = (*_data).size();
 }
 
 
 template<typename T>
 template<typename Callback>
 void Array<T>::forEachIndex(Callback func) const {
-	for (size_t i = 0; i < _size; ++i) {
+	for (int i = 0; i < _size; ++i) {
 		func(i);
 	}
 }
 
-template<typename T>
-template <typename Callback>
-void Array<T>::parallelForEachIndex(Callback func) {
-	func(0);
-}
 
 #endif

@@ -96,7 +96,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 }
 
 
-Vector2<size_t> resolution(20, 20);
+Vector2<int> resolution(20, 20);
 Vector2<double> origin(0.0, 0.0);
 
 

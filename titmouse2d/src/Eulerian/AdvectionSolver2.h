@@ -42,7 +42,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 	auto data = advectedData->datas();
 	auto gridSpacing = advectedData->gridSpacing();
 
-	Array2Ptr<T> newData;
+	Array2<T> newData;
 	//newData = data;
 	newData.reSize(resolution.x, resolution.y, T());
 

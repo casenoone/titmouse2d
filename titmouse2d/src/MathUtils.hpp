@@ -1,6 +1,9 @@
 #ifndef MATHUTILS_HPP
 #define MATHUTILS_HPP
 
+#include <iostream>
+using namespace std;
+
 #include <cmath>
 #include "ConstVar.h"
 
@@ -99,6 +102,7 @@ inline T bilerp(
 	const T& f01,
 	const T& f11,
 	double tx, double ty) {
+
 	return lerp(
 		lerp(f00, f10, tx),
 		lerp(f01, f11, tx),

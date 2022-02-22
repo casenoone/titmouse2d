@@ -11,18 +11,18 @@ public:
 
 	virtual ~VortexParticleSystemData2();
 
-	ArrayPtr<double>& vorticities();
+	Array<double>& vorticities();
 
 public:
 	ExplicitSurface2Ptr panelSet;
 
 	//保存每一帧从panel中点发射出来的粒子的索引
-	ArrayPtr<int> midleList;
+	Array<int> midleList;
 
 private:
 
 	//二维情况下，涡量是标量
-	ArrayPtr<double> _vorticities;
+	Array<double> _vorticities;
 
 };
 

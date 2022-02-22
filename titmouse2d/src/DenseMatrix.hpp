@@ -37,7 +37,7 @@ public:
 	DenseMatrix();
 	~DenseMatrix();
 
-	DenseMatrix(size_t row, size_t column, const vector<vector<T>>& data);
+	DenseMatrix(int row, int column, const vector<vector<T>>& data);
 
 	DenseMatrix(const DenseMatrix<T>& other);
 
@@ -54,12 +54,12 @@ public:
 	//返回矩阵是行优先还是列优先
 	int getOrder() const;
 
-	T& operator()(size_t i, size_t j);
+	T& operator()(int i, int j);
 
-	T& lookAt(size_t i, size_t j) const;
+	T& lookAt(int i, int j) const;
 
 	//返回行向量或者列向量
-	vectorNPtr<T> getVec(size_t idx) const;
+	vectorNPtr<T> getVec(int idx) const;
 
 	//两个矩阵相加
 	DenseMatrixPtr<T> operator+(const DenseMatrix<T>& mat) const;
@@ -104,7 +104,7 @@ DenseMatrix<T>::~DenseMatrix() {
 }
 
 template<class T>
-DenseMatrix<T>::DenseMatrix(size_t row, size_t column, const vector<vector<T>>& data) {
+DenseMatrix<T>::DenseMatrix(int row, int column, const vector<vector<T>>& data) {
 
 	_size = Size2(row, column);
 
@@ -147,8 +147,8 @@ void DenseMatrix<T>::reSize(Size2 newSize) {
 template<typename T>
 template<typename Callback>
 void DenseMatrix<T>::forEachIndex(Callback func) const {
-	for (size_t i = 0; i < _size.x; ++i) {
-		for (size_t j = 0; j < _size.y; ++j) {
+	for (int i = 0; i < _size.x; ++i) {
+		for (int j = 0; j < _size.y; ++j) {
 			func(i, j);
 		}
 	}
@@ -168,14 +168,14 @@ int DenseMatrix<T>::getOrder() const {
 }
 
 template<typename T>
-vectorNPtr<T> DenseMatrix<T>::getVec(size_t idx) const {
+vectorNPtr<T> DenseMatrix<T>::getVec(int idx) const {
 
 	return _data[idx];
 }
 
 
 template<typename T>
-T& DenseMatrix<T>::lookAt(size_t i, size_t j) const {
+T& DenseMatrix<T>::lookAt(int i, int j) const {
 	auto result = 0;
 
 	//如果是列优先
@@ -189,7 +189,7 @@ T& DenseMatrix<T>::lookAt(size_t i, size_t j) const {
 }
 
 template<typename T>
-T& DenseMatrix<T>::operator()(size_t i, size_t j) {
+T& DenseMatrix<T>::operator()(int i, int j) {
 	auto result = 0;
 
 	//如果是列优先
@@ -211,7 +211,7 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator+(const DenseMatrix<T>& mat) const {
 
 		vector<vector<T>> temp(_size.x, vector<T>(_size.y));
 
-		this->forEachIndex([&](size_t i, size_t j) {
+		this->forEachIndex([&](int i, int j) {
 
 			temp[i][j] = this->lookAt(i, j) + mat.lookAt(i, j);
 
@@ -232,7 +232,7 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator-(const DenseMatrix<T>& mat) const {
 
 		vector<vector<T>> temp(_size.x, vector<T>(_size.y));
 
-		this->forEachIndex([&](size_t i, size_t j) {
+		this->forEachIndex([&](int i, int j) {
 
 			temp[i][j] = this->lookAt(i, j) - mat.lookAt(i, j);
 
@@ -253,10 +253,10 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator*(const DenseMatrix<T>& mat)const {
 		auto newSize = Size2(this->_size.x, mat._size.y);
 		vector<vector<T>> temp(newSize.x, vector<T>(newSize.y));
 
-		for (size_t i = 0; i < newSize.x; ++i) {
-			for (size_t j = 0; j < newSize.y; ++j) {
+		for (int i = 0; i < newSize.x; ++i) {
+			for (int j = 0; j < newSize.y; ++j) {
 				T tempResult = static_cast<T>(0);
-				for (size_t k = 0; k < this->_size.y; ++k) {
+				for (int k = 0; k < this->_size.y; ++k) {
 					tempResult += this->lookAt(i, k) * mat.lookAt(k, j);
 				}
 				temp[i][j] = tempResult;
@@ -273,7 +273,7 @@ DenseMatrixPtr<T> DenseMatrix<T>::operator*(const DenseMatrix<T>& mat)const {
 template<class T>
 DenseMatrixPtr<T> DenseMatrix<T>::operator*(const T r) const {
 	vector<vector<T>> temp(_size.x, vector<T>(_size.y));
-	this->forEachIndex([&](size_t i, size_t j) {
+	this->forEachIndex([&](int i, int j) {
 		temp[i][j] = r * this->lookAt(i, j);
 		});
 	DenseMatrixPtr<T> result = make_shared<DenseMatrix>(_size.x, _size.y, temp);
@@ -291,7 +291,7 @@ DenseMatrixPtr<T> operator*(const T r, const DenseMatrix<T>& mat) {
 template<class T>
 DenseMatrixPtr<T> DenseMatrix<T>::operator/(const T r) const {
 	vector<vector<T>> temp(_size.x, vector<T>(_size.y));
-	this->forEachIndex([&](size_t i, size_t j) {
+	this->forEachIndex([&](int i, int j) {
 		temp[i][j] = r / this->lookAt(i, j);
 		});
 	DenseMatrixPtr<T> result = make_shared<DenseMatrix>(_size.x, _size.y, temp);

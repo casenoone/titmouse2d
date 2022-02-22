@@ -11,7 +11,7 @@ public:
 	FlipSolver2();
 
 	FlipSolver2(
-		const Vector2<size_t>& resolutions,
+		const Vector2<int>& resolutions,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
@@ -34,8 +34,8 @@ protected:
 
 private:
 	double _picBlendingFactor = 0.01;
-	Array2Ptr<double> _uDelta;
-	Array2Ptr<double> _vDelta;
+	Array2<double> _uDelta;
+	Array2<double> _vDelta;
 
 };
 

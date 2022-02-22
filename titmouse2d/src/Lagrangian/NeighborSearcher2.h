@@ -6,8 +6,8 @@ using namespace std;
 
 #include <vector>
 #include "../Vector2.hpp"
-#include "../ArrayPtr.hpp"
-#include "../Array2Ptr.hpp"
+#include "../Array.hpp"
+#include "../Array2.hpp"
 
 //Íø¸ñËÑË÷·¨
 
@@ -16,31 +16,31 @@ public:
 	NeighborSearcher2();
 	~NeighborSearcher2();
 
-	explicit NeighborSearcher2(size_t resolutionX, size_t resolutionY, size_t numberOfParticles);
+	explicit NeighborSearcher2(int resolutionX, int resolutionY, int numberOfParticles);
 
-	void setNeiborList(const ArrayPtr<Vector2<double>>& positions);
+	void setNeiborList(const Array<Vector2<double>>& positions);
 
-	vector<vector<size_t>>& neighBors();
+	vector<vector<int>>& neighBors();
 
 private:
 
-	size_t _resolutionX;
-	size_t _resolutionY;
-	size_t _numberOfParticles;
+	int _resolutionX;
+	int _resolutionY;
+	int _numberOfParticles;
 
-	vector<vector<size_t>> _data;
+	vector<vector<int>> _data;
 
 	void resetDataSize();
 
 	void clearData();
 
-	bool IsXoverBorder(size_t idx);
+	bool IsXoverBorder(int idx);
 
-	bool IsYoverBorder(size_t idx);
+	bool IsYoverBorder(int idx);
 
-	bool IsNeighbor(Vector2 <double> & pos1, Vector2<double>& pos2, const double& r);
+	bool IsNeighbor(Vector2 <double>& pos1, Vector2<double>& pos2, const double& r);
 
-	void forEachNeighborGrid(Vector2<size_t>& idx, size_t particleId, vector<vector<vector<size_t>>>& grids, const ArrayPtr<Vector2<double>>& positions);
+	void forEachNeighborGrid(Vector2<int>& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2<double>>& positions);
 
 };
 

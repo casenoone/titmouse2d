@@ -10,15 +10,15 @@ public:
 	ConjugateGradientSolver();
 	~ConjugateGradientSolver();
 
-	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
+	void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b);
 
 private:
 
 	//计算residual
-	void computResidual(const SparseMatrixPtr<T>& A);
+	void computResidual(const SparseMatrix<T>& A);
 
 	//计算步进系数
-	void computeAlpha(const SparseMatrixPtr<T>& A);
+	void computeAlpha(const SparseMatrix<T>& A);
 
 	void computeBeta();
 
@@ -27,14 +27,14 @@ private:
 private:
 
 
-	VectorNPtr<T> _r1;
+	VectorN<T> _r1;
 
 	//步进系数
 	T _alpha;
 
 	T _beta;
 
-	VectorNPtr<T> _d;
+	VectorN<T> _d;
 
 };
 
@@ -50,7 +50,7 @@ ConjugateGradientSolver<T>::~ConjugateGradientSolver() {
 }
 
 template<class T>
-void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b) {
+void ConjugateGradientSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
 	this->correctResidual(A, x, b);
 	_d = this->_r;
 
@@ -85,20 +85,20 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrixPtr<T>& A, VectorNPtr
 		this->_iterNum++;
 
 	}
-	//cout << this->_minR << endl;
+
 	//cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << endl;
 }
 
 
 //计算residual
 template<class T>
-void ConjugateGradientSolver<T>::computResidual(const SparseMatrixPtr<T>& A) {
+void ConjugateGradientSolver<T>::computResidual(const SparseMatrix<T>& A) {
 	_r1 = this->_r - _alpha * A * _d;
 }
 
 //计算步进系数
 template<class T>
-void ConjugateGradientSolver<T>::computeAlpha(const SparseMatrixPtr<T>& A) {
+void ConjugateGradientSolver<T>::computeAlpha(const SparseMatrix<T>& A) {
 	_alpha = (this->_r * this->_r) / (_d * A * _d);
 }
 

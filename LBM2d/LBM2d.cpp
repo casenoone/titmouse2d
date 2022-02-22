@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	Array2Ptr<int> lbm_collider(temp1);
+	Array2<int> lbm_collider(temp1);
 
 	//LBMSolver->setCollider(lbm_collider);
 

@@ -10,7 +10,7 @@ public:
 	MPMData2() = default;
 
 	MPMData2(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 public:
@@ -20,15 +20,15 @@ public:
 	CellCenteredScalarGrid2Ptr g_mass;
 
 	//¡£◊” Ù–‘
-	ArrayPtr<double> J;
-	ArrayPtr<Matrix2x2<double>> C;
+	Array<double> J;
+	Array<Matrix2x2<double>> C;
 
 };
 
 using MPMData2Ptr = shared_ptr<MPMData2>;
 
 inline MPMData2::MPMData2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) {
 

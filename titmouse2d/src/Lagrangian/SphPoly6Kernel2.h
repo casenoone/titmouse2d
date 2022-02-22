@@ -2,7 +2,7 @@
 #define SPHPOLY6KERNEL2_H
 
 #include "../Vector2.hpp"
-#include "../Array2Ptr.hpp"
+#include "../Array2.hpp"
 #include "../ConstVar.h"
 
 struct SphPolyKernel2 {

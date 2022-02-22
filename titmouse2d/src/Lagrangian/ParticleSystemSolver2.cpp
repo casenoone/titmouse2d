@@ -10,10 +10,10 @@ ParticleSystemSolver2::~ParticleSystemSolver2() {
 
 }
 
-void ParticleSystemSolver2::setData(size_t numberOfParticles,
-	ArrayPtr<Vector2<double>>& pos,
-	size_t resolutionX,
-	size_t resolutionY) {
+void ParticleSystemSolver2::setData(int numberOfParticles,
+	Array<Vector2<double>>& pos,
+	int resolutionX,
+	int resolutionY) {
 	_particleSystemData->numberOfParticles() = numberOfParticles;
 	_particleSystemData->positions() = pos;
 	_particleSystemData->velocities().reSize(numberOfParticles);
@@ -28,7 +28,7 @@ void ParticleSystemSolver2::setData(size_t numberOfParticles,
 
 
 void ParticleSystemSolver2::beginAdvanceTimeStep() {
-	size_t n = _particleSystemData->numberOfParticles();
+	int n = _particleSystemData->numberOfParticles();
 
 	_newPositions.clear();
 	_newPositions.reSize(n);
@@ -40,17 +40,17 @@ void ParticleSystemSolver2::beginAdvanceTimeStep() {
 
 
 void ParticleSystemSolver2::endAdvanceTimeStep() {
-	size_t n = _particleSystemData->numberOfParticles();
+	int n = _particleSystemData->numberOfParticles();
 	auto& positions = _particleSystemData->positions();
 	auto& velocities = _particleSystemData->velocities();
 
 
 
-	positions.forEachIndex([&](size_t i) {
+	positions.forEachIndex([&](int i) {
 		positions[i] = _newPositions[i];
 		});
 
-	velocities.forEachIndex([&](size_t i) {
+	velocities.forEachIndex([&](int i) {
 		velocities[i] = _newVelocities[i];
 		});
 
@@ -58,13 +58,13 @@ void ParticleSystemSolver2::endAdvanceTimeStep() {
 
 }
 void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
-	size_t n = _particleSystemData->numberOfParticles();
+	int n = _particleSystemData->numberOfParticles();
 	auto forces = _particleSystemData->forces();
 	auto velocities = _particleSystemData->velocities();
 	auto positions = _particleSystemData->positions();
 
 
-	for (size_t i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		auto& newVelocity = _newVelocities[i];
 
 
@@ -80,10 +80,10 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 //暂时不实现
 void ParticleSystemSolver2::resolveCollision() {
-	size_t n = _particleSystemData->numberOfParticles();
+	int n = _particleSystemData->numberOfParticles();
 	auto& velocities = _particleSystemData->velocities();
 	if (_collider.IsNull() == false) {
-		for (size_t i = 0; i < n; ++i) {
+		for (int i = 0; i < n; ++i) {
 			_collider.resolveCollision(0.011 * random_double(0.0, 1.0), 0.00001, &_newPositions[i], &_newVelocities[i]);
 
 		}
@@ -113,13 +113,13 @@ void ParticleSystemSolver2::accumulateForces(double timeIntervalInSeconds) {
 
 void ParticleSystemSolver2::accumlateExternalForces() {
 	//Gravity
-	size_t n = _particleSystemData->numberOfParticles();
+	int n = _particleSystemData->numberOfParticles();
 	auto& forces = _particleSystemData->forces();
 	auto& velocities = _particleSystemData->velocities();
 	auto& positions = _particleSystemData->positions();
 	double mass = 1.0;
 	auto g = Vector2<double>(0.0, -9.8);
-	for (size_t i = 0; i < n; ++i) {
+	for (int i = 0; i < n; ++i) {
 		auto force = g * mass;
 		forces[i] = forces[i] + force;
 
@@ -132,10 +132,10 @@ void ParticleSystemSolver2::accumlateExternalForces() {
 }
 
 
-void ParticleSystemSolver2::clearForces(ArrayPtr<Vector2<double>>& forces) {
+void ParticleSystemSolver2::clearForces(Array<Vector2<double>>& forces) {
 	Vector2<double> zero;
 
-	forces.forEachIndex([&](size_t i) {
+	forces.forEachIndex([&](int i) {
 		forces[i] = zero;
 		});
 }

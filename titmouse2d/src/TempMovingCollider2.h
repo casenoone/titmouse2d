@@ -5,14 +5,14 @@
 using namespace std;
 #include <cmath>
 
-#include "ArrayPtr.hpp"
+#include "Array.hpp"
 #include "Vector2.hpp"
 #include "random.h"
 
 //临时弄一个移动边界，有空再去修改collider类，使其具有移动属性
 
-inline double resolveMovingCollision(ArrayPtr<Vector2<double>> postions,
-	ArrayPtr<Vector2<double>> velocities) {
+inline double resolveMovingCollision(Array<Vector2<double>> postions,
+	Array<Vector2<double>> velocities) {
 
 	double min = 0;
 	static double angle = min;

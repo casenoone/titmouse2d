@@ -7,7 +7,7 @@ using namespace std;
 #include <array>
 
 #include "../../Vector2.hpp"
-#include "../../Array2Ptr.hpp"
+#include "../../Array2.hpp"
 
 
 
@@ -36,12 +36,12 @@ public:
 	}
 
 public:
-	Array2Ptr<vector<double>> f;
-	Array2Ptr<vector<double>> f_;
+	Array2<vector<double>> f;
+	Array2<vector<double>> f_;
 
-	Array2Ptr<Vector2<double>> velocity;
+	Array2<Vector2<double>> velocity;
 
-	Array2Ptr<double> rho;
+	Array2<double> rho;
 
 	Vector2<int> _resolution;
 };

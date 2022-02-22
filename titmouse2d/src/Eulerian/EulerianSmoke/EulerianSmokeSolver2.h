@@ -19,7 +19,7 @@ public:
 	EulerianSmokeSolver2();
 
 	EulerianSmokeSolver2(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
@@ -66,7 +66,7 @@ inline EulerianSmokeSolver2::EulerianSmokeSolver2() {
 }
 
 inline EulerianSmokeSolver2::EulerianSmokeSolver2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) :GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 

@@ -64,7 +64,7 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto flipSolver = FlipSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(20, 20))
+.withResolution(Vector2<int>(20, 20))
 .makeShared();
 
 
@@ -88,7 +88,7 @@ static void display(void)
 
 	auto num = flipSolver->particleSystemData()->numberOfParticles();
 	auto& pos = flipSolver->particleSystemData()->positions();
-	for (size_t i = 0; i < num; ++i) {
+	for (int i = 0; i < num; ++i) {
 		drawPoint(pos[i].x, pos[i].y);
 	}
 
@@ -145,7 +145,7 @@ int main(int argc, char** argv)
 		temp1.push_back(temp);
 	}
 
-	ArrayPtr<Vector2<double>> pos(temp1);
+	Array<Vector2<double>> pos(temp1);
 
 
 	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
 	//collider.push(box2);
 	//collider.push(box3);
 	//collider.push(plane1);
-	flipSolver->setPicBlendingFactor(1);
+	flipSolver->setPicBlendingFactor(0.01);
 
 	flipSolver->setCollider(collider);
 	flipSolver->setData(numberOfParticles, pos, resolutionX, resolutionY);

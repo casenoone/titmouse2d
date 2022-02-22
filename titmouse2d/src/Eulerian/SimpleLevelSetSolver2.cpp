@@ -12,7 +12,7 @@ SimpleLevelSetSolver2::~SimpleLevelSetSolver2() {
 }
 
 
-double SimpleLevelSetSolver2::sign(const Array2Ptr<double>& input, int i, int j) const {
+double SimpleLevelSetSolver2::sign(const Array2<double>& input, int i, int j) const {
 	auto h = input.dataSize().x;
 	auto h2 = h * h;
 	auto phi = input.lookAt(i, j);
@@ -23,7 +23,7 @@ double SimpleLevelSetSolver2::sign(const Array2Ptr<double>& input, int i, int j)
 //不知道如何理解这里的Cfl值
 //与时步有何关系？
 //这个函数的算法原理没搞清楚
-double SimpleLevelSetSolver2::pseudoTimeStep(const Array2Ptr<double>& input,
+double SimpleLevelSetSolver2::pseudoTimeStep(const Array2<double>& input,
 	const Vector2<double>& gridSpacing) {
 	double h = gridSpacing.x;
 
@@ -51,16 +51,16 @@ int SimpleLevelSetSolver2::distanceToNumberOfIterations(double distance, double 
 }
 
 
-void SimpleLevelSetSolver2::getDerivatives(const Array2Ptr<double>& input, Vector2<double> gridSpacing,
-	size_t i, size_t j, std::array<double, 2>* dx, std::array<double, 2>* dy) const{
+void SimpleLevelSetSolver2::getDerivatives(const Array2<double>& input, Vector2<double> gridSpacing,
+	int i, int j, std::array<double, 2>* dx, std::array<double, 2>* dy) const {
 
 	double D0[3];
 	auto size = input.dataSize();
 
-	size_t im1 = (i < 1) ? 0 : i - 1;
-	size_t ip1 = std::min(i + 1, size.x - 1);
-	size_t jm1 = (j < 1) ? 0 : j - 1;
-	size_t jp1 = std::min(j + 1, size.y - 1);
+	int im1 = (i < 1) ? 0 : i - 1;
+	int ip1 = std::min(i + 1, size.x - 1);
+	int jm1 = (j < 1) ? 0 : j - 1;
+	int jp1 = std::min(j + 1, size.y - 1);
 
 	D0[0] = input.lookAt(im1, j);
 	D0[1] = input.lookAt(i, j);
@@ -70,13 +70,13 @@ void SimpleLevelSetSolver2::getDerivatives(const Array2Ptr<double>& input, Vecto
 	D0[0] = input.lookAt(i, jm1);
 	D0[1] = input.lookAt(i, j);
 	D0[2] = input.lookAt(i, jp1);
-	*dy = upwind1(D0, double(gridSpacing.y));    
+	*dy = upwind1(D0, double(gridSpacing.y));
 
 }
 
 
 //这里有一个语法上的问题
-//比如说auto arr = Array2Ptr对象时
+//比如说auto arr = Array2对象时
 //此时并不会调用Array2里的等于号重载
 
 //那么auto grid = VertexCentered时，
@@ -86,8 +86,8 @@ void SimpleLevelSetSolver2::reinitialize(const VertexCenteredScalarGrid2& inputS
 
 	auto size = inputSdf.dataSize();
 	auto gridSpacing = inputSdf.gridSpacing();
-	
-	Array2Ptr<double> input;
+
+	Array2<double> input;
 	input.reSize(size.x, size.y);
 
 	//我擦，这里应该不会出错吧？
@@ -111,7 +111,7 @@ void SimpleLevelSetSolver2::reinitialize(const VertexCenteredScalarGrid2& inputS
 				getDerivatives(input, gridSpacing, i, j, &dx, &dy);
 
 				//显式欧拉时间积分
-				(*outputSdf)(i,j)= input.lookAt(i,j)
+				(*outputSdf)(i, j) = input.lookAt(i, j)
 					- dtau * std::max(s, 0.0)
 					* (std::sqrt(square(std::max(dx[0], 0.0))
 						+ square(std::min(dx[1], 0.0))

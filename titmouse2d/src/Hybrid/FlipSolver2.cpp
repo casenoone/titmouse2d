@@ -9,7 +9,7 @@ FlipSolver2::FlipSolver2() :FlipSolver2({ 2,2 }, { 2,2 }, { 0,0 }) {
 
 
 FlipSolver2::FlipSolver2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin)
 	: PicSolver2(resolution, gridSpacing, gridOrigin) {
@@ -72,7 +72,7 @@ void FlipSolver2::transferFromGridsToParticles() {
 	auto flow = gridSystemData()->velocity();
 	auto positions = particleSystemData()->positions();
 	auto velocities = particleSystemData()->velocities();
-	size_t numberOfParticles = particleSystemData()->numberOfParticles();
+	int numberOfParticles = particleSystemData()->numberOfParticles();
 
 	//计算速度增量
 	auto sizeU = flow->uSize();
@@ -107,7 +107,7 @@ void FlipSolver2::transferFromGridsToParticles() {
 		if (_picBlendingFactor > 0.0) {
 			Vector2<double> picVel = flow->sample(positions[i]);
 
-			
+
 			flipVel = lerp(flipVel, picVel, _picBlendingFactor);
 		}
 		velocities[i] = flipVel;

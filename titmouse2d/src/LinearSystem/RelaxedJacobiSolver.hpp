@@ -12,7 +12,7 @@ public:
 	RelaxedJacobiSolver(T omega) :_omega(omega) {}
 
 	//求解Ax = b
-	void compute(const SparseMatrixPtr<T>& A, VectorNPtr<T>& x, const VectorNPtr<T>& b);
+	void compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b);
 
 private:
 	//松弛因子
@@ -21,9 +21,9 @@ private:
 };
 
 template<class T>
-void RelaxedJacobiSolver<T>::compute(const SparseMatrixPtr<T>& A,
-	VectorNPtr<T>& x,
-	const VectorNPtr<T>& b) {
+void RelaxedJacobiSolver<T>::compute(const SparseMatrix<T>& A,
+	VectorN<T>& x,
+	const VectorN<T>& b) {
 
 	this->_r = (b - A * x);
 	auto err = this->_r.norm();
@@ -34,9 +34,9 @@ void RelaxedJacobiSolver<T>::compute(const SparseMatrixPtr<T>& A,
 
 		auto R = A - D;
 
-		SparseMatrixPtr<T> D_inv(A.size().x, A.size().y);
-		for (size_t i = 0; i < A.size().x; ++i) {
-			size_t j = i;
+		SparseMatrix<T> D_inv(A.size().x, A.size().y);
+		for (int i = 0; i < A.size().x; ++i) {
+			int j = i;
 			auto value = A.lookAt(i, j);
 			if (value == 0)value = 1.0;
 

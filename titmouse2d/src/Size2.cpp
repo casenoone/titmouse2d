@@ -9,7 +9,7 @@ Size2::~Size2() {
 
 }
 
-Size2::Size2(size_t _x, size_t _y) :
+Size2::Size2(int _x, int _y) :
 	x(_x), y(_y) {
 
 }

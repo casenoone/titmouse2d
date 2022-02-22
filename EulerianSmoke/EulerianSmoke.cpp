@@ -61,7 +61,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 auto smokeSolver = EulerianSmokeSolver2::builder()
 .withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<size_t>(50, 50))
+.withResolution(Vector2<int>(20, 20))
 .makeShared();
 
 double dt = 0.01;

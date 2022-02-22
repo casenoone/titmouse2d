@@ -153,7 +153,7 @@ int main(int argc, char** argv)
 		tempPos.push_back(temp);
 	}
 
-	ArrayPtr<Vector2<double>> pos(tempPos);
+	Array<Vector2<double>> pos(tempPos);
 
 
 	vpSolver->setData(numberOfparticles, pos, res_x, res_y);

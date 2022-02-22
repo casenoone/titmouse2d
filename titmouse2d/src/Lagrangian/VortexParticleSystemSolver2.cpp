@@ -78,7 +78,7 @@ Vector2<double> VortexParticleSystemSolver2::computeUSingle(const Vector2<double
 }
 
 void VortexParticleSystemSolver2::setData(int numberOfParticles,
-	ArrayPtr<Vector2<double>>& pos,
+	Array<Vector2<double>>& pos,
 	int resolutionX,
 	int resolutionY) {
 

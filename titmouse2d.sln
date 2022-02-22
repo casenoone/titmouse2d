@@ -27,8 +27,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sph2d", "Sph2d\Sph2d.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LevelSetLiquid2d", "LevelSetLiquid2d\LevelSetLiquid2d.vcxproj", "{E376E2E8-CCD0-4E49-B06E-324E8B7897A1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MarchingSquare", "MarchingSquare\MarchingSquare.vcxproj", "{25F0B087-7427-44AF-B866-F737CBF445DF}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IterativeSolve", "IterativeSolve\IterativeSolve.vcxproj", "{1556385A-F444-4780-B00C-9E76E378213C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Advection2d", "Advection2d\Advection2d.vcxproj", "{F97D1D6E-E329-4A2F-9FB2-9EC56FB81BBC}"
@@ -143,14 +141,6 @@ Global
 		{E376E2E8-CCD0-4E49-B06E-324E8B7897A1}.Release|x64.Build.0 = Release|x64
 		{E376E2E8-CCD0-4E49-B06E-324E8B7897A1}.Release|x86.ActiveCfg = Release|Win32
 		{E376E2E8-CCD0-4E49-B06E-324E8B7897A1}.Release|x86.Build.0 = Release|Win32
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Debug|x64.ActiveCfg = Debug|x64
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Debug|x64.Build.0 = Debug|x64
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Debug|x86.ActiveCfg = Debug|Win32
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Debug|x86.Build.0 = Debug|Win32
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Release|x64.ActiveCfg = Release|x64
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Release|x64.Build.0 = Release|x64
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Release|x86.ActiveCfg = Release|Win32
-		{25F0B087-7427-44AF-B866-F737CBF445DF}.Release|x86.Build.0 = Release|Win32
 		{1556385A-F444-4780-B00C-9E76E378213C}.Debug|x64.ActiveCfg = Debug|x64
 		{1556385A-F444-4780-B00C-9E76E378213C}.Debug|x64.Build.0 = Debug|x64
 		{1556385A-F444-4780-B00C-9E76E378213C}.Debug|x86.ActiveCfg = Debug|Win32

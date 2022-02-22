@@ -6,15 +6,15 @@
 
 class LevelSetLiquidSolver2 : public GridFluidSolver2 {
 public:
-	
+
 	class Builder;
-	
+
 	LevelSetLiquidSolver2();
 
 	~LevelSetLiquidSolver2();
 
-	LevelSetLiquidSolver2(const Vector2<size_t>& resolution, 
-		const Vector2<double>& gridSpacing, 
+	LevelSetLiquidSolver2(const Vector2<int>& resolution,
+		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
 	void extrapolateVelocityToAir();
@@ -23,7 +23,7 @@ public:
 
 private:
 	void setMarkers();
-	
+
 	void computeSdfAdvection(double timeIntervalInSeconds);
 
 	virtual void onBeginAdvanceTimeStep(double timeIntervalInSeconds)override;

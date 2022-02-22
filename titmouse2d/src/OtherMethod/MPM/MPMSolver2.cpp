@@ -7,7 +7,7 @@ void MPMSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 }
 
 void MPMSolver2::setData(int numberOfParticles,
-	ArrayPtr<Vector2<double>>& pos,
+	Array<Vector2<double>>& pos,
 	int resolutionX,
 	int resolutionY) {
 	_mpmData->positions() = pos;
@@ -46,7 +46,7 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 	auto& grid_v = flow->datas();
 	auto grid_m = mass->datas();
 
-	Array2Ptr<double> weight;
+	Array2<double> weight;
 	weight.reSize(flow->resolution().x, flow->resolution().y, 0.0);
 
 	LinearArraySampler2<Vector2<double>> sampler(
@@ -140,7 +140,7 @@ void MPMSolver2::transferFromGridsToParticles(double timeIntervalInSeconds) {
 	auto& grid_v = flow->datas();
 	auto grid_m = _mpmData->g_mass->datas();
 
-	Array2Ptr<double> weight;
+	Array2<double> weight;
 
 	LinearArraySampler2<Vector2<double>> sampler(
 		grid_v,

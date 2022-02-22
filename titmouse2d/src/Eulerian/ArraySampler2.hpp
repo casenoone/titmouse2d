@@ -4,7 +4,7 @@
 #include "../Vector2.hpp"
 #include <functional>
 
-#include "../Array2Ptr.hpp"
+#include "../Array2.hpp"
 #include "../MathUtils.hpp"
 
 #include "../ConstVar.h"
@@ -27,13 +27,13 @@ public:
 	~LinearArraySampler2();
 
 	LinearArraySampler2(
-		const Array2Ptr<T>& accessor,
+		const Array2<T>& accessor,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
 	LinearArraySampler2(const LinearArraySampler2& other);
 
-	T operator()(const Array2Ptr<T>& accessor, const Vector2<double>& x);
+	T operator()(const Array2<T>& accessor, const Vector2<double>& x);
 
 	void getCoordinatesAndGradientWeights(
 		const Vector2<double>& x,
@@ -48,7 +48,7 @@ public:
 	//这里需要改一下接口,这里本应该是私有成员
 	//由于设计不当，这里不得不暂时改为公有
 public:
-	Array2Ptr<T> _accessor;
+	Array2<T> _accessor;
 
 private:
 	Vector2<double> _gridSpacing;
@@ -77,16 +77,16 @@ LinearArraySampler2<T>::~LinearArraySampler2() {
 
 template<class T>
 LinearArraySampler2<T>::LinearArraySampler2(
-	const Array2Ptr<T>& accessor,
+	const Array2<T>& accessor,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) {
 	_gridSpacing = gridSpacing;
 	_invGridSpacing = Vector2<double>(1 / gridSpacing.x, 1 / gridSpacing.y);
 
 	_origin = gridOrigin;
-	_accessor = accessor;
-
+	_accessor.set(accessor);
 }
+
 
 template<class T>
 LinearArraySampler2<T>::LinearArraySampler2(const LinearArraySampler2<T>& other) {
@@ -100,14 +100,15 @@ LinearArraySampler2<T>::LinearArraySampler2(const LinearArraySampler2<T>& other)
 
 
 template<class T>
-T LinearArraySampler2<T>::operator()(const Array2Ptr<T>& accessor, const Vector2<double>& x) {
+T LinearArraySampler2<T>::operator()(const Array2<T>& accessor, const Vector2<double>& x) {
 	int i, j;
 	double fx, fy;
 	Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
-	auto& accessors = const_cast<Array2Ptr<T>&>(accessor);
+	auto& accessors = const_cast<Array2<T>&>(accessor);
 	auto size = accessors.dataSize();
 	int iSize = size.x;
 	int jSize = size.y;
+
 
 	getBarycentric(normalizedX.x, 0, iSize - 1, &i, &fx);
 	getBarycentric(normalizedX.y, 0, jSize - 1, &j, &fy);
@@ -115,7 +116,7 @@ T LinearArraySampler2<T>::operator()(const Array2Ptr<T>& accessor, const Vector2
 	int jp1 = std::min(j + 1, jSize - 1);
 
 
-	////双线性插值
+	//双线性插值
 	return bilerp(
 		accessors(i, j),
 		accessors(ip1, j),
@@ -207,6 +208,8 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
 	(*indices)[1] = Vector2<int>(ip1, j);
 	(*indices)[2] = Vector2<int>(i, jp1);
 	(*indices)[3] = Vector2<int>(ip1, jp1);
+
+
 
 	//双线性插值
 	(*weights)[0] = (1 - fx) * (1 - fy);

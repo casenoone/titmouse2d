@@ -4,7 +4,7 @@
 ImplicitSurface2::ImplicitSurface2() {
 }
 
-ImplicitSurface2::ImplicitSurface2(const Vector2<size_t>& resolution,
+ImplicitSurface2::ImplicitSurface2(const Vector2<int>& resolution,
 	const Vector2<double>& origin,
 	double initialValue) {
 

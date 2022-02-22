@@ -4,7 +4,7 @@
 GridFluidSolver2::GridFluidSolver2() {}
 
 GridFluidSolver2::GridFluidSolver2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) {
 
@@ -46,11 +46,11 @@ double GridFluidSolver2::cfl(double timeIntervalInSeconds) const {
 	double maxVel = 0.0;
 
 	auto size = vel->resolution();
-	size_t sizeX = size.x;
-	size_t sizeY = size.y;
+	int sizeX = size.x;
+	int sizeY = size.y;
 
-	for (size_t i = 0; i < sizeX; ++i) {
-		for (size_t j = 0; j < sizeY; ++j) {
+	for (int i = 0; i < sizeX; ++i) {
+		for (int j = 0; j < sizeY; ++j) {
 			Vector2<double> v =
 				vel->valueAtCellCenter(i, j) + _gravity * timeIntervalInSeconds;
 			maxVel = std::max(maxVel, v.x);
@@ -75,7 +75,7 @@ const GridSystemData2Ptr& GridFluidSolver2::gridSystemData() const {
 }
 
 
-Vector2<size_t> GridFluidSolver2::resolution() const { return _grids->resolution(); }
+Vector2<int> GridFluidSolver2::resolution() const { return _grids->resolution(); }
 
 Vector2<double> GridFluidSolver2::gridSpacing() const { return _grids->gridSpacing(); }
 
@@ -124,7 +124,6 @@ void GridFluidSolver2::computePressure(double timeIntervalInSeconds) {
 
 void GridFluidSolver2::computeAdvection(double timeIntervalInSeconds) {
 	_advectionSolver->solve(velocity(), velocity(), timeIntervalInSeconds);
-
 }
 
 
@@ -138,10 +137,10 @@ void GridFluidSolver2::computeGravity(double timeIntervalInSeconds) {
 		if (std::abs(_gravity.y) > kEpsilonD) {
 
 			auto sizeV = vel->vSize();
-			size_t sizeVx = sizeV.x;
-			size_t sizeVy = sizeV.y;
-			for (size_t i = 0; i < sizeVx; ++i) {
-				for (size_t j = 0; j < sizeVy; ++j) {
+			int sizeVx = sizeV.x;
+			int sizeVy = sizeV.y;
+			for (int i = 0; i < sizeVx; ++i) {
+				for (int j = 0; j < sizeVy; ++j) {
 					vel->v(i, j) += timeIntervalInSeconds * _gravity.y;
 				}
 			}

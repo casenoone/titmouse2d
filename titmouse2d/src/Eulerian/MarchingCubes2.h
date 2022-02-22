@@ -25,7 +25,7 @@ struct LineSegment {
 class MarchingCube2 {
 public:
 	MarchingCube2();
-	MarchingCube2(const Vector2<size_t>& resolution,
+	MarchingCube2(const Vector2<int>& resolution,
 		const Vector2<double>& origin,
 		double initialValue = 1.0,
 		double domainSizeX = 1.0);
@@ -57,10 +57,10 @@ private:
 	void calculateWeight();
 
 	//获取所有格子的配置信息
-	void getVoxelConfig(Array2Ptr<double>& num);
+	void getVoxelConfig(Array2<double>& num);
 
 	//计算等值线所在的位置
-	Vector2<double> calculateIso(size_t edge, size_t i, size_t j);
+	Vector2<double> calculateIso(int edge, int i, int j);
 
 	//存放圆
 	vector<Circle> _circleList;
@@ -80,9 +80,9 @@ public:
 
 	~Builder();
 
-	Builder& withResolution(const Vector2<size_t>& resolution);
+	Builder& withResolution(const Vector2<int>& resolution);
 
-	Builder& withResolution(size_t resolutionX, size_t resolutionY);
+	Builder& withResolution(int resolutionX, int resolutionY);
 
 	Builder& withOrigin(const Vector2<double>& gridOrigin);
 
@@ -97,7 +97,7 @@ public:
 	MarchingCube2Ptr makeShared() const;
 
 private:
-	Vector2<size_t> _resolution;
+	Vector2<int> _resolution;
 	Vector2<double> _gridOrigin;
 	double _initialVal = 0.0;
 	double _domainSizeX = 1.0;

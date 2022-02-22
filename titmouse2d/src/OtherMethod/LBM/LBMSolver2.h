@@ -23,11 +23,11 @@ public:
 
 	Vector2<int> resolution()const;
 
-	void setCollider(const Array2Ptr<int>& collider);
+	void setCollider(const Array2<int>& collider);
 
 	void onAdvancedTimeStep();
 
-	Array2Ptr<double> getRho()const;
+	Array2<double> getRho()const;
 
 	const Vector2<double> velocityAt(int i, int j)const;
 

@@ -14,7 +14,7 @@ public:
 	PicSolver2();
 
 	PicSolver2(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
@@ -25,8 +25,8 @@ public:
 	const ParticleSystemData2Ptr& particleSystemData() const;
 
 	//临时测试使用,后期改成Builder里构建
-	void setData(size_t numberOfParticles, ArrayPtr<Vector2<double>>& pos,
-		size_t resolutionX, size_t resolutionY);
+	void setData(int numberOfParticles, Array<Vector2<double>>& pos,
+		int resolutionX, int resolutionY);
 
 	void onBeginAdvanceTimeStep(double timeIntervalInSeconds) override;
 
@@ -59,8 +59,8 @@ protected:
 	ParticleSystemData2Ptr _particles;
 
 	//这个貌似是为了外推速度场用的，但是对于pic/flip，外推速度场怎么操作呢？目的是什么？
-	Array2Ptr<double>_uMarkers;
-	Array2Ptr<double> _vMarkers;
+	Array2<double>_uMarkers;
+	Array2<double> _vMarkers;
 };
 
 typedef std::shared_ptr<PicSolver2> PicSolver2Ptr;

@@ -31,7 +31,7 @@ void SphSystemSolver2::accumulateForces(double timeStepInSeconds) {
 
 }
 
-void SphSystemSolver2::setData(int numberOfParticles, ArrayPtr<Vector2<double>>& pos, int resolutionX, int resolutionY) {
+void SphSystemSolver2::setData(int numberOfParticles, Array<Vector2<double>>& pos, int resolutionX, int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
 
 	auto particles = sphSystemData();
@@ -128,10 +128,10 @@ void SphSystemSolver2::computePressure() {
 
 
 
-void SphSystemSolver2::accumulatePressureForce(ArrayPtr<Vector2<double>> positions,
-	ArrayPtr<double> densities,
-	ArrayPtr<double> pressures,
-	ArrayPtr<Vector2<double>> pressureForces) {
+void SphSystemSolver2::accumulatePressureForce(Array<Vector2<double>> positions,
+	Array<double> densities,
+	Array<double> pressures,
+	Array<Vector2<double>> pressureForces) {
 	auto particles = sphSystemData();
 	auto forces = particles->forces();
 	auto numberOfParticles = particles->numberOfParticles();

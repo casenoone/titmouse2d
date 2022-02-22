@@ -10,16 +10,16 @@ public:
 	MPMSolver2() = default;
 
 	MPMSolver2(
-		const Vector2<size_t>& resolution,
+		const Vector2<int>& resolution,
 		const Vector2<double>& gridSpacing,
 		const Vector2<double>& gridOrigin);
 
-	const MPMData2Ptr const mpmData()const;
+	const MPMData2Ptr  mpmData()const;
 
 	void onAdvanceTimeStep(double timeIntervalInSeconds);
 
 	void setData(int numberOfParticles,
-		ArrayPtr<Vector2<double>>& pos,
+		Array<Vector2<double>>& pos,
 		int resolutionX,
 		int resolutionY);
 
@@ -42,13 +42,13 @@ private:
 
 
 
-inline const MPMData2Ptr const MPMSolver2::mpmData()const {
+inline const MPMData2Ptr  MPMSolver2::mpmData()const {
 	return _mpmData;
 }
 
 
 inline MPMSolver2::MPMSolver2(
-	const Vector2<size_t>& resolution,
+	const Vector2<int>& resolution,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) {
 	_mpmData = make_shared<MPMData2>(resolution, gridSpacing, gridOrigin);

@@ -2,7 +2,7 @@
 #include "../boundingbox2.h"
 
 ApicSolver2::ApicSolver2(
-	const Vector2<size_t>& resolutions,
+	const Vector2<int>& resolutions,
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin)
 	:PicSolver2(resolutions, gridSpacing, gridOrigin)
@@ -49,8 +49,8 @@ void ApicSolver2::transferFromParticlesToGrids() {
 	const auto uPos = flow->uPosition();
 	const auto vPos = flow->vPosition();
 
-	Array2Ptr<double> uWeight;
-	Array2Ptr<double> vWeight;
+	Array2<double> uWeight;
+	Array2<double> vWeight;
 	uWeight.reSize(u.dataSize().x, u.dataSize().y);
 	vWeight.reSize(v.dataSize().x, v.dataSize().y);
 
@@ -107,12 +107,12 @@ void ApicSolver2::transferFromParticlesToGrids() {
 
 	}
 
-	uWeight.forEachIndex([&](size_t i, size_t j) {
+	uWeight.forEachIndex([&](int i, int j) {
 		if (uWeight(i, j) > 0.0) {
 			u(i, j) /= uWeight(i, j);
 		}
 		});
-	vWeight.forEachIndex([&](size_t i, size_t j) {
+	vWeight.forEachIndex([&](int i, int j) {
 		if (vWeight(i, j) > 0.0) {
 			v(i, j) /= vWeight(i, j);
 		}
