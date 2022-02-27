@@ -145,7 +145,7 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	////steepSolver.compute(A, x, b);
 	////JacobiSolver.compute(A, x, b);
 	////rjSolver.compute(A, x, b);
-	////sorSolver.compute(A, x, b);
+	//sorSolver.compute(A, x, b);
 
 }
 

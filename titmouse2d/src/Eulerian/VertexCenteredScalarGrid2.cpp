@@ -17,7 +17,6 @@ VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
 	_data.reSize(size.x, size.y, initialValue);
 
 	this->_linearSampler = make_shared<LinearArraySampler2<double>>(this->_data, gridSpacing, dataOrigin());
-	cout << "vertex" << this->_data.dataSize().x << endl;
 
 }
 

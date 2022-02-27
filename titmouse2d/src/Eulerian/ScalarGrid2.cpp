@@ -3,7 +3,6 @@
 #include <array>
 
 ScalarGrid2::ScalarGrid2() :_data(vector<vector<double>>()) {
-	cout << "scalarÄ¬ÈÏ¹¹Ôì" << endl;
 }
 
 
@@ -106,7 +105,6 @@ Vector2<double> ScalarGrid2::gradient(const Vector2<double>& x) const {
 	Vector2D result;
 
 	for (int i = 0; i < 4; ++i) {
-		//cout << indices[i].x << endl;
 		result += weights[i] * gradientAtDataPoint(indices[i].x, indices[i].y);
 	}
 	return result;

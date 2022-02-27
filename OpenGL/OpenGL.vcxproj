@@ -24,6 +24,7 @@
     <ProjectGuid>{f2dcce0e-43ed-4f15-b6cb-059c9727fe88}</ProjectGuid>
     <RootNamespace>OpenGL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Experiment1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -144,6 +145,16 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="OpenGL.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.h" />
+    <ClInclude Include="Shader\shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="2.2.basic_lighting.fs" />
+    <None Include="2.2.basic_lighting.vs" />
+    <None Include="2.2.light_cube.vs" />
+    <None Include="2.2.light_cube.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

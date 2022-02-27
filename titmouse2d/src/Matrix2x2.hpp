@@ -11,7 +11,7 @@ using namespace std;
 
 //注意深浅拷贝的问题
 //这个类是一个浅拷贝类，但拷贝复制运算符是一个深拷贝
-
+//实际上实现一个set或copy是更好的做法，而不要重载等于号
 
 template<class T>
 class Matrix2x2 {
@@ -49,6 +49,9 @@ public:
 	Vector2<T> operator*(const Vector2<T>& vec)const;
 
 	T trace()const;
+
+	//坐标系转换
+
 
 private:
 	shared_ptr<std::array<T, 4>> _data;

@@ -22,4 +22,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader\shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="2.2.basic_lighting.fs" />
+    <None Include="2.2.basic_lighting.vs" />
+    <None Include="2.2.light_cube.vs" />
+    <None Include="2.2.light_cube.fs" />
+  </ItemGroup>
 </Project>
