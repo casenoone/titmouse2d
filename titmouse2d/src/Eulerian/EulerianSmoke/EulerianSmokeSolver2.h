@@ -70,7 +70,6 @@ inline EulerianSmokeSolver2::EulerianSmokeSolver2(
 	const Vector2<double>& gridSpacing,
 	const Vector2<double>& gridOrigin) :GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
-	//这样写会出问题么？
 	_grids = make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
 	_eulerianSmokeData = make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
 	_eulerianSmokeData = std::dynamic_pointer_cast<EulerianSmokeGridData2>(_grids);
