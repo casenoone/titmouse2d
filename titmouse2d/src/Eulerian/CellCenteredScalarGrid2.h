@@ -14,8 +14,8 @@ public:
 
 	CellCenteredScalarGrid2(
 		const Vector2I& resolution,
-		const Vector2D& origin,
-		double initialValue);
+		const Vector2D& origin = Vector2D(),
+		double initialValue = 0.0);
 
 	virtual ~CellCenteredScalarGrid2();
 

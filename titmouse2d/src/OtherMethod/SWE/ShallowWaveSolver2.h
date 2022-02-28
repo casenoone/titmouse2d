@@ -25,9 +25,16 @@ public:
 
 private:
 
+	//标记哪些格子被固体所占据
+	void setMarkers(const Vector2D& pos);
+
+	void setFluidCellNum();
+
 	void advection(double timeIntervalInSeconds);
 
 	void pressureSolve(double timeIntervalInSeconds);
+
+	void applyGhostVolumn();
 
 	void couplingSolve(double timeIntervalInSeconds);
 
@@ -54,6 +61,43 @@ inline ShallowWaveSolver2::~ShallowWaveSolver2() {
 
 inline ShallowWaveData2Ptr ShallowWaveSolver2::shallowWaveData() {
 	return _shallowWaveData;
+}
+
+void ShallowWaveSolver2::advection(double timeIntervalInSeconds) {
+	_advectionSolver->solve(_shallowWaveData->velocity(), _shallowWaveData->velocity(), timeIntervalInSeconds);
+}
+
+
+class ShallowWaveSolver2::Builder final
+	: public GridFluidSolverBuilderBase2<ShallowWaveSolver2::Builder> {
+public:
+	ShallowWaveSolver2 build() const;
+
+	ShallowWaveSolver2Ptr makeShared() const;
+};
+
+
+
+inline ShallowWaveSolver2::Builder ShallowWaveSolver2::builder() {
+	return Builder();
+}
+
+inline ShallowWaveSolver2 ShallowWaveSolver2::Builder::build() const {
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
+	return ShallowWaveSolver2(_resolution, gridSpacing, _gridOrigin);
+}
+
+
+inline ShallowWaveSolver2Ptr ShallowWaveSolver2::Builder::makeShared() const {
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
+	return std::shared_ptr<ShallowWaveSolver2>(
+		new ShallowWaveSolver2(
+			_resolution,
+			gridSpacing,
+			_gridOrigin),
+		[](ShallowWaveSolver2* obj) {
+			delete obj;
+		});
 }
 
 #endif

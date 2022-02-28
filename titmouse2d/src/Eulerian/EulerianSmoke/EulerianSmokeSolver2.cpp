@@ -5,13 +5,13 @@
 void EulerianSmokeSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
 	addDensity();
-	//addTemperature();
-	//computeExternalForces(timeIntervalInSeconds);
-	//computeAdvection(timeIntervalInSeconds);
+	addTemperature();
+	computeExternalForces(timeIntervalInSeconds);
+	computeAdvection(timeIntervalInSeconds);
 
-	//setMarkers();
-	//setFluidCellNum();
-	//computePressure(timeIntervalInSeconds);
+	setMarkers();
+	setFluidCellNum();
+	computePressure(timeIntervalInSeconds);
 
 }
 
