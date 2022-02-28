@@ -1,8 +1,8 @@
 #include "Heart2.h"
 
-Heart2::Heart2(const Vector2<double>& center, const double& r,
-	const Vector2<int>& resolution,
-	const Vector2<double>& origin,
+Heart2::Heart2(const Vector2D& center, const double& r,
+	const Vector2I& resolution,
+	const Vector2D& origin,
 	double initialValue) {
 
 	_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
@@ -11,7 +11,7 @@ Heart2::Heart2(const Vector2<double>& center, const double& r,
 
 }
 
-Surface2::SurfaceQueryResult Heart2::getClosedInformation(const Vector2<double>& otherPoint) {
+Surface2::SurfaceQueryResult Heart2::getClosedInformation(const Vector2D& otherPoint) {
 	Surface2::SurfaceQueryResult result;
 
 	return result;

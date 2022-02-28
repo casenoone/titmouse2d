@@ -8,7 +8,7 @@ const double iisph_rho0 = 0.00000001;
 
 
 void IISphSolver2::setData(int numberOfParticles,
-	Array<Vector2<double>>& pos,
+	Array<Vector2D>& pos,
 	int resolutionX,
 	int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
@@ -46,7 +46,7 @@ void IISphSolver2::computeD_ii(double timeIntervalInSeconds) {
 
 	for (int i = 0; i < n; ++i) {
 		auto currentP = pos[i];
-		Vector2<double> temp_d_ii(0.0, 0.0);
+		Vector2D temp_d_ii(0.0, 0.0);
 		auto rho2 = densities[i] * densities[i];
 
 		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
@@ -132,7 +132,7 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 	double t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto n = _iisphData->numberOfParticles();
 
-	Array<Vector2<double>> d_ij_p_j;
+	Array<Vector2D> d_ij_p_j;
 	d_ij_p_j.reSize(n);
 
 	SphSpikyKernel2 kernel(iisphKR);
@@ -149,7 +149,7 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 		for (int i = 0; i < n; ++i) {
 			auto currentP = pos[i];
 
-			auto temp_d_ij = Vector2<double>(0.0, 0.0);
+			auto temp_d_ij = Vector2D(0.0, 0.0);
 			for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
 				auto rho_j2 = densities[*j] * densities[*j];
 				auto neighborP = pos[*j];
@@ -189,7 +189,7 @@ void IISphSolver2::iterPressureSolver(double timeIntervalInSeconds) {
 				auto direction = (neighborP - currentP).normalize();
 
 				auto term42 = d_ii[*j] * pressure[*j];
-				auto term43 = Vector2<double>(0.0, 0.0);
+				auto term43 = Vector2D(0.0, 0.0);
 
 				auto d_ji_direction = (currentP - neighborP).normalize();
 				if (rho_i2 > 0.0 && dis > 0) {
@@ -222,7 +222,7 @@ void IISphSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 	for (int i = 0; i < n; ++i) {
 		auto currentP = pos[i];
-		auto tempPressureForce = Vector2<double>(0.0, 0.0);
+		auto tempPressureForce = Vector2D(0.0, 0.0);
 		auto rho_i2 = densities[i] * densities[i];
 		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {
 			auto neighborP = pos[*j];

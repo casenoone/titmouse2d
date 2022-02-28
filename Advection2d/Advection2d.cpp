@@ -49,7 +49,7 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<float> color)
+void drawPoint(Vector2D pos, float size, Color3<float> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -58,7 +58,7 @@ void drawPoint(Vector2<double> pos, float size, Color3<float> color)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<double> color)
+void drawPoint(Vector2D pos, float size, Color3<double> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -81,14 +81,14 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-Vector2<int> resolution(40, 40);
-Vector2<double> origin(0.0, 0.0);
+Vector2I resolution(40, 40);
+Vector2D origin(0.0, 0.0);
 Color3<double> red(255, 0.0, 0.0);
 
 CellCenteredVectorGrid2Ptr<Color3<double>> advectedData;
 
 
-Vector2<double> center1(1.0, 1.0);
+Vector2D center1(1.0, 1.0);
 double r1 = 0.5;
 double r1_sqr = r1 * r1;
 
@@ -96,7 +96,7 @@ Color3<double> blacks(0, 0, 0);
 Color3<double> whites(255, 255, 255);
 
 
-auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>(0, 0));
+auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2D(0, 0));
 
 auto advectionSolver = make_shared<AdvectionSolver2>();
 

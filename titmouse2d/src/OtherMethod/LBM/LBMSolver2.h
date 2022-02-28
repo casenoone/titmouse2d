@@ -19,17 +19,17 @@ public:
 
 	LBMSolver2() = default;
 
-	LBMSolver2(const Vector2<int>& resolution);
+	LBMSolver2(const Vector2I& resolution);
 
-	Vector2<int> resolution()const;
+	Vector2I resolution()const;
 
-	void setCollider(const Array2<int>& collider);
+	void setCollider(const Array2I& collider);
 
 	void onAdvancedTimeStep();
 
-	Array2<double> getRho()const;
+	Array2D getRho()const;
 
-	const Vector2<double> velocityAt(int i, int j)const;
+	const Vector2D velocityAt(int i, int j)const;
 
 
 	int getGridState(int i, int j)const;
@@ -46,7 +46,7 @@ public:
 	LBMData2 _data;
 
 private:
-	Array2<int> _g;
+	Array2I _g;
 };
 
 

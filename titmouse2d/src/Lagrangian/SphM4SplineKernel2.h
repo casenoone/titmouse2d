@@ -13,7 +13,7 @@ struct SphM4SplineKernel2 {
 	SphM4SplineKernel2();
 	explicit SphM4SplineKernel2(double h_);
 	double operator()(double distance)const;
-	Vector2<double> gradient(double distance, const Vector2<double>& direction)const;
+	Vector2D gradient(double distance, const Vector2D& direction)const;
 
 };
 
@@ -62,11 +62,11 @@ inline double SphM4SplineKernel2::operator()(double distance)const {
 }
 
 
-inline Vector2<double> SphM4SplineKernel2::gradient(double distance, const Vector2<double>& direction)const {
+inline Vector2D SphM4SplineKernel2::gradient(double distance, const Vector2D& direction)const {
 	double q = distance / halfH;
 	auto gradient = direction;
 	if (q <= 0.0) {
-		gradient = Vector2<double>();
+		gradient = Vector2D();
 	}
 	else if (q < 1.0) {
 		auto t1 = 1.0 - q;

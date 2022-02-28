@@ -51,8 +51,9 @@ protected:
 	int _size;
 };
 
-template<typename T>
-using arrayPtr = shared_ptr<Array<T>>;
+using ArrayI = Array<int>;
+using ArrayF = Array<float>;
+using ArrayD = Array<double>;
 
 
 template<typename T>

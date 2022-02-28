@@ -7,7 +7,7 @@ void MPMSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 }
 
 void MPMSolver2::setData(int numberOfParticles,
-	Array<Vector2<double>>& pos,
+	Array<Vector2D>& pos,
 	int resolutionX,
 	int resolutionY) {
 	_mpmData->positions() = pos;
@@ -33,7 +33,7 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 
 	const auto hh = flow->gridSpacing() / 2.0;
 	auto lower = flow->origin();
-	Vector2<double> upper;
+	Vector2D upper;
 	upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
 	upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
 
@@ -46,10 +46,10 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 	auto& grid_v = flow->datas();
 	auto grid_m = mass->datas();
 
-	Array2<double> weight;
+	Array2D weight;
 	weight.reSize(flow->resolution().x, flow->resolution().y, 0.0);
 
-	LinearArraySampler2<Vector2<double>> sampler(
+	LinearArraySampler2<Vector2D> sampler(
 		grid_v,
 		flow->gridSpacing(),
 		flow->dataOrigin()
@@ -69,7 +69,7 @@ void MPMSolver2::transferFromParticlesToGrids(double timeIntervalInSeconds) {
 			bbox.upperCorner.y - hh.y);
 
 		auto affine = Matrix2x2<double>(stress, 0, 0, stress) + mpm_mass * C(i);
-		std::array<Vector2<int>, 4> indices;
+		std::array<Vector2I, 4> indices;
 		std::array<double, 4> weights;
 
 
@@ -129,7 +129,7 @@ void MPMSolver2::transferFromGridsToParticles(double timeIntervalInSeconds) {
 
 	const auto hh = flow->gridSpacing() / 2.0;
 	auto lower = flow->origin();
-	Vector2<double> upper;
+	Vector2D upper;
 	upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
 	upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
 
@@ -140,9 +140,9 @@ void MPMSolver2::transferFromGridsToParticles(double timeIntervalInSeconds) {
 	auto& grid_v = flow->datas();
 	auto grid_m = _mpmData->g_mass->datas();
 
-	Array2<double> weight;
+	Array2D weight;
 
-	LinearArraySampler2<Vector2<double>> sampler(
+	LinearArraySampler2<Vector2D> sampler(
 		grid_v,
 		flow->gridSpacing(),
 		flow->dataOrigin()
@@ -163,7 +163,7 @@ void MPMSolver2::transferFromGridsToParticles(double timeIntervalInSeconds) {
 		Vector2D new_v;
 		Matrix2x2<double> new_C;
 
-		std::array<Vector2<int>, 4> indices;
+		std::array<Vector2I, 4> indices;
 		std::array<double, 4> weights;
 
 		auto dx = flow->gridSpacing().x;

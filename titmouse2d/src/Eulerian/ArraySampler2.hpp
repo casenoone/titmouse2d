@@ -28,21 +28,21 @@ public:
 
 	LinearArraySampler2(
 		const Array2<T>& accessor,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& gridOrigin);
+		const Vector2D& gridSpacing,
+		const Vector2D& gridOrigin);
 
 	LinearArraySampler2(const LinearArraySampler2& other);
 
-	T operator()(const Array2<T>& accessor, const Vector2<double>& x);
+	T operator()(const Array2<T>& accessor, const Vector2D& x);
 
 	void getCoordinatesAndGradientWeights(
-		const Vector2<double>& x,
-		std::array<Vector2<int>, 4>* indices,
-		std::array<Vector2<double>, 4>* weights)const;
+		const Vector2D& x,
+		std::array<Vector2I, 4>* indices,
+		std::array<Vector2D, 4>* weights)const;
 
 	void getCoordinatesAndWeights(
-		const Vector2<double>& x,
-		std::array<Vector2<int>, 4>* indices,
+		const Vector2D& x,
+		std::array<Vector2I, 4>* indices,
 		std::array<double, 4>* weights);
 
 	//这里需要改一下接口,这里本应该是私有成员
@@ -51,9 +51,9 @@ public:
 	Array2<T> _accessor;
 
 private:
-	Vector2<double> _gridSpacing;
-	Vector2<double> _invGridSpacing;
-	Vector2<double> _origin;
+	Vector2D _gridSpacing;
+	Vector2D _invGridSpacing;
+	Vector2D _origin;
 
 };
 
@@ -78,10 +78,10 @@ LinearArraySampler2<T>::~LinearArraySampler2() {
 template<class T>
 LinearArraySampler2<T>::LinearArraySampler2(
 	const Array2<T>& accessor,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin) {
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) {
 	_gridSpacing = gridSpacing;
-	_invGridSpacing = Vector2<double>(1 / gridSpacing.x, 1 / gridSpacing.y);
+	_invGridSpacing = Vector2D(1 / gridSpacing.x, 1 / gridSpacing.y);
 
 	_origin = gridOrigin;
 	_accessor.set(accessor);
@@ -100,10 +100,10 @@ LinearArraySampler2<T>::LinearArraySampler2(const LinearArraySampler2<T>& other)
 
 
 template<class T>
-T LinearArraySampler2<T>::operator()(const Array2<T>& accessor, const Vector2<double>& x) {
+T LinearArraySampler2<T>::operator()(const Array2<T>& accessor, const Vector2D& x) {
 	int i, j;
 	double fx, fy;
-	Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
+	Vector2D normalizedX = (x - _origin) / _gridSpacing;
 	auto& accessors = const_cast<Array2<T>&>(accessor);
 	auto size = accessors.dataSize();
 	int iSize = size.x;
@@ -130,14 +130,14 @@ T LinearArraySampler2<T>::operator()(const Array2<T>& accessor, const Vector2<do
 
 template <class T>
 void LinearArraySampler2<T>::getCoordinatesAndGradientWeights(
-	const Vector2<double>& x,
-	std::array<Vector2<int>, 4>* indices,
-	std::array<Vector2<double>, 4>* weights) const {
+	const Vector2D& x,
+	std::array<Vector2I, 4>* indices,
+	std::array<Vector2D, 4>* weights) const {
 	int i, j;
 	double fx, fy;
 
 
-	const Vector2<double> normalizedX = (x - _origin) * _invGridSpacing;
+	const Vector2D normalizedX = (x - _origin) * _invGridSpacing;
 
 	auto size = _accessor.dataSize();
 
@@ -150,10 +150,10 @@ void LinearArraySampler2<T>::getCoordinatesAndGradientWeights(
 	int ip1 = std::min(i + 1, iSize - 1);
 	int jp1 = std::min(j + 1, jSize - 1);
 
-	(*indices)[0] = Vector2<int>(i, j);
-	(*indices)[1] = Vector2<int>(ip1, j);
-	(*indices)[2] = Vector2<int>(i, jp1);
-	(*indices)[3] = Vector2<int>(ip1, jp1);
+	(*indices)[0] = Vector2I(i, j);
+	(*indices)[1] = Vector2I(ip1, j);
+	(*indices)[2] = Vector2I(i, jp1);
+	(*indices)[3] = Vector2I(ip1, jp1);
 
 	(*weights)[0] = Vector2<T>(
 		fy * _invGridSpacing.x - _invGridSpacing.x,
@@ -173,8 +173,8 @@ void LinearArraySampler2<T>::getCoordinatesAndGradientWeights(
 //计算粒子在各个节点上的插值
 template<class T>
 void LinearArraySampler2<T>::getCoordinatesAndWeights(
-	const Vector2<double>& x,
-	std::array<Vector2<int>, 4>* indices,
+	const Vector2D& x,
+	std::array<Vector2I, 4>* indices,
 	std::array<double, 4>* weights) {
 
 	//这步操作在做这样一个事情：
@@ -185,7 +185,7 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
 	//这里的origin指的是背景网格数据点的起点，而非每一个小cell里的起点
 
 
-	Vector2<double> normalizedX = (x - _origin) / _gridSpacing;
+	Vector2D normalizedX = (x - _origin) / _gridSpacing;
 
 	auto size = _accessor.dataSize();
 
@@ -204,10 +204,10 @@ void LinearArraySampler2<T>::getCoordinatesAndWeights(
 	int ip1 = std::min(i + 1, iSize - 1);
 	int jp1 = std::min(j + 1, jSize - 1);
 
-	(*indices)[0] = Vector2<int>(i, j);
-	(*indices)[1] = Vector2<int>(ip1, j);
-	(*indices)[2] = Vector2<int>(i, jp1);
-	(*indices)[3] = Vector2<int>(ip1, jp1);
+	(*indices)[0] = Vector2I(i, j);
+	(*indices)[1] = Vector2I(ip1, j);
+	(*indices)[2] = Vector2I(i, jp1);
+	(*indices)[3] = Vector2I(ip1, jp1);
 
 
 

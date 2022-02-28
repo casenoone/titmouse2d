@@ -10,6 +10,6 @@ VortexParticleSystemData2::~VortexParticleSystemData2() {
 }
 
 
-Array<double>& VortexParticleSystemData2::vorticities() {
+ArrayD& VortexParticleSystemData2::vorticities() {
 	return _vorticities;
 }

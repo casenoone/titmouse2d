@@ -11,8 +11,8 @@ using namespace std;
 
 //临时弄一个移动边界，有空再去修改collider类，使其具有移动属性
 
-inline double resolveMovingCollision(Array<Vector2<double>> postions,
-	Array<Vector2<double>> velocities) {
+inline double resolveMovingCollision(Array<Vector2D> postions,
+	Array<Vector2D> velocities) {
 
 	double min = 0;
 	static double angle = min;

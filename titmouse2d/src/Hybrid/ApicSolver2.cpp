@@ -2,9 +2,9 @@
 #include "../boundingbox2.h"
 
 ApicSolver2::ApicSolver2(
-	const Vector2<int>& resolutions,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin)
+	const Vector2I& resolutions,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin)
 	:PicSolver2(resolutions, gridSpacing, gridOrigin)
 {
 }
@@ -31,7 +31,7 @@ void ApicSolver2::transferFromParticlesToGrids() {
 	int numberOfParticles = particles->numberOfParticles();
 	const auto hh = flow->gridSpacing() / 2.0;
 	auto lower = flow->origin();
-	Vector2<double> upper;
+	Vector2D upper;
 	upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
 	upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
 
@@ -41,7 +41,7 @@ void ApicSolver2::transferFromParticlesToGrids() {
 	_cY.reSize(numberOfParticles);
 
 	//清空速度场
-	flow->fill(Vector2<double>());
+	flow->fill(Vector2D());
 
 	auto u = flow->uDatas();
 	auto v = flow->vDatas();
@@ -49,8 +49,8 @@ void ApicSolver2::transferFromParticlesToGrids() {
 	const auto uPos = flow->uPosition();
 	const auto vPos = flow->vPosition();
 
-	Array2<double> uWeight;
-	Array2<double> vWeight;
+	Array2D uWeight;
+	Array2D vWeight;
 	uWeight.reSize(u.dataSize().x, u.dataSize().y);
 	vWeight.reSize(v.dataSize().x, v.dataSize().y);
 
@@ -71,7 +71,7 @@ void ApicSolver2::transferFromParticlesToGrids() {
 	);
 
 	for (int i = 0; i < numberOfParticles; ++i) {
-		std::array<Vector2<int>, 4> indices;
+		std::array<Vector2I, 4> indices;
 		std::array<double, 4> weights;
 
 		auto uPosClamped = positions.lookAt(i);
@@ -131,14 +131,14 @@ void ApicSolver2::transferFromGridsToParticles() {
 	int numberOfParticles = particles->numberOfParticles();
 	const auto hh = flow->gridSpacing() / 2.0;
 	auto lower = flow->origin();
-	Vector2<double> upper;
+	Vector2D upper;
 	upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
 	upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
 
 	auto  bbox = BoundingBox2(lower, upper);
 
-	_cX.reSize(numberOfParticles, Vector2<double>());
-	_cY.reSize(numberOfParticles, Vector2<double>());
+	_cX.reSize(numberOfParticles, Vector2D());
+	_cY.reSize(numberOfParticles, Vector2D());
 
 	auto u = flow->uDatas();
 	auto v = flow->vDatas();
@@ -159,8 +159,8 @@ void ApicSolver2::transferFromGridsToParticles() {
 	for (int i = 0; i < numberOfParticles; ++i) {
 		velocities[i] = flow->sample(positions.lookAt(i));
 
-		std::array<Vector2<int>, 4> indices;
-		std::array<Vector2<double>, 4> gradWeights;
+		std::array<Vector2I, 4> indices;
+		std::array<Vector2D, 4> gradWeights;
 
 		auto uPosClamped = positions.lookAt(i);
 		uPosClamped.y = clamp(
@@ -195,12 +195,12 @@ ApicSolver2::Builder ApicSolver2::builder() {
 
 
 ApicSolver2 ApicSolver2::Builder::build() const {
-	auto gridspacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridspacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return ApicSolver2(_resolution, gridspacing, _gridOrigin);
 }
 
 ApicSolver2Ptr ApicSolver2::Builder::makeShared() const {
-	auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return std::shared_ptr<ApicSolver2>(
 		new ApicSolver2(
 			_resolution,

@@ -38,7 +38,7 @@ bool NeighborSearcher2::IsYoverBorder(int idx) {
 	return false;
 }
 
-bool NeighborSearcher2::IsNeighbor(Vector2<double>& pos1, Vector2<double>& pos2, const double& r) {
+bool NeighborSearcher2::IsNeighbor(Vector2D& pos1, Vector2D& pos2, const double& r) {
 	auto dis = pos1.dis(pos2);
 	if (dis < r) {
 		return true;
@@ -47,7 +47,7 @@ bool NeighborSearcher2::IsNeighbor(Vector2<double>& pos1, Vector2<double>& pos2,
 }
 
 
-void NeighborSearcher2::forEachNeighborGrid(Vector2<int>& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2<double>>& positions) {
+void NeighborSearcher2::forEachNeighborGrid(Vector2I& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2D>& positions) {
 
 	//idx是待求格子的坐标
 	int x = idx.x;
@@ -73,7 +73,7 @@ void NeighborSearcher2::forEachNeighborGrid(Vector2<int>& idx, int particleId, v
 
 }
 
-void NeighborSearcher2::setNeiborList(const Array<Vector2<double>>& positions) {
+void NeighborSearcher2::setNeiborList(const Array<Vector2D>& positions) {
 	clearData();
 	resetDataSize();
 
@@ -83,7 +83,7 @@ void NeighborSearcher2::setNeiborList(const Array<Vector2<double>>& positions) {
 	vector<vector<vector<int>>> grids;
 
 	//gridPositions保存了粒子的映射坐标
-	vector<Vector2<int>> gridPositons;
+	vector<Vector2I> gridPositons;
 	//对格子进行初始化
 	grids.resize(_resolutionX);
 	for (auto iter = grids.begin(); iter != grids.end(); iter++) {
@@ -121,7 +121,7 @@ void NeighborSearcher2::setNeiborList(const Array<Vector2<double>>& positions) {
 		if (gridY < 0) {
 			gridY = 0;
 		}
-		Vector2<int> pos(gridX, gridY);
+		Vector2I pos(gridX, gridY);
 		gridPositons.push_back(pos);
 
 		grids[gridX][gridY].push_back(particleIdx);
@@ -136,14 +136,14 @@ void NeighborSearcher2::setNeiborList(const Array<Vector2<double>>& positions) {
 	positions.forEachIndex([&](int i) {
 
 		auto current = gridPositons[particleIdx];
-		Vector2<int> top(current.x, current.y + 1);
-		Vector2<int> down(current.x, current.y - 1);
-		Vector2<int> left(current.x - 1, current.y);
-		Vector2<int> right(current.x + 1, current.y);
-		Vector2<int> leftTop(current.x - 1, current.y + 1);
-		Vector2<int> rightTop(current.x + 1, current.y + 1);
-		Vector2<int> leftDown(current.x - 1, current.y - 1);
-		Vector2<int> rightDown(current.x + 1, current.y - 1);
+		Vector2I top(current.x, current.y + 1);
+		Vector2I down(current.x, current.y - 1);
+		Vector2I left(current.x - 1, current.y);
+		Vector2I right(current.x + 1, current.y);
+		Vector2I leftTop(current.x - 1, current.y + 1);
+		Vector2I rightTop(current.x + 1, current.y + 1);
+		Vector2I leftDown(current.x - 1, current.y - 1);
+		Vector2I rightDown(current.x + 1, current.y - 1);
 
 		forEachNeighborGrid(current, particleIdx, grids, positions);
 		forEachNeighborGrid(top, particleIdx, grids, positions);

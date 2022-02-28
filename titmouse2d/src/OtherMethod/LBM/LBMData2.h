@@ -16,7 +16,7 @@ public:
 
 	LBMData2() = default;
 
-	LBMData2(const Vector2<int>& resolution) :_resolution(resolution) {
+	LBMData2(const Vector2I& resolution) :_resolution(resolution) {
 		f.reSize(resolution.x, resolution.y);
 		f_.reSize(resolution.x, resolution.y);
 		velocity.reSize(resolution.x, resolution.y);
@@ -31,7 +31,7 @@ public:
 
 	}
 
-	Vector2<int> resolution()const {
+	Vector2I resolution()const {
 		return _resolution;
 	}
 
@@ -39,11 +39,11 @@ public:
 	Array2<vector<double>> f;
 	Array2<vector<double>> f_;
 
-	Array2<Vector2<double>> velocity;
+	Array2<Vector2D> velocity;
 
-	Array2<double> rho;
+	Array2D rho;
 
-	Vector2<int> _resolution;
+	Vector2I _resolution;
 };
 
 

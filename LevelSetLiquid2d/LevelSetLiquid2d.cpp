@@ -52,7 +52,7 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<float> color)
+void drawPoint(Vector2D pos, float size, Color3<float> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -61,7 +61,7 @@ void drawPoint(Vector2<double> pos, float size, Color3<float> color)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<double> color)
+void drawPoint(Vector2D pos, float size, Color3<double> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -96,8 +96,8 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 }
 
 
-Vector2<int> resolution(20, 20);
-Vector2<double> origin(0.0, 0.0);
+Vector2I resolution(20, 20);
+Vector2D origin(0.0, 0.0);
 
 
 auto mc = MarchingCube2::builder()
@@ -112,16 +112,16 @@ SimpleLevelSetSolver2 levelsetSolver;
 
 auto levelsetLiquidSolver = LevelSetLiquidSolver2::builder()
 .withResolution(resolution)
-.withOrigin(Vector2<double>())
+.withOrigin(Vector2D())
 .makeShared();
 
 
-Vector2<double> centers(0.7, 1.3);
+Vector2D centers(0.7, 1.3);
 double rs = 0.5;
 
 auto sphere1 = Sphere2(centers, rs, resolution, origin, 0.0);
 
-auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>(0, 0));
+auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2D(0, 0));
 
 auto advectionSolver = make_shared<AdvectionSolver2>();
 

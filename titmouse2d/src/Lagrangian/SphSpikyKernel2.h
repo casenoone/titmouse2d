@@ -11,7 +11,7 @@ struct SphSpikyKernel2 {
 	explicit SphSpikyKernel2(double kernelRadius);
 	double operator()(double distance)const;
 	double firstDerivative(double distance)const;
-	Vector2<double> gradient(double distance, const Vector2<double>& direction)const;
+	Vector2D gradient(double distance, const Vector2D& direction)const;
 	double secondDerivative(double distance)const;
 };
 
@@ -45,7 +45,7 @@ inline double SphSpikyKernel2::firstDerivative(double distance)const {
 	}
 }
 
-inline Vector2<double> SphSpikyKernel2::gradient(double distance, const Vector2<double>& directionToCenter)const {
+inline Vector2D SphSpikyKernel2::gradient(double distance, const Vector2D& directionToCenter)const {
 	return directionToCenter * -1 * firstDerivative(distance);
 }
 

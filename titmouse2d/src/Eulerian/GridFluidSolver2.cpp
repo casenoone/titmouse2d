@@ -4,9 +4,9 @@
 GridFluidSolver2::GridFluidSolver2() {}
 
 GridFluidSolver2::GridFluidSolver2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin) {
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) {
 
 
 	_grids = std::make_shared<GridSystemData2>(resolution, gridSpacing, gridOrigin);
@@ -37,7 +37,7 @@ VertexCenteredScalarGrid2Ptr& GridFluidSolver2::sdf() {
 
 
 
-const Vector2<double>& GridFluidSolver2::gravity() const { return _gravity; }
+const Vector2D& GridFluidSolver2::gravity() const { return _gravity; }
 
 
 //计算CFL条件数
@@ -51,7 +51,7 @@ double GridFluidSolver2::cfl(double timeIntervalInSeconds) const {
 
 	for (int i = 0; i < sizeX; ++i) {
 		for (int j = 0; j < sizeY; ++j) {
-			Vector2<double> v =
+			Vector2D v =
 				vel->valueAtCellCenter(i, j) + _gravity * timeIntervalInSeconds;
 			maxVel = std::max(maxVel, v.x);
 			maxVel = std::max(maxVel, v.y);
@@ -75,11 +75,11 @@ const GridSystemData2Ptr& GridFluidSolver2::gridSystemData() const {
 }
 
 
-Vector2<int> GridFluidSolver2::resolution() const { return _grids->resolution(); }
+Vector2I GridFluidSolver2::resolution() const { return _grids->resolution(); }
 
-Vector2<double> GridFluidSolver2::gridSpacing() const { return _grids->gridSpacing(); }
+Vector2D GridFluidSolver2::gridSpacing() const { return _grids->gridSpacing(); }
 
-Vector2<double> GridFluidSolver2::gridOrigin() const { return _grids->origin(); }
+Vector2D GridFluidSolver2::gridOrigin() const { return _grids->origin(); }
 
 FaceCenteredGrid2Ptr GridFluidSolver2::velocity() {
 	return _grids->velocity();

@@ -18,7 +18,7 @@ public:
 
 	explicit NeighborSearcher2(int resolutionX, int resolutionY, int numberOfParticles);
 
-	void setNeiborList(const Array<Vector2<double>>& positions);
+	void setNeiborList(const Array<Vector2D>& positions);
 
 	vector<vector<int>>& neighBors();
 
@@ -38,9 +38,9 @@ private:
 
 	bool IsYoverBorder(int idx);
 
-	bool IsNeighbor(Vector2 <double>& pos1, Vector2<double>& pos2, const double& r);
+	bool IsNeighbor(Vector2 <double>& pos1, Vector2D& pos2, const double& r);
 
-	void forEachNeighborGrid(Vector2<int>& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2<double>>& positions);
+	void forEachNeighborGrid(Vector2I& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2D>& positions);
 
 };
 

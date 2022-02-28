@@ -4,8 +4,8 @@
 ImplicitSurface2::ImplicitSurface2() {
 }
 
-ImplicitSurface2::ImplicitSurface2(const Vector2<int>& resolution,
-	const Vector2<double>& origin,
+ImplicitSurface2::ImplicitSurface2(const Vector2I& resolution,
+	const Vector2D& origin,
 	double initialValue) {
 
 	_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
@@ -19,16 +19,16 @@ ImplicitSurface2::ImplicitSurface2(const VertexCenteredScalarGrid2& other) {
 	//_data = make_shared<VertexCenteredScalarGrid2>(other);
 }
 
-Vector2<double> ImplicitSurface2::closestPoint(const Vector2<double>& otherPoint)const {
-	return Vector2<double>(0.0, 0.0);
+Vector2D ImplicitSurface2::closestPoint(const Vector2D& otherPoint)const {
+	return Vector2D(0.0, 0.0);
 }
 
-double ImplicitSurface2::closestDistance(const Vector2<double>& otherPoint)const {
+double ImplicitSurface2::closestDistance(const Vector2D& otherPoint)const {
 	return 0.0;
 }
 
 
-Surface2::SurfaceQueryResult ImplicitSurface2::getClosedInformation(const Vector2<double>& otherPoint) {
+Surface2::SurfaceQueryResult ImplicitSurface2::getClosedInformation(const Vector2D& otherPoint) {
 
 	SurfaceQueryResult a;
 	return a;

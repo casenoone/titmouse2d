@@ -6,27 +6,27 @@
 #include "../Geometry/ExplicitSurface2.h"
 
 struct Edge {
-	Vector2<double> p1;
-	Vector2<double> p2;
+	Vector2D p1;
+	Vector2D p2;
 };
 
 struct Circle {
 	double r;
-	Vector2<double> center;
+	Vector2D center;
 
 };
 
 struct LineSegment {
-	Vector2<double> start;
-	Vector2<double> End;
+	Vector2D start;
+	Vector2D End;
 };
 
 
 class MarchingCube2 {
 public:
 	MarchingCube2();
-	MarchingCube2(const Vector2<int>& resolution,
-		const Vector2<double>& origin,
+	MarchingCube2(const Vector2I& resolution,
+		const Vector2D& origin,
 		double initialValue = 1.0,
 		double domainSizeX = 1.0);
 	~MarchingCube2();
@@ -57,10 +57,10 @@ private:
 	void calculateWeight();
 
 	//获取所有格子的配置信息
-	void getVoxelConfig(Array2<double>& num);
+	void getVoxelConfig(Array2D& num);
 
 	//计算等值线所在的位置
-	Vector2<double> calculateIso(int edge, int i, int j);
+	Vector2D calculateIso(int edge, int i, int j);
 
 	//存放圆
 	vector<Circle> _circleList;
@@ -80,11 +80,11 @@ public:
 
 	~Builder();
 
-	Builder& withResolution(const Vector2<int>& resolution);
+	Builder& withResolution(const Vector2I& resolution);
 
 	Builder& withResolution(int resolutionX, int resolutionY);
 
-	Builder& withOrigin(const Vector2<double>& gridOrigin);
+	Builder& withOrigin(const Vector2D& gridOrigin);
 
 	Builder& withOrigin(double gridOriginX, double gridOriginY);
 
@@ -97,8 +97,8 @@ public:
 	MarchingCube2Ptr makeShared() const;
 
 private:
-	Vector2<int> _resolution;
-	Vector2<double> _gridOrigin;
+	Vector2I _resolution;
+	Vector2D _gridOrigin;
 	double _initialVal = 0.0;
 	double _domainSizeX = 1.0;
 

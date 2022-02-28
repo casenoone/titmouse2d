@@ -68,7 +68,7 @@ void AdvectionSolver2::solve(const FaceCenteredGrid2Ptr& flow, CellCenteredVecto
 				double x, y;
 				x = clamp<double>(backTracedPoint.x, 0.0, 2.0);
 				y = clamp<double>(backTracedPoint.y, 0.0, 2.0);
-				newData(i, j) = advectedData->sample(Vector2<double>(x, y));
+				newData(i, j) = advectedData->sample(Vector2D(x, y));
 			}
 
 

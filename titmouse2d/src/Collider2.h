@@ -25,8 +25,8 @@ public:
 	void resolveCollision(
 		double radius,
 		double restitutionCoefficient,
-		Vector2<double>* position,
-		Vector2<double>* velocity
+		Vector2D* position,
+		Vector2D* velocity
 	);
 
 	bool IsNull()const;
@@ -36,20 +36,20 @@ public:
 
 	struct ColliderQueryResult final {
 		double distance;
-		Vector2<double> point;
-		Vector2<double> normal;
-		Vector2<double> velocity;
+		Vector2D point;
+		Vector2D normal;
+		Vector2D velocity;
 	};
 
 	//查询当前点到表面上最近的一点
 	void getClosestPoint(
-		const Vector2<double>& queryPoint,
+		const Vector2D& queryPoint,
 		ColliderQueryResult* result) const;
 
 	//检查粒子是否穿透表面
 	bool isPenetrating(
 		const ColliderQueryResult& colliderPoint,
-		const Vector2<double>& position,
+		const Vector2D& position,
 		double radius);
 
 private:

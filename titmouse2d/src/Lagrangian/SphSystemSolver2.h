@@ -17,7 +17,7 @@ public:
 
 	//setDataÓ¦Ð´³ÉÐéº¯Êý
 	void setData(int numberOfParticles,
-		Array<Vector2<double>>& pos,
+		Array<Vector2D>& pos,
 		int resolutionX,
 		int resolutionY);
 
@@ -28,10 +28,10 @@ public:
 	void accumulateNonPressureForces(double timeStepInSeconds);
 	void accumulatePressureForce(double timeStepInSeconds);
 
-	void accumulatePressureForce(Array<Vector2<double>> positions,
-		Array<double> densities,
-		Array<double> pressures,
-		Array<Vector2<double>> pressureForces);
+	void accumulatePressureForce(Array<Vector2D> positions,
+		ArrayD densities,
+		ArrayD pressures,
+		Array<Vector2D> pressureForces);
 
 	void accumulateViscosityForce();
 

@@ -39,7 +39,7 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<float> color)
+void drawPoint(Vector2D pos, float size, Color3<float> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -48,7 +48,7 @@ void drawPoint(Vector2<double> pos, float size, Color3<float> color)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<double> color)
+void drawPoint(Vector2D pos, float size, Color3<double> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -144,21 +144,21 @@ int main(int argc, char** argv)
 	int res_x = 30;
 	int res_y = res_x;
 
-	vector<Vector2<double>> tempPos;
+	vector<Vector2D> tempPos;
 
 	for (int i = 0; i < numberOfparticles; ++i) {
 		auto x = random_double(0.7, 1.3);
 		auto y = random_double(0.1, 0.4);
-		Vector2<double> temp(x, y);
+		Vector2D temp(x, y);
 		tempPos.push_back(temp);
 	}
 
-	Array<Vector2<double>> pos(tempPos);
+	Array<Vector2D> pos(tempPos);
 
 
 	vpSolver->setData(numberOfparticles, pos, res_x, res_y);
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
+	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
 	Collider2 collider;
 	collider.push(box1);
 	//vpSolver->setCollider(collider);

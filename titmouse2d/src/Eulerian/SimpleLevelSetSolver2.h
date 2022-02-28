@@ -17,14 +17,14 @@ public:
 		VertexCenteredScalarGrid2Ptr& outputSdf);
 
 private:
-	double sign(const Array2<double>& input, int i, int j) const;
+	double sign(const Array2D& input, int i, int j) const;
 
-	double pseudoTimeStep(const Array2<double>& input,
-		const Vector2<double>& gridSpacing);
+	double pseudoTimeStep(const Array2D& input,
+		const Vector2D& gridSpacing);
 
 	int distanceToNumberOfIterations(double distance, double dtau);
 
-	void getDerivatives(const Array2<double>& input, Vector2<double> gridSpacing,
+	void getDerivatives(const Array2D& input, Vector2D gridSpacing,
 		int i, int j, std::array<double, 2>* dx, std::array<double, 2>* dy) const;
 
 private:

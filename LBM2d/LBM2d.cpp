@@ -40,7 +40,7 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<float> color)
+void drawPoint(Vector2D pos, float size, Color3<float> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -49,7 +49,7 @@ void drawPoint(Vector2<double> pos, float size, Color3<float> color)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<double> color)
+void drawPoint(Vector2D pos, float size, Color3<double> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -87,7 +87,7 @@ const double minVel = 0;
 const double maxVel = 0.1;
 
 
-Vector2<int> resolution(40, 40);
+Vector2I resolution(40, 40);
 auto LBMSolver = make_shared<LBMSolver2>(resolution);
 auto spacing = 2.0 / resolution.x;
 auto halfSpacing = 0.5 * spacing;
@@ -110,8 +110,8 @@ static void display(void)
 	//可视化部分
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
-			auto currentX = Vector2<double>(i, j) * spacing +
-				Vector2<double>(halfSpacing, halfSpacing);
+			auto currentX = Vector2D(i, j) * spacing +
+				Vector2D(halfSpacing, halfSpacing);
 
 			auto temp = LBMSolver->getGridState(i, j);
 			if (temp != LBM_OBS) {
@@ -141,8 +141,8 @@ static void display(void)
 
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {
-			auto currentX = Vector2<double>(i, j) * spacing +
-				Vector2<double>(halfSpacing, halfSpacing);
+			auto currentX = Vector2D(i, j) * spacing +
+				Vector2D(halfSpacing, halfSpacing);
 			auto temp = LBMSolver->getGridState(i, j);
 			if (temp == LBM_VELOCITY)
 				drawPoint(currentX, pointSize, Color3<float>(1, 0.4, 0));
@@ -195,7 +195,7 @@ int main(int argc, char** argv)
 	//设置一个圆形的障碍物
 
 	double r1 = 0.2;
-	Vector2<double> center1(0.4, 1.0);
+	Vector2D center1(0.4, 1.0);
 
 	auto res = resolution;
 
@@ -204,8 +204,8 @@ int main(int argc, char** argv)
 	for (int i = 0; i < res.x; ++i) {
 		temp1[i].resize(res.y);
 		for (int j = 0; j < res.y; ++j) {
-			auto currentX = Vector2<double>(i, j) * spacing +
-				Vector2<double>(halfSpacing, halfSpacing);
+			auto currentX = Vector2D(i, j) * spacing +
+				Vector2D(halfSpacing, halfSpacing);
 
 			//cout << currentX.x << "," << currentX.y << "," << (currentX - center1).getLength() << endl;
 			if ((currentX - center1).getLength() < r1) {
@@ -218,7 +218,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	Array2<int> lbm_collider(temp1);
+	Array2I lbm_collider(temp1);
 
 	//LBMSolver->setCollider(lbm_collider);
 

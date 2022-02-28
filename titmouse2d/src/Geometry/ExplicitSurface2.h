@@ -16,15 +16,15 @@ public:
 
 	virtual ~SurfaceElement2();
 
-	SurfaceElement2(Vector2<double> _start, Vector2<double> _end, Vector2<double> _normal);
+	SurfaceElement2(Vector2D _start, Vector2D _end, Vector2D _normal);
 
 
 public:
-	Vector2<double> start;
+	Vector2D start;
 
-	Vector2<double> end;
+	Vector2D end;
 
-	Vector2<double> normal;
+	Vector2D normal;
 
 };
 
@@ -40,11 +40,11 @@ public:
 
 	ExplicitSurface2(const vector<SurfaceElement2>& data);
 
-	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const override;
+	virtual Vector2D closestPoint(const Vector2D& otherPoint)const override;
 
-	virtual double closestDistance(const Vector2<double>& otherPoint)const override;
+	virtual double closestDistance(const Vector2D& otherPoint)const override;
 
-	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint);
+	virtual SurfaceQueryResult getClosedInformation(const Vector2D& otherPoint);
 
 	int size()const;
 

@@ -10,19 +10,19 @@ class ImplicitSurface2 : public Surface2 {
 public:
 	ImplicitSurface2();
 
-	ImplicitSurface2(const Vector2<int>& resolution,
-		const Vector2<double>& origin,
+	ImplicitSurface2(const Vector2I& resolution,
+		const Vector2D& origin,
 		double initialValue);
 
 	~ImplicitSurface2();
 
 	ImplicitSurface2(const VertexCenteredScalarGrid2& other);
 
-	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const final;
+	virtual Vector2D closestPoint(const Vector2D& otherPoint)const final;
 
-	virtual double closestDistance(const Vector2<double>& otherPoint)const final;
+	virtual double closestDistance(const Vector2D& otherPoint)const final;
 
-	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint) = 0;
+	virtual SurfaceQueryResult getClosedInformation(const Vector2D& otherPoint) = 0;
 
 	virtual const VertexCenteredScalarGrid2Ptr sdf() const = 0;
 

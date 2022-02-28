@@ -13,9 +13,9 @@ PicSolver2::~PicSolver2() {
 
 
 PicSolver2::PicSolver2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin)
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin)
 	: GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
 	_particles = std::make_shared<ParticleSystemData2>();
@@ -59,15 +59,15 @@ void PicSolver2::transferFromParticlesToGrids() {
 	auto velocities = _particles->velocities();
 	int numberOfParticles = _particles->numberOfParticles();
 
-	flow->fill(Vector2<double>(0.0, 0.0));
+	flow->fill(Vector2D(0.0, 0.0));
 	auto sizeU = flow->uSize();
 	auto sizeV = flow->vSize();
 	auto& u = flow->uDatas();
 	auto& v = flow->vDatas();
 
-	Array2<double> uWeight;
+	Array2D uWeight;
 	uWeight.reSize(sizeU.x, sizeU.y, 0.0);
-	Array2<double> vWeight;
+	Array2D vWeight;
 	vWeight.reSize(sizeV.x, sizeV.y, 0.0);
 
 	_uMarkers.reSize(u.dataSize().x, u.dataSize().y, 0.0);
@@ -87,7 +87,7 @@ void PicSolver2::transferFromParticlesToGrids() {
 
 	for (int i = 0; i < numberOfParticles; ++i) {
 
-		std::array<Vector2<int>, 4> indices;
+		std::array<Vector2I, 4> indices;
 
 		std::array<double, 4> weights;
 
@@ -159,7 +159,7 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 	int numberOfParticles = _particles->numberOfParticles();
 
 	auto lower = flow->origin();
-	Vector2<double> upper;
+	Vector2D upper;
 	upper.x = lower.x + flow->resolution().x * flow->gridSpacing().x;
 	upper.y = lower.y + flow->resolution().y * flow->gridSpacing().y;
 	//cout << upper.x << " " << upper.y << endl;
@@ -167,19 +167,19 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 	omp_set_num_threads(23);
 #pragma omp parallel for
 	for (int i = 0; i < numberOfParticles; ++i) {
-		Vector2<double> pt0 = positions[i];
-		Vector2<double> pt1 = pt0;
-		Vector2<double> vel = velocities[i];
+		Vector2D pt0 = positions[i];
+		Vector2D pt1 = pt0;
+		Vector2D vel = velocities[i];
 
 		unsigned int numSubSteps
 			= static_cast<unsigned int>(std::max(maxCfl(), 1.0));
 		double dt = timeIntervalInSeconds / numSubSteps;
 		for (unsigned int t = 0; t < numSubSteps; ++t) {
-			Vector2<double> vel0 = flow->sample(pt0);
+			Vector2D vel0 = flow->sample(pt0);
 
 			//�е㷨
-			Vector2<double> midPt = pt0 + vel0 * 0.5 * dt;
-			Vector2<double> midVel = flow->sample(midPt);
+			Vector2D midPt = pt0 + vel0 * 0.5 * dt;
+			Vector2D midVel = flow->sample(midPt);
 
 
 			pt1 = pt0 + midVel * dt;
@@ -290,7 +290,7 @@ const ParticleSystemData2Ptr& PicSolver2::particleSystemData() const {
 	return _particles;
 }
 
-void PicSolver2::setData(int numberOfParticles, Array<Vector2<double>>& pos, int resolutionX, int resolutionY) {
+void PicSolver2::setData(int numberOfParticles, Array<Vector2D>& pos, int resolutionX, int resolutionY) {
 	_particles->positions() = pos;
 	_particles->numberOfParticles() = numberOfParticles;
 	_particles->forces().reSize(numberOfParticles);
@@ -299,13 +299,13 @@ void PicSolver2::setData(int numberOfParticles, Array<Vector2<double>>& pos, int
 
 
 PicSolver2 PicSolver2::Builder::build() const {
-	auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return PicSolver2(_resolution, gridSpacing, _gridOrigin);
 }
 
 
 PicSolver2Ptr PicSolver2::Builder::makeShared() const {
-	auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return std::shared_ptr<PicSolver2>(
 		new PicSolver2(
 			_resolution,

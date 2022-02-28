@@ -7,11 +7,11 @@ class IISphData2 : public SphSystemData2 {
 public:
 	IISphData2() = default;
 
-	Array<double> a_ii;
+	ArrayD a_ii;
 
-	Array<Vector2<double>> d_ii;
+	Array<Vector2D> d_ii;
 
-	Array<double> advRho;
+	ArrayD advRho;
 
 private:
 

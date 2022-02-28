@@ -8,9 +8,9 @@ public:
 	EulerianSmokeGridData2() = default;
 
 	EulerianSmokeGridData2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& origin);
+		const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& origin);
 
 	CellCenteredScalarGrid2Ptr  densities();
 
@@ -25,9 +25,9 @@ private:
 typedef std::shared_ptr<EulerianSmokeGridData2> EulerianSmokeGridData2Ptr;
 
 inline EulerianSmokeGridData2::EulerianSmokeGridData2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& origin) :GridSystemData2(resolution, gridSpacing, origin) {
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& origin) :GridSystemData2(resolution, gridSpacing, origin) {
 
 	_densities = make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
 	_temperature = make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);

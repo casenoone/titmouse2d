@@ -26,7 +26,7 @@ const double omga = 1.9;
 const double ldc_velocity = 0.09;
 const bool SMAGORINSKY = false;
 
-LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
+LBMSolver2::LBMSolver2(const Vector2I& resolution) :_data(resolution) {
 
 	if (SMAGORINSKY) initSmagoArrays();
 
@@ -63,7 +63,7 @@ LBMSolver2::LBMSolver2(const Vector2<int>& resolution) :_data(resolution) {
 
 }
 
-void LBMSolver2::setCollider(const Array2<int>& collider) {
+void LBMSolver2::setCollider(const Array2I& collider) {
 
 	auto res = resolution();
 
@@ -79,7 +79,7 @@ void LBMSolver2::setCollider(const Array2<int>& collider) {
 }
 
 
-Vector2<int> LBMSolver2::resolution()const {
+Vector2I LBMSolver2::resolution()const {
 	return _data.resolution();
 }
 
@@ -185,11 +185,11 @@ void LBMSolver2::collide() {
 }
 
 
-Array2<double> LBMSolver2::getRho()const {
+Array2D LBMSolver2::getRho()const {
 	return _data.rho;
 }
 
-const Vector2<double> LBMSolver2::velocityAt(int i, int j)const {
+const Vector2D LBMSolver2::velocityAt(int i, int j)const {
 
 	return _data.velocity.lookAt(i, j);
 }

@@ -12,22 +12,22 @@ public:
 
 	virtual ~Surface2();
 
-	virtual Vector2<double> closestPoint(const Vector2<double>& otherPoint)const = 0;
+	virtual Vector2D closestPoint(const Vector2D& otherPoint)const = 0;
 
-	virtual double closestDistance(const Vector2<double>& otherPoint)const = 0;
+	virtual double closestDistance(const Vector2D& otherPoint)const = 0;
 
 public:
 	struct SurfaceQueryResult final {
 		double distance;
-		Vector2<double> point;
-		Vector2<double> normal;
-		Vector2<double> velocity;
+		Vector2D point;
+		Vector2D normal;
+		Vector2D velocity;
 	};
 
 
 	SurfaceQueryResult _surfaceQueryResult;
 
-	virtual SurfaceQueryResult getClosedInformation(const Vector2<double>& otherPoint) = 0;
+	virtual SurfaceQueryResult getClosedInformation(const Vector2D& otherPoint) = 0;
 
 };
 

@@ -19,14 +19,14 @@ double ScalarGrid2::lookAt(int i, int j)const {
 }
 
 
-double ScalarGrid2::sample(const Vector2<double>& x)const {
+double ScalarGrid2::sample(const Vector2D& x)const {
 	auto _sample = _linearSampler;
 	auto result = (*_linearSampler)(this->_data, x);
 	return result;
 }
 
 
-Vector2<double> ScalarGrid2::gradientAtDataPoint(int i, int j) const {
+Vector2D ScalarGrid2::gradientAtDataPoint(int i, int j) const {
 	const auto ds = _data.dataSize();
 	double left = _data.lookAt((i > 0) ? i - 1 : i, j);
 	double right = _data.lookAt((i + 1 < ds.x) ? i + 1 : i, j);
@@ -42,19 +42,19 @@ double ScalarGrid2::laplacianAtDataPoint(int i, int j) const {
 	return 0.0;
 }
 
-Array2<double>& ScalarGrid2::datas() {
+Array2D& ScalarGrid2::datas() {
 	return _data;
 }
 
 
-const Array2<double> ScalarGrid2::datas() const {
+const Array2D ScalarGrid2::datas() const {
 	return _data;
 }
 
 
-void ScalarGrid2::resize(const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& origin,
+void ScalarGrid2::resize(const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& origin,
 	double initialValue) {
 
 	_resolution = resolution;
@@ -76,10 +76,10 @@ void ScalarGrid2::clearData(double initialValue) {
 
 
 ScalarGrid2::DataPositionFunc ScalarGrid2::dataPosition() const {
-	Vector2<double> o = dataOrigin();
+	Vector2D o = dataOrigin();
 	//从int转换到const double &需要收缩转换
-	return [this, o](double i, double j) -> Vector2<double> {
-		return o + gridSpacing() * Vector2<double>({ i, j });
+	return [this, o](double i, double j) -> Vector2D {
+		return o + gridSpacing() * Vector2D({ i, j });
 	};
 }
 
@@ -87,13 +87,13 @@ ScalarGrid2::DataPositionFunc ScalarGrid2::dataPosition() const {
 
 
 
-std::function<double(const Vector2<double>&)> ScalarGrid2::sampler() const {
-	std::function<double(const Vector2<double>&)> t;
+std::function<double(const Vector2D&)> ScalarGrid2::sampler() const {
+	std::function<double(const Vector2D&)> t;
 	return t;
 }
 
 
-Vector2<double> ScalarGrid2::gradient(const Vector2<double>& x) const {
+Vector2D ScalarGrid2::gradient(const Vector2D& x) const {
 
 	auto sampler = _linearSampler;
 
@@ -111,7 +111,7 @@ Vector2<double> ScalarGrid2::gradient(const Vector2<double>& x) const {
 }
 
 
-double ScalarGrid2::laplacian(const Vector2<double>& x) const {
+double ScalarGrid2::laplacian(const Vector2D& x) const {
 	return 0.0;
 }
 

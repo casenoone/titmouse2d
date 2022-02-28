@@ -120,21 +120,21 @@ int main(int argc, char** argv)
 	int numberOfParticles = 4;
 	int resolutionX = 50;
 	int resolutionY = 50;
-	vector <Vector2<double>> temp1;
+	vector <Vector2D> temp1;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = rand() / double(RAND_MAX) + 1.0;
 		auto y = rand() / double(RAND_MAX) + 1.0;
-		Vector2<double> temp(x, y);
+		Vector2D temp(x, y);
 		temp1.push_back(temp);
 	}
 
-	Array<Vector2<double>> pos(temp1);
+	Array<Vector2D> pos(temp1);
 
 
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(1.99, 1.99), true);
-	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(1, 0), Vector2<double>(1.3, 0.8), false);
-	Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.5, 0), Vector2<double>(1, 0.8), false);
+	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(1.99, 1.99), true);
+	Box2Ptr box2 = make_shared<Box2>(Vector2D(1, 0), Vector2D(1.3, 0.8), false);
+	Plane2Ptr plane1 = make_shared<Plane2>(Vector2D(0.5, 0), Vector2D(1, 0.8), false);
 
 	surfaceSet.push_back(box1);
 	surfaceSet.push_back(box2);

@@ -52,7 +52,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2<int> mpm_res(30, 30);
+Vector2I mpm_res(30, 30);
 Vector2D mpm_gs(2.0 / mpm_res.x, 2.0 / mpm_res.x);
 Vector2D mpm_origin(0.0, 0.0);
 
@@ -119,21 +119,21 @@ int main(int argc, char** argv)
 	int numberOfParticles = 1000;
 	int resolutionX = 10;
 	int resolutionY = 10;
-	vector <Vector2<double>> temp1;
+	vector <Vector2D> temp1;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = random_double(0.7, 1.3);
 		auto y = random_double(0.1, 1.9);
-		Vector2<double> temp(x, y);
+		Vector2D temp(x, y);
 		temp1.push_back(temp);
 	}
 
-	Array<Vector2<double>> pos(temp1);
+	Array<Vector2D> pos(temp1);
 
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
-	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0.1, 0.1), Vector2<double>(1.9, 1.9), true);
-	Box2Ptr box3 = make_shared<Box2>(Vector2<double>(0.6, 0.6), Vector2<double>(1.0, 0.7), false);
-	Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.7, 0.8), Vector2<double>(1.0, 0.8), false);
+	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
+	Box2Ptr box2 = make_shared<Box2>(Vector2D(0.1, 0.1), Vector2D(1.9, 1.9), true);
+	Box2Ptr box3 = make_shared<Box2>(Vector2D(0.6, 0.6), Vector2D(1.0, 0.7), false);
+	Plane2Ptr plane1 = make_shared<Plane2>(Vector2D(0.7, 0.8), Vector2D(1.0, 0.8), false);
 
 
 

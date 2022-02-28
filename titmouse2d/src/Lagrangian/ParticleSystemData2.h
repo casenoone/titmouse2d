@@ -15,21 +15,21 @@ public:
 
 	int& numberOfParticles();
 
-	Array<Vector2<double>>& positions();
+	Array<Vector2D>& positions();
 
-	Array<Vector2<double>>& velocities();
+	Array<Vector2D>& velocities();
 
-	Array<Vector2<double>>& forces();
+	Array<Vector2D>& forces();
 
 	NeighborSearcher2Ptr neighbor;
 
 private:
 
-	Array<Vector2<double>> _positions;
+	Array<Vector2D> _positions;
 
-	Array<Vector2<double>> _velocities;
+	Array<Vector2D> _velocities;
 
-	Array<Vector2<double>> _forces;
+	Array<Vector2D> _forces;
 
 	int _numberOfParticles = 0;
 

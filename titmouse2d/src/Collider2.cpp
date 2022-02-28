@@ -14,7 +14,7 @@ void Collider2::push(const Surface2Ptr& _surface) {
 }
 
 void Collider2::getClosestPoint(
-	const Vector2<double>& queryPoint,
+	const Vector2D& queryPoint,
 	ColliderQueryResult* result) const {
 
 	auto minDis = kMaxD;
@@ -40,8 +40,8 @@ void Collider2::getClosestPoint(
 void Collider2::resolveCollision(
 	double radius,
 	double restitutionCoefficient,
-	Vector2<double>* position,
-	Vector2<double>* velocity
+	Vector2D* position,
+	Vector2D* velocity
 ) {
 
 	ColliderQueryResult colliderPoint;
@@ -51,21 +51,21 @@ void Collider2::resolveCollision(
 	if (isPenetrating(colliderPoint, *position, 0.00001)) {
 
 
-		Vector2<double> targetNormal = colliderPoint.normal;
-		Vector2<double> targetPoint = colliderPoint.point + targetNormal * radius;
-		Vector2<double> colliderVelAtTargetPoint = colliderPoint.velocity;
+		Vector2D targetNormal = colliderPoint.normal;
+		Vector2D targetPoint = colliderPoint.point + targetNormal * radius;
+		Vector2D colliderVelAtTargetPoint = colliderPoint.velocity;
 
-		Vector2<double> relativeVel = *velocity - colliderVelAtTargetPoint;
+		Vector2D relativeVel = *velocity - colliderVelAtTargetPoint;
 
 		double normalDotRelativeVel = targetNormal.dot(relativeVel);
 
 		//相对速度的法线分量
 		//相对速度的切线分量
-		Vector2<double> relativeVelN = targetNormal * normalDotRelativeVel;
-		Vector2<double> relativeVelT = relativeVel - relativeVelN;
+		Vector2D relativeVelN = targetNormal * normalDotRelativeVel;
+		Vector2D relativeVelT = relativeVel - relativeVelN;
 
 		if (normalDotRelativeVel < 0.0) {
-			Vector2<double> deltaRelativeVelN =
+			Vector2D deltaRelativeVelN =
 				relativeVelN * (-restitutionCoefficient - 1.0);
 			relativeVelN = relativeVelN * -restitutionCoefficient;
 
@@ -95,7 +95,7 @@ void Collider2::resolveCollision(
 //判断这个向量与法向量的点积
 bool Collider2::isPenetrating(
 	const Collider2::ColliderQueryResult& colliderPoint,
-	const Vector2<double>& position,
+	const Vector2D& position,
 	double radius) {
 
 	auto OP = position - colliderPoint.point;

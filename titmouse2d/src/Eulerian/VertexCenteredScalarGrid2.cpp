@@ -5,15 +5,15 @@ VertexCenteredScalarGrid2::VertexCenteredScalarGrid2() {
 
 
 VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& origin,
+	const Vector2I& resolution,
+	const Vector2D& origin,
 	double initialValue) {
-	auto gridSpacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
+	auto gridSpacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 
 	vector<vector<double>> temp;
 
 	resize(resolution, gridSpacing, origin, initialValue);
-	auto size = resolution + Vector2<int>(1, 1);
+	auto size = resolution + Vector2I(1, 1);
 	_data.reSize(size.x, size.y, initialValue);
 
 	this->_linearSampler = make_shared<LinearArraySampler2<double>>(this->_data, gridSpacing, dataOrigin());
@@ -23,7 +23,7 @@ VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
 
 void VertexCenteredScalarGrid2::clearData(double initialValue) {
 	auto res = resolution();
-	auto newres = res + Vector2<int>(1, 1);
+	auto newres = res + Vector2I(1, 1);
 	_data.reSize(newres.x, newres.y, initialValue);
 }
 
@@ -36,24 +36,24 @@ VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
 
 
 
-Vector2<int> VertexCenteredScalarGrid2::dataSize() const {
+Vector2I VertexCenteredScalarGrid2::dataSize() const {
 	auto tempV = resolution();
 	if (tempV.x != 0.0 && tempV.y != 0.0) {
-		return resolution() + Vector2<int>(1, 1);
+		return resolution() + Vector2I(1, 1);
 	}
 	else {
-		return Vector2<int>(0, 0);
+		return Vector2I(0, 0);
 	}
 }
 
-Vector2<double> VertexCenteredScalarGrid2::dataOrigin() const {
+Vector2D VertexCenteredScalarGrid2::dataOrigin() const {
 	return origin();
 }
 
 
 
 
-VertexCenteredScalarGrid2::Builder& VertexCenteredScalarGrid2::Builder::withResolution(const Vector2<int>& resolution) {
+VertexCenteredScalarGrid2::Builder& VertexCenteredScalarGrid2::Builder::withResolution(const Vector2I& resolution) {
 	_resolution = resolution;
 	return *this;
 }
@@ -69,7 +69,7 @@ VertexCenteredScalarGrid2::Builder& VertexCenteredScalarGrid2::Builder::withReso
 
 
 VertexCenteredScalarGrid2::Builder&
-VertexCenteredScalarGrid2::Builder::withOrigin(const Vector2<double>& gridOrigin) {
+VertexCenteredScalarGrid2::Builder::withOrigin(const Vector2D& gridOrigin) {
 	_gridOrigin = gridOrigin;
 	return *this;
 }
@@ -111,8 +111,8 @@ VertexCenteredScalarGrid2 VertexCenteredScalarGrid2::Builder::build() const {
 }
 
 ScalarGrid2Ptr VertexCenteredScalarGrid2::Builder::build(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridOrigin,
+	const Vector2I& resolution,
+	const Vector2D& gridOrigin,
 	double initialVal) const {
 	return std::shared_ptr<VertexCenteredScalarGrid2>(
 		new VertexCenteredScalarGrid2(

@@ -3,7 +3,7 @@
 #include "Ray2.h"
 
 Sphere2::Sphere2() :
-	_center(Vector2<double>()), _r(1.0)
+	_center(Vector2D()), _r(1.0)
 {
 
 }
@@ -12,9 +12,9 @@ Sphere2::~Sphere2() {
 
 }
 
-Sphere2::Sphere2(const Vector2<double>& center, const double& r,
-	const Vector2<int>& resolution,
-	const Vector2<double>& origin,
+Sphere2::Sphere2(const Vector2D& center, const double& r,
+	const Vector2I& resolution,
+	const Vector2D& origin,
 	double initialValue
 ) :
 	_center(center), _r(r), ImplicitSurface2(resolution, origin, initialValue)
@@ -37,7 +37,7 @@ Sphere2::Sphere2(const VertexCenteredScalarGrid2& other) :
 //一般我们使用隐式曲面，有两种情形：
 //1.需要一个sdf，那么这个函数就没什么用处，
 //2.有些曲面比如圆、椭圆等，在与粒子作碰撞检测时就无需sdf，直接通过联立公式进行判断，这时就需要用到此方法
-Surface2::SurfaceQueryResult Sphere2::getClosedInformation(const Vector2<double>& otherPoint) {
+Surface2::SurfaceQueryResult Sphere2::getClosedInformation(const Vector2D& otherPoint) {
 	Surface2::SurfaceQueryResult result;
 
 
@@ -58,7 +58,7 @@ const VertexCenteredScalarGrid2Ptr Sphere2::sdf() const {
 }
 
 
-Vector2<double> Sphere2::center() {
+Vector2D Sphere2::center() {
 	return _center;
 }
 

@@ -2,25 +2,25 @@
 #include "../ConstVar.h"
 
 FaceCenteredGrid2::FaceCenteredGrid2() :
-	_uLinearSampler(_dataU, Vector2<double>(1.0, 1.0), Vector2<double>()),
-	_vLinearSampler(_dataV, Vector2<double>(1.0, 1.0), Vector2<double>())
+	_uLinearSampler(_dataU, Vector2D(1.0, 1.0), Vector2D()),
+	_vLinearSampler(_dataV, Vector2D(1.0, 1.0), Vector2D())
 {
-	_dataOriginU = Vector2<double>(0.0, 0.5);
-	_dataOriginV = Vector2<double>(0.5, 0.0);
+	_dataOriginU = Vector2D(0.0, 0.5);
+	_dataOriginV = Vector2D(0.5, 0.0);
 
 
 }
 
 
 
-FaceCenteredGrid2::FaceCenteredGrid2(const Vector2<int>& resolution,
-	const Vector2<double>& origin,
-	const Vector2<double>& initialValue) :
-	_uLinearSampler(_dataU, Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2<double>(0.0, 2.0 / resolution.y * 0.5))),
-	_vLinearSampler(_dataV, Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2<double>(2.0 / resolution.x * 0.5, 0.0)))
+FaceCenteredGrid2::FaceCenteredGrid2(const Vector2I& resolution,
+	const Vector2D& origin,
+	const Vector2D& initialValue) :
+	_uLinearSampler(_dataU, Vector2D(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2D(0.0, 2.0 / resolution.y * 0.5))),
+	_vLinearSampler(_dataV, Vector2D(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2D(2.0 / resolution.x * 0.5, 0.0)))
 {
 
-	auto gridSpacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
+	auto gridSpacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 	resize(resolution, gridSpacing, origin, initialValue);
 	_uLinearSampler._accessor = _dataU;
 	_vLinearSampler._accessor = _dataV;
@@ -57,9 +57,9 @@ double& FaceCenteredGrid2::u(int i, int j) { return _dataU(i, j); }
 
 double& FaceCenteredGrid2::v(int i, int j) { return _dataV(i, j); }
 
-Vector2<double> FaceCenteredGrid2::valueAtCellCenter(int i, int j) {
+Vector2D FaceCenteredGrid2::valueAtCellCenter(int i, int j) {
 
-	return Vector2<double>(_dataU(i, j) + _dataU(i + 1, j),
+	return Vector2D(_dataU(i, j) + _dataU(i + 1, j),
 		_dataV(i, j) + _dataV(i, j + 1)) * 0.5;
 }
 
@@ -99,19 +99,19 @@ double FaceCenteredGrid2::curlAtCellCenter(int i, int j) {
 }
 
 
-VectorGrid2<Vector2<double>>::DataPositionFunc FaceCenteredGrid2::uPosition() const {
+VectorGrid2<Vector2D>::DataPositionFunc FaceCenteredGrid2::uPosition() const {
 	auto h = gridSpacing();
 
-	return [this, h](double i, double j) -> Vector2<double> {
-		return _dataOriginU + h * Vector2<double>({ i, j });
+	return [this, h](double i, double j) -> Vector2D {
+		return _dataOriginU + h * Vector2D({ i, j });
 	};
 }
 
-VectorGrid2<Vector2<double>>::DataPositionFunc FaceCenteredGrid2::vPosition() const {
+VectorGrid2<Vector2D>::DataPositionFunc FaceCenteredGrid2::vPosition() const {
 	auto h = gridSpacing();
 
-	return [this, h](double i, double j) -> Vector2<double> {
-		return _dataOriginV + h * Vector2<double>({ i, j });
+	return [this, h](double i, double j) -> Vector2D {
+		return _dataOriginV + h * Vector2D({ i, j });
 	};
 }
 
@@ -122,19 +122,19 @@ Size2 FaceCenteredGrid2::uSize() {
 
 Size2 FaceCenteredGrid2::vSize() { return _dataV.dataSize(); }
 
-Array2<double>& FaceCenteredGrid2::uDatas() {
+Array2D& FaceCenteredGrid2::uDatas() {
 	return _dataU;
 }
 
-Array2<double>& FaceCenteredGrid2::vDatas() {
+Array2D& FaceCenteredGrid2::vDatas() {
 	return _dataV;
 }
 
-Vector2<double> FaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
+Vector2D FaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
 
-Vector2<double> FaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
+Vector2D FaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
 
-Vector2<double> FaceCenteredGrid2::sample(const Vector2<double>& x) const {
+Vector2D FaceCenteredGrid2::sample(const Vector2D& x) const {
 
 
 	auto uSample = _uLinearSampler;
@@ -142,16 +142,16 @@ Vector2<double> FaceCenteredGrid2::sample(const Vector2<double>& x) const {
 
 	auto u = uSample(_dataU, x);
 	auto v = vSample(_dataV, x);
-	Vector2<double> result(u, v);
+	Vector2D result(u, v);
 	return result;
 }
 
-std::function<Vector2<double>(const Vector2<double>&)> FaceCenteredGrid2::sampler() const {
+std::function<Vector2D(const Vector2D&)> FaceCenteredGrid2::sampler() const {
 	return _sampler;
 }
 
 
-void FaceCenteredGrid2::fill(const Vector2<double>& value) {
+void FaceCenteredGrid2::fill(const Vector2D& value) {
 
 	auto sizeU = uSize();
 
@@ -171,7 +171,7 @@ void FaceCenteredGrid2::fill(const Vector2<double>& value) {
 }
 
 //暂时不实现
-double FaceCenteredGrid2::divergence(const Vector2<double>& x) const {
+double FaceCenteredGrid2::divergence(const Vector2D& x) const {
 	//ssize_t i, j;
 	//double fx, fy;
 	//Vector2D cellCenterOrigin = origin() + 0.5 * gridSpacing();
@@ -209,7 +209,7 @@ double FaceCenteredGrid2::divergence(const Vector2<double>& x) const {
 }
 
 //暂时不实现
-double FaceCenteredGrid2::curl(const Vector2<double>& x) const {
+double FaceCenteredGrid2::curl(const Vector2D& x) const {
 	//ssize_t i, j;
 	//double fx, fy;
 	//Vector2D cellCenterOrigin = origin() + 0.5 * gridSpacing();
@@ -245,13 +245,13 @@ double FaceCenteredGrid2::curl(const Vector2<double>& x) const {
 
 
 
-void FaceCenteredGrid2::onResize(const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& origin,
-	const Vector2<double>& initialValue) {
-	if (resolution != Vector2<int>(0, 0)) {
-		auto ures = resolution + Vector2<int>(1, 0);
-		auto vres = resolution + Vector2<int>(0, 1);
+void FaceCenteredGrid2::onResize(const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& origin,
+	const Vector2D& initialValue) {
+	if (resolution != Vector2I(0, 0)) {
+		auto ures = resolution + Vector2I(1, 0);
+		auto vres = resolution + Vector2I(0, 1);
 		_dataU.reSize(ures.x, ures.y, initialValue.x);
 		_dataV.reSize(vres.x, vres.y, initialValue.y);
 
@@ -260,8 +260,8 @@ void FaceCenteredGrid2::onResize(const Vector2<int>& resolution,
 		_dataU.reSize(0, 0, 0.0);
 		_dataV.reSize(0, 0, 0.0);
 	}
-	_dataOriginU = origin + Vector2<double>(0.0, gridSpacing.y) * 0.5;
-	_dataOriginV = origin + Vector2<double>(gridSpacing.x, 0.0) * 0.5;
+	_dataOriginU = origin + Vector2D(0.0, gridSpacing.y) * 0.5;
+	_dataOriginV = origin + Vector2D(gridSpacing.x, 0.0) * 0.5;
 
 	resetSampler();
 }

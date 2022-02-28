@@ -23,11 +23,11 @@ public:
 	ParticleSystemSolver2();
 	~ParticleSystemSolver2();
 
-	void setData(int numberOfParticles, Array<Vector2<double>>& pos, int resolutionX, int resolutionY);
+	void setData(int numberOfParticles, Array<Vector2D>& pos, int resolutionX, int resolutionY);
 
 	void setCollider(const Collider2& collider);
 
-	void initSearchList(const Array<Vector2<double>> pos);
+	void initSearchList(const Array<Vector2D> pos);
 
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
 
@@ -51,16 +51,16 @@ protected:
 
 	virtual void accumlateExternalForces();
 
-	void clearForces(Array<Vector2<double>>& forces);
+	void clearForces(Array<Vector2D>& forces);
 
-	Array<Vector2<double>> _newPositions;
+	Array<Vector2D> _newPositions;
 
-	Array<Vector2<double>> _newVelocities;
+	Array<Vector2D> _newVelocities;
 
 };
 
 
-inline void ParticleSystemSolver2::initSearchList(const Array<Vector2<double>> pos) {
+inline void ParticleSystemSolver2::initSearchList(const Array<Vector2D> pos) {
 	auto neighbors = _particleSystemData->neighbor;
 	neighbors->setNeiborList(pos);
 }

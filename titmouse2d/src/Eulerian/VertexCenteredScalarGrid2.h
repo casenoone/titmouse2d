@@ -13,17 +13,17 @@ public:
 	VertexCenteredScalarGrid2();
 
 	VertexCenteredScalarGrid2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& origin = Vector2D(),
+		const Vector2I& resolution,
+		const Vector2D& origin = Vector2D(),
 		double initialValue = 0.0);
 
 
 
 	VertexCenteredScalarGrid2(const VertexCenteredScalarGrid2& other);
 
-	Vector2<int> dataSize() const override;
+	Vector2I dataSize() const override;
 
-	Vector2<double> dataOrigin() const override;
+	Vector2D dataOrigin() const override;
 
 	void clearData(double initialValue)override;
 
@@ -50,11 +50,11 @@ typedef std::shared_ptr<VertexCenteredScalarGrid2> VertexCenteredScalarGrid2Ptr;
 
 class VertexCenteredScalarGrid2::Builder final : public ScalarGridBuilder2 {
 public:
-	Builder& withResolution(const Vector2<int>& resolution);
+	Builder& withResolution(const Vector2I& resolution);
 
 	Builder& withResolution(int resolutionX, int resolutionY);
 
-	Builder& withOrigin(const Vector2<double>& gridOrigin);
+	Builder& withOrigin(const Vector2D& gridOrigin);
 
 	Builder& withOrigin(double gridOriginX, double gridOriginY);
 
@@ -68,15 +68,15 @@ public:
 	VertexCenteredScalarGrid2Ptr makeShared() const;
 
 	ScalarGrid2Ptr build(
-		const Vector2<int>& resolution,
+		const Vector2I& resolution,
 		const Vector2 <double>& gridOrigin,
 		double initialVal) const override;
 
 
 
 private:
-	Vector2<int> _resolution;
-	Vector2<double> _gridOrigin;
+	Vector2I _resolution;
+	Vector2D _gridOrigin;
 	double _initialVal = 0.0;
 };
 

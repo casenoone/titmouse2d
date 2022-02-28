@@ -10,11 +10,11 @@ SphSystemData2::~SphSystemData2() {
 
 }
 
-Array<double> SphSystemData2::densities() {
+ArrayD SphSystemData2::densities() {
 	return _densities;
 }
 
-Array<double> SphSystemData2::pressures() {
+ArrayD SphSystemData2::pressures() {
 	return _pressures;
 }
 
@@ -94,8 +94,8 @@ void SphSystemData2::clearDensities() {
 }
 
 
-Vector2<double> SphSystemData2::gradientAt(int i, Array<double>& values) {
-	Vector2<double> sum;
+Vector2D SphSystemData2::gradientAt(int i, ArrayD& values) {
+	Vector2D sum;
 	auto p = positions();
 	auto d = densities();
 
@@ -119,7 +119,7 @@ Vector2<double> SphSystemData2::gradientAt(int i, Array<double>& values) {
 
 }
 
-double SphSystemData2::laplacianAt(int i, const Array<double>& values) {
+double SphSystemData2::laplacianAt(int i, const ArrayD& values) {
 	double sum = 0.0;
 	auto p = positions();
 	auto d = densities();

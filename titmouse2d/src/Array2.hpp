@@ -53,6 +53,9 @@ public:
 	Size2 _size;
 };
 
+using Array2I = Array2<int>;
+using Array2F = Array2<float>;
+using Array2D = Array2<double>;
 
 template<typename T>
 Array2<T>::Array2() {

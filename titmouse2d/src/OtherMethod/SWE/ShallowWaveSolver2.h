@@ -11,9 +11,9 @@ public:
 	ShallowWaveSolver2() = default;
 
 	ShallowWaveSolver2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& gridOrigin);
+		const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& gridOrigin);
 
 	virtual ~ShallowWaveSolver2();
 
@@ -24,6 +24,13 @@ public:
 	static Builder builder();
 
 private:
+
+	void advection(double timeIntervalInSeconds);
+
+	void pressureSolve(double timeIntervalInSeconds);
+
+	void couplingSolve(double timeIntervalInSeconds);
+
 	ShallowWaveData2Ptr _shallowWaveData;
 
 };
@@ -31,9 +38,9 @@ private:
 typedef std::shared_ptr<ShallowWaveSolver2> ShallowWaveSolver2Ptr;
 
 inline ShallowWaveSolver2::ShallowWaveSolver2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin) : GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) : GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
 	_grids = make_shared<ShallowWaveData2>(resolution, gridSpacing, gridOrigin);
 	_shallowWaveData = make_shared<ShallowWaveData2>(resolution, gridSpacing, gridOrigin);

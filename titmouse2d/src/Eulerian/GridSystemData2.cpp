@@ -9,10 +9,10 @@ GridSystemData2::~GridSystemData2() {
 
 
 GridSystemData2::GridSystemData2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& origin) {
-	_velocity = std::make_shared<FaceCenteredGrid2>(resolution, origin, Vector2<double>());
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& origin) {
+	_velocity = std::make_shared<FaceCenteredGrid2>(resolution, origin, Vector2D());
 
 	resize(resolution, gridSpacing, origin);
 }
@@ -23,9 +23,9 @@ GridSystemData2::GridSystemData2(const GridSystemData2& other) {
 
 
 void GridSystemData2::resize(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& origin) {
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& origin) {
 	_resolution = resolution;
 	_gridSpacing = gridSpacing;
 	_origin = origin;
@@ -34,15 +34,15 @@ void GridSystemData2::resize(
 
 
 
-Vector2<int> GridSystemData2::resolution() const {
+Vector2I GridSystemData2::resolution() const {
 	return _resolution;
 }
 
-Vector2<double> GridSystemData2::gridSpacing() const {
+Vector2D GridSystemData2::gridSpacing() const {
 	return _gridSpacing;
 }
 
-Vector2<double> GridSystemData2::origin() const {
+Vector2D GridSystemData2::origin() const {
 	return _origin;
 }
 

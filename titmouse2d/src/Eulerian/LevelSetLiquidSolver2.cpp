@@ -15,9 +15,9 @@ LevelSetLiquidSolver2::~LevelSetLiquidSolver2() {
 }
 
 
-LevelSetLiquidSolver2::LevelSetLiquidSolver2(const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin) : GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
+LevelSetLiquidSolver2::LevelSetLiquidSolver2(const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) : GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
 	_levelsetSolver = make_shared <SimpleLevelSetSolver2>();
 
@@ -35,7 +35,7 @@ void LevelSetLiquidSolver2::extrapolateVelocityToAir() {
 	auto uPos = vel->uPosition();
 	auto vPos = vel->vPosition();
 
-	Array2<int> uMarker, vMarker;
+	Array2I uMarker, vMarker;
 	uMarker.reSize(u.dataSize().x, u.dataSize().y);
 	vMarker.reSize(v.dataSize().x, v.dataSize().y);
 
@@ -150,13 +150,13 @@ LevelSetLiquidSolver2::Builder LevelSetLiquidSolver2::builder() {
 
 
 LevelSetLiquidSolver2 LevelSetLiquidSolver2::Builder::build() const {
-	auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return LevelSetLiquidSolver2(_resolution, gridSpacing, _gridOrigin);
 }
 
 
 LevelSetLiquidSolver2Ptr LevelSetLiquidSolver2::Builder::makeShared() const {
-	auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return std::shared_ptr<LevelSetLiquidSolver2>(
 		new LevelSetLiquidSolver2(
 			_resolution,

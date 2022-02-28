@@ -16,17 +16,17 @@ public:
 
 	~SimplePressureSolver2();
 
-	void solve(FaceCenteredGrid2Ptr flow, const Array2<int>& markers);
+	void solve(FaceCenteredGrid2Ptr flow, const Array2I& markers);
 
 private:
-	int fluidCellSize(const Array2<int>& markers);
+	int fluidCellSize(const Array2I& markers);
 
 	void constructMatrix(FaceCenteredGrid2Ptr& flow,
-		const Array2<int>& markers,
+		const Array2I& markers,
 		VectorN<double>& x, int systemSize);
 
 	void applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,
-		const Array2<int>& markers,
+		const Array2I& markers,
 		VectorN<double>& x);
 
 };

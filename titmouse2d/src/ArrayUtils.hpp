@@ -8,15 +8,15 @@
 template <typename T>
 void extrapolateToRegion(
 	const Array2<T>& input,
-	const Array2<int>& valid,
+	const Array2I& valid,
 	unsigned int numberOfIterations,
 	Array2<T> output) {
 	auto size = input.dataSize();
 
 
-	Array2<int> valid0;
+	Array2I valid0;
 	valid0.reSize(size.x, size.y);
-	Array2<int> valid1;
+	Array2I valid1;
 	valid1.reSize(size.x, size.y);
 
 	//这里可以并行优化

@@ -13,15 +13,15 @@ public:
 	CellCenteredScalarGrid2();
 
 	CellCenteredScalarGrid2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& origin,
+		const Vector2I& resolution,
+		const Vector2D& origin,
 		double initialValue);
 
 	virtual ~CellCenteredScalarGrid2();
 
-	Vector2<int> dataSize() const override;
+	Vector2I dataSize() const override;
 
-	Vector2<double> dataOrigin() const override;
+	Vector2D dataOrigin() const override;
 
 	static Builder builder();
 
@@ -32,11 +32,11 @@ using  CellCenteredScalarGrid2Ptr = std::shared_ptr<CellCenteredScalarGrid2>;
 
 class CellCenteredScalarGrid2::Builder : public ScalarGridBuilder2 {
 public:
-	Builder& withResolution(const Vector2<int>& resolution);
+	Builder& withResolution(const Vector2I& resolution);
 
 	Builder& withResolution(int resolutionX, int resolutionY);
 
-	Builder& withOrigin(const Vector2<double>& gridOrigin);
+	Builder& withOrigin(const Vector2D& gridOrigin);
 
 	Builder& withOrigin(double gridOriginX, double gridOriginY);
 
@@ -47,13 +47,13 @@ public:
 	CellCenteredScalarGrid2Ptr makeShared() const;
 
 	ScalarGrid2Ptr build(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridOrigin,
+		const Vector2I& resolution,
+		const Vector2D& gridOrigin,
 		double initialVal) const override;
 
 private:
-	Vector2<int> _resolution;
-	Vector2<double> _gridOrigin;
+	Vector2I _resolution;
+	Vector2D _gridOrigin;
 	double _initialVal;
 };
 

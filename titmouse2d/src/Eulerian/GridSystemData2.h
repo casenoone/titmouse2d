@@ -11,33 +11,33 @@ public:
 	GridSystemData2();
 
 	GridSystemData2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& origin);
+		const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& origin);
 
 	GridSystemData2(const GridSystemData2& other);
 
 	virtual ~GridSystemData2();
 
 	void resize(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& origin);
+		const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& origin);
 
-	Vector2<int> resolution() const;
+	Vector2I resolution() const;
 
-	Vector2<double> gridSpacing() const;
+	Vector2D gridSpacing() const;
 
-	Vector2<double> origin() const;
+	Vector2D origin() const;
 
 
 	FaceCenteredGrid2Ptr& velocity();
 	VertexCenteredScalarGrid2Ptr& sdf();
 
 private:
-	Vector2<int> _resolution;
-	Vector2<double> _gridSpacing;
-	Vector2<double> _origin;
+	Vector2I _resolution;
+	Vector2D _gridSpacing;
+	Vector2D _origin;
 
 	FaceCenteredGrid2Ptr _velocity;
 	VertexCenteredScalarGrid2Ptr _sdf;

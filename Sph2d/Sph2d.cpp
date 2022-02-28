@@ -41,7 +41,7 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<float> color)
+void drawPoint(Vector2D pos, float size, Color3<float> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -50,7 +50,7 @@ void drawPoint(Vector2<double> pos, float size, Color3<float> color)
 	glEnd();
 }
 
-void drawPoint(Vector2<double> pos, float size, Color3<double> color)
+void drawPoint(Vector2D pos, float size, Color3<double> color)
 {
 	glPointSize(size);
 	glBegin(GL_POINTS);
@@ -153,23 +153,23 @@ int main(int argc, char** argv)
 	int res_x = 20;
 	int res_y = 20;
 
-	vector<Vector2<double>> temp_pos;
+	vector<Vector2D> temp_pos;
 
 	for (double i = 0.5; i < 1.5; i += 0.02) {
 		for (double j = 0.4; j < 1.6; j += 0.02) {
-			Vector2<double> temp(i, j);
+			Vector2D temp(i, j);
 			temp_pos.push_back(temp);
 			numberOfParticles++;
 		}
 	}
 
-	Array<Vector2<double>> pos(temp_pos);
+	Array<Vector2D> pos(temp_pos);
 
 	sphSolver->setData(numberOfParticles, pos, res_x, res_y);
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
+	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
 
-	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(0.3, 0.3), Vector2<double>(0.6, 0.6), false);
+	Box2Ptr box2 = make_shared<Box2>(Vector2D(0.3, 0.3), Vector2D(0.6, 0.6), false);
 
 
 	Collider2 collider;

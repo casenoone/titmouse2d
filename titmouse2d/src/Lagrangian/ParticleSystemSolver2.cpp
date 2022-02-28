@@ -11,7 +11,7 @@ ParticleSystemSolver2::~ParticleSystemSolver2() {
 }
 
 void ParticleSystemSolver2::setData(int numberOfParticles,
-	Array<Vector2<double>>& pos,
+	Array<Vector2D>& pos,
 	int resolutionX,
 	int resolutionY) {
 	_particleSystemData->numberOfParticles() = numberOfParticles;
@@ -118,7 +118,7 @@ void ParticleSystemSolver2::accumlateExternalForces() {
 	auto& velocities = _particleSystemData->velocities();
 	auto& positions = _particleSystemData->positions();
 	double mass = 1.0;
-	auto g = Vector2<double>(0.0, -9.8);
+	auto g = Vector2D(0.0, -9.8);
 	for (int i = 0; i < n; ++i) {
 		auto force = g * mass;
 		forces[i] = forces[i] + force;
@@ -132,8 +132,8 @@ void ParticleSystemSolver2::accumlateExternalForces() {
 }
 
 
-void ParticleSystemSolver2::clearForces(Array<Vector2<double>>& forces) {
-	Vector2<double> zero;
+void ParticleSystemSolver2::clearForces(Array<Vector2D>& forces) {
+	Vector2D zero;
 
 	forces.forEachIndex([&](int i) {
 		forces[i] = zero;

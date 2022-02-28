@@ -68,8 +68,8 @@ void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 
 auto picSolver = PicSolver2::builder()
-.withOrigin(Vector2<double>(0.0, 0.0))
-.withResolution(Vector2<int>(20, 20))
+.withOrigin(Vector2D(0.0, 0.0))
+.withResolution(Vector2I(20, 20))
 .makeShared();
 
 ParticleSystemSolver2 solver;
@@ -143,22 +143,22 @@ int main(int argc, char** argv)
 	int numberOfParticles = 400;
 	int resolutionX = 10;
 	int resolutionY = 10;
-	vector <Vector2<double>> temp1;
+	vector <Vector2D> temp1;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = random_double(0.5, 1.7);
 		auto y = random_double(0.5, 1.2);
 
-		Vector2<double> temp(x, y);
+		Vector2D temp(x, y);
 		temp1.push_back(temp);
 	}
 
-	Array<Vector2<double>> pos(temp1);
+	Array<Vector2D> pos(temp1);
 
 
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2<double>(0, 0), Vector2<double>(2.0, 2.0), true);
-	Box2Ptr box2 = make_shared<Box2>(Vector2<double>(1, 0), Vector2<double>(1.3, 0.8), false);
-	Plane2Ptr plane1 = make_shared<Plane2>(Vector2<double>(0.5, 0), Vector2<double>(1, 0.8), false);
+	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
+	Box2Ptr box2 = make_shared<Box2>(Vector2D(1, 0), Vector2D(1.3, 0.8), false);
+	Plane2Ptr plane1 = make_shared<Plane2>(Vector2D(0.5, 0), Vector2D(1, 0.8), false);
 
 	surfaceSet.push_back(box1);
 	//surfaceSet.push_back(box2);

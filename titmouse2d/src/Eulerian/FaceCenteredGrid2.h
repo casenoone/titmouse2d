@@ -5,16 +5,16 @@
 #include "../Array2.hpp"
 #include "../Eulerian/ArraySampler2.hpp"
 
-class FaceCenteredGrid2 final : public VectorGrid2<Vector2<double>> {
+class FaceCenteredGrid2 final : public VectorGrid2<Vector2D> {
 
 public:
 	class Builder;
 
 	FaceCenteredGrid2();
 
-	FaceCenteredGrid2(const Vector2<int>& resolution,
-		const Vector2<double>& origin,
-		const Vector2<double>& initialValue);
+	FaceCenteredGrid2(const Vector2I& resolution,
+		const Vector2D& origin,
+		const Vector2D& initialValue);
 
 	FaceCenteredGrid2(const FaceCenteredGrid2& other);
 
@@ -30,7 +30,7 @@ public:
 
 	double& v(int i, int j);
 
-	Vector2<double> valueAtCellCenter(int i, int j);
+	Vector2D valueAtCellCenter(int i, int j);
 
 	double divergenceAtCellCenter(int i, int j);
 
@@ -45,38 +45,38 @@ public:
 	Size2 vSize();
 
 	//这里想一个更好的实现方式
-	Array2<double>& uDatas();
-	Array2<double>& vDatas();
+	Array2D& uDatas();
+	Array2D& vDatas();
 
-	Vector2<double> uOrigin() const;
+	Vector2D uOrigin() const;
 
-	Vector2<double> vOrigin() const;
+	Vector2D vOrigin() const;
 
-	Vector2<double> sample(const Vector2<double>& x)  const override;
+	Vector2D sample(const Vector2D& x)  const override;
 
-	double divergence(const Vector2<double>& x) const override;
+	double divergence(const Vector2D& x) const override;
 
-	double curl(const Vector2<double>& x) const override;
+	double curl(const Vector2D& x) const override;
 
-	std::function<Vector2<double>(const Vector2<double>&)> sampler() const override;
+	std::function<Vector2D(const Vector2D&)> sampler() const override;
 
 	//暂时不实现
 	//std::shared_ptr<VectorGrid2> clone() const override;
 
-	void fill(const Vector2<double>& value)override;
+	void fill(const Vector2D& value)override;
 
 
 	//由于faceCentered常常被用作速度场
 	//在求解线性系统时，往往只求解流体所在部分
 	//所以用该成员去标识线性系统中未知量系数的序号
 	//我们令其初始化为空气
-	Array2<int> solveSystemMarker;
+	Array2I solveSystemMarker;
 
 	static Builder builder();
 
 protected:
-	void onResize(const Vector2<int>& resolution, const Vector2<double>& gridSpacing,
-		const Vector2<double>& origin, const Vector2<double>& initialValue) final;
+	void onResize(const Vector2I& resolution, const Vector2D& gridSpacing,
+		const Vector2D& origin, const Vector2D& initialValue) final;
 
 
 	//用到时再实现
@@ -86,15 +86,15 @@ protected:
 
 
 private:
-	Array2<double> _dataU;
-	Array2<double> _dataV;
-	Vector2<double> _dataOriginU;
-	Vector2<double> _dataOriginV;
+	Array2D _dataU;
+	Array2D _dataV;
+	Vector2D _dataOriginU;
+	Vector2D _dataOriginV;
 
 	LinearArraySampler2<double> _uLinearSampler;
 	LinearArraySampler2<double> _vLinearSampler;
 
-	std::function<Vector2<double>(const Vector2<double>&)> _sampler;
+	std::function<Vector2D(const Vector2D&)> _sampler;
 
 	void resetSampler();
 

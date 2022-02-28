@@ -68,17 +68,17 @@ void VortexParticleSystemSolver2::onEndAdvanceTimeStep() {
 }
 
 
-Vector2<double> VortexParticleSystemSolver2::computeUSingle(const Vector2<double>& pos, int i)const {
+Vector2D VortexParticleSystemSolver2::computeUSingle(const Vector2D& pos, int i)const {
 
 	auto position = _vortexParticleData->positions();
 	auto vorticity = _vortexParticleData->vorticities();
 	auto r2 = (pos - position[i]).getLengthSquared();
-	auto uv = Vector2<double>(position[i].y - pos.y, pos.x - position[i].x);
+	auto uv = Vector2D(position[i].y - pos.y, pos.x - position[i].x);
 	return vorticity[i] * uv / (kPiD * r2) * 0.5 * (1.0 - pow(kE, -r2 / (eps * eps)));
 }
 
 void VortexParticleSystemSolver2::setData(int numberOfParticles,
-	Array<Vector2<double>>& pos,
+	Array<Vector2D>& pos,
 	int resolutionX,
 	int resolutionY) {
 

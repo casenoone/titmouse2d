@@ -11,19 +11,19 @@ ScalarField2::~ScalarField2() {
 
 
 
-Vector2<double> ScalarField2::gradient(const Vector2<double>& x)const {
-	return Vector2<double>(0.0, 0.0);
+Vector2D ScalarField2::gradient(const Vector2D& x)const {
+	return Vector2D(0.0, 0.0);
 }
 
 
-double ScalarField2::laplacian(const Vector2<double>& x)const {
+double ScalarField2::laplacian(const Vector2D& x)const {
 	return 0.0;
 }
 
 
-function<double(const Vector2<double>&)> ScalarField2::sampler()const {
+function<double(const Vector2D&)> ScalarField2::sampler()const {
 	const ScalarField2* self = this;
-	return [self](const Vector2<double>& x)->double {
+	return [self](const Vector2D& x)->double {
 		return self->sample(x);
 	};
 }

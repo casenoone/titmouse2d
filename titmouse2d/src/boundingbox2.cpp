@@ -5,7 +5,7 @@ BoundingBox2::BoundingBox2() {
 
 }
 
-BoundingBox2::BoundingBox2(const Vector2<double>& point1, const Vector2<double>& point2) {
+BoundingBox2::BoundingBox2(const Vector2D& point1, const Vector2D& point2) {
 
 	lowerCorner.x = std::min(point1.x, point2.x);
 	lowerCorner.y = std::min(point1.y, point2.y);

@@ -10,8 +10,8 @@ struct SphPolyKernel2 {
 	SphPolyKernel2() = default;
 	explicit SphPolyKernel2(double kernelRadius);
 	double operator()(double distance)const;
-	Vector2<double> gradient(double distance, const Vector2<double>& direction)const;
-	double laplace(double distance, const Vector2<double>& direction) const;
+	Vector2D gradient(double distance, const Vector2D& direction)const;
+	double laplace(double distance, const Vector2D& direction) const;
 
 
 };
@@ -30,9 +30,9 @@ inline double SphPolyKernel2::operator()(double distance)const {
 		return alpha * std::pow(h2_r2, 3);
 	}
 }
-inline Vector2<double> SphPolyKernel2::gradient(double distance, const Vector2<double>& direction)const {
+inline Vector2D SphPolyKernel2::gradient(double distance, const Vector2D& direction)const {
 	if (distance >= h) {
-		return Vector2<double>(0.0, 0.0);
+		return Vector2D(0.0, 0.0);
 	}
 	else {
 		auto alpha = -24 / (kPiD * h8);
@@ -40,7 +40,7 @@ inline Vector2<double> SphPolyKernel2::gradient(double distance, const Vector2<d
 		return alpha * std::pow(h2_r2, 2) * direction;
 	}
 }
-inline double SphPolyKernel2::laplace(double distance, const Vector2<double>& direction) const {
+inline double SphPolyKernel2::laplace(double distance, const Vector2D& direction) const {
 	if (distance >= h) {
 		return 0.0;
 	}

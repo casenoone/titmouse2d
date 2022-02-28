@@ -13,9 +13,9 @@ public:
 
 	~LevelSetLiquidSolver2();
 
-	LevelSetLiquidSolver2(const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& gridOrigin);
+	LevelSetLiquidSolver2(const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& gridOrigin);
 
 	void extrapolateVelocityToAir();
 

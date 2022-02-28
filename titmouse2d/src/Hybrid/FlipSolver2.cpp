@@ -9,9 +9,9 @@ FlipSolver2::FlipSolver2() :FlipSolver2({ 2,2 }, { 2,2 }, { 0,0 }) {
 
 
 FlipSolver2::FlipSolver2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin)
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin)
 	: PicSolver2(resolution, gridSpacing, gridOrigin) {
 
 }
@@ -101,11 +101,11 @@ void FlipSolver2::transferFromGridsToParticles() {
 	omp_set_num_threads(20);
 #pragma omp parallel for
 	for (int i = 0; i < numberOfParticles; ++i) {
-		auto sampleDelta = Vector2<double>(uSampler(_uDelta, positions[i]), vSampler(_vDelta, positions[i]));
-		Vector2<double> flipVel = velocities[i] + sampleDelta;
+		auto sampleDelta = Vector2D(uSampler(_uDelta, positions[i]), vSampler(_vDelta, positions[i]));
+		Vector2D flipVel = velocities[i] + sampleDelta;
 
 		if (_picBlendingFactor > 0.0) {
-			Vector2<double> picVel = flow->sample(positions[i]);
+			Vector2D picVel = flow->sample(positions[i]);
 
 
 			flipVel = lerp(flipVel, picVel, _picBlendingFactor);
@@ -123,12 +123,12 @@ FlipSolver2::Builder FlipSolver2::builder() {
 
 
 FlipSolver2 FlipSolver2::Builder::build() const {
-	auto gridspacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridspacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return FlipSolver2(_resolution, gridspacing, _gridOrigin);
 }
 
 FlipSolver2Ptr FlipSolver2::Builder::makeShared() const {
-	auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+	auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 	return std::shared_ptr<FlipSolver2>(
 		new FlipSolver2(
 			_resolution,

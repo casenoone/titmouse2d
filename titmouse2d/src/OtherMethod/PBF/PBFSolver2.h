@@ -12,7 +12,7 @@ public:
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds)override;
 
 	void setData(int numberOfParticles,
-		Array<Vector2<double>>& pos,
+		Array<Vector2D>& pos,
 		int resolutionX,
 		int resolutionY);
 
@@ -32,7 +32,7 @@ private:
 
 	void iterSolve();
 
-	void findNeighborParticles(const Array<Vector2<double>>& pos);
+	void findNeighborParticles(const Array<Vector2D>& pos);
 
 	void initDensity();
 
@@ -94,7 +94,7 @@ inline void PBFSolver2::applyForce(double timeIntervalInSeconds) {
 }
 
 
-inline void PBFSolver2::findNeighborParticles(const Array<Vector2<double>>& pos) {
+inline void PBFSolver2::findNeighborParticles(const Array<Vector2D>& pos) {
 	auto particles = pbfData();
 	particles->neighbor->setNeiborList(pos);
 }

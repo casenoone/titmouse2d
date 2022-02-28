@@ -9,17 +9,17 @@ public:
 
 	~Ray2();
 
-	Ray2(Vector2<double> origin, Vector2<double> orientation);
+	Ray2(Vector2D origin, Vector2D orientation);
 
-	Vector2<double> origin();
+	Vector2D origin();
 
-	Vector2<double> orientation();
+	Vector2D orientation();
 
 private:
 
-	Vector2<double> _origin;
+	Vector2D _origin;
 
-	Vector2<double> _orientation;
+	Vector2D _orientation;
 };
 
 

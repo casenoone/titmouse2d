@@ -19,10 +19,10 @@ public:
 
 	virtual ~CollocatedVectorGrid2();
 
-	virtual Vector2<int> dataSize() const = 0;
+	virtual Vector2I dataSize() const = 0;
 
 
-	virtual Vector2<double> dataOrigin() const = 0;
+	virtual Vector2D dataOrigin() const = 0;
 
 	T& operator()(int i, int j);
 
@@ -31,16 +31,16 @@ public:
 	double curlAtDataPoint(int i, int j);
 
 
-	function<Vector2<double>(int, int)> dataPosition() const;
+	function<Vector2D(int, int)> dataPosition() const;
 
-	T sample(const Vector2<double>& x) const;
+	T sample(const Vector2D& x) const;
 
-	double divergence(const Vector2<double>& x) const override;
+	double divergence(const Vector2D& x) const override;
 
-	double curl(const Vector2<double>& x) const override;
+	double curl(const Vector2D& x) const override;
 
 	//这里应该用什么类型？
-	std::function<T(const Vector2<double>&)> sampler() const override;
+	std::function<T(const Vector2D&)> sampler() const override;
 
 	Array2<T>& datas();
 
@@ -65,9 +65,9 @@ protected:
 	Array2<T> _data;
 
 	virtual void onResize(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& origin,
+		const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& origin,
 		const T& initialValue) final;
 private:
 
@@ -78,7 +78,7 @@ private:
 
 	//这个暂时先不实现
 	//LinearArraySampler2<Vector2D, double> _linearSampler;
-	std::function<T(const Vector2<double>&)> _sampler;
+	std::function<T(const Vector2D&)> _sampler;
 
 
 
@@ -96,9 +96,9 @@ using CollocatedVectorGrid2Ptr = shared_ptr<CollocatedVectorGrid2<T>>;
 //且模板类型和普通类型是一样的么？
 //template<class T>
 //CollocatedVectorGrid2<T>::CollocatedVectorGrid2():
-//    _linearSampler(_data, Vector2<double>(1.0, 1.0), Vector2<double>(0.0,0.0))
+//    _linearSampler(_data, Vector2D(1.0, 1.0), Vector2D(0.0,0.0))
 //{
-//    //LinearArraySampler2<T> sam(_data, Vector2<double>(1.0, 1.0), Vector2<double>());
+//    //LinearArraySampler2<T> sam(_data, Vector2D(1.0, 1.0), Vector2D());
 //}
 
 
@@ -131,10 +131,10 @@ double CollocatedVectorGrid2<T>::curlAtDataPoint(int i, int j) {
 }
 
 template<class T>
-function<Vector2<double>(int, int)> CollocatedVectorGrid2<T>::dataPosition() const {
-	Vector2<double> dataOrigin_ = dataOrigin();
-	return [this, dataOrigin_](double i, double j) -> Vector2<double> {
-		return dataOrigin_ + this->gridSpacing() * Vector2<double>({ i, j });
+function<Vector2D(int, int)> CollocatedVectorGrid2<T>::dataPosition() const {
+	Vector2D dataOrigin_ = dataOrigin();
+	return [this, dataOrigin_](double i, double j) -> Vector2D {
+		return dataOrigin_ + this->gridSpacing() * Vector2D({ i, j });
 	};
 }
 
@@ -144,7 +144,7 @@ function<Vector2<double>(int, int)> CollocatedVectorGrid2<T>::dataPosition() con
 //线性采样器这里写的十分不好，不过可以凑活使用
 //算法设计完之后再来优化程序吧，妈的，太累了
 template<class T>
-T CollocatedVectorGrid2<T>::sample(const Vector2<double>& x) const {
+T CollocatedVectorGrid2<T>::sample(const Vector2D& x) const {
 
 	auto _sample = _linearSampler;
 	auto result = (*_sample)(this->_data, x);
@@ -154,19 +154,19 @@ T CollocatedVectorGrid2<T>::sample(const Vector2<double>& x) const {
 
 
 template<class T>
-double CollocatedVectorGrid2<T>::divergence(const Vector2<double>& x) const {
+double CollocatedVectorGrid2<T>::divergence(const Vector2D& x) const {
 	return 0.0;
 }
 
 
 template<class T>
-double CollocatedVectorGrid2<T>::curl(const Vector2<double>& x) const {
+double CollocatedVectorGrid2<T>::curl(const Vector2D& x) const {
 	return 0.0;
 }
 
 
 template<class T>
-std::function<T(const Vector2<double>&)> CollocatedVectorGrid2<T>::sampler() const {
+std::function<T(const Vector2D&)> CollocatedVectorGrid2<T>::sampler() const {
 	return _sampler;
 }
 
@@ -188,9 +188,9 @@ void CollocatedVectorGrid2<T>::fill(const T& value) {
 
 template<class T>
 void CollocatedVectorGrid2<T>::onResize(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& origin,
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& origin,
 	const T& initialValue) {
 
 	_data.reSize(dataSize().x, dataSize().y, initialValue);

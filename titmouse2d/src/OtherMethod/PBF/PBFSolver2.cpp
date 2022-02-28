@@ -13,7 +13,7 @@ const double pbf_h = 0;
 
 
 void PBFSolver2::setData(int numberOfParticles,
-	Array<Vector2<double>>& pos,
+	Array<Vector2D>& pos,
 	int resolutionX,
 	int resolutionY) {
 	ParticleSystemSolver2::setData(numberOfParticles, pos, resolutionX, resolutionY);
@@ -62,10 +62,10 @@ void PBFSolver2::calculateLambda() {
 	//eq(8),eq(10)
 	for (int i = 0; i < n; ++i) {
 		auto currentP = pos(i);
-		//Vector2<double> c_grad_temp(0.0, 0.0);
+		//Vector2D c_grad_temp(0.0, 0.0);
 		//double c_grad_norm = 0.0;
 
-		Vector2<double> grad_i;
+		Vector2D grad_i;
 		double sum_gradient_sqr = 0.0;
 
 		for (auto j = neighbors[i].begin(); j != neighbors[i].end(); ++j) {

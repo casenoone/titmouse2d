@@ -17,7 +17,7 @@ public:
 
 	~GridFluidSolver2();
 
-	GridFluidSolver2(const Vector2<int>& resolution, const Vector2<double>& gridSpacing, const Vector2<double>& gridOrigin);
+	GridFluidSolver2(const Vector2I& resolution, const Vector2D& gridSpacing, const Vector2D& gridOrigin);
 
 	//暂时写一个这样的接口，将来会专门抽象出一个流体发射器
 	void setFluidSdf(const VertexCenteredScalarGrid2& _sdf);
@@ -26,11 +26,11 @@ public:
 
 	VertexCenteredScalarGrid2Ptr& sdf();
 
-	Vector2<int> resolution() const;
+	Vector2I resolution() const;
 
-	Vector2<double> gridSpacing() const;
+	Vector2D gridSpacing() const;
 
-	Vector2<double> gridOrigin() const;
+	Vector2D gridOrigin() const;
 
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds);
 
@@ -58,7 +58,7 @@ protected:
 
 	void updateCollider(double timeIntervalInSeconds);
 
-	const Vector2<double>& gravity() const;
+	const Vector2D& gravity() const;
 
 	double cfl(double timeIntervalInSeconds) const;
 
@@ -76,13 +76,13 @@ protected:
 
 protected:
 	//标记网格是否被粒子占用
-	Array2<int> cellCenterMarkers;
+	Array2I cellCenterMarkers;
 
 	SimplePressureSolver2Ptr _pressureSolver;
 	AdvectionSolver2Ptr _advectionSolver;
 
 protected:
-	Vector2<double> _gravity = Vector2<double>(0.0, -9.8);
+	Vector2D _gravity = Vector2D(0.0, -9.8);
 	double _viscosityCoefficient = 0.0;
 	double _maxCfl = 5.0;
 
@@ -97,28 +97,28 @@ typedef std::shared_ptr<GridFluidSolver2> GridFluidSolver2Ptr;
 template <typename DerivedBuilder>
 class GridFluidSolverBuilderBase2 {
 public:
-	DerivedBuilder& withResolution(const Vector2<int>& resolution);
+	DerivedBuilder& withResolution(const Vector2I& resolution);
 
-	DerivedBuilder& withOrigin(const Vector2<double>& gridOrigin);
+	DerivedBuilder& withOrigin(const Vector2D& gridOrigin);
 
 protected:
-	Vector2<int> _resolution;
-	Vector2<double> _gridSpacing;
-	Vector2<double> _gridOrigin;
+	Vector2I _resolution;
+	Vector2D _gridSpacing;
+	Vector2D _gridOrigin;
 
 };
 
 
 
 template <typename T>
-T& GridFluidSolverBuilderBase2<T>::withResolution(const Vector2<int>& resolution) {
+T& GridFluidSolverBuilderBase2<T>::withResolution(const Vector2I& resolution) {
 	_resolution = resolution;
 	return static_cast<T&>(*this);
 }
 
 
 template <typename T>
-T& GridFluidSolverBuilderBase2<T>::withOrigin(const Vector2<double>& gridOrigin) {
+T& GridFluidSolverBuilderBase2<T>::withOrigin(const Vector2D& gridOrigin) {
 	_gridOrigin = gridOrigin;
 	return static_cast<T&>(*this);
 }
@@ -131,7 +131,7 @@ public:
 
 	GridFluidSolver2Ptr makeShared() const {
 
-		auto gridSpacing = Vector2<double>(2.0 / _resolution.x, 2.0 / _resolution.y);
+		auto gridSpacing = Vector2D(2.0 / _resolution.x, 2.0 / _resolution.y);
 		return std::make_shared<GridFluidSolver2>(_resolution, gridSpacing, _gridOrigin);
 	}
 };

@@ -19,15 +19,15 @@ public:
 	virtual ~CellCenteredVectorGrid2();
 
 	CellCenteredVectorGrid2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& origin,
+		const Vector2I& resolution,
+		const Vector2D& origin,
 		const T& initialValue);
 
 	CellCenteredVectorGrid2(const CellCenteredVectorGrid2<T>& other);
 
-	Vector2<int> dataSize() const override;
+	Vector2I dataSize() const override;
 
-	Vector2<double> dataOrigin() const override;
+	Vector2D dataOrigin() const override;
 
 	//暂时不实现
 	//void swap(Grid2* other) override;
@@ -61,11 +61,11 @@ CellCenteredVectorGrid2<T>::~CellCenteredVectorGrid2() {
 template<class T>
 CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2
 (
-	const Vector2<int>& resolution,
-	const Vector2<double>& origin,
+	const Vector2I& resolution,
+	const Vector2D& origin,
 	const T& initialValue) {
 
-	auto newgridspacing = Vector2<double>(2.0 / resolution.x, 2.0 / resolution.y);
+	auto newgridspacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 	this->resize(resolution, newgridspacing, origin, initialValue);
 	this->_linearSampler = make_shared<LinearArraySampler2<T>>(this->_data, newgridspacing, dataOrigin());
 
@@ -79,13 +79,13 @@ CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2(const CellCenteredVectorGrid
 
 
 template<class T>
-Vector2<int> CellCenteredVectorGrid2<T>::dataSize() const {
+Vector2I CellCenteredVectorGrid2<T>::dataSize() const {
 	return this->resolution();
 }
 
 
 template<class T>
-Vector2<double> CellCenteredVectorGrid2<T>::dataOrigin() const {
+Vector2D CellCenteredVectorGrid2<T>::dataOrigin() const {
 	return this->origin() + this->gridSpacing() * 0.5;
 
 }

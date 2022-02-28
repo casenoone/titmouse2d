@@ -14,15 +14,15 @@ public:
 
 	//在给定点采样值
 
-	virtual double sample(const Vector2<double>& x)const = 0;
+	virtual double sample(const Vector2D& x)const = 0;
 
 	//算梯度
-	virtual Vector2<double> gradient(const Vector2<double>& x)const;
+	virtual Vector2D gradient(const Vector2D& x)const;
 
 	//算拉普拉斯
-	virtual double laplacian(const Vector2<double>& x)const;
+	virtual double laplacian(const Vector2D& x)const;
 
-	virtual function<double(const Vector2<double>&)> sampler()const;
+	virtual function<double(const Vector2D&)> sampler()const;
 };
 
 

@@ -19,9 +19,9 @@ public:
 	EulerianSmokeSolver2();
 
 	EulerianSmokeSolver2(
-		const Vector2<int>& resolution,
-		const Vector2<double>& gridSpacing,
-		const Vector2<double>& gridOrigin);
+		const Vector2I& resolution,
+		const Vector2D& gridSpacing,
+		const Vector2D& gridOrigin);
 
 	virtual ~EulerianSmokeSolver2();
 
@@ -66,9 +66,9 @@ inline EulerianSmokeSolver2::EulerianSmokeSolver2() {
 }
 
 inline EulerianSmokeSolver2::EulerianSmokeSolver2(
-	const Vector2<int>& resolution,
-	const Vector2<double>& gridSpacing,
-	const Vector2<double>& gridOrigin) :GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) :GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
 	_grids = make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
 	_eulerianSmokeData = make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);

@@ -17,7 +17,7 @@ public:
 	virtual void onAdvanceTimeStep(double timeIntervalInSeconds)override;
 
 	void setData(int numberOfParticles,
-		Array<Vector2<double>>& pos,
+		Array<Vector2D>& pos,
 		int resolutionX,
 		int resolutionY);
 

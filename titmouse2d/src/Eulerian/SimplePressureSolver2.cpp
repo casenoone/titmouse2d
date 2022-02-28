@@ -20,7 +20,7 @@ SimplePressureSolver2::~SimplePressureSolver2() {
 }
 
 
-void SimplePressureSolver2::solve(FaceCenteredGrid2Ptr flow, const Array2<int>& markers) {
+void SimplePressureSolver2::solve(FaceCenteredGrid2Ptr flow, const Array2I& markers) {
 	int size = fluidCellSize(markers);
 	VectorN<double> x(size);
 
@@ -28,7 +28,7 @@ void SimplePressureSolver2::solve(FaceCenteredGrid2Ptr flow, const Array2<int>& 
 	applyGradientandUpdateVel(flow, markers, x);
 }
 
-int SimplePressureSolver2::fluidCellSize(const Array2<int>& markers) {
+int SimplePressureSolver2::fluidCellSize(const Array2I& markers) {
 	int systemSize = 0;
 
 	auto markersSize = markers.dataSize();
@@ -48,7 +48,7 @@ int SimplePressureSolver2::fluidCellSize(const Array2<int>& markers) {
 
 
 void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
-	const Array2<int>& markers,
+	const Array2I& markers,
 	VectorN<double>& x, int systemSize) {
 
 	auto& solveSystemMarker = flow->solveSystemMarker;
@@ -150,7 +150,7 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 }
 
 void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,
-	const Array2<int>& markers,
+	const Array2I& markers,
 	VectorN<double>& x) {
 
 

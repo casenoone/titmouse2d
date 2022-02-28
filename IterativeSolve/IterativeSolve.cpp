@@ -76,7 +76,7 @@ int main() {
 
 	//该算例的正确答案： 0.499999 1  -0.49999 
 
-	auto vx = make_shared<VertexCenteredScalarGrid2>(Vector2<int>(10, 10));
+	auto vx = make_shared<VertexCenteredScalarGrid2>(Vector2I(10, 10));
 
 	cout << vx->sample(Vector2D(0.5, 0.5)) << endl;;
 

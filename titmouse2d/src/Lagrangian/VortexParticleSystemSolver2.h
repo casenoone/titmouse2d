@@ -18,10 +18,10 @@ public:
 
 	VortexParticleSystemData2Ptr& vortexParticleData();
 
-	Vector2<double> computeUSingle(const Vector2<double>& pos, int i)const;
+	Vector2D computeUSingle(const Vector2D& pos, int i)const;
 
 	void setData(int numberOfParticles,
-		Array<Vector2<double>>& pos,
+		Array<Vector2D>& pos,
 		int resolutionX,
 		int resolutionY);
 

@@ -10,13 +10,13 @@ MarchingCube2::MarchingCube2() {
 
 
 
-MarchingCube2::MarchingCube2(const Vector2<int>& resolution,
-	const Vector2<double>& origin,
+MarchingCube2::MarchingCube2(const Vector2I& resolution,
+	const Vector2D& origin,
 	double initialValue,
 	double domainSizeX) {
 
 	auto k = domainSizeX / resolution.x;
-	auto m = Vector2<double>(k, k);
+	auto m = Vector2D(k, k);
 
 	data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
 
@@ -48,7 +48,7 @@ void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
 
 	auto resolution = _data->resolution();
 
-	Array2<double> num;
+	Array2D num;
 
 	//获取顶点配置
 	getVoxelConfig(num);
@@ -88,7 +88,7 @@ void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet,
 
 	auto resolution = _data->resolution();
 
-	Array2<double> num;
+	Array2D num;
 
 	//获取顶点配置
 	getVoxelConfig(num);
@@ -121,7 +121,7 @@ void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet) {
 
 	//计算顶点势能
 	calculateWeight();
-	Array2<double> num;
+	Array2D num;
 
 	//获取顶点配置
 	getVoxelConfig(num);
@@ -168,7 +168,7 @@ void MarchingCube2::calculateWeight() {
 }
 
 
-void MarchingCube2::getVoxelConfig(Array2<double>& num) {
+void MarchingCube2::getVoxelConfig(Array2D& num) {
 
 	auto size = data->resolution();
 	num.reSize(size.x, size.y, 0.0);
@@ -222,11 +222,11 @@ void MarchingCube2::getVoxelConfig(Array2<double>& num) {
 
 
 
-Vector2<double> MarchingCube2::calculateIso(int edge, int i, int j) {
+Vector2D MarchingCube2::calculateIso(int edge, int i, int j) {
 	int start = edge;
 
-	Vector2<double> p1, p2;
-	Vector2<double> result;
+	Vector2D p1, p2;
+	Vector2D result;
 	double value1, value2;
 	auto posFunc = data->dataPosition();
 
@@ -295,7 +295,7 @@ MarchingCube2::Builder MarchingCube2::builder() {
 }
 
 
-MarchingCube2::Builder& MarchingCube2::Builder::withResolution(const Vector2<int>& resolution) {
+MarchingCube2::Builder& MarchingCube2::Builder::withResolution(const Vector2I& resolution) {
 	_resolution = resolution;
 	return *this;
 }
@@ -308,7 +308,7 @@ MarchingCube2::Builder& MarchingCube2::Builder::withResolution(int resolutionX, 
 
 
 
-MarchingCube2::Builder& MarchingCube2::Builder::withOrigin(const Vector2<double>& gridOrigin) {
+MarchingCube2::Builder& MarchingCube2::Builder::withOrigin(const Vector2D& gridOrigin) {
 	_gridOrigin = gridOrigin;
 	return *this;
 }

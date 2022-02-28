@@ -18,13 +18,13 @@ public:
 	virtual ~Grid2();
 
 	//下标转为位置
-	using DataPositionFunc = function<Vector2<double>(int, int)>;
+	using DataPositionFunc = function<Vector2D(int, int)>;
 
-	const Vector2<int>& resolution()const;
+	const Vector2I& resolution()const;
 
-	const Vector2<double>& origin()const;
+	const Vector2D& origin()const;
 
-	const Vector2<double>& gridSpacing()const;
+	const Vector2D& gridSpacing()const;
 
 	DataPositionFunc cellCenterPosition() const;
 
@@ -34,9 +34,9 @@ public:
 
 
 protected:
-	Vector2<int> _resolution;
-	Vector2<double> _gridSpacing;
-	Vector2<double> _origin;
+	Vector2I _resolution;
+	Vector2D _gridSpacing;
+	Vector2D _origin;
 };
 
 

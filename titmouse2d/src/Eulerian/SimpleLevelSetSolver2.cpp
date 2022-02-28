@@ -12,7 +12,7 @@ SimpleLevelSetSolver2::~SimpleLevelSetSolver2() {
 }
 
 
-double SimpleLevelSetSolver2::sign(const Array2<double>& input, int i, int j) const {
+double SimpleLevelSetSolver2::sign(const Array2D& input, int i, int j) const {
 	auto h = input.dataSize().x;
 	auto h2 = h * h;
 	auto phi = input.lookAt(i, j);
@@ -23,8 +23,8 @@ double SimpleLevelSetSolver2::sign(const Array2<double>& input, int i, int j) co
 //不知道如何理解这里的Cfl值
 //与时步有何关系？
 //这个函数的算法原理没搞清楚
-double SimpleLevelSetSolver2::pseudoTimeStep(const Array2<double>& input,
-	const Vector2<double>& gridSpacing) {
+double SimpleLevelSetSolver2::pseudoTimeStep(const Array2D& input,
+	const Vector2D& gridSpacing) {
 	double h = gridSpacing.x;
 
 	auto size = input.dataSize();
@@ -51,7 +51,7 @@ int SimpleLevelSetSolver2::distanceToNumberOfIterations(double distance, double 
 }
 
 
-void SimpleLevelSetSolver2::getDerivatives(const Array2<double>& input, Vector2<double> gridSpacing,
+void SimpleLevelSetSolver2::getDerivatives(const Array2D& input, Vector2D gridSpacing,
 	int i, int j, std::array<double, 2>* dx, std::array<double, 2>* dy) const {
 
 	double D0[3];
@@ -87,7 +87,7 @@ void SimpleLevelSetSolver2::reinitialize(const VertexCenteredScalarGrid2& inputS
 	auto size = inputSdf.dataSize();
 	auto gridSpacing = inputSdf.gridSpacing();
 
-	Array2<double> input;
+	Array2D input;
 	input.reSize(size.x, size.y);
 
 	//我擦，这里应该不会出错吧？
