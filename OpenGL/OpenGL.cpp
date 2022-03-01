@@ -23,7 +23,7 @@ void processInput(GLFWwindow* window);
 
 // settings
 const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_HEIGHT = 800;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -150,25 +150,31 @@ int main()
 
 	/**************以下计算域***************/
 
-	auto res = Vector2I(40, 40);
+	auto res = Vector2I(50, 50);
 	auto swSolver = ShallowWaveSolver2::builder()
 		.withResolution(res)
 		.makeShared();
-	Vector2D lower(0.8, 0.8);
-	Vector2D upper(1.2, 1.2);
-	swSolver->setMarkers(lower, upper);
+	Vector2D lower(1.1, 1.2);
+	Vector2D upper(1.2, 1.3);
+	//swSolver->setMarkers(lower, upper);
+	auto swData = swSolver->shallowWaveData();
 
-	double dt = 0.02;
+	double dt = 0.005;
+
 	/**************以上计算域*************/
-
+	double t = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 
 		/**************以下计算域***************/
-
+		lower.x = fabs(sin(t));
+		upper.x = fabs(sin(t)) + 0.2;
+		//lower.y = 0.05;
+		//upper.y = 0.15;
+		swSolver->setMarkers(lower, upper);
 		swSolver->onAdvanceTimeStep(dt);
-
-
+		t += 0.05;
+		if (t > 3.14)t = 0;
 		/**************以上计算域*************/
 
 
@@ -190,7 +196,7 @@ int main()
 
 		// world transformation
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.05f));
+		model = glm::scale(model, glm::vec3(0.00051f));
 		lightingShader.setMat4("model", model);
 
 
@@ -202,10 +208,27 @@ int main()
 		view = glm::lookAt(glm::vec3(1.0f, 4.0f, 3.0f), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 
 		lightingShader.setMat4("view", view);
-
-		// render the cube
 		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		double temp_k = 40;
+
+		auto h = swData->height;
+		for (int i = 0; i < res.x; ++i) {
+			for (int j = 0; j < res.y; ++j) {
+				auto posFunc = h->dataPosition();
+				auto pos = posFunc(i, j);
+				auto tempX = (pos.x - 1) * temp_k;
+				auto tempY = (h->lookAt(i, j) - 1) * temp_k;
+				auto tempZ = (pos.y - 1) * temp_k;
+				model = glm::translate(model, glm::vec3(tempX, tempY, tempZ));
+				lightingShader.setMat4("model", model);
+				model = glm::mat4(1.0f);
+				model = glm::scale(model, glm::vec3(0.00051f));
+
+				glDrawArrays(GL_TRIANGLES, 0, 36);
+			}
+		}
+
 
 
 

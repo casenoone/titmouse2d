@@ -1,6 +1,7 @@
 #ifndef SHALLOWWAVEDATA2_H
 #define SHALLOWWAVEDATA2_H
 
+#include "../../random.h"
 
 class ShallowWaveData2 : public GridSystemData2 {
 public:
@@ -39,6 +40,14 @@ inline ShallowWaveData2::ShallowWaveData2(
 	double initHeight = 0.5;
 	height = make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
 	old_height = make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
+
+	for (int i = 0; i < resolution.x; ++i) {
+		for (int j = 0; j < resolution.y; ++j) {
+
+			//(*height)(i, j) = random_double(0.1, 0.6);
+			//(*old_height)(i, j) = random_double(0.3, 0.31);
+		}
+	}
 
 	solveSystemMarker.reSize(resolution.x, resolution.y, -1);
 	markers.reSize(resolution.x, resolution.y, 0);

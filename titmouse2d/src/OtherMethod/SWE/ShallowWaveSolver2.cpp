@@ -4,9 +4,9 @@
 const double shallow_H = 1.0;
 
 //控制流体的粘性
-const double shallow_beta = 1.0;
+const double shallow_beta = 0.9;
 
-const double shallow_e = 0.1;
+const double shallow_e = 0.05;
 
 //假设标签的值为1时是被固体占据
 void ShallowWaveSolver2::setCouplingCellNum() {
@@ -38,7 +38,7 @@ void ShallowWaveSolver2::pressureSolve(double timeIntervalInSeconds) {
 
 	auto t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto x2 = data->gridSpacing().x * gridSpacing().x;
-	auto alpha = t2 * shallow_H * _gravity.y / x2;
+	auto alpha = t2 * shallow_H * 9.8 / x2;
 	for (int i = 0; i < res.x; ++i) {
 		for (int j = 0; j < res.y; ++j) {
 
@@ -48,35 +48,34 @@ void ShallowWaveSolver2::pressureSolve(double timeIntervalInSeconds) {
 			double current = -4;
 			double sum = 0.0;
 			//如果上边界是固体
-			if (j + 1 == res.y) {
+			if (j + 1 > res.y - 1) {
 				up = 0;
-				--current;
+				++current;
 			}
 
 			//如果下边界是固体
 			if (j - 1 < 0) {
 				down = 0;
-				--current;
+				++current;
 			}
 
 			//如果左边是固体
 			if (i - 1 < 0) {
 				left = 0;
-				--current;
+				++current;
 			}
 
 			//如果右边是固体
-			if (i + 1 == res.x) {
+			if (i + 1 > res.x - 1) {
 				right = 0;
-				--current;
+				++current;
 			}
 
-			sum += current * h(i, j);
-			if (up != 0)sum += h(i, j + 1);
-			if (down != 0)sum += h(i, j - 1);
-			if (left != 0)sum += h(i - 1, j);
-			if (right != 0)sum += h(i + 1, j);
-
+			sum = current * h(i, j);
+			if (up != 0) { sum += h(i, j + 1); }
+			if (down != 0) { sum += h(i, j - 1); }
+			if (left != 0) { sum += h(i - 1, j); }
+			if (right != 0) { sum += h(i + 1, j); }
 			old_h(i, j) = term1 + sum * alpha;
 		}
 	}
@@ -103,7 +102,7 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 
 	auto t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto x2 = data->gridSpacing().x * gridSpacing().x;
-	auto alpha = t2 * shallow_H * _gravity.y / x2;
+	auto alpha = t2 * shallow_H * 9.8 / x2;
 	VectorN<double> x(systemSize);
 	VectorN<double> b(systemSize);
 	SparseMatrix<double> A(systemSize, systemSize);
@@ -187,7 +186,7 @@ void ShallowWaveSolver2::applyGhostVolumn(double timeIntervalInSeconds) {
 	auto v = data->ghostH;
 	auto t2 = timeIntervalInSeconds * timeIntervalInSeconds;
 	auto x2 = data->gridSpacing().x * gridSpacing().x;
-	auto alpha = t2 * shallow_H * _gravity.y / x2;
+	auto alpha = t2 * shallow_H * 9.8 / x2;
 	for (int i = 0; i < res.x; ++i) {
 		for (int j = 0; j < res.y; ++j) {
 			int up = 1, down = 1, left = 1, right = 1;
@@ -196,25 +195,25 @@ void ShallowWaveSolver2::applyGhostVolumn(double timeIntervalInSeconds) {
 			//如果上边界是固体
 			if (j + 1 == res.y) {
 				up = 0;
-				--current;
+				++current;
 			}
 
 			//如果下边界是固体
 			if (j - 1 < 0) {
 				down = 0;
-				--current;
+				++current;
 			}
 
 			//如果左边是固体
 			if (i - 1 < 0) {
 				left = 0;
-				--current;
+				++current;
 			}
 
 			//如果右边是固体
 			if (i + 1 == res.x) {
 				right = 0;
-				--current;
+				++current;
 			}
 
 			sum += current * v(i, j);
@@ -224,7 +223,6 @@ void ShallowWaveSolver2::applyGhostVolumn(double timeIntervalInSeconds) {
 			if (right != 0)sum += v(i + 1, j);
 
 			old_h(i, j) = old_h(i, j) + sum * alpha;
-
 		}
 	}
 
