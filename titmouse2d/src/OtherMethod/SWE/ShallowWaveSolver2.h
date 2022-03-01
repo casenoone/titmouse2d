@@ -21,22 +21,21 @@ public:
 
 	void onAdvanceTimeStep(double timeIntervalInSeconds)override;
 
+	//标记哪些格子被固体所占据
+	//我们暂时就假设障碍物是一个长方体
+	void setMarkers(const Vector2D& lower, const Vector2D& upper);
+
 	static Builder builder();
 
 private:
 
-	//标记哪些格子被固体所占据
-	void setMarkers(const Vector2D& pos);
-
-	void setFluidCellNum();
-
-	void advection(double timeIntervalInSeconds);
+	void setCouplingCellNum();
 
 	void pressureSolve(double timeIntervalInSeconds);
 
-	void applyGhostVolumn();
-
 	void couplingSolve(double timeIntervalInSeconds);
+
+	void applyGhostVolumn(double timeIntervalInSeconds);
 
 	ShallowWaveData2Ptr _shallowWaveData;
 
@@ -63,9 +62,7 @@ inline ShallowWaveData2Ptr ShallowWaveSolver2::shallowWaveData() {
 	return _shallowWaveData;
 }
 
-void ShallowWaveSolver2::advection(double timeIntervalInSeconds) {
-	_advectionSolver->solve(_shallowWaveData->velocity(), _shallowWaveData->velocity(), timeIntervalInSeconds);
-}
+
 
 
 class ShallowWaveSolver2::Builder final

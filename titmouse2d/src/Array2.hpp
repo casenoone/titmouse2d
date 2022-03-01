@@ -37,7 +37,7 @@ public:
 
 	void set(const Array2<T>& other);
 
-	void Swap(Array2<T>& other);
+	void swap(Array2<T>& other);
 
 	T dot(const Array2<T>& a);
 
@@ -73,6 +73,7 @@ template<typename T>
 T Array2<T>::lookAt(int i, int j) const {
 	return (*_data)[i][j];
 }
+
 
 template<typename T>
 T& Array2<T>::operator()(int i, int j) {
@@ -170,8 +171,8 @@ void Array2<T>::set(const Array2<T>& other) {
 }
 
 template<typename T>
-void Array2<T>::Swap(Array2<T>& other) {
-	std::swap((*_data), *(other._data));
+void Array2<T>::swap(Array2<T>& other) {
+	std::swap((*_data), (*(other._data)));
 }
 
 

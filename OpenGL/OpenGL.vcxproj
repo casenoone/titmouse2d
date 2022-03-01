@@ -156,6 +156,11 @@
     <None Include="2.2.light_cube.vs" />
     <None Include="2.2.light_cube.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\titmouse2d\titmouse2d.vcxproj">
+      <Project>{94580d84-0ebe-489d-a109-b2cbff52d865}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

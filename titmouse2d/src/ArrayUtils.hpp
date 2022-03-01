@@ -67,7 +67,7 @@ void extrapolateToRegion(
 			}
 		}
 
-		valid0.Swap(valid1);
+		valid0.swap(valid1);
 	}
 }
 

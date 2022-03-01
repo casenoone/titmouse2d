@@ -12,6 +12,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include"../titmouse2d/src/OtherMethod/SWE/ShallowWaveSolver2.h"
+
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -38,8 +40,6 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
-	// glfw: initialize and configure
-	// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -51,7 +51,7 @@ int main()
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "titmouse2d", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -63,28 +63,20 @@ int main()
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
-	// tell GLFW to capture our mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
 
-	// configure global opengl state
-	// -----------------------------
+
 	glEnable(GL_DEPTH_TEST);
 
-	// build and compile our shader zprogram
-	// ------------------------------------
 	Shader lightingShader("2.2.basic_lighting.vs", "2.2.basic_lighting.fs");
 	Shader lightCubeShader("2.2.light_cube.vs", "2.2.light_cube.fs");
 
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
+
 	float vertices[] = {
 		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -128,7 +120,7 @@ int main()
 		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
-	// first, configure the cube's VAO (and VBO)
+
 	unsigned int VBO, cubeVAO;
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &VBO);
@@ -156,23 +148,36 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
+	/**************以下计算域***************/
 
-	// render loop
-	// -----------
+	auto res = Vector2I(40, 40);
+	auto swSolver = ShallowWaveSolver2::builder()
+		.withResolution(res)
+		.makeShared();
+	Vector2D lower(0.8, 0.8);
+	Vector2D upper(1.2, 1.2);
+	swSolver->setMarkers(lower, upper);
+
+	double dt = 0.02;
+	/**************以上计算域*************/
+
 	while (!glfwWindowShouldClose(window))
 	{
-		// per-frame time logic
-		// --------------------
+
+		/**************以下计算域***************/
+
+		swSolver->onAdvanceTimeStep(dt);
+
+
+		/**************以上计算域*************/
+
+
+
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// input
-		// -----
 		processInput(window);
-
-		// render
-		// ------
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -203,20 +208,16 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	// optional: de-allocate all resources once they've outlived their purpose:
-	// ------------------------------------------------------------------------
 	glDeleteVertexArrays(1, &cubeVAO);
 	glDeleteVertexArrays(1, &lightCubeVAO);
 	glDeleteBuffers(1, &VBO);
 
-	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
+
 	glfwTerminate();
 	return 0;
 }

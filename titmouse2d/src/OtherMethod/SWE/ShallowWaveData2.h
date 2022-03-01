@@ -35,9 +35,14 @@ inline ShallowWaveData2::ShallowWaveData2(
 	const Vector2D& gridSpacing,
 	const Vector2D& origin) :GridSystemData2(resolution, gridSpacing, origin) {
 
-	height = make_shared<CellCenteredScalarGrid2>(resolution);
-	old_height = make_shared<CellCenteredScalarGrid2>(resolution);
+	//默认初始化水面高度为initHeight
+	double initHeight = 0.5;
+	height = make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
+	old_height = make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
+
 	solveSystemMarker.reSize(resolution.x, resolution.y, -1);
+	markers.reSize(resolution.x, resolution.y, 0);
+	ghostH.reSize(resolution.x, resolution.y, 0);
 }
 
 #endif
