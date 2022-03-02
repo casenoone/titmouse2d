@@ -38,6 +38,7 @@ titmouse是一个2d离线流体引擎（个人玩具）
 - PBF
 - IISPH(隐式不可压缩SPH)
 - Eulerian Smoke 
+- Shallow Wave Solver
 
 
 - 1.FLIP算法
