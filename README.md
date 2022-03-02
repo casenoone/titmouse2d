@@ -87,7 +87,6 @@ titmouse是一个2d离线流体引擎（个人玩具）
 
 即将实现的算法或数据结构：
 - PCISPH
-- shallow water solver
 - BVH加速结构
 - Explicit/Implicit Mass Spring System
 - Clebsch gauge fluid solver
