@@ -6,7 +6,10 @@ const double shallow_H = 1.0;
 //控制流体的粘性
 const double shallow_beta = 0.9;
 
-const double shallow_e = 0.05;
+//控制耦合稳定性
+const double shallow_gama = 0.4;
+
+const double shallow_e = 0.2;
 
 //假设标签的值为1时是被固体占据
 void ShallowWaveSolver2::setCouplingCellNum() {
@@ -14,6 +17,8 @@ void ShallowWaveSolver2::setCouplingCellNum() {
 	auto res = data->resolution();
 	auto markers = data->markers;
 	auto solveSystemMarker = data->solveSystemMarker;
+
+	solveSystemMarker.reSize(res.x, res.y, -1);
 
 	int num = 0;
 
@@ -181,6 +186,7 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 void ShallowWaveSolver2::applyGhostVolumn(double timeIntervalInSeconds) {
 	auto data = _shallowWaveData;
 	auto res = data->resolution();
+	auto marker = data->markers;
 	auto old_h = data->old_height->datas();
 	auto h = data->height->datas();
 	auto v = data->ghostH;
@@ -222,7 +228,8 @@ void ShallowWaveSolver2::applyGhostVolumn(double timeIntervalInSeconds) {
 			if (left != 0)sum += v(i - 1, j);
 			if (right != 0)sum += v(i + 1, j);
 
-			old_h(i, j) = old_h(i, j) + sum * alpha;
+			old_h(i, j) = old_h(i, j) + sum * alpha * shallow_gama;
+
 		}
 	}
 

@@ -150,16 +150,15 @@ int main()
 
 	/**************以下计算域***************/
 
-	auto res = Vector2I(50, 50);
+	auto res = Vector2I(70, 70);
 	auto swSolver = ShallowWaveSolver2::builder()
 		.withResolution(res)
 		.makeShared();
 	Vector2D lower(1.1, 1.2);
 	Vector2D upper(1.2, 1.3);
-	//swSolver->setMarkers(lower, upper);
 	auto swData = swSolver->shallowWaveData();
 
-	double dt = 0.005;
+	double dt = 0.006;
 
 	/**************以上计算域*************/
 	double t = 0;
@@ -167,16 +166,18 @@ int main()
 	{
 
 		/**************以下计算域***************/
+		lower.y = fabs(cos(t));
+		upper.y = fabs(cos(t)) + 0.1;
 		lower.x = fabs(sin(t));
-		upper.x = fabs(sin(t)) + 0.2;
+		upper.x = fabs(sin(t)) + 0.1;
 		//lower.y = 0.05;
 		//upper.y = 0.15;
 		swSolver->setMarkers(lower, upper);
 		swSolver->onAdvanceTimeStep(dt);
-		t += 0.05;
+
+		t += 0.02;
 		if (t > 3.14)t = 0;
 		/**************以上计算域*************/
-
 
 
 		float currentFrame = static_cast<float>(glfwGetTime());
@@ -194,9 +195,12 @@ int main()
 		lightingShader.setVec3("lightPos", lightPos);
 		lightingShader.setVec3("viewPos", camera.Position);
 
+		auto  cofee = 0.00071f;
+
+
 		// world transformation
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.00051f));
+		model = glm::scale(model, glm::vec3(cofee));
 		lightingShader.setMat4("model", model);
 
 
@@ -223,14 +227,23 @@ int main()
 				model = glm::translate(model, glm::vec3(tempX, tempY, tempZ));
 				lightingShader.setMat4("model", model);
 				model = glm::mat4(1.0f);
-				model = glm::scale(model, glm::vec3(0.00051f));
+				model = glm::scale(model, glm::vec3(cofee));
 
 				glDrawArrays(GL_TRIANGLES, 0, 36);
 			}
 		}
 
 
-
+		//绘制移动立方体
+		auto cubePos = Vector2D((lower.x + upper.x) / 2, (lower.y + upper.y) / 2);
+		auto tempX = (cubePos.x - 1) * temp_k;
+		auto tempY = -0.5 * temp_k;
+		auto tempZ = (cubePos.y - 1) * temp_k;
+		model = glm::translate(model, glm::vec3(tempX, tempY, tempZ));
+		model = glm::scale(model, glm::vec3(5.0f));
+		lightingShader.setMat4("model", model);
+		lightingShader.setVec3("objectColor", 1.0f, 1.0f, 1.0f);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
