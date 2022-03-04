@@ -83,6 +83,8 @@ public:
 private:
 	Size2 _size;
 
+	//这里换成array
+	//不搞什么行列优先了，统一默认行优先
 	vector<vectorNPtr<T>> _data;
 
 	//默认为列优先存储
@@ -165,12 +167,6 @@ void DenseMatrix<T>::setOrder(int state) {
 template<typename T>
 int DenseMatrix<T>::getOrder() const {
 	return _order;
-}
-
-template<typename T>
-vectorNPtr<T> DenseMatrix<T>::getVec(int idx) const {
-
-	return _data[idx];
 }
 
 

@@ -10,7 +10,7 @@ using namespace std;
 #include "../titmouse2d/src/LinearSystem/SORsolver.hpp"
 #include "../titmouse2d/src/LinearSystem/RelaxedJacobiSolver.hpp"
 #include "../titmouse2d/src/Matrix2x2.hpp"
-
+#include "../titmouse2d/src/Matrix3x3.hpp"
 #include "../titmouse2d/src/Eulerian/VertexCenteredScalarGrid2.h"
 
 #include <array>
@@ -68,7 +68,7 @@ int main() {
 	rjbSolver.compute(A, x, b);
 
 	x.forEachIndex([&](int i) {
-		cout << x[i] << endl;
+		//cout << x[i] << endl;
 		});
 
 	//该算例的正确答案： 1.000000 -2.000000  3.000000 -2.000000  1.000000
@@ -76,6 +76,19 @@ int main() {
 
 	//该算例的正确答案： 0.499999 1  -0.49999 
 
+	Matrix2x2<double> mat2(1, 2, -3, 0);
+	auto k = mat2.inverse();
 
+	Matrix3x3<double> mat3(Vector3D(1, -3, 2), Vector3D(5, 1, -1), Vector3D(2, -1, 4));
+
+	auto mat3Invers = mat3.inverse();
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			cout << mat3Invers(i, j) << endl;
+		}
+	}
+
+	//cout << k(0, 0) << " " << k(0, 1) << "  " << k(1, 0) << "  " << k(1, 1) << endl;
 	return 0;
 }

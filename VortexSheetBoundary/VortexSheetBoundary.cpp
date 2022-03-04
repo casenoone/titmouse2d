@@ -164,6 +164,9 @@ int main(int argc, char** argv)
 
 void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 {
-	vpSolver->emitParticlesFromPanel();
-	cout << "当前系统粒子数：" << vpSolver->vortexParticleData()->numberOfParticles() << endl;
+	auto num = vpSolver->vortexParticleData()->numberOfParticles();
+	if (num < 600) {
+		vpSolver->emitParticlesFromPanel();
+		cout << "当前系统粒子数：" << num << endl;
+	}
 }

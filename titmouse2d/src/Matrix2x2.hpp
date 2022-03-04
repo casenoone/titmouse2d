@@ -35,7 +35,7 @@ public:
 
 	Matrix2x2<T> operator+(const Matrix2x2<T>& mat)const;
 
-	Matrix2x2<T> operator+=(const Matrix2x2<T>& mat);
+	Matrix2x2<T>& operator+=(const Matrix2x2<T>& mat);
 
 	Matrix2x2<T> operator-(const Matrix2x2<T>& mat)const;
 
@@ -43,10 +43,18 @@ public:
 
 	Matrix2x2<T> operator/(T num)const;
 
+	Matrix2x2<T>& operator*=(T num);
+
 	template<class B>
 	friend Matrix2x2<B> operator*(B num, const Matrix2x2<B>& mat);
 
 	Vector2<T> operator*(const Vector2<T>& vec)const;
+
+	Vector2<T> transToLocalPos(const Vector2D& newX, const Vector2D& newOrigin);
+
+	Vector2<T> transToWorldPos(const Vector2D& currentX, const Vector2D& currentOrigin);
+
+	Matrix2x2<T> inverse();
 
 	T trace()const;
 
@@ -158,12 +166,46 @@ Matrix2x2<T> Matrix2x2<T>::operator-(const Matrix2x2<T>& mat)const {
 
 
 template<class T>
-Matrix2x2<T> Matrix2x2<T>::operator+=(const Matrix2x2<T>& mat) {
+Matrix2x2<T>& Matrix2x2<T>::operator+=(const Matrix2x2<T>& mat) {
 	for (int i = 0; i < 4; ++i) {
 		(*_data)[i] += (*mat._data)[i];
 	}
 	return *this;
 }
+
+
+template<class T>
+Matrix2x2<T>& Matrix2x2<T>::operator*=(T num) {
+	for (int i = 0; i < 4; ++i) {
+		(*_data)[i] *= num;
+	}
+	return *this;
+}
+
+template<class T>
+Vector2<T> Matrix2x2<T>::transToLocalPos(const Vector2D& newX, const Vector2D& newOrigin) {
+
+}
+
+
+template<class T>
+Vector2<T> Matrix2x2<T>::transToWorldPos(const Vector2D& currentX, const Vector2D& currentOrigin) {
+
+}
+
+
+template<class T>
+Matrix2x2<T> Matrix2x2<T>::inverse() {
+	auto a = (*_data)[0];
+	auto b = (*_data)[1];
+	auto c = (*_data)[2];
+	auto d = (*_data)[3];
+	Matrix2x2<T> result(d, -b, -c, a);
+	auto k = 1 / (a * d - b * c);
+	result *= k;
+	return result;
+}
+
 
 template<class T>
 T Matrix2x2<T>::trace()const {

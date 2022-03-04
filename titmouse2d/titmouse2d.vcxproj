@@ -179,6 +179,7 @@
     <ClCompile Include="src\Lagrangian\VortexParticleSystemData2.cpp" />
     <ClCompile Include="src\Lagrangian\VortexParticleSystemSolver2.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Matrix3x3.hpp" />
     <ClCompile Include="src\Numerical\Pde.hpp" />
     <ClCompile Include="src\OtherMethod\IISPH\IISPHSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\LBM\LBMData2.h" />
@@ -272,6 +273,7 @@
     <ClInclude Include="src\SparseMatrix.hpp" />
     <ClInclude Include="src\TempMovingCollider2.h" />
     <ClInclude Include="src\Vector2.hpp" />
+    <ClInclude Include="src\Vector3.hpp" />
     <ClInclude Include="src\VectorN.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -47,6 +47,7 @@ void VortexParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) 
 }
 
 void VortexParticleSystemSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
+	//做vortex sheet boundary的时候要把这个onBeginAdvanceTimeStep注释掉
 	//onBeginAdvanceTimeStep();
 	timeIntegration(timeIntervalInSeconds);
 	//ParticleSystemSolver2::resolveCollision();
