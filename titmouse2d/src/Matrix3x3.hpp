@@ -7,6 +7,7 @@ using namespace std;
 
 #include <array>
 
+#include "Vector2.hpp"
 #include "Vector3.hpp"
 
 
@@ -41,6 +42,8 @@ public:
 
 	Matrix3x3<T> operator*(T num)const;
 
+	Matrix3x3<T> operator*(const Matrix3x3<T>& mat)const;
+
 	Matrix3x3<T> operator/(T num)const;
 
 	Matrix3x3<T>& operator*=(T num);
@@ -51,7 +54,9 @@ public:
 	Vector3<T> operator*(const Vector3<T>& vec)const;
 
 	//把世界坐标系下的表示变换到局部坐标系下
-	Matrix3x3 transToLocalMatrix()const;
+	Matrix3x3<T> transToLocalMatrix(
+		const Vector2<T>& localX,
+		const Vector2<T>& localO)const;
 
 	Matrix3x3<T> inverse();
 
@@ -120,6 +125,27 @@ Vector3<T> Matrix3x3<T>::operator*(const Vector3<T>& vec)const {
 	auto z = (*_data)[6] * vec.x + (*_data)[7] * vec.y + (*_data)[8] * vec.z;
 	return Vector3<T>(x, y, z);
 }
+
+template<class T>
+Matrix3x3<T> Matrix3x3<T>::operator*(const Matrix3x3<T>& mat)const {
+
+	Matrix3x3<T> result;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			T tempResult = static_cast<T>(0);
+			for (int k = 0; k < 3; ++k) {
+				tempResult += this->lookAt(i, k) * mat.lookAt(k, j);
+			}
+			result(i, j) = tempResult;
+		}
+	}
+
+	return result;
+
+}
+
+
 
 template<class T>
 Matrix3x3<T>  Matrix3x3<T>::operator*(T num)const {
@@ -210,6 +236,32 @@ T Matrix3x3<T>::det()const {
 			a12 * a21 * a33 -
 			a11 * a23 * a32);
 }
+
+
+template<class T>
+Matrix3x3<T> Matrix3x3<T>::transToLocalMatrix(
+	const Vector2<T>& localY,
+	const Vector2<T>& localO)const {
+
+	//首先我们构造平移矩阵，把localO平移到原点
+	Matrix3x3 trans(Vector3<T>(1, 0, -localO.x),
+		Vector3<T>(0, 1, -localO.y),
+		Vector3<T>(0, 0, 1));
+
+	auto l = localY.getLength();
+	auto sin_beta = -localY.cross(Vector2<T>(0, 1)) / l;
+	auto cos_beta = localY.dot(Vector2<T>(0, 1)) / l;
+
+	//然后我们构造旋转矩阵
+	Matrix3x3 rotation(Vector3<T>(cos_beta, sin_beta, 0),
+		Vector3<T>(-sin_beta, cos_beta, 0),
+		Vector3<T>(0, 0, 1));
+
+	//顺序不能乘错了
+	return rotation * trans;
+
+}
+
 
 template<class T>
 Matrix3x3<T> Matrix3x3<T>::inverse() {

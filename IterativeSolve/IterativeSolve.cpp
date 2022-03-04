@@ -85,10 +85,19 @@ int main() {
 
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {
-			cout << mat3Invers(i, j) << endl;
+			//cout << mat3Invers(i, j) << endl;
 		}
 	}
 
-	//cout << k(0, 0) << " " << k(0, 1) << "  " << k(1, 0) << "  " << k(1, 1) << endl;
+	//齐次坐标
+	Vector3D point(0.5, 0.0, 1);
+	Matrix3x3<double> mat;
+	auto toLocal = mat.transToLocalMatrix(Vector2D(-1, 0.57), Vector2D(0, 0));
+	auto localP = toLocal * point;
+	cout << localP.x << " ," << localP.y << endl;
+	auto toWorld = toLocal.inverse();
+	localP = toWorld * localP;
+	cout << localP.x << " ," << localP.y << endl;
+
 	return 0;
 }

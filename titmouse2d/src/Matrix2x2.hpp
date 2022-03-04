@@ -56,6 +56,7 @@ public:
 
 	Matrix2x2<T> inverse();
 
+
 	T trace()const;
 
 	//×ø±êÏµ×ª»»
@@ -205,6 +206,7 @@ Matrix2x2<T> Matrix2x2<T>::inverse() {
 	result *= k;
 	return result;
 }
+
 
 
 template<class T>
