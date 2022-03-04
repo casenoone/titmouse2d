@@ -1,5 +1,5 @@
 2d流体引擎
-titmouse是一个2d离线流体引擎（个人玩具）
+titmouse是一个2d离线流体引擎（个人玩具），由于程序性能受限，所有算例都是在低分辨率下解算。
 
 - C++ 11
 - 基本的向量操作
@@ -38,6 +38,7 @@ titmouse是一个2d离线流体引擎（个人玩具）
 - PBF
 - IISPH(隐式不可压缩SPH)
 - Eulerian Smoke 
+- Shallow Wave Solver
 
 
 - 1.FLIP算法
@@ -82,11 +83,11 @@ titmouse是一个2d离线流体引擎（个人玩具）
 - 13.Eulerian Smoke(双线性插值，midpoint，边界还有点bug没解决，还没有加vorticity force)
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/eulerian_smoke.gif)
 
-
+- 14.shallow wave solver
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
 
 即将实现的算法或数据结构：
 - PCISPH
-- shallow water solver
 - BVH加速结构
 - Explicit/Implicit Mass Spring System
 - Clebsch gauge fluid solver
