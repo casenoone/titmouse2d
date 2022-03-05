@@ -58,6 +58,9 @@ public:
 	//矩阵乘以向量
 	VectorN<T> operator*(const VectorN<T>& vec)const;
 
+	//LU分解
+	void LU(DenseMatrix<T>& L, DenseMatrix<T>& U)const;
+
 private:
 	Size2 _size;
 
@@ -227,6 +230,12 @@ VectorN<T> DenseMatrix<T>::operator*(const VectorN<T>& vec)const {
 	}
 	return result;
 }
+
+template<class T>
+void DenseMatrix<T>::LU(DenseMatrix<T>& L, DenseMatrix<T>& U)const {
+
+}
+
 
 
 #endif
