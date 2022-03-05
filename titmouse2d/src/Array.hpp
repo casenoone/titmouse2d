@@ -15,9 +15,12 @@ template<class T>
 class Array {
 public:
 	Array();
+
 	virtual ~Array();
 
 	Array(const vector<T>& data);
+
+	Array(int len);
 
 	T lookAt(int idx) const;
 
@@ -77,6 +80,12 @@ Array<T>::Array(const vector<T>& data) {
 	_size = (*_data).size();
 }
 
+template<typename T>
+Array<T>::Array(int len) {
+	_data = make_shared<vector<T>>();
+	(*_data).resize(len);
+	_size = len;
+}
 
 //这里要改进一下
 template<typename T>

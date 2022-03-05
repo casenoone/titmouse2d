@@ -11,6 +11,8 @@ using namespace std;
 #include "../titmouse2d/src/LinearSystem/RelaxedJacobiSolver.hpp"
 #include "../titmouse2d/src/Matrix2x2.hpp"
 #include "../titmouse2d/src/Matrix3x3.hpp"
+#include "../titmouse2d/src/DenseMatrix.hpp"
+
 #include "../titmouse2d/src/Eulerian/VertexCenteredScalarGrid2.h"
 
 #include <array>
@@ -89,15 +91,34 @@ int main() {
 		}
 	}
 
-	//齐次坐标
-	Vector3D point(0.5, 0.0, 1);
-	Matrix3x3<double> mat;
-	auto toLocal = mat.transToLocalMatrix(Vector2D(-1, 0.57), Vector2D(0, 0));
-	auto localP = toLocal * point;
-	cout << localP.x << " ," << localP.y << endl;
-	auto toWorld = toLocal.inverse();
-	localP = toWorld * localP;
-	cout << localP.x << " ," << localP.y << endl;
+
+
+	vector<vector<
+		double>> dense1 = {
+			{4.,-1.,0.},
+			{-1.,4.,-1.},
+			{0.,-1.,4.}
+	};
+
+	vector<vector<
+		double>> dense2 = {
+			{2.,1.,0.},
+			{5.,-1.,0.},
+			{3.,9.,7.}
+	};
+
+	DenseMatrix<double> mat41(3, 3, dense1);
+	DenseMatrix<double> mat42(3, 3, dense2);
+	vector<double> _b = { 1.,4.,-3. };
+
+	VectorN<double> mat_b(_b);
+
+	auto mat_result = mat41 * mat42 * mat_b;
+	for (int i = 0; i < 3; ++i) {
+
+		cout << mat_result[i] << endl;
+
+	}
 
 	return 0;
 }

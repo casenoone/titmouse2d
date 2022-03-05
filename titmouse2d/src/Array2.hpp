@@ -48,6 +48,7 @@ public:
 	//T clone();
 
 public:
+	//这里换成一维的vector
 	shared_ptr<vector<vector<T>>> _data;
 
 	Size2 _size;

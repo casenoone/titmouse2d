@@ -53,6 +53,9 @@ public:
 
 	Vector3<T> operator*(const Vector3<T>& vec)const;
 
+	//重载一个3x3矩阵与二维向量的乘法，省的还得写齐次坐标
+	Vector3<T> operator*(const Vector2<T>& vec)const;
+
 	//把世界坐标系下的表示变换到局部坐标系下
 	Matrix3x3<T> transToLocalMatrix(
 		const Vector2<T>& localX,
@@ -124,6 +127,15 @@ Vector3<T> Matrix3x3<T>::operator*(const Vector3<T>& vec)const {
 	auto y = (*_data)[3] * vec.x + (*_data)[4] * vec.y + (*_data)[5] * vec.z;
 	auto z = (*_data)[6] * vec.x + (*_data)[7] * vec.y + (*_data)[8] * vec.z;
 	return Vector3<T>(x, y, z);
+}
+
+template<class T>
+Vector3<T> Matrix3x3<T>::operator*(const Vector2<T>& vec)const {
+	auto x = (*_data)[0] * vec.x + (*_data)[1] * vec.y + (*_data)[2];
+	auto y = (*_data)[3] * vec.x + (*_data)[4] * vec.y + (*_data)[5];
+	auto z = (*_data)[6] * vec.x + (*_data)[7] * vec.y + (*_data)[8];
+	return Vector2<T>(x, y);
+
 }
 
 template<class T>

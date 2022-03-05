@@ -59,8 +59,8 @@ VectorN<T>::VectorN(const vector<T>& data) : Array<T>(data) {
 }
 
 template<class T>
-VectorN<T>::VectorN(int len) {
-	this->reSize(len, static_cast<T>(0));
+VectorN<T>::VectorN(int len) : Array<T>(len) {
+
 }
 
 

@@ -50,16 +50,9 @@ public:
 
 	Vector2<T> operator*(const Vector2<T>& vec)const;
 
-	Vector2<T> transToLocalPos(const Vector2D& newX, const Vector2D& newOrigin);
-
-	Vector2<T> transToWorldPos(const Vector2D& currentX, const Vector2D& currentOrigin);
-
 	Matrix2x2<T> inverse();
 
-
 	T trace()const;
-
-	//×ø±êÏµ×ª»»
 
 
 private:
@@ -182,18 +175,6 @@ Matrix2x2<T>& Matrix2x2<T>::operator*=(T num) {
 	}
 	return *this;
 }
-
-template<class T>
-Vector2<T> Matrix2x2<T>::transToLocalPos(const Vector2D& newX, const Vector2D& newOrigin) {
-
-}
-
-
-template<class T>
-Vector2<T> Matrix2x2<T>::transToWorldPos(const Vector2D& currentX, const Vector2D& currentOrigin) {
-
-}
-
 
 template<class T>
 Matrix2x2<T> Matrix2x2<T>::inverse() {
