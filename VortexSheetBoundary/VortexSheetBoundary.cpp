@@ -8,11 +8,12 @@ using namespace std;
 
 #include "../titmouse2d/src/Geometry/Sphere2.h"
 #include "../titmouse2d/src/Lagrangian/VortexParticleSystemSolver2.h"
+#include "../titmouse2d/src/SparseMatrix.hpp"
 
 #include <GL/glut.h>
 
 #include <windows.h>
-
+#include <Eigen/Dense>
 
 static void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
@@ -71,6 +72,9 @@ auto vpSolver = make_shared<VortexParticleSystemSolver2>();
 
 
 double dt = 0.02;
+
+
+
 
 static void display(void)
 {
@@ -147,6 +151,16 @@ int main(int argc, char** argv)
 	UINT timerId = 1;
 	MSG msg;
 	SetTimer(NULL, timerId, 3000, TimerProc);
+
+	Eigen::Matrix3f A;
+	Eigen::Vector3f b;
+	A << 1, 2, 3, 4, 5, 6, 7, 8, 10;
+
+	cout << "Here is the matrix A:\n" << A << endl;
+	cout << "Here is the vector b:\n" << b << endl;
+	Eigen::Vector3f x = A.colPivHouseholderQr().solve(b);
+	cout << "The solution is:\n" << x << endl;
+
 
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时

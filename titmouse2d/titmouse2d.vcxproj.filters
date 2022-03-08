@@ -416,5 +416,11 @@
     <ClInclude Include="src\Vector3.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\LinearSystem\DirectSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\GaussianElimSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

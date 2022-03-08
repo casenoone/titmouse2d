@@ -61,6 +61,9 @@ public:
 	//LU分解
 	void LU(DenseMatrix<T>& L, DenseMatrix<T>& U)const;
 
+
+	static DenseMatrix<T> identityMatrix(int row, int column);
+
 private:
 	Size2 _size;
 
@@ -231,9 +234,32 @@ VectorN<T> DenseMatrix<T>::operator*(const VectorN<T>& vec)const {
 	return result;
 }
 
+
+template<class T>
+inline DenseMatrix<T> DenseMatrix<T>::identityMatrix(int row, int column) {
+	DenseMatrix<T> result(row, column);
+	for (int i = 0; i < row; ++i) {
+		result(i, i) = static_cast<T>(1.0);
+	}
+	return result;
+}
+
+
 template<class T>
 void DenseMatrix<T>::LU(DenseMatrix<T>& L, DenseMatrix<T>& U)const {
 
+	auto M = DenseMatrix<double>::identityMatrix(_size.x, _size.y);
+
+	for (int i = 0; i < _size.x; ++i) {
+		auto dominE = this->lookAt(i, i);
+		//如果该行主元不符合条件，那么就做一个行变换
+		if (fabs(dominE) < 0.1 || dominE == 0.0) {
+
+		}
+		for (int j = 0; j < _size.y; ++j) {
+
+		}
+	}
 }
 
 

@@ -4,6 +4,9 @@
 #include "VortexParticleSystemData2.h"
 #include "ParticleSystemSolver2.h"
 
+#include <Eigen/Dense>
+
+
 class VortexParticleSystemSolver2 : public ParticleSystemSolver2 {
 
 public:
@@ -30,6 +33,18 @@ public:
 	void emitParticlesFromPanel();
 
 private:
+
+	//对panel的数据结构做一个矫正以便于局部坐标系下的计算
+	void correctPanelCoordinateSystem();
+
+	//只要边界形状不变，边界矩阵就不会变
+	void computeBoundaryMatrix(Eigen::Matrix3f& A);
+
+	//我也不想起这么长的名字
+	Vector2D computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
+
+	void vortexSheetSolve(double timeIntervalInSeconds);
+
 	void onBeginAdvanceTimeStep();
 
 	void onEndAdvanceTimeStep();

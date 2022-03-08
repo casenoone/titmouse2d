@@ -54,6 +54,8 @@ public:
 
 	const SurfaceElement2& lookAt(int i)const;
 
+	Vector2D midPoint(int i)const;
+
 public:
 
 	vector<SurfaceElement2> _data;
@@ -76,6 +78,9 @@ inline const SurfaceElement2& ExplicitSurface2::lookAt(int i)const {
 	return _data[i];
 }
 
+inline Vector2D ExplicitSurface2::midPoint(int i)const {
+	return 0.5 * (_data[i].start + _data[i].end);
+}
 
 inline int ExplicitSurface2::size()const {
 	return _data.size();

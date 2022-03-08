@@ -15,6 +15,7 @@ using namespace std;
 
 #include "../titmouse2d/src/Eulerian/VertexCenteredScalarGrid2.h"
 
+
 #include <array>
 
 int main() {
@@ -116,9 +117,19 @@ int main() {
 	auto mat_result = mat41 * mat42 * mat_b;
 	for (int i = 0; i < 3; ++i) {
 
-		cout << mat_result[i] << endl;
+		//cout << mat_result[i] << endl;
 
 	}
+
+	auto identity = DenseMatrix<double>::identityMatrix(6, 6);
+
+	for (int i = 0; i < 6; ++i) {
+		for (int j = 0; j < 6; ++j) {
+			cout << identity(i, j) << endl;
+		}
+	}
+
+
 
 	return 0;
 }
