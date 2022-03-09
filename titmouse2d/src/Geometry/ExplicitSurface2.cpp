@@ -13,6 +13,7 @@ SurfaceElement2::SurfaceElement2(Vector2D _start, Vector2D _end, Vector2D _norma
 	start(_start), end(_end), normal(_normal)
 {
 	normal.normalize();
+
 }
 
 ExplicitSurface2::ExplicitSurface2() {

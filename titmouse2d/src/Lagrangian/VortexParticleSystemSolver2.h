@@ -38,10 +38,13 @@ private:
 	void correctPanelCoordinateSystem();
 
 	//只要边界形状不变，边界矩阵就不会变
-	void computeBoundaryMatrix(Eigen::Matrix3f& A);
+	//这个函数只调用一次
+	void computeBoundaryMatrix();
 
 	//我也不想起这么长的名字
 	Vector2D computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
+
+	Vector2D computeSingleVelocityFromPanels(int index);
 
 	void vortexSheetSolve(double timeIntervalInSeconds);
 

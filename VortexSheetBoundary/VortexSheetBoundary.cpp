@@ -58,7 +58,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2I resolution(17, 17);
+Vector2I resolution(25, 25);
 Vector2D origin(0.0, 0.0);
 
 Vector2D center1(0.6, 1.0);
@@ -93,8 +93,7 @@ static void display(void)
 		drawPoint(pos[i].x, pos[i].y);
 	}
 
-
-
+	int m = 0;
 	for (auto i = explicitSphere1->_data.begin(); i != explicitSphere1->_data.end(); ++i) {
 		auto start = i->start;
 		auto end = i->end;
@@ -102,8 +101,9 @@ static void display(void)
 
 		////可视化法线
 		//auto midPoint = 0.5 * (start + end);
-		//auto normalEnd = midPoint + 0.2 * i->normal;
-		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
+		auto midPoint = explicitSphere1->midPoint(m++);
+		auto normalEnd = midPoint + 0.2 * i->normal;
+		drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
 
 
@@ -150,16 +150,17 @@ int main(int argc, char** argv)
 
 	UINT timerId = 1;
 	MSG msg;
-	SetTimer(NULL, timerId, 3000, TimerProc);
+	SetTimer(NULL, timerId, 1, TimerProc);
 
-	Eigen::Matrix3f A;
-	Eigen::Vector3f b;
-	A << 1, 2, 3, 4, 5, 6, 7, 8, 10;
-
-	cout << "Here is the matrix A:\n" << A << endl;
-	cout << "Here is the vector b:\n" << b << endl;
-	Eigen::Vector3f x = A.colPivHouseholderQr().solve(b);
-	cout << "The solution is:\n" << x << endl;
+	//Eigen::MatrixXd A;
+	//A.resize(3, 3);
+	//Eigen::Vector3d b;
+	//A << 4, -1, 0, -1, 4, -1, 0, -1, 4;
+	//b << 1, 4, -3;
+	//cout << "Here is the matrix A:\n" << A << endl;
+	//cout << "Here is the vector b:\n" << b << endl;
+	//Eigen::Vector3d x = A.colPivHouseholderQr().solve(b);
+	//cout << "The solution is:\n" << x << endl;
 
 
 	glutKeyboardFunc(key);       //键盘按下去时
@@ -179,7 +180,7 @@ int main(int argc, char** argv)
 void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 {
 	auto num = vpSolver->vortexParticleData()->numberOfParticles();
-	if (num < 600) {
+	if (num < 1500) {
 		vpSolver->emitParticlesFromPanel();
 		cout << "当前系统粒子数：" << num << endl;
 	}
