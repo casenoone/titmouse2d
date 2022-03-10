@@ -12,7 +12,8 @@ public:
 
 	FaceCenteredGrid2();
 
-	FaceCenteredGrid2(const Vector2I& resolution,
+	FaceCenteredGrid2(
+		const Vector2I& resolution,
 		const Vector2D& origin,
 		const Vector2D& initialValue);
 

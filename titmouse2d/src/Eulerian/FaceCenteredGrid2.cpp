@@ -15,16 +15,13 @@ FaceCenteredGrid2::FaceCenteredGrid2() :
 
 FaceCenteredGrid2::FaceCenteredGrid2(const Vector2I& resolution,
 	const Vector2D& origin,
-	const Vector2D& initialValue) :
-	_uLinearSampler(_dataU, Vector2D(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2D(0.0, 2.0 / resolution.y * 0.5))),
-	_vLinearSampler(_dataV, Vector2D(2.0 / resolution.x, 2.0 / resolution.y), (origin + Vector2D(2.0 / resolution.x * 0.5, 0.0)))
+	const Vector2D& initialValue)
 {
-
 	auto gridSpacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 	resize(resolution, gridSpacing, origin, initialValue);
-	_uLinearSampler._accessor = _dataU;
-	_vLinearSampler._accessor = _dataV;
 
+	_uLinearSampler.resize(_dataU, gridSpacing, _dataOriginU);
+	_vLinearSampler.resize(_dataV, gridSpacing, _dataOriginV);
 	solveSystemMarker.reSize(resolution.x, resolution.y, AIR);
 }
 
@@ -34,24 +31,6 @@ FaceCenteredGrid2::FaceCenteredGrid2(const FaceCenteredGrid2& other) {
 }
 
 
-
-//这个函数暂时不实现
-//void FaceCenteredGrid2::set(const FaceCenteredGrid2& other) {
-//    setGrid(other);
-//
-//    _dataU.set(other._dataU);
-//    _dataV.set(other._dataV);
-//    _dataOriginU = other._dataOriginU;
-//    _dataOriginV = other._dataOriginV;
-//
-//    resetSampler();
-//}
-
-FaceCenteredGrid2& FaceCenteredGrid2::operator=(
-	const FaceCenteredGrid2& other) {
-	//set(other);
-	return *this;
-}
 
 double& FaceCenteredGrid2::u(int i, int j) { return _dataU(i, j); }
 

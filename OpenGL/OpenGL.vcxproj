@@ -144,10 +144,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
     <ClCompile Include="OpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="MovingFaceCenteredGrid2.h" />
     <ClInclude Include="Shader\shader.h" />
   </ItemGroup>
   <ItemGroup>

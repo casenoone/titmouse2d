@@ -33,6 +33,11 @@ public:
 
 	LinearArraySampler2(const LinearArraySampler2& other);
 
+	void resize(
+		const Array2<T>& accessor,
+		const Vector2D& gridSpacing,
+		const Vector2D& gridOrigin);
+
 	T operator()(const Array2<T>& accessor, const Vector2D& x);
 
 	void getCoordinatesAndGradientWeights(
@@ -87,6 +92,17 @@ LinearArraySampler2<T>::LinearArraySampler2(
 	_accessor.set(accessor);
 }
 
+template<class T>
+void LinearArraySampler2<T>::resize(
+	const Array2<T>& accessor,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) {
+	_gridSpacing = gridSpacing;
+	_invGridSpacing = Vector2D(1 / gridSpacing.x, 1 / gridSpacing.y);
+
+	_origin = gridOrigin;
+	_accessor.set(accessor);
+}
 
 template<class T>
 LinearArraySampler2<T>::LinearArraySampler2(const LinearArraySampler2<T>& other) {
