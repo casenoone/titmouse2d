@@ -115,12 +115,8 @@ Vector2D FaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
 
 Vector2D FaceCenteredGrid2::sample(const Vector2D& x) const {
 
-
-	auto uSample = _uLinearSampler;
-	auto vSample = _vLinearSampler;
-
-	auto u = uSample(_dataU, x);
-	auto v = vSample(_dataV, x);
+	auto u = _uLinearSampler(_dataU, x);
+	auto v = _vLinearSampler(_dataV, x);
 	Vector2D result(u, v);
 	return result;
 }

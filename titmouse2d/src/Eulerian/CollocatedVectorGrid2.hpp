@@ -146,10 +146,9 @@ function<Vector2D(int, int)> CollocatedVectorGrid2<T>::dataPosition() const {
 template<class T>
 T CollocatedVectorGrid2<T>::sample(const Vector2D& x) const {
 
-	auto _sample = _linearSampler;
-	auto result = (*_sample)(this->_data, x);
+	auto result = (*_linearSampler)(this->_data, x);
 	return result;
-	//return _sampler(x);
+
 }
 
 

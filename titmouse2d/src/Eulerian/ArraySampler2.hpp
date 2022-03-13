@@ -38,7 +38,7 @@ public:
 		const Vector2D& gridSpacing,
 		const Vector2D& gridOrigin);
 
-	T operator()(const Array2<T>& accessor, const Vector2D& x);
+	T operator()(const Array2<T>& accessor, const Vector2D& x)const;
 
 	void getCoordinatesAndGradientWeights(
 		const Vector2D& x,
@@ -116,7 +116,7 @@ LinearArraySampler2<T>::LinearArraySampler2(const LinearArraySampler2<T>& other)
 
 
 template<class T>
-T LinearArraySampler2<T>::operator()(const Array2<T>& accessor, const Vector2D& x) {
+T LinearArraySampler2<T>::operator()(const Array2<T>& accessor, const Vector2D& x) const {
 	int i, j;
 	double fx, fy;
 	Vector2D normalizedX = (x - _origin) / _gridSpacing;

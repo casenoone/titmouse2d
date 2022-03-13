@@ -20,7 +20,6 @@ double ScalarGrid2::lookAt(int i, int j)const {
 
 
 double ScalarGrid2::sample(const Vector2D& x)const {
-	auto _sample = _linearSampler;
 	auto result = (*_linearSampler)(this->_data, x);
 	return result;
 }
