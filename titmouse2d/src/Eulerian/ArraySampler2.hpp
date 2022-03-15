@@ -90,6 +90,7 @@ LinearArraySampler2<T>::LinearArraySampler2(
 
 	_origin = gridOrigin;
 	_accessor.set(accessor);
+
 }
 
 template<class T>

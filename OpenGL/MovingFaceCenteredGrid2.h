@@ -55,6 +55,8 @@ private:
 
 	std::function<Vector2D(const Vector2D&)> _sampler;
 
+
+
 };
 typedef std::shared_ptr<MovingFaceCenteredGrid2> MovingFaceCenteredGrid2Ptr;
 
@@ -105,7 +107,13 @@ Array2D& MovingFaceCenteredGrid2::vDatas() {
 Vector2D MovingFaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
 Vector2D MovingFaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
 
-Vector2D MovingFaceCenteredGrid2::sample(const Vector2D& x) const {}
+Vector2D MovingFaceCenteredGrid2::sample(const Vector2D& x) const {
+
+	auto u = _uLinearSampler(_dataU, x);
+	auto v = _vLinearSampler(_dataV, x);
+	Vector2D result(u, v);
+	return result;
+}
 
 
 #endif

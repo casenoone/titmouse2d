@@ -94,6 +94,8 @@ void FlipSolver2::transferFromGridsToParticles() {
 		}
 	}
 
+
+	//每一个时步都会去构造一遍sampler？能否只构造一遍，这样效率更高
 	LinearArraySampler2<double> uSampler(_uDelta, flow->gridSpacing(), flow->origin());
 	LinearArraySampler2<double> vSampler(_vDelta, flow->gridSpacing(), flow->origin());
 

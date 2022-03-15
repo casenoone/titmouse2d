@@ -18,7 +18,91 @@ using namespace std;
 
 #include <array>
 
+//插入排序
+//时间复杂度：O(n2)
+void insert(double a[], int len) {
+	int temp;
+	for (int i = 1; i < len; ++i) {
+		temp = a[i];
+		int j = i - 1;
+		for (; j >= 0 && a[j] > temp; --j) {
+			a[j + 1] = a[j];
+		}
+		a[j + 1] = temp;
+	}
+
+}
+
+
+//选择排序
+void choice(double a[], int len) {
+	for (int i = 0; i < len; ++i) {
+		auto min_index = i;
+		for (int j = i + 1; j < len; ++j) {
+			if (a[j] < a[min_index]) {
+				min_index = j;
+			}
+		}
+		std::swap(a[i], a[min_index]);
+	}
+}
+
+
+//冒泡排序
+
+void bubbleSort(double a[], int len) {
+	bool exchange = false;
+	for (int i = len - 1; i >= 0; --i) {
+		for (int j = 0; j < i; ++j) {
+			if (a[j] > a[j + 1]) {
+				std::swap(a[j], a[j + 1]);
+				exchange = true;
+			}
+		}
+		if (exchange == false) {
+			break;
+		}
+	}
+}
+
+void shellHelp(double a[], int start, int& gap, int len) {
+	for (int i = start + gap; i < len; i += gap) {
+		auto pos = i;
+		auto currentValue = a[i];
+
+		while (pos > start && a[pos - gap] > currentValue) {
+			a[pos] = a[pos - gap];
+			pos = pos - gap;
+		}
+		a[pos] = currentValue;
+	}
+}
+
+//希尔排序
+void shellSort(double a[], int len) {
+
+	int gap = len / 2;
+	while (gap > 0) {
+		for (int i = 0; i < gap; ++i) {
+			shellHelp(a, i, gap, len);
+		}
+		gap = gap / 2;
+	}
+
+}
+
+
 int main() {
+
+
+	double a[] = { 5,3,1,2,9,6 ,4 };
+	int len = 7;
+
+	shellSort(a, len);
+
+	for (int i = 0; i < len; ++i) {
+		cout << a[i] << endl;
+	}
 
 
 	SteepestDescentSolver<double> SteepSolver;
@@ -125,7 +209,7 @@ int main() {
 
 	for (int i = 0; i < 6; ++i) {
 		for (int j = 0; j < 6; ++j) {
-			cout << identity(i, j) << endl;
+			//cout << identity(i, j) << endl;
 		}
 	}
 

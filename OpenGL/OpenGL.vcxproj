@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\opengl\Include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\opengl\Include;E:\zhangjian\eigen\eigen3;$(IncludePath)</IncludePath>
     <LibraryPath>D:\opengl\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,12 +143,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FoamVortexSolver.h" />
+    <ClCompile Include="FoamVortexSolver.cpp" />
+    <ClCompile Include="FoamVortexTest.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
     <ClCompile Include="OpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="FoamVortexData.h" />
     <ClInclude Include="MovingFaceCenteredGrid2.h" />
     <ClInclude Include="Shader\shader.h" />
   </ItemGroup>

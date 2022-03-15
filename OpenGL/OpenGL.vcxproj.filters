@@ -22,7 +22,16 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MovingFaceCenteredGrid2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FoamVortexSolver.h">
       <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FoamVortexTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FoamVortexSolver.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +42,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="MovingFaceCenteredGrid2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FoamVortexData.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
