@@ -61,21 +61,21 @@ private:
 typedef std::shared_ptr<MovingFaceCenteredGrid2> MovingFaceCenteredGrid2Ptr;
 
 
-double& MovingFaceCenteredGrid2::u(int i, int j) {
+inline double& MovingFaceCenteredGrid2::u(int i, int j) {
 	return _dataU(i, j);
 }
-double& MovingFaceCenteredGrid2::v(int i, int j) {
+inline double& MovingFaceCenteredGrid2::v(int i, int j) {
 	return _dataV(i, j);
 }
 
-MovingFaceCenteredGrid2::DataPositionFunc MovingFaceCenteredGrid2::uPosition() const {
+inline MovingFaceCenteredGrid2::DataPositionFunc MovingFaceCenteredGrid2::uPosition() const {
 	auto h = gridSpacing();
 
 	return [this, h](double i, double j) -> Vector2D {
 		return _dataOriginU + h * Vector2D({ i, j });
 	};
 }
-MovingFaceCenteredGrid2::DataPositionFunc MovingFaceCenteredGrid2::vPosition() const {
+inline MovingFaceCenteredGrid2::DataPositionFunc MovingFaceCenteredGrid2::vPosition() const {
 	auto h = gridSpacing();
 
 	return [this, h](double i, double j) -> Vector2D {
@@ -83,31 +83,31 @@ MovingFaceCenteredGrid2::DataPositionFunc MovingFaceCenteredGrid2::vPosition() c
 	};
 }
 
-Vector2I MovingFaceCenteredGrid2::resolution()const {
+inline Vector2I MovingFaceCenteredGrid2::resolution()const {
 	return _resolution;
 }
-Vector2D MovingFaceCenteredGrid2::gridSpacing()const {
+inline Vector2D MovingFaceCenteredGrid2::gridSpacing()const {
 	return _gridSpacing;
 }
 
-Size2 MovingFaceCenteredGrid2::uSize() {
+inline Size2 MovingFaceCenteredGrid2::uSize() {
 	return _dataU.dataSize();
 }
-Size2 MovingFaceCenteredGrid2::vSize() {
+inline Size2 MovingFaceCenteredGrid2::vSize() {
 	return _dataV.dataSize();
 }
 
-Array2D& MovingFaceCenteredGrid2::uDatas() {
+inline Array2D& MovingFaceCenteredGrid2::uDatas() {
 	return _dataU;
 }
-Array2D& MovingFaceCenteredGrid2::vDatas() {
+inline Array2D& MovingFaceCenteredGrid2::vDatas() {
 	return _dataV;
 }
 
-Vector2D MovingFaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
-Vector2D MovingFaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
+inline Vector2D MovingFaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
+inline Vector2D MovingFaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
 
-Vector2D MovingFaceCenteredGrid2::sample(const Vector2D& x) const {
+inline Vector2D MovingFaceCenteredGrid2::sample(const Vector2D& x) const {
 
 	auto u = _uLinearSampler(_dataU, x);
 	auto v = _vLinearSampler(_dataV, x);

@@ -13,6 +13,7 @@ public:
 
 	BoundingBox2(const Vector2D& point1, const Vector2D& point2);
 
+	bool IsInBox(const Vector2D& p)const;
 
 public:
 	Vector2D lowerCorner;
@@ -21,5 +22,13 @@ public:
 
 };
 
-
+inline bool BoundingBox2::IsInBox(const Vector2D& p)const {
+	if (p.x > lowerCorner.x &&
+		p.x<upperCorner.x &&
+		p.y>lowerCorner.y &&
+		p.y < upperCorner.y) {
+		return true;
+	}
+	return false;
+}
 #endif

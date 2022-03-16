@@ -30,10 +30,18 @@ public:
 
 	ExplicitSurface2Ptr transformToExplicitSurface()const;
 
+	virtual BoundingBox2 boundingBox()const {
+		return BoundingBox2(Vector2D(), Vector2D());
+	}
+
+	virtual BoundingBox2 computeBoundingBox() {
+		return BoundingBox2(Vector2D(), Vector2D());
+	}
+
 public:
 
 	VertexCenteredScalarGrid2Ptr _data;
-
+	BoundingBox2 _boundingBox;
 };
 
 

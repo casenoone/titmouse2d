@@ -6,6 +6,8 @@ using namespace std;
 
 #include "../Vector2.hpp"
 
+#include "../boundingbox2.h"
+
 class Surface2 {
 public:
 	Surface2();
@@ -26,6 +28,8 @@ public:
 
 
 	SurfaceQueryResult _surfaceQueryResult;
+
+
 
 	virtual SurfaceQueryResult getClosedInformation(const Vector2D& otherPoint) = 0;
 

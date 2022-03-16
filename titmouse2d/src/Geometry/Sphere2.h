@@ -23,6 +23,11 @@ public:
 
 	virtual const VertexCenteredScalarGrid2Ptr sdf() const;
 
+	BoundingBox2 boundingBox()const override;
+
+	BoundingBox2 computeBoundingBox()override;
+
+
 public:
 	Vector2D center();
 
@@ -38,6 +43,16 @@ private:
 
 };
 
+inline BoundingBox2 Sphere2::boundingBox()const {
 
+	return _boundingBox;
+}
+
+inline BoundingBox2 Sphere2::computeBoundingBox() {
+
+	_boundingBox.lowerCorner = Vector2D(_center.x - _r, _center.y - _r);
+	_boundingBox.upperCorner = Vector2D(_center.x + _r, _center.y + _r);
+	return _boundingBox;
+}
 
 #endif

@@ -7,7 +7,7 @@ using namespace std;
 #include <vector>
 
 #include "../titmouse2d/src/Geometry/Sphere2.h"
-#include "../titmouse2d/src/Lagrangian/VortexParticleSystemSolver2.h"
+#include "FoamVortexSolver.h"
 #include "../titmouse2d/src/SparseMatrix.hpp"
 
 #include <GL/glut.h>
@@ -64,11 +64,19 @@ Vector2D origin(0.0, 0.0);
 Vector2D center1(0.6, 1.0);
 double r1 = 0.2;
 
+
+
+
 auto sphere1 = make_shared<Sphere2>(center1, r1, resolution);
 
 auto explicitSphere1 = sphere1->transformToExplicitSurface();
 
-auto vpSolver = make_shared<VortexParticleSystemSolver2>();
+auto vpSolver = make_shared<FoamVortexSolver>();
+
+auto sphereBox = sphere1->boundingBox();
+
+Vector2I movingGridRes(15, 15);
+BoundingBox2 movingGridDomain(sphereBox.lowerCorner, sphereBox.upperCorner);
 
 
 double dt = 0.02;
@@ -85,11 +93,11 @@ static void display(void)
 
 	vpSolver->onAdvanceTimeStep(dt);
 
-	int numberOfParticles = vpSolver->vortexParticleData()->numberOfParticles();
+	int numberOfParticles = vpSolver->foamVortexData()->numberOfParticles();
 
 	for (int i = 0; i < numberOfParticles; ++i) {
 
-		auto pos = vpSolver->vortexParticleData()->positions();
+		auto pos = vpSolver->foamVortexData()->positions();
 		drawPoint(pos[i].x, pos[i].y);
 	}
 
@@ -103,10 +111,16 @@ static void display(void)
 		//auto midPoint = 0.5 * (start + end);
 		auto midPoint = explicitSphere1->midPoint(m++);
 		auto normalEnd = midPoint + 0.2 * i->normal;
-		drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
+		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
 
-
+	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
+	for (int i = 0; i < movingSize.x; ++i) {
+		for (int j = 0; j < movingSize.y; ++j) {
+			auto posfunc = vpSolver->foamVortexData()->movingGrid->uPosition();
+			drawPoint(posfunc(i, j).x, posfunc(i, j).y);
+		}
+	}*/
 
 	glutSwapBuffers();
 
@@ -145,8 +159,10 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 	vpSolver->setPanels(explicitSphere1);
-
+	vpSolver->setMovingGrid(movingGridRes, movingGridDomain);
 	vpSolver->emitParticlesFromPanel();
+
+
 
 	UINT timerId = 1;
 	MSG msg;
@@ -170,7 +186,7 @@ int main(int argc, char** argv)
 
 void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 {
-	auto num = vpSolver->vortexParticleData()->numberOfParticles();
+	auto num = vpSolver->foamVortexData()->numberOfParticles();
 	if (num < 1500) {
 		vpSolver->emitParticlesFromPanel();
 		cout << "当前系统粒子数：" << num << endl;

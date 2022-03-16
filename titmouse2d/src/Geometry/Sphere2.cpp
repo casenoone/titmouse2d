@@ -23,6 +23,7 @@ Sphere2::Sphere2(const Vector2D& center, const double& r,
 
 	//这个方法应该单独拎出来，把resolution传给computeSdf这个方法
 	computeSdf();
+	computeBoundingBox();
 }
 
 Sphere2::Sphere2(const VertexCenteredScalarGrid2& other) :

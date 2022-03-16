@@ -5,6 +5,9 @@
 #include "FoamVortexData.h"
 #include "../titmouse2d/src/Lagrangian/ParticleSystemSolver2.h"
 
+#include "../titmouse2d/src/boundingbox2.h"
+
+
 #include <Eigen/Dense>
 
 
@@ -30,6 +33,8 @@ public:
 		int resolutionY);
 
 	void setPanels(ExplicitSurface2Ptr surfaces);
+
+	void setMovingGrid(const Vector2I& resolution_, const BoundingBox2& domain_);
 
 	void emitParticlesFromPanel();
 

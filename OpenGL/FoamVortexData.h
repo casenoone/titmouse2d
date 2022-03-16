@@ -6,6 +6,8 @@
 
 #include "../titmouse2d/src/Geometry/ExplicitSurface2.h"
 
+#include "MovingFaceCenteredGrid2.h"
+
 class FoamVortexData : public ParticleSystemData2 {
 public:
 	FoamVortexData() = default;
@@ -14,6 +16,8 @@ public:
 
 public:
 	ExplicitSurface2Ptr panelSet;
+
+	MovingFaceCenteredGrid2Ptr movingGrid;
 
 	//保存每一帧从panel中点发射出来的粒子的索引
 	ArrayI midleList;
