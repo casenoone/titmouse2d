@@ -14,9 +14,9 @@
 #include <cmath>
 const double eps = 0.00001;
 
-const Vector2D vs_vec = Vector2D(0.1, 0.0);
+const Vector2D vs_vec = Vector2D(0.01, 0.0);
 
-double fv_eps = 0.01;
+double fv_eps = 0.001;
 
 //newPosition赋值给positions可以改用移动构造函数，提高效率
 
@@ -52,7 +52,7 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 		//在这里采样边界速度
 		votexSheetVel = computeSingleVelocityFromPanels(i);
-
+		//cout << "边界速度：" << votexSheetVel.x << endl;
 		//暂时不考虑受力
 		//需要注意的是，这个速度积分并不包括上面从涡量场恢复出来的速度场
 		_newVelocities[i] = vel[i] + votexSheetVel /* + forces[i] * timeIntervalInSeconds */;
@@ -173,11 +173,11 @@ void FoamVortexSolver::emitParticlesFromPanel() {
 
 	double dx = 0.05;
 	double dy = 0.05;
-	Vector2D center(0.2, 1);
+	Vector2D center(0.05, 1);
 	Vector2D lower(center.x - dx, center.y - dy);
 	Vector2D upper(center.x + dx, center.y + dy);
 
-	int emitNum = 5;
+	int emitNum = 1;
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
 
@@ -224,14 +224,16 @@ Vector2D FoamVortexSolver::computeSingleVelocityFromPanels(int index) {
 		auto r2 = vec_r2.getLength();
 		auto temp1 = vec_r1.dot(vec_r2) / (r1 * r2);
 		beta = acos(std::min(std::max(temp1, -1.0), 1.0));
-
+		//cout << gama[i] << endl;
 		temp2.x = beta / (2 * kPiD);
 		temp2.y = log10((r2 + fv_eps) / (r1 + fv_eps)) / (2 * kPiD);
 
 		temp2 = transToWorld * temp2 * gama[i];
+		//temp2 = temp2 * gama[i];
 		result += temp2;
 	}
 	//cout << result.x << "," << result.y << endl;
+	//return Vector2D(0.0, 0.0);
 	return result;
 }
 
@@ -262,7 +264,6 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector
 	result.y = log10((r2 + fv_eps) / (r1 + fv_eps)) / (2 * kPiD);
 
 	result = transToWorld * result;
-
 	return result;
 }
 
@@ -279,6 +280,7 @@ void FoamVortexSolver::transferFromParticlesToGrids() {
 	int n = data->numberOfParticles();
 
 	flow->fill(Vector2D(0.0, 0.0));
+
 	auto sizeU = flow->uSize();
 	auto sizeV = flow->vSize();
 	auto& u = flow->uDatas();
@@ -302,24 +304,28 @@ void FoamVortexSolver::transferFromParticlesToGrids() {
 		flow->vOrigin()
 	);
 
+	auto box = flow->domain();
+
 	for (int i = 0; i < n; ++i) {
 
-		std::array<Vector2I, 4> indices;
-		std::array<double, 4> weights;
+		//首先得确保粒子落在网格内
+		if (box.IsInBox(positions(i))) {
+			std::array<Vector2I, 4> indices;
+			std::array<double, 4> weights;
 
-		uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-		for (int j = 0; j < 4; ++j) {
-			u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
-			uWeight(indices[j].x, indices[j].y) += weights[j];
+			uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+			for (int j = 0; j < 4; ++j) {
+				u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
+				uWeight(indices[j].x, indices[j].y) += weights[j];
+			}
+
+			vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+			for (int j = 0; j < 4; ++j) {
+				v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
+				vWeight(indices[j].x, indices[j].y) += weights[j];
+			}
+
 		}
-
-		vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-		for (int j = 0; j < 4; ++j) {
-			v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
-			vWeight(indices[j].x, indices[j].y) += weights[j];
-		}
-
-
 	}
 
 	omp_set_num_threads(23);
@@ -385,13 +391,21 @@ void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 	auto& pos = data->positions();
 	auto& A = _foamVortexData->A;
 	auto& x = _foamVortexData->strength;
+	auto boundaryVel = data->movingGrid;
 
 	//组装b
 	Eigen::VectorXd b(panleSize);
 	for (int i = 0; i < panleSize; ++i) {
 		auto normal = panels->lookAt(i).normal;
-		b[i] = vs_vec.dot(normal);
+		auto pos = panels->midPoint(i);
+		auto vec = boundaryVel->sample(pos);
+		//vec = Vector2D(0, 0);
+		//cout << vec.x << " " << vec.y << endl;
+		b[i] = vec.dot(normal);
+		//cout << vec.dot(normal) << endl;
 	}
 	//cout << b << endl;
+	//cout << b << endl;
 	x = A.colPivHouseholderQr().solve(b);
+	//cout << x << endl;
 }

@@ -43,6 +43,11 @@ public:
 
 	void fill(const Vector2D& value);
 
+	BoundingBox2 domain() {
+		return _domain;
+	}
+
+
 private:
 	Array2D _dataU;
 	Array2D _dataV;
@@ -56,9 +61,6 @@ private:
 	LinearArraySampler2<double> _vLinearSampler;
 
 	std::function<Vector2D(const Vector2D&)> _sampler;
-
-
-
 };
 typedef std::shared_ptr<MovingFaceCenteredGrid2> MovingFaceCenteredGrid2Ptr;
 

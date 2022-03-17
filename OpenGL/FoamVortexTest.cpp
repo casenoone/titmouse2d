@@ -9,7 +9,7 @@ using namespace std;
 #include "../titmouse2d/src/Geometry/Sphere2.h"
 #include "FoamVortexSolver.h"
 #include "../titmouse2d/src/SparseMatrix.hpp"
-
+#include "../titmouse2d/src/Eulerian/MarchingCubes2.h"
 #include <GL/glut.h>
 
 #include <windows.h>
@@ -75,12 +75,16 @@ auto vpSolver = make_shared<FoamVortexSolver>();
 
 auto sphereBox = sphere1->boundingBox();
 
-Vector2I movingGridRes(15, 15);
-BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(0.05, 0.05),
-	sphereBox.upperCorner + Vector2D(0.05, 0.05));
+double movingCoffe = 0.1;
+
+Vector2I movingGridRes(20, 20);
+BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movingCoffe),
+	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
 
 
 double dt = 0.02;
+
+
 
 
 
@@ -115,13 +119,13 @@ static void display(void)
 		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
 
-	auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
+	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
 	for (int i = 0; i < movingSize.x; ++i) {
 		for (int j = 0; j < movingSize.y; ++j) {
 			auto posfunc = vpSolver->foamVortexData()->movingGrid->uPosition();
 			drawPoint(posfunc(i, j).x, posfunc(i, j).y);
 		}
-	}
+	}*/
 
 	glutSwapBuffers();
 
@@ -188,7 +192,7 @@ int main(int argc, char** argv)
 void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 {
 	auto num = vpSolver->foamVortexData()->numberOfParticles();
-	if (num < 1500) {
+	if (num < 1) {
 		vpSolver->emitParticlesFromPanel();
 		cout << "当前系统粒子数：" << num << endl;
 	}
