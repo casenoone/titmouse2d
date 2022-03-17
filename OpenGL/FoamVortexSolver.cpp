@@ -8,6 +8,7 @@
 
 #include "../titmouse2d/src/boundingbox2.h"
 
+#include <omp.h>
 
 #include <iostream>
 #include <cmath>
@@ -48,6 +49,8 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 		//}
 
 		Vector2D votexSheetVel;
+
+		//在这里采样边界速度
 		votexSheetVel = computeSingleVelocityFromPanels(i);
 
 		//暂时不考虑受力
@@ -62,6 +65,7 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	//onBeginAdvanceTimeStep();
+	transferFromParticlesToGrids();
 	vortexSheetSolve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
 	//ParticleSystemSolver2::resolveCollision();
@@ -261,6 +265,84 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector
 
 	return result;
 }
+
+
+//这里可作优化，即被固体占据的地方不必作P2G操作
+void FoamVortexSolver::transferFromParticlesToGrids() {
+	auto data = _foamVortexData;
+	auto& flow = data->movingGrid;
+
+	//暂时不考虑涡量场恢复出来的那个速度
+	//如果考虑上的话，此处的速度场应该要把涡量恢复出来的速度场也加上
+	auto& velocities = data->velocities();
+	auto& positions = data->positions();
+	int n = data->numberOfParticles();
+
+	flow->fill(Vector2D(0.0, 0.0));
+	auto sizeU = flow->uSize();
+	auto sizeV = flow->vSize();
+	auto& u = flow->uDatas();
+	auto& v = flow->vDatas();
+
+	Array2D uWeight;
+	uWeight.reSize(sizeU.x, sizeU.y, 0.0);
+	Array2D vWeight;
+	vWeight.reSize(sizeV.x, sizeV.y, 0.0);
+
+
+	LinearArraySampler2<double> uSampler(
+		u,
+		flow->gridSpacing(),
+		flow->uOrigin()
+	);
+
+	LinearArraySampler2<double> vSampler(
+		v,
+		flow->gridSpacing(),
+		flow->vOrigin()
+	);
+
+	for (int i = 0; i < n; ++i) {
+
+		std::array<Vector2I, 4> indices;
+		std::array<double, 4> weights;
+
+		uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+		for (int j = 0; j < 4; ++j) {
+			u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
+			uWeight(indices[j].x, indices[j].y) += weights[j];
+		}
+
+		vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
+		for (int j = 0; j < 4; ++j) {
+			v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
+			vWeight(indices[j].x, indices[j].y) += weights[j];
+		}
+
+
+	}
+
+	omp_set_num_threads(23);
+#pragma omp parallel for
+	for (int i = 0; i < sizeU.x; ++i) {
+		for (int j = 0; j < sizeU.y; ++j) {
+			if (uWeight(i, j) > 0.0) {
+				u(i, j) /= uWeight(i, j);
+			}
+		}
+	}
+
+	omp_set_num_threads(23);
+#pragma omp parallel for
+	for (int i = 0; i < sizeV.x; ++i) {
+		for (int j = 0; j < sizeV.y; ++j) {
+			if (vWeight(i, j) > 0.0) {
+				v(i, j) /= vWeight(i, j);
+			}
+		}
+	}
+}
+
 
 //要确保normal x (end - start) < 0
 void FoamVortexSolver::correctPanelCoordinateSystem() {

@@ -18,6 +18,9 @@ public:
 
 	T& operator()(int i, int j);
 
+
+	void shallowCopy(Array2<T>& other);
+
 	//实现智能指针类的深拷贝
 	//实际上添加一个copy方法更好
 	Array2<T>& operator=(const Array2<T>& other);
@@ -81,6 +84,11 @@ T& Array2<T>::operator()(int i, int j) {
 	return (*_data)[i][j];
 }
 
+template<typename T>
+void Array2<T>::shallowCopy(Array2<T>& other) {
+	_size = other._size;
+	_data = other._data;
+}
 
 template<typename T>
 Array2<T>& Array2<T>::operator=(const Array2<T>& other) {
@@ -159,6 +167,8 @@ Size2 Array2<T>::reSize(int nx, int ny, T initValue) {
 	_size = l;
 	return _size;
 }
+
+
 
 template<typename T>
 Size2  Array2<T>::dataSize() const {

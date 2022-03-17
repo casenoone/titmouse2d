@@ -18,3 +18,22 @@ MovingFaceCenteredGrid2::MovingFaceCenteredGrid2(
 	_uLinearSampler.resize(_dataU, _gridSpacing, _dataOriginU);
 	_vLinearSampler.resize(_dataV, _gridSpacing, _dataOriginV);
 }
+
+
+void MovingFaceCenteredGrid2::fill(const Vector2D& value) {
+	auto sizeU = uSize();
+
+	for (int i = 0; i < sizeU.x; ++i) {
+		for (int j = 0; j < sizeU.y; ++j) {
+			_dataU(i, j) = value.x;
+		}
+	}
+
+
+	auto sizeV = vSize();
+	for (int i = 0; i < sizeV.x; ++i) {
+		for (int j = 0; j < sizeV.y; ++j) {
+			_dataV(i, j) = value.y;
+		}
+	}
+}

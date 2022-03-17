@@ -70,8 +70,6 @@ void PicSolver2::transferFromParticlesToGrids() {
 	Array2D vWeight;
 	vWeight.reSize(sizeV.x, sizeV.y, 0.0);
 
-	_uMarkers.reSize(u.dataSize().x, u.dataSize().y, 0.0);
-	_vMarkers.reSize(v.dataSize().x, v.dataSize().y, 0.0);
 
 	LinearArraySampler2<double> uSampler(
 		u,
@@ -95,7 +93,6 @@ void PicSolver2::transferFromParticlesToGrids() {
 		for (int j = 0; j < 4; ++j) {
 			u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
 			uWeight(indices[j].x, indices[j].y) += weights[j];
-			_uMarkers(indices[j].x, indices[j].y) = 1;
 		}
 
 		vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
@@ -106,7 +103,6 @@ void PicSolver2::transferFromParticlesToGrids() {
 			if (velocities[i].y == 0)weights[j] = 0;
 
 			vWeight(indices[j].x, indices[j].y) += weights[j];
-			_vMarkers(indices[j].x, indices[j].y) = 1;
 		}
 
 

@@ -76,7 +76,8 @@ auto vpSolver = make_shared<FoamVortexSolver>();
 auto sphereBox = sphere1->boundingBox();
 
 Vector2I movingGridRes(15, 15);
-BoundingBox2 movingGridDomain(sphereBox.lowerCorner, sphereBox.upperCorner);
+BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(0.05, 0.05),
+	sphereBox.upperCorner + Vector2D(0.05, 0.05));
 
 
 double dt = 0.02;
@@ -114,13 +115,13 @@ static void display(void)
 		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
 
-	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
+	auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
 	for (int i = 0; i < movingSize.x; ++i) {
 		for (int j = 0; j < movingSize.y; ++j) {
 			auto posfunc = vpSolver->foamVortexData()->movingGrid->uPosition();
 			drawPoint(posfunc(i, j).x, posfunc(i, j).y);
 		}
-	}*/
+	}
 
 	glutSwapBuffers();
 

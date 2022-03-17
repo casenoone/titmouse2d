@@ -31,6 +31,12 @@ public:
 		const Vector2D& gridSpacing,
 		const Vector2D& gridOrigin);
 
+	LinearArraySampler2(
+		Array2<T>& accessor,
+		const Vector2D& gridSpacing,
+		const Vector2D& gridOrigin);
+
+
 	LinearArraySampler2(const LinearArraySampler2& other);
 
 	void resize(
@@ -90,7 +96,21 @@ LinearArraySampler2<T>::LinearArraySampler2(
 
 	_origin = gridOrigin;
 	_accessor.set(accessor);
+	//cout << "Éî¿½±´" << endl;
+}
 
+template<class T>
+LinearArraySampler2<T>::LinearArraySampler2(
+	Array2<T>& accessor,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) {
+	_gridSpacing = gridSpacing;
+	_invGridSpacing = Vector2D(1 / gridSpacing.x, 1 / gridSpacing.y);
+
+	_origin = gridOrigin;
+	_accessor.shallowCopy(accessor);
+	//_accessor = accessor;
+	//cout << "Ç³¿½±´" << endl;
 }
 
 template<class T>

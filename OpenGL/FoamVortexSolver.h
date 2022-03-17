@@ -40,6 +40,9 @@ public:
 
 private:
 
+	//把粒子的速度映射到网格上，方便做速度采样
+	void transferFromParticlesToGrids();
+
 	//对panel的数据结构做一个矫正以便于局部坐标系下的计算
 	void correctPanelCoordinateSystem();
 

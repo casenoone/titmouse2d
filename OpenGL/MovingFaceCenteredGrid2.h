@@ -41,6 +41,8 @@ public:
 
 	Vector2D sample(const Vector2D& x) const;
 
+	void fill(const Vector2D& value);
+
 private:
 	Array2D _dataU;
 	Array2D _dataV;
