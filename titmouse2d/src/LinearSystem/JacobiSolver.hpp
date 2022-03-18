@@ -56,11 +56,6 @@ SparseMatrix<T> JacobiSolver<T>::computeD(const SparseMatrix<T>& A) const {
 
 
 
-
-
-//目标矩阵是A
-//将A分解为D和R
-//其中D为对角矩阵
 template<class T>
 void JacobiSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
 	this->_r = (b - A * x);
@@ -68,7 +63,6 @@ void JacobiSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const Vec
 	auto relerr = err;
 	while (this->_iterNum <= this->_maxIterNum) {
 		auto D = computeD(A);
-
 
 		auto R = A - D;
 

@@ -8,11 +8,17 @@
 
 #include "../titmouse2d/src/boundingbox2.h"
 
+#include "../titmouse2d/src/LinearSystem/JacobiSolver.hpp"
+
+#include "../titmouse2d/src/LinearSystem/ConjugateGradientSolver.hpp"
 #include <omp.h>
 
 #include <iostream>
 #include <cmath>
-const double eps = 0.00001;
+
+#include <Eigen/SVD>
+#include <Eigen/LU>
+const double vorticity_eps = 0.00001;
 
 const Vector2D vs_vec = Vector2D(0.01, 0.0);
 
@@ -93,7 +99,7 @@ Vector2D FoamVortexSolver::computeUSingle(const Vector2D& pos, int i)const {
 	auto vorticity = _foamVortexData->vorticities();
 	auto r2 = (pos - position[i]).getLengthSquared();
 	auto uv = Vector2D(position[i].y - pos.y, pos.x - position[i].x);
-	return vorticity[i] * uv / (kPiD * r2) * 0.5 * (1.0 - pow(kE, -r2 / (eps * eps)));
+	return vorticity[i] * uv / (kPiD * r2) * 0.5 * (1.0 - pow(kE, -r2 / (vorticity_eps * vorticity_eps)));
 }
 
 void FoamVortexSolver::setData(int numberOfParticles,
@@ -379,10 +385,10 @@ void FoamVortexSolver::computeBoundaryMatrix() {
 			A(j, i) = -u_ji;
 		}
 	}
+	cout << A << endl;
 }
 
 //在这里求解vortex sheet strength
-//为了简化，在panel上采样速度的我们暂时用一个常数项代替
 void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 	auto data = _foamVortexData;
 	auto n = data->numberOfParticles();
@@ -393,6 +399,9 @@ void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 	auto& x = _foamVortexData->strength;
 	auto boundaryVel = data->movingGrid;
 
+	VectorN<double> temp_b(panleSize);
+
+
 	//组装b
 	Eigen::VectorXd b(panleSize);
 	for (int i = 0; i < panleSize; ++i) {
@@ -402,10 +411,35 @@ void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 		//vec = Vector2D(0, 0);
 		//cout << vec.x << " " << vec.y << endl;
 		b[i] = vec.dot(normal);
-		//cout << vec.dot(normal) << endl;
+		temp_b(i) = b[i];
+		//cout << temp_b(i) << endl;
 	}
-	//cout << b << endl;
-	//cout << b << endl;
-	x = A.colPivHouseholderQr().solve(b);
+
+	SparseMatrix<double> temp_A(panleSize, panleSize);
+	for (int i = 0; i < panleSize; ++i) {
+		for (int j = 0; j < panleSize; ++j) {
+			temp_A.insert(i, j, A(i, j));
+
+		}
+	}
+
+	temp_A.build();
+
+
+	VectorN<double> temp_x(panleSize);
+	x.resize(panleSize);
+	JacobiSolver<double> jsolver;
+	ConjugateGradientSolver<double> cgSolver;
+	//jsolver.compute(temp_A, temp_x, temp_b);
+	//cgSolver.compute(temp_A, temp_x, temp_b);
+	//cout << 999999999 << endl;
 	//cout << x << endl;
+	x = A.colPivHouseholderQr().solve(b);
+	//x = A.bdcSvd().solve(b);
+	for (int i = 0; i < panleSize; ++i) {
+		//x[i] = temp_x[i];
+		//if (x[i] != 0)cout << x[i] << endl;
+	}
+	//cout << 999 << endl;
+	//cout << b << endl;
 }

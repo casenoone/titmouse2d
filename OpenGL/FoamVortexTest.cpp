@@ -33,7 +33,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(2.05f);//缺省是1
+	glPointSize(4.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * 10, (y - 1) * 10, 0);
@@ -58,11 +58,11 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2I resolution(25, 25);
+Vector2I resolution(10, 10);
 Vector2D origin(0.0, 0.0);
 
-Vector2D center1(0.6, 1.0);
-double r1 = 0.2;
+Vector2D center1(0.8, 1.0);
+double r1 = 0.3;
 
 
 
@@ -75,9 +75,9 @@ auto vpSolver = make_shared<FoamVortexSolver>();
 
 auto sphereBox = sphere1->boundingBox();
 
-double movingCoffe = 0.1;
+double movingCoffe = 0.2;
 
-Vector2I movingGridRes(20, 20);
+Vector2I movingGridRes(13, 13);
 BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movingCoffe),
 	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
 
@@ -175,6 +175,7 @@ int main(int argc, char** argv)
 
 
 
+
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时
 	glutReshapeFunc(resize);     //改变窗口大小时
@@ -197,3 +198,6 @@ void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 		cout << "当前系统粒子数：" << num << endl;
 	}
 }
+
+
+
