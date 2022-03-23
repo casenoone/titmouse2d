@@ -58,11 +58,11 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2I resolution(10, 10);
+Vector2I resolution(14, 14);
 Vector2D origin(0.0, 0.0);
 
-Vector2D center1(0.8, 1.0);
-double r1 = 0.3;
+Vector2D center1(0.9, 1.1);
+double r1 = 0.4;
 
 
 
@@ -75,9 +75,9 @@ auto vpSolver = make_shared<FoamVortexSolver>();
 
 auto sphereBox = sphere1->boundingBox();
 
-double movingCoffe = 0.2;
+double movingCoffe = 0.3;
 
-Vector2I movingGridRes(13, 13);
+Vector2I movingGridRes(15, 15);
 BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movingCoffe),
 	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
 
@@ -183,8 +183,43 @@ int main(int argc, char** argv)
 
 	glutMainLoop();
 
+	Eigen::MatrixXd A(4, 4);
+	Eigen::VectorXd b(4);
 
+	A << 1.14689, 1.06625, 1.18281, 1.13222,
+		-0.150321, -0.195824, -0.195824, -0.241327,
+		-0.397666, -0.337486, -0.337486, -0.277307,
+		-1.62209, -1.55612, -1.67269, -1.63677;
 
+	/*A(0, 0) = 1.14689;
+	A(0, 1) = 1.06625;
+	A(0, 2) = 1.18281;
+	A(0, 3) = 1.3222;
+	A(1, 0) = -0.150321;
+	A(1, 1) = -0.195824;
+	A(1, 2) = -0.195824;
+	A(1, 3) = -0.241327;
+	A(2, 0) = -0.397666;
+	A(2, 1) = -0.337486;
+	A(2, 2) = -0.337486;
+	A(2, 3) = -0.277307;
+	A(3, 0) = -1.62209;
+	A(3, 1) = -1.55612;
+	A(3, 2) = -1.67269;
+	A(3, 3) = -1.63677;*/
+
+	/*b[0] = -0.00332102;
+	b[1] = 0;
+	b[2] = 0;
+	b[3] = 0;*/
+
+	b[0] = -0.00332102;
+	b[1] = 0;
+	b[2] = 0;
+	b[3] = 0;
+
+	Eigen::VectorXd x = A.colPivHouseholderQr().solve(b);
+	cout << x << endl;
 
 	return 0;
 }
