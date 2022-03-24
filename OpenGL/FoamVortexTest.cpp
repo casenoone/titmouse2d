@@ -58,7 +58,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2I resolution(14, 14);
+Vector2I resolution(12, 12);
 Vector2D origin(0.0, 0.0);
 
 Vector2D center1(0.9, 1.1);
@@ -77,7 +77,7 @@ auto sphereBox = sphere1->boundingBox();
 
 double movingCoffe = 0.3;
 
-Vector2I movingGridRes(15, 15);
+Vector2I movingGridRes(20, 20);
 BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movingCoffe),
 	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
 
@@ -113,10 +113,10 @@ static void display(void)
 		drawLine(start.x, start.y, end.x, end.y);
 
 		////可视化法线
-		//auto midPoint = 0.5 * (start + end);
 		auto midPoint = explicitSphere1->midPoint(m++);
-		auto normalEnd = midPoint + 0.2 * i->normal;
-		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
+		auto normalEnd = start + 0.2 * i->normal;
+		drawPoint(start.x, start.y);
+		//drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
 	}
 
 	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();

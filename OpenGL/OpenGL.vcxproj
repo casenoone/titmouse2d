@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="FoamVortexSolver.h" />
     <ClCompile Include="FoamVortexSolver.cpp" />
+    <ClCompile Include="FoamVortexSolver2.cpp" />
     <ClCompile Include="FoamVortexTest.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
