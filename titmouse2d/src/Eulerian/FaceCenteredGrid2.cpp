@@ -1,6 +1,8 @@
 #include "FaceCenteredGrid2.h"
 #include "../ConstVar.h"
 
+#include <array>
+
 FaceCenteredGrid2::FaceCenteredGrid2() :
 	_uLinearSampler(_dataU, Vector2D(1.0, 1.0), Vector2D()),
 	_vLinearSampler(_dataV, Vector2D(1.0, 1.0), Vector2D())
@@ -36,10 +38,10 @@ double& FaceCenteredGrid2::u(int i, int j) { return _dataU(i, j); }
 
 double& FaceCenteredGrid2::v(int i, int j) { return _dataV(i, j); }
 
-Vector2D FaceCenteredGrid2::valueAtCellCenter(int i, int j) {
+Vector2D FaceCenteredGrid2::valueAtCellCenter(int i, int j) const {
 
-	return Vector2D(_dataU(i, j) + _dataU(i + 1, j),
-		_dataV(i, j) + _dataV(i, j + 1)) * 0.5;
+	return Vector2D(_dataU.lookAt(i, j) + _dataU.lookAt(i + 1, j),
+		_dataV.lookAt(i, j) + _dataV.lookAt(i, j + 1)) * 0.5;
 }
 
 
@@ -57,7 +59,7 @@ double FaceCenteredGrid2::divergenceAtCellCenter(int i, int j) {
 }
 
 
-double FaceCenteredGrid2::curlAtCellCenter(int i, int j) {
+double FaceCenteredGrid2::curlAtCellCenter(int i, int j) const {
 	auto res = resolution();
 
 
@@ -183,38 +185,38 @@ double FaceCenteredGrid2::divergence(const Vector2D& x) const {
 	return result;
 }
 
-//暂时不实现
+
 double FaceCenteredGrid2::curl(const Vector2D& x) const {
-	//ssize_t i, j;
-	//double fx, fy;
-	//Vector2D cellCenterOrigin = origin() + 0.5 * gridSpacing();
+	int i, j;
+	double fx, fy;
+	Vector2D cellCenterOrigin = origin() + 0.5 * gridSpacing();
 
-	//Vector2D normalizedX = (x - cellCenterOrigin) / gridSpacing();
+	Vector2D normalizedX = (x - cellCenterOrigin) / gridSpacing();
 
-	//getBarycentric(normalizedX.x, 0, static_cast<ssize_t>(resolution().x) - 1,
-	//    &i, &fx);
-	//getBarycentric(normalizedX.y, 0, static_cast<ssize_t>(resolution().y) - 1,
-	//    &j, &fy);
+	getBarycentric(normalizedX.x, 0, static_cast<int>(resolution().x) - 1,
+		&i, &fx);
+	getBarycentric(normalizedX.y, 0, static_cast<int>(resolution().y) - 1,
+		&j, &fy);
 
-	//std::array<Point2UI, 4> indices;
-	//std::array<double, 4> weights;
+	std::array<Vector2I, 4> indices;
+	std::array<double, 4> weights;
 
-	//indices[0] = Point2UI(i, j);
-	//indices[1] = Point2UI(i + 1, j);
-	//indices[2] = Point2UI(i, j + 1);
-	//indices[3] = Point2UI(i + 1, j + 1);
+	indices[0] = Vector2I(i, j);
+	indices[1] = Vector2I(i + 1, j);
+	indices[2] = Vector2I(i, j + 1);
+	indices[3] = Vector2I(i + 1, j + 1);
 
-	//weights[0] = (1.0 - fx) * (1.0 - fy);
-	//weights[1] = fx * (1.0 - fy);
-	//weights[2] = (1.0 - fx) * fy;
-	//weights[3] = fx * fy;
+	weights[0] = (1.0 - fx) * (1.0 - fy);
+	weights[1] = fx * (1.0 - fy);
+	weights[2] = (1.0 - fx) * fy;
+	weights[3] = fx * fy;
 
-	//double result = 0.0;
+	double result = 0.0;
 
-	//for (int n = 0; n < 4; ++n) {
-	//    result += weights[n] * curlAtCellCenter(indices[n].x, indices[n].y);
-	//}
-	double result = 0;
+	for (int n = 0; n < 4; ++n) {
+		result += weights[n] * curlAtCellCenter(indices[n].x, indices[n].y);
+	}
+
 	return result;
 }
 

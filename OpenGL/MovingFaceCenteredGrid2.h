@@ -39,6 +39,12 @@ public:
 	Vector2D uOrigin() const;
 	Vector2D vOrigin() const;
 
+	Vector2D valueAtCellCenter(int i, int j)const;
+
+	double curl(const Vector2D& x)const;
+
+	double curlAtCellCenter(int i, int j)const;
+
 	Vector2D sample(const Vector2D& x) const;
 
 	void fill(const Vector2D& value);
@@ -71,6 +77,14 @@ inline double& MovingFaceCenteredGrid2::u(int i, int j) {
 inline double& MovingFaceCenteredGrid2::v(int i, int j) {
 	return _dataV(i, j);
 }
+
+inline Vector2D MovingFaceCenteredGrid2::valueAtCellCenter(int i, int j) const {
+
+	return Vector2D(_dataU.lookAt(i, j) + _dataU.lookAt(i + 1, j),
+		_dataV.lookAt(i, j) + _dataV.lookAt(i, j + 1)) * 0.5;
+}
+
+
 
 inline MovingFaceCenteredGrid2::DataPositionFunc MovingFaceCenteredGrid2::uPosition() const {
 	auto h = gridSpacing();
@@ -110,6 +124,7 @@ inline Array2D& MovingFaceCenteredGrid2::vDatas() {
 
 inline Vector2D MovingFaceCenteredGrid2::uOrigin() const { return _dataOriginU; }
 inline Vector2D MovingFaceCenteredGrid2::vOrigin() const { return _dataOriginV; }
+
 
 inline Vector2D MovingFaceCenteredGrid2::sample(const Vector2D& x) const {
 

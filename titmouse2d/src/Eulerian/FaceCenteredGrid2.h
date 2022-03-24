@@ -31,11 +31,11 @@ public:
 
 	double& v(int i, int j);
 
-	Vector2D valueAtCellCenter(int i, int j);
+	Vector2D valueAtCellCenter(int i, int j)const;
 
 	double divergenceAtCellCenter(int i, int j);
 
-	double curlAtCellCenter(int i, int j);
+	double curlAtCellCenter(int i, int j)const;
 
 	DataPositionFunc uPosition() const;
 
