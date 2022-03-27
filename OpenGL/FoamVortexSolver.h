@@ -36,9 +36,13 @@ public:
 
 	void setMovingGrid(const Vector2I& resolution_, const BoundingBox2& domain_);
 
-	void emitParticlesFromPanel();
+	void emitParticles();
+
+
 
 private:
+
+	void emitParticlesFromPanel();
 
 	//把粒子的速度映射到网格上，方便做速度采样
 	void transferFromParticlesToGrids();

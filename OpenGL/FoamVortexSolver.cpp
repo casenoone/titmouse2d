@@ -15,9 +15,11 @@
 
 #include <iostream>
 #include <cmath>
-
+#include <windows.h>
 #include <Eigen/SVD>
 #include <Eigen/LU>
+
+
 
 Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector2D normal_i) {
 	double cos_theta = normal_i.y; // cos(theta)
@@ -30,7 +32,7 @@ Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector
 
 const double vorticity_eps = 0.00001;
 
-const Vector2D vs_vec = Vector2D(0.02, 0.0);
+const Vector2D vs_vec = Vector2D(0.6, 0.0);
 
 double fv_eps = 0.00000001;
 
@@ -87,6 +89,7 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	timeIntegration(timeIntervalInSeconds);
 	//ParticleSystemSolver2::resolveCollision();
 	onEndAdvanceTimeStep();
+	//emitParticles();
 }
 
 
@@ -146,7 +149,37 @@ void FoamVortexSolver::setMovingGrid(const Vector2I& resolution_,
 }
 
 
+void FoamVortexSolver::emitParticles() {
+	auto data = _foamVortexData;
+	auto n = data->numberOfParticles();
+	auto& pos = data->positions();
+	auto& vel = data->velocities();
 
+	double dx = 0.05;
+	double dy = 0.05;
+	Vector2D center(0.1, 1.0);
+	Vector2D lower(center.x - dx, center.y - dy);
+	Vector2D upper(center.x + dx, center.y + dy);
+
+	int emitNum = 10;
+	Vector2D tempPos;
+	for (int i = 0; i < emitNum; ++i) {
+
+		tempPos.x = random_double(lower.x, upper.x);
+		tempPos.y = random_double(lower.y, upper.y);
+		//tempPos.x = 0.05;
+		//tempPos.y = 0.9;
+		pos.push(tempPos);
+		vel.push(Vector2D(0.0, 0.0));
+		data->vorticities().push(0.0);
+		_newVelocities.push(Vector2D(0.0, 0.0));
+		_newPositions.push(Vector2D());
+
+		data->numberOfParticles()++;
+	}
+
+
+}
 
 void FoamVortexSolver::emitParticlesFromPanel() {
 	auto data = _foamVortexData;
@@ -160,7 +193,7 @@ void FoamVortexSolver::emitParticlesFromPanel() {
 	Vector2D lower(center.x - dx, center.y - dy);
 	Vector2D upper(center.x + dx, center.y + dy);
 
-	int emitNum = 200;
+	int emitNum = 1;
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
 

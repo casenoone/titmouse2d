@@ -24,6 +24,7 @@
     <ProjectGuid>{41eee663-1bd2-4a3e-8b4f-280e1daa0fd6}</ProjectGuid>
     <RootNamespace>VortexSheetBoundary</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Render2D</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -140,7 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="VortexSheetBoundary.cpp" />
+    <ClCompile Include="particleRender2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\titmouse2d\titmouse2d.vcxproj">

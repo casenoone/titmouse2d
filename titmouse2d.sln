@@ -33,9 +33,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Advection2d", "Advection2d\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FreeFalling2d", "FreeFalling2d\FreeFalling2d.vcxproj", "{5A1CA3D0-2BA0-4AA3-B1E3-FC62B0561DD7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL", "OpenGL\OpenGL.vcxproj", "{F2DCCE0E-43ED-4F15-B6CB-059C9727FE88}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Experiment1", "OpenGL\OpenGL.vcxproj", "{F2DCCE0E-43ED-4F15-B6CB-059C9727FE88}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VortexSheetBoundary", "VortexSheetBoundary\VortexSheetBoundary.vcxproj", "{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render2D", "VortexSheetBoundary\VortexSheetBoundary.vcxproj", "{41EEE663-1BD2-4A3E-8B4F-280E1DAA0FD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

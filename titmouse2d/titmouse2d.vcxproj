@@ -277,6 +277,7 @@
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />
     <ClInclude Include="src\SparseMatrix.hpp" />
     <ClInclude Include="src\TempMovingCollider2.h" />
+    <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\Vector2.hpp" />
     <ClInclude Include="src\Vector3.hpp" />
     <ClInclude Include="src\VectorN.hpp" />

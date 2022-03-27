@@ -15,7 +15,7 @@ using namespace std;
 #include <GL/glut.h>
 #include <cmath>
 
-const float SCREEN_SIZE = 600;
+const float SCREEN_SIZE = 400;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 static void key(unsigned char key, int x, int y)
 {
@@ -33,7 +33,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.0f);//缺省是1
+	glPointSize(4.0f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -137,9 +137,9 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 
-	int numberOfParticles = 200;
-	int resolutionX = 10;
-	int resolutionY = 10;
+	int numberOfParticles = 500;
+	int resolutionX = 20;
+	int resolutionY = 20;
 	vector <Vector2D> temp1;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = rand() / double(RAND_MAX) + 0.3;

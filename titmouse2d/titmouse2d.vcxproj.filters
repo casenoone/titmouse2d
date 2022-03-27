@@ -428,5 +428,8 @@
     <ClInclude Include="src\Geometry\RegularPolygon.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Timer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

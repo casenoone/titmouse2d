@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="VortexSheetBoundary.cpp">
+    <ClCompile Include="particleRender2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
