@@ -98,6 +98,11 @@ public:
 	//计算当前vector在normal上的投影
 	Vector2<T> projected(const Vector2<T>& normal) const;
 
+	static Vector2<T> zero() {
+		return Vector2<T>(0, 0);
+	}
+
+
 public:
 	T x;
 	T y;

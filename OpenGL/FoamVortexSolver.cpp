@@ -18,11 +18,21 @@
 
 #include <Eigen/SVD>
 #include <Eigen/LU>
+
+Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector2D normal_i) {
+	double cos_theta = normal_i.y; // cos(theta)
+	double sin_theta = normal_i.x; // sin(theta)
+	Vector2D vel = Vector2D(cos_theta * vel_local.x + sin_theta * vel_local.y,
+		-sin_theta * vel_local.x + cos_theta * vel_local.y);
+	return vel;
+}
+
+
 const double vorticity_eps = 0.00001;
 
-const Vector2D vs_vec = Vector2D(0.007, 0.0);
+const Vector2D vs_vec = Vector2D(0.02, 0.0);
 
-double fv_eps = 0.0001;
+double fv_eps = 0.00000001;
 
 //newPosition赋值给positions可以改用移动构造函数，提高效率
 
@@ -58,6 +68,7 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 		//在这里采样边界速度
 		votexSheetVel = computeSingleVelocityFromPanels(i);
+		//cout << votexSheetVel.x << endl;
 		//cout << "边界速度：" << votexSheetVel.x << endl;
 		//暂时不考虑受力
 		//需要注意的是，这个速度积分并不包括上面从涡量场恢复出来的速度场
@@ -99,6 +110,7 @@ Vector2D FoamVortexSolver::computeUSingle(const Vector2D& pos, int i)const {
 	auto vorticity = _foamVortexData->vorticities();
 	auto r2 = (pos - position[i]).getLengthSquared();
 	auto uv = Vector2D(position[i].y - pos.y, pos.x - position[i].x);
+	return vorticity[i] * uv / (kPiD * r2) * 0.5 * (1.0 - pow(kE, -r2 / (vorticity_eps * vorticity_eps)));
 	return vorticity[i] * uv / (kPiD * r2) * 0.5 * (1.0 - pow(kE, -r2 / (vorticity_eps * vorticity_eps)));
 }
 
@@ -142,13 +154,13 @@ void FoamVortexSolver::emitParticlesFromPanel() {
 	auto& pos = data->positions();
 	auto& vel = data->velocities();
 
-	double dx = 0.05;
-	double dy = 0.05;
-	Vector2D center(0.2, 1.4);
+	double dx = 0.3;
+	double dy = 0.4;
+	Vector2D center(0.5, 1.0);
 	Vector2D lower(center.x - dx, center.y - dy);
 	Vector2D upper(center.x + dx, center.y + dy);
 
-	int emitNum = 1;
+	int emitNum = 200;
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
 
@@ -169,15 +181,17 @@ void FoamVortexSolver::emitParticlesFromPanel() {
 }
 
 
-
+//计算index点处的速度值
+//这里的index是流体粒子的index
 Vector2D FoamVortexSolver::computeSingleVelocityFromPanels(int index) {
 	auto& pos = _foamVortexData->positions();
 	auto panel = _foamVortexData->panelSet;
 	auto panelSize = panel->size();
-	const auto gama = _foamVortexData->strength;
+	auto& gama = _foamVortexData->strength;
 
 	Vector2D result;
 	for (int i = 0; i < panelSize; ++i) {
+
 		auto start = panel->lookAt(i).start;
 		auto end = panel->lookAt(i).end;
 		auto normal = panel->lookAt(i).normal;
@@ -195,19 +209,27 @@ Vector2D FoamVortexSolver::computeSingleVelocityFromPanels(int index) {
 		auto r1 = vec_r1.getLength();
 		auto r2 = vec_r2.getLength();
 		auto temp1 = vec_r1.dot(vec_r2) / (r1 * r2);
-		beta = acos(std::min(std::max(temp1, -1.0), 1.0));
+		//beta = acos(std::min(std::max(temp1, -1.0), 1.0));
+		beta = acos(temp1);
+		if (isnan(beta)) {
+			beta = kPiD;
+		}
+
 		//cout << gama[i] << endl;
 		temp2.x = beta / (2.0 * kPiD);
 		temp2.y = log((r2 + fv_eps) / (r1 + fv_eps)) / (2.0 * kPiD);
 
-		temp2 = transToWorld * temp2 * gama[i];
+		//temp2 = transToWorld * temp2 * gama[i];
+		temp2 = temp2 * gama[i];
+		temp2 = vel_to_world(temp2, start, normal);
 		result += temp2;
 	}
-	//cout << result.x << "," << result.y << endl;
-	//return Vector2D(0.0, 0.0);
 	return result;
 }
 
+
+
+//这里的index是panel的index
 Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector2D& midPoint) {
 	auto panel = _foamVortexData->panelSet;
 	auto start = panel->lookAt(index).start;
@@ -215,8 +237,8 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector
 	auto normal = panel->lookAt(index).normal;
 
 	//首先，组装坐标变换矩阵
-	auto transToLocal = Matrix3x3<double>::transToLocalMatrix(normal, start);
-	auto transToWorld = transToLocal.inverse();
+	//auto transToLocal = Matrix3x3<double>::transToLocalMatrix(normal, start);
+	//auto transToWorld = transToLocal.inverse();
 
 	Vector2D result;
 
@@ -227,98 +249,23 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector
 	auto r1 = vec_r1.getLength();
 	auto r2 = vec_r2.getLength();
 	auto temp1 = vec_r1.dot(vec_r2) / (r1 * r2);
-	beta = acos(std::min(std::max(temp1, -1.0), 1.0));
-
+	//beta = acos(std::min(std::max(temp1, -1.0), 1.0));
+	beta = acos(temp1);
+	if (isnan(beta)) {
+		beta = kPiD;
+	}
 	//eq(16) eq(17)
 	//按照论文上的逻辑来看，这里算出来的是局部坐标系下的表示
 	result.x = beta / (2.0 * kPiD);
 	result.y = log((r2 + fv_eps) / (r1 + fv_eps)) / (2.0 * kPiD);
 
-	result = transToWorld * result;
+	//result = transToWorld * result;
+	result = vel_to_world(result, start, normal);
+	//cout << result.x << endl;
 	return result;
 }
 
 
-//这里可作优化，即被固体占据的地方不必作P2G操作
-void FoamVortexSolver::transferFromParticlesToGrids() {
-	auto data = _foamVortexData;
-	auto& flow = data->movingGrid;
-
-	//暂时不考虑涡量场恢复出来的那个速度
-	//如果考虑上的话，此处的速度场应该要把涡量恢复出来的速度场也加上
-	auto& velocities = data->velocities();
-	auto& positions = data->positions();
-	int n = data->numberOfParticles();
-
-	flow->fill(Vector2D(0.0, 0.0));
-
-	auto sizeU = flow->uSize();
-	auto sizeV = flow->vSize();
-	auto& u = flow->uDatas();
-	auto& v = flow->vDatas();
-
-	Array2D uWeight;
-	uWeight.reSize(sizeU.x, sizeU.y, 0.0);
-	Array2D vWeight;
-	vWeight.reSize(sizeV.x, sizeV.y, 0.0);
-
-
-	LinearArraySampler2<double> uSampler(
-		u,
-		flow->gridSpacing(),
-		flow->uOrigin()
-	);
-
-	LinearArraySampler2<double> vSampler(
-		v,
-		flow->gridSpacing(),
-		flow->vOrigin()
-	);
-
-	auto box = flow->domain();
-
-	for (int i = 0; i < n; ++i) {
-
-		//首先得确保粒子落在网格内
-		if (box.IsInBox(positions(i))) {
-			std::array<Vector2I, 4> indices;
-			std::array<double, 4> weights;
-
-			uSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-			for (int j = 0; j < 4; ++j) {
-				u(indices[j].x, indices[j].y) += velocities[i].x * weights[j];
-				uWeight(indices[j].x, indices[j].y) += weights[j];
-			}
-
-			vSampler.getCoordinatesAndWeights(positions[i], &indices, &weights);
-			for (int j = 0; j < 4; ++j) {
-				v(indices[j].x, indices[j].y) += velocities[i].y * weights[j];
-				vWeight(indices[j].x, indices[j].y) += weights[j];
-			}
-
-		}
-	}
-
-	omp_set_num_threads(23);
-#pragma omp parallel for
-	for (int i = 0; i < sizeU.x; ++i) {
-		for (int j = 0; j < sizeU.y; ++j) {
-			if (uWeight(i, j) > 0.0) {
-				u(i, j) /= uWeight(i, j);
-			}
-		}
-	}
-
-	omp_set_num_threads(23);
-#pragma omp parallel for
-	for (int i = 0; i < sizeV.x; ++i) {
-		for (int j = 0; j < sizeV.y; ++j) {
-			if (vWeight(i, j) > 0.0) {
-				v(i, j) /= vWeight(i, j);
-			}
-		}
-	}
-}
 
 
 //要确保normal x (end - start) < 0
@@ -329,7 +276,11 @@ void FoamVortexSolver::correctPanelCoordinateSystem() {
 	for (int i = 0; i < size; ++i) {
 		auto& data = (*panels)[i];
 		if (data.normal.cross(data.end - data.start) > 0) {
-			std::swap(data.end, data.start);
+
+			//std::swap(data.end, data.start);
+		}
+		else {
+			//cout << i << endl;
 		}
 	}
 }
@@ -347,18 +298,29 @@ void FoamVortexSolver::computeBoundaryMatrix() {
 	for (int j = 0; j < panelSize; ++j) {
 		auto normal = panels->lookAt(j).normal;
 		for (int i = 0; i < panelSize; ++i) {
-			auto mid_i = panels->midPoint(i);
-			auto u_ji = computeUnitVelocityFromPanels(j, mid_i).dot(normal);
+			auto mid_j = panels->midPoint(j);
+			auto u_ji = computeUnitVelocityFromPanels(i, mid_j).dot(normal);
+			//cout << "A:" << computeUnitVelocityFromPanels(j, mid_i).x << "," << computeUnitVelocityFromPanels(j, mid_i).y << endl;
+			//cout << "B:" << normal.x << "," << normal.y << endl;
+			//cout << "C:" << u_ji << endl;
+			//cout << computeUnitVelocityFromPanels(j, mid_i).x << endl;
+			//cout << mid_i.x << endl;
+			//cout << normal.y << endl;
+			//cout << u_ji << endl;
 			A(j, i) = -u_ji;
 		}
 	}
 
 	for (int i = 0; i < panelSize; ++i) {
-		A(panelSize, i) = 1;
+		//cout << panels->lookAt(i).start.x << "," << panels->lookAt(i).start.y << ","
+		//	<< panels->lookAt(i).end.x << "," << panels->lookAt(i).end.y << endl;
+		//cout << panels->midPoint(i).x << "," << panels->midPoint(i).y << endl;
+		//cout << panels->lookAt(i).normal.x << endl;
+		A(panelSize, i) = 1.0;
 	}
 
 
-	cout << A << endl;
+	//cout << A << endl;
 }
 
 //在这里求解vortex sheet strength
@@ -376,8 +338,6 @@ void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 	Eigen::VectorXd b(panelSize + 1);
 	for (int i = 0; i < panelSize; ++i) {
 		auto normal = panels->lookAt(i).normal;
-		auto pos = panels->midPoint(i);
-		//auto vec = boundaryVel->sample(pos);
 		auto vec = vs_vec;
 		b[i] = vec.dot(normal);
 	}
@@ -388,13 +348,12 @@ void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 	//x = A.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(b);
 	x = A.colPivHouseholderQr().solve(b);
 
-
 	for (int i = 0; i < panelSize; ++i) {
 		k += x[i];
 	}
 	//if (k != 0)
-		//cout << k << endl;
-	//cout << x << endl;
+	//	cout << k << endl;
+	////cout << x << endl;
 
 
 

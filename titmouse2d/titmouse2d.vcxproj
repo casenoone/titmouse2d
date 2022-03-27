@@ -167,6 +167,7 @@
     <ClCompile Include="src\Geometry\ImplicitSurface2.cpp" />
     <ClCompile Include="src\Geometry\Plane2.cpp" />
     <ClCompile Include="src\Geometry\Ray2.cpp" />
+    <ClCompile Include="src\Geometry\RegularPolygon.cpp" />
     <ClCompile Include="src\Geometry\Sphere2.cpp" />
     <ClCompile Include="src\Geometry\Surface2.cpp" />
     <ClCompile Include="src\Hybrid\ApicSolver2.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
     <ClInclude Include="src\Geometry\Heart2.h" />
+    <ClInclude Include="src\Geometry\RegularPolygon.h" />
     <ClInclude Include="src\LinearSystem\DirectSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussianElimSolver.hpp" />
     <ClInclude Include="src\LinearSystem\RelaxedJacobiSolver.hpp" />

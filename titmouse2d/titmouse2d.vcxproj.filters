@@ -159,6 +159,9 @@
     <ClCompile Include="src\Matrix3x3.hpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Geometry\RegularPolygon.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -420,6 +423,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\LinearSystem\GaussianElimSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Geometry\RegularPolygon.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

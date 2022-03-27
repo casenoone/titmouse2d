@@ -10,10 +10,14 @@ using namespace std;
 #include "FoamVortexSolver.h"
 #include "../titmouse2d/src/SparseMatrix.hpp"
 #include "../titmouse2d/src/Eulerian/MarchingCubes2.h"
+#include "../titmouse2d/src/Geometry/RegularPolygon.h"
 #include <GL/glut.h>
 
 #include <windows.h>
 #include <Eigen/Dense>
+
+const float SCREEN_SIZE = 400;
+const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 
 static void CALLBACK TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
@@ -36,7 +40,7 @@ void drawPoint(double x, double y)
 	glPointSize(4.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
-	glVertex3f((x - 1) * 10, (y - 1) * 10, 0);
+	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
 
@@ -49,8 +53,8 @@ void drawLine(double x1, double y1, double x2, double y2) {
 	glLineWidth(1);//设置线段宽度
 	glBegin(GL_LINES);
 	glColor3f(1.0, 0.0, 0.0);
-	glVertex2f((x1 - 1) * 10, (y1 - 1) * 10); //定点坐标范围
-	glVertex2f((x2 - 1) * 10, (y2 - 1) * 10);
+	glVertex2f((x1 - 1) * DRAW_SIZE, (y1 - 1) * DRAW_SIZE); //定点坐标范围
+	glVertex2f((x2 - 1) * DRAW_SIZE, (y2 - 1) * DRAW_SIZE);
 	glEnd();
 	glFlush();
 }
@@ -84,7 +88,7 @@ BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movi
 
 double dt = 0.02;
 
-
+ExplicitSurface2Ptr obj1 = make_shared<RegularPolygon>(14, Vector2D(1, 1), 0.2);
 
 
 
@@ -107,17 +111,30 @@ static void display(void)
 	}
 
 	int m = 0;
-	for (auto i = explicitSphere1->_data.begin(); i != explicitSphere1->_data.end(); ++i) {
+	for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
 		auto start = i->start;
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
 
 		////可视化法线
-		auto midPoint = explicitSphere1->midPoint(m++);
-		auto normalEnd = start + 0.2 * i->normal;
-		drawPoint(start.x, start.y);
-		//drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
+		auto midPoint = obj1->midPoint(m++);
+		auto normalEnd = midPoint + 0.2 * i->normal;
+		drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
+
+
+	//int m = 0;
+	//for (auto i = explicitSphere1->_data.begin(); i != explicitSphere1->_data.end(); ++i) {
+	//	auto start = i->start;
+	//	auto end = i->end;
+	//	drawLine(start.x, start.y, end.x, end.y);
+
+	//	////可视化法线
+	//	auto midPoint = explicitSphere1->midPoint(m++);
+	//	auto normalEnd = start + 0.2 * i->normal;
+	//	drawPoint(start.x, start.y);
+	//	//drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
+	//}
 
 	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
 	for (int i = 0; i < movingSize.x; ++i) {
@@ -156,14 +173,15 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(200, 200);
+	glutInitWindowSize(SCREEN_SIZE, SCREEN_SIZE);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("titmouse2d");
 
 	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
 	glShadeModel(GL_FLAT);
 
-	vpSolver->setPanels(explicitSphere1);
+	//vpSolver->setPanels(explicitSphere1);
+	vpSolver->setPanels(obj1);
 	vpSolver->setMovingGrid(movingGridRes, movingGridDomain);
 	vpSolver->emitParticlesFromPanel();
 
@@ -191,7 +209,7 @@ int main(int argc, char** argv)
 void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 {
 	auto num = vpSolver->foamVortexData()->numberOfParticles();
-	if (num < 3) {
+	if (num < 500) {
 		vpSolver->emitParticlesFromPanel();
 		cout << "当前系统粒子数：" << num << endl;
 	}

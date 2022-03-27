@@ -8,6 +8,28 @@
 
 #include "MovingFaceCenteredGrid2.h"
 
+class Panel {
+public:
+	Panel() :
+		start(Vector2D::zero()),
+		end(Vector2D::zero()),
+		mid(Vector2D::zero()),
+		normal(Vector2D::zero()),
+		tangent(Vector2D::zero()),
+		gamma(0.0)
+	{}
+
+
+public:
+	Vector2D start;
+	Vector2D end;
+	Vector2D mid;
+	Vector2D normal;
+	Vector2D tangent;
+	double gamma;
+};
+
+
 class FoamVortexData : public ParticleSystemData2 {
 public:
 	FoamVortexData() = default;
@@ -19,8 +41,7 @@ public:
 
 	MovingFaceCenteredGrid2Ptr movingGrid;
 
-	//保存每一帧从panel中点发射出来的粒子的索引
-	ArrayI midleList;
+	//Array<Panel> panelSet;
 
 	Eigen::VectorXd strength;
 
