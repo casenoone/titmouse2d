@@ -68,7 +68,7 @@ public:
 	Vector3<T> getNormalize()const;
 
 	//叉积运算
-	T cross(const Vector3<T>& vec)const;
+	Vector3<T> cross(const Vector3<T>& vec)const;
 
 	//求两vector之间的距离，此时vector代表点
 	T dis(const Vector3<T>& vec)const;
@@ -267,8 +267,8 @@ Vector3<T> Vector3<T>::getNormalize()const {
 }
 
 template<class T>
-T Vector3<T>::cross(const Vector3<T>& vec)const {
-	return (y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x);
+Vector3<T> Vector3<T>::cross(const Vector3<T>& vec)const {
+	return Vector3<T>(y * vec.z - z * vec.y, z * vec.x - x * vec.z, x * vec.y - y * vec.x);
 }
 
 template<class T>

@@ -130,11 +130,11 @@
 //	//	auto end = i->end;
 //	//	drawLine(start.x, start.y, end.x, end.y);
 //
-//	//	////可视化法线
+//	//	//可视化法线
 //	//	auto midPoint = explicitSphere1->midPoint(m++);
 //	//	auto normalEnd = start + 0.2 * i->normal;
 //	//	drawPoint(start.x, start.y);
-//	//	//drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
+//	//	drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
 //	//}
 //
 //	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
@@ -200,44 +200,44 @@
 //	glutReshapeFunc(resize);     //改变窗口大小时
 //	glutDisplayFunc(display);    //绘制窗zz口显示时
 //
-//	//glutMainLoop();
+//	glutMainLoop();
 //
 //
-//		//这里是写入文件
-//	//记得重新算的时候要删掉 原来的文件夹
-//	int frame = 10000;
-//
-//	auto position = vpSolver->foamVortexData()->positions();
-//
-//
-//	int interval = 1;
-//
-//	string outfilename = "1";
-//
-//	system("mkdir FoamTest3");
-//
-//	for (int i = 0; i < frame; i += 1) {
-//
-//		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest3\\" + outfilename + ".txt", ios::app);
-//		auto num = vpSolver->foamVortexData()->numberOfParticles();
-//		for (int n = 0; n < num; ++n) {
-//			auto x = position[n].x;
-//			auto y = position[n].y;
-//			out << x << "," << y << endl;
-//		}
-//		vpSolver->onAdvanceTimeStep(0.005);
-//		sim_step++;
-//		auto temp1 = std::atoi(outfilename.c_str());
-//		temp1++;
-//		outfilename = std::to_string(temp1);
-//
-//		if (sim_step % 50 == 0 && num < 3000) {
-//			vpSolver->emitParticles();
-//			cout << "当前系统粒子数：" << num << endl;
-//		}
-//
-//
-//	}
+//	//	//这里是写入文件
+//	////记得重新算的时候要删掉 原来的文件夹
+//	//	int frame = 10000;
+//	//
+//	//	auto position = vpSolver->foamVortexData()->positions();
+//	//
+//	//
+//	//	int interval = 1;
+//	//
+//	//	string outfilename = "1";
+//	//
+//	//	system("mkdir FoamTest3");
+//	//
+//	//	for (int i = 0; i < frame; i += 1) {
+//	//
+//	//		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest3\\" + outfilename + ".txt", ios::app);
+//	//		auto num = vpSolver->foamVortexData()->numberOfParticles();
+//	//		for (int n = 0; n < num; ++n) {
+//	//			auto x = position[n].x;
+//	//			auto y = position[n].y;
+//	//			out << x << "," << y << endl;
+//	//		}
+//	//		vpSolver->onAdvanceTimeStep(0.005);
+//	//		sim_step++;
+//	//		auto temp1 = std::atoi(outfilename.c_str());
+//	//		temp1++;
+//	//		outfilename = std::to_string(temp1);
+//	//
+//	//		if (sim_step % 50 == 0 && num < 3000) {
+//	//			vpSolver->emitParticles();
+//	//			cout << "当前系统粒子数：" << num << endl;
+//	//		}
+//	//
+//	//
+//	//	}
 //
 //
 //
@@ -248,7 +248,7 @@
 //void CALLBACK TimerProc(HWND hwnd, UINT Msg, UINT idEvent, DWORD dwTime)
 //{
 //	auto num = vpSolver->foamVortexData()->numberOfParticles();
-//	if (num < 2000 && sim_step % 10 == 0) {
+//	if (num < 300 && sim_step % 10 == 0) {
 //		vpSolver->emitParticles();
 //		cout << "当前系统粒子数：" << num << endl;
 //	}

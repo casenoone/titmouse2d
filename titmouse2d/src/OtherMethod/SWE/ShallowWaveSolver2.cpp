@@ -1,5 +1,6 @@
 #include "ShallowWaveSolver2.h"
 #include "../../LinearSystem/ConjugateGradientSolver.hpp"
+#include "../../Vector3.hpp"
 
 const double shallow_H = 1.0;
 
@@ -9,7 +10,7 @@ const double shallow_beta = 0.9;
 //控制耦合稳定性
 const double shallow_gama = 0.4;
 
-const double shallow_e = 0.2;
+const double shallow_e = 0.02;
 
 //假设标签的值为1时是被固体占据
 void ShallowWaveSolver2::setCouplingCellNum() {
@@ -263,4 +264,106 @@ void ShallowWaveSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	pressureSolve(timeIntervalInSeconds);
 	couplingSolve(timeIntervalInSeconds);
 	applyGhostVolumn(timeIntervalInSeconds);
+}
+
+
+int ShallowWaveSolver2::getWaterSurface(float* mesh) {
+	auto data = _shallowWaveData;
+	auto h = data->height;
+	double temp_k = 30;
+	auto res = data->resolution();
+	int len = res.x * res.y;
+	int k = 0;
+	int triNum = 0;
+	double temppp = -5;
+	auto posFunc = data->height->dataPosition();
+	for (int j = res.y - 1; j > 0; j--) {
+		for (int i = 0; i < res.x - 1; ++i) {
+			auto pos1 = posFunc(i, j);
+			auto tempX1 = (pos1.x - 1) * temp_k;
+			auto tempY1 = (h->lookAt(i, j) - 1) * temp_k;
+			auto tempZ1 = (pos1.y - 1) * temp_k;
+			Vector3D p1(tempX1, tempY1, tempZ1);
+
+			auto pos2 = posFunc(i + 1, j);
+			auto tempX2 = (pos2.x - 1) * temp_k;
+			auto tempY2 = (h->lookAt(i + 1, j) - 1) * temp_k;
+			auto tempZ2 = (pos2.y - 1) * temp_k;
+			Vector3D p2(tempX2, tempY2, tempZ2);
+
+			auto pos3 = posFunc(i, j - 1);
+			auto tempX3 = (pos3.x - 1) * temp_k;
+			auto tempY3 = (h->lookAt(i, j - 1) - 1) * temp_k;
+			auto tempZ3 = (pos3.y - 1) * temp_k;
+			Vector3D p3(tempX3, tempY3, tempZ3);
+
+			auto n = (p2 - p1).cross(p3 - p1).getNormalize();
+			mesh[k] = p1.x;
+			mesh[k + 1] = p1.y;
+			mesh[k + 2] = p1.z;
+			mesh[k + 3] = n.x;
+			mesh[k + 4] = n.y;
+			mesh[k + 5] = n.z;
+			mesh[k + 6] = p2.x;
+			mesh[k + 7] = p2.y;
+			mesh[k + 8] = p2.z;
+			mesh[k + 9] = n.x;
+			mesh[k + 10] = n.y;
+			mesh[k + 11] = n.z;
+			mesh[k + 12] = p3.x;
+			mesh[k + 13] = p3.y;
+			mesh[k + 14] = p3.z;
+			mesh[k + 15] = n.x;
+			mesh[k + 16] = n.y;
+			mesh[k + 17] = n.z;
+			k += 18;
+			triNum += 18;
+		}
+	}
+	//k += 1;
+	for (int j = res.y - 1; j > 0; j--) {
+		for (int i = 1; i < res.x; ++i) {
+			auto pos1 = posFunc(i, j);
+			auto tempX1 = (pos1.x - 1) * temp_k;
+			auto tempY1 = (h->lookAt(i, j) - 1) * temp_k;
+			auto tempZ1 = (pos1.y - 1) * temp_k;
+			Vector3D p1(tempX1, tempY1, tempZ1);
+			auto pos2 = posFunc(i, j - 1);
+			auto tempX2 = (pos2.x - 1) * temp_k;
+			auto tempY2 = (h->lookAt(i, j - 1) - 1) * temp_k;
+			auto tempZ2 = (pos2.y - 1) * temp_k;
+			Vector3D p2(tempX2, tempY2, tempZ2);
+
+			auto pos3 = posFunc(i - 1, j - 1);
+			auto tempX3 = (pos3.x - 1) * temp_k;
+			auto tempY3 = (h->lookAt(i - 1, j - 1) - 1) * temp_k;
+			auto tempZ3 = (pos3.y - 1) * temp_k;
+			Vector3D p3(tempX3, tempY3, tempZ3);
+
+			auto n = (p2 - p1).cross(p3 - p2).getNormalize();
+
+			mesh[k + 0] = p1.x;
+			mesh[k + 1] = p1.y;
+			mesh[k + 2] = p1.z;
+			mesh[k + 3] = n.x;
+			mesh[k + 4] = n.y;
+			mesh[k + 5] = n.z;
+			mesh[k + 6] = p2.x;
+			mesh[k + 7] = p2.y;
+			mesh[k + 8] = p2.z;
+			mesh[k + 9] = n.x;
+			mesh[k + 10] = n.y;
+			mesh[k + 11] = n.z;
+			mesh[k + 12] = p3.x;
+			mesh[k + 13] = p3.y;
+			mesh[k + 14] = p3.z;
+			mesh[k + 15] = n.x;
+			mesh[k + 16] = n.y;
+			mesh[k + 17] = n.z;
+			k += 18;
+			triNum += 18;
+		}
+	}
+	//cout << triNum << endl;
+	return triNum;
 }

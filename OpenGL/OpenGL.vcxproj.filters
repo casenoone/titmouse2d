@@ -36,6 +36,9 @@
     <ClCompile Include="FoamVortexSolver2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="shalowwaveTest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader\shader.h">

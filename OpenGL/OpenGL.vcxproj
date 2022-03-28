@@ -151,6 +151,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
     <ClCompile Include="OpenGL.cpp" />
+    <ClCompile Include="shalowwaveTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />

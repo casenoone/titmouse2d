@@ -25,6 +25,9 @@ public:
 	//我们暂时就假设障碍物是一个长方体
 	void setMarkers(const Vector2D& lower, const Vector2D& upper);
 
+	//返回水面数据以供OpenGL渲染
+	int getWaterSurface(float mesh[]);
+
 	static Builder builder();
 
 private:
