@@ -32,7 +32,9 @@ Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector
 
 const double vorticity_eps = 0.00001;
 
-const Vector2D vs_vec = Vector2D(0.6, 0.0);
+const Vector2D vs_vec = Vector2D(1000., 0.0);
+
+double vs_tau = 1.0;
 
 double fv_eps = 0.00000001;
 
@@ -57,24 +59,18 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 	for (int i = 0; i < n; ++i) {
 		Vector2D vortexVel;
-		//for (int j = 0; j < n; ++j) {
-		//	if (i != j) {
-		//		//这个需要在data类里新增一个成员变量
-		//		//所以当需要某个时刻粒子的速度时
-		//		//返回的应该是velocity + vortexVel
-		//		vortexVel += computeUSingle(positions[i], j);
-		//	}
-		//}
+		for (int j = 0; j < n; ++j) {
+			if (i != j) {
+				//这个需要在data类里新增一个成员变量
+				//所以当需要某个时刻粒子的速度时
+				//返回的应该是velocity + vortexVel
+				vortexVel += computeUSingle(positions[i], j);
+			}
+		}
 
 		Vector2D votexSheetVel;
-
-		//在这里采样边界速度
 		votexSheetVel = computeSingleVelocityFromPanels(i);
-		//cout << votexSheetVel.x << endl;
-		//cout << "边界速度：" << votexSheetVel.x << endl;
-		//暂时不考虑受力
-		//需要注意的是，这个速度积分并不包括上面从涡量场恢复出来的速度场
-		//_newVelocities[i] = vel[i] + votexSheetVel /* + forces[i] * timeIntervalInSeconds */;
+
 		_newVelocities[i] = vs_vec + votexSheetVel;
 		_newPositions[i] = positions[i] + timeIntervalInSeconds * (_newVelocities[i] + vortexVel);
 	}
@@ -149,61 +145,102 @@ void FoamVortexSolver::setMovingGrid(const Vector2I& resolution_,
 }
 
 
+//void FoamVortexSolver::emitParticles() {
+//	auto data = _foamVortexData;
+//	auto n = data->numberOfParticles();
+//	auto& pos = data->positions();
+//	auto& vel = data->velocities();
+//
+//	double dx = 0.05;
+//	double dy = 0.05;
+//	Vector2D center(0.3, 1.0);
+//	Vector2D lower(center.x - dx, center.y - dy);
+//	Vector2D upper(center.x + dx, center.y + dy);
+//
+//	int emitNum = 10;
+//	Vector2D tempPos;
+//	for (int i = 0; i < emitNum; ++i) {
+//
+//		tempPos.x = random_double(lower.x, upper.x);
+//		tempPos.y = random_double(lower.y, upper.y);
+//
+//		pos.push(tempPos);
+//		vel.push(Vector2D(0.0, 0.0));
+//		data->vorticities().push(0.000);
+//		_newVelocities.push(Vector2D(0.0, 0.0));
+//		_newPositions.push(Vector2D());
+//
+//		data->numberOfParticles()++;
+//	}
+//
+//
+//}
+
+
 void FoamVortexSolver::emitParticles() {
 	auto data = _foamVortexData;
 	auto n = data->numberOfParticles();
 	auto& pos = data->positions();
 	auto& vel = data->velocities();
+	auto panels = data->panelSet;
 
-	double dx = 0.05;
-	double dy = 0.05;
-	Vector2D center(0.1, 1.0);
-	Vector2D lower(center.x - dx, center.y - dy);
-	Vector2D upper(center.x + dx, center.y + dy);
-
-	int emitNum = 10;
+	auto gamma = data->strength;
+	int emitNum = panels->size();
 	Vector2D tempPos;
+
 	for (int i = 0; i < emitNum; ++i) {
+		for (int j = 0; j < 3; ++j) {
 
-		tempPos.x = random_double(lower.x, upper.x);
-		tempPos.y = random_double(lower.y, upper.y);
-		//tempPos.x = 0.05;
-		//tempPos.y = 0.9;
-		pos.push(tempPos);
-		vel.push(Vector2D(0.0, 0.0));
-		data->vorticities().push(0.0);
-		_newVelocities.push(Vector2D(0.0, 0.0));
-		_newPositions.push(Vector2D());
+			auto line = panels->lookAt(i).end - panels->lookAt(i).start;
+			double panelLength = line.getLength();
+			auto lambda = random_double(0, panelLength);
+			tempPos = panels->lookAt(i).start + lambda * line;
+			tempPos += panels->lookAt(i).normal * random_double(0.01, 0.02);
 
-		data->numberOfParticles()++;
+			pos.push(tempPos);
+			vel.push(Vector2D(0.0, 0.0));
+			double temp_vorticity = 0;
+
+			data->vorticities().push(temp_vorticity);
+			_newVelocities.push(Vector2D(0.0, 0.0));
+			_newPositions.push(Vector2D());
+
+			data->numberOfParticles()++;
+		}
 	}
 
 
 }
 
-void FoamVortexSolver::emitParticlesFromPanel() {
+
+void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 	auto data = _foamVortexData;
 	auto n = data->numberOfParticles();
 	auto& pos = data->positions();
 	auto& vel = data->velocities();
+	auto panels = data->panelSet;
 
-	double dx = 0.3;
-	double dy = 0.4;
-	Vector2D center(0.5, 1.0);
-	Vector2D lower(center.x - dx, center.y - dy);
-	Vector2D upper(center.x + dx, center.y + dy);
-
-	int emitNum = 1;
+	auto gamma = data->slipStrength;
+	int emitNum = panels->size();
 	Vector2D tempPos;
+
 	for (int i = 0; i < emitNum; ++i) {
 
-		tempPos.x = random_double(lower.x, upper.x);
-		tempPos.y = random_double(lower.y, upper.y);
-		//tempPos.x = 0.05;
-		//tempPos.y = 0.9;
+		auto line = panels->lookAt(i).end - panels->lookAt(i).start;
+		double panelLength = line.getLength();
+		auto lambda = random_double(0, panelLength);
+		//tempPos = panels->lookAt(i).start + lambda * line;
+		tempPos = panels->midPoint(i);
+		tempPos += panels->lookAt(i).normal * random_double(0.01, 0.02);
+
 		pos.push(tempPos);
 		vel.push(Vector2D(0.0, 0.0));
-		data->vorticities().push(0.0);
+		double temp_vorticity = 0;
+		if (gamma.size() > 0) {
+			temp_vorticity = (vs_tau * gamma[i] * timeIntervalInSeconds * panelLength);
+		}
+		//cout << temp_vorticity << endl;
+		data->vorticities().push(temp_vorticity);
 		_newVelocities.push(Vector2D(0.0, 0.0));
 		_newPositions.push(Vector2D());
 
@@ -212,6 +249,8 @@ void FoamVortexSolver::emitParticlesFromPanel() {
 
 
 }
+
+
 
 
 //计算index点处的速度值
@@ -221,6 +260,7 @@ Vector2D FoamVortexSolver::computeSingleVelocityFromPanels(int index) {
 	auto panel = _foamVortexData->panelSet;
 	auto panelSize = panel->size();
 	auto& gama = _foamVortexData->strength;
+	//auto& gama = _foamVortexData->slipStrength;
 
 	Vector2D result;
 	for (int i = 0; i < panelSize; ++i) {
@@ -257,6 +297,8 @@ Vector2D FoamVortexSolver::computeSingleVelocityFromPanels(int index) {
 		temp2 = vel_to_world(temp2, start, normal);
 		result += temp2;
 	}
+
+
 	return result;
 }
 
@@ -323,38 +365,44 @@ void FoamVortexSolver::computeBoundaryMatrix() {
 	auto panels = _foamVortexData->panelSet;
 	auto panelSize = panels->size();
 	Eigen::MatrixXd& A = _foamVortexData->A;
+	Eigen::MatrixXd& B = _foamVortexData->B;
 
 	auto sizex = panelSize + 1;
 	auto sizey = panelSize;
 	A.resize(sizex, sizey);
+	B.resize(sizex, sizey);
 
 	for (int j = 0; j < panelSize; ++j) {
 		auto normal = panels->lookAt(j).normal;
 		for (int i = 0; i < panelSize; ++i) {
 			auto mid_j = panels->midPoint(j);
 			auto u_ji = computeUnitVelocityFromPanels(i, mid_j).dot(normal);
-			//cout << "A:" << computeUnitVelocityFromPanels(j, mid_i).x << "," << computeUnitVelocityFromPanels(j, mid_i).y << endl;
-			//cout << "B:" << normal.x << "," << normal.y << endl;
-			//cout << "C:" << u_ji << endl;
-			//cout << computeUnitVelocityFromPanels(j, mid_i).x << endl;
-			//cout << mid_i.x << endl;
-			//cout << normal.y << endl;
-			//cout << u_ji << endl;
 			A(j, i) = -u_ji;
 		}
 	}
 
 	for (int i = 0; i < panelSize; ++i) {
-		//cout << panels->lookAt(i).start.x << "," << panels->lookAt(i).start.y << ","
-		//	<< panels->lookAt(i).end.x << "," << panels->lookAt(i).end.y << endl;
-		//cout << panels->midPoint(i).x << "," << panels->midPoint(i).y << endl;
-		//cout << panels->lookAt(i).normal.x << endl;
 		A(panelSize, i) = 1.0;
 	}
 
+	for (int j = 0; j < panelSize; ++j) {
+		auto normal = panels->lookAt(j).normal;
+		Vector2D tengent(-normal.y, normal.x);
+		for (int i = 0; i < panelSize; ++i) {
+			auto mid_j = panels->midPoint(j);
+			auto u_ji = computeUnitVelocityFromPanels(i, mid_j).dot(tengent);
+			B(j, i) = -u_ji;
+		}
+	}
 
-	//cout << A << endl;
+	for (int i = 0; i < panelSize; ++i) {
+		B(panelSize, i) = 1.0;
+	}
 }
+
+
+
+
 
 //在这里求解vortex sheet strength
 void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
@@ -365,37 +413,49 @@ void FoamVortexSolver::vortexSheetSolve(double timeIntervalInSeconds) {
 	auto& pos = data->positions();
 	Eigen::MatrixXd& A = _foamVortexData->A;
 	Eigen::VectorXd& x = _foamVortexData->strength;
-	auto boundaryVel = data->movingGrid;
+
+	Eigen::MatrixXd& B = _foamVortexData->B;
+	Eigen::VectorXd& x1 = _foamVortexData->slipStrength;
+
 
 	//组装b
 	Eigen::VectorXd b(panelSize + 1);
 	for (int i = 0; i < panelSize; ++i) {
 		auto normal = panels->lookAt(i).normal;
+		auto pos = panels->midPoint(i);
 		auto vec = vs_vec;
-		b[i] = vec.dot(normal);
+
+		Vector2D temp;
+		for (int j = 0; j < n; ++j) {
+			temp += computeUSingle(pos, j);
+		}
+		b[i] = (vec + temp).dot(normal);
 	}
 
 	b[panelSize] = 0;
 
-	auto k = 0;
-	//x = A.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(b);
 	x = A.colPivHouseholderQr().solve(b);
 
+
+
+	Eigen::VectorXd b1(panelSize + 1);
 	for (int i = 0; i < panelSize; ++i) {
-		k += x[i];
+		auto normal = panels->lookAt(i).normal;
+		Vector2D tengent(-normal.y, normal.x);
+
+		auto pos = panels->midPoint(i);
+		auto vec = vs_vec;
+
+		Vector2D temp;
+		for (int j = 0; j < n; ++j) {
+			temp += computeUSingle(pos, j);
+		}
+		b1[i] = (vec + temp).dot(tengent);
 	}
-	//if (k != 0)
-	//	cout << k << endl;
-	////cout << x << endl;
 
+	b1[panelSize] = 0;
 
+	x1 = B.colPivHouseholderQr().solve(b1);
 
-	/*cout << "start" << endl;
-	cout << x << endl;
-	cout << "b" << endl;
-	cout << b << endl;
-	cout << "A" << endl;
-	cout << A << endl;
-	cout << "end" << endl;*/
 
 }

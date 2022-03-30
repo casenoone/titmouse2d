@@ -16,6 +16,9 @@ using namespace std;
 #include "../titmouse2d/src/Lagrangian/VortexParticleSystemSolver2.h"
 
 #include "../titmouse2d/src/Geometry/Box2.h"
+
+const float SCREEN_SIZE = 400;
+const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 static void key(unsigned char key, int x, int y)
 {
 	switch (key)
@@ -32,10 +35,10 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.0f);//缺省是1
+	glPointSize(4.0f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
-	glVertex3f((x - 1) * 10, (y - 1) * 10, 0);
+	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
 
@@ -44,7 +47,7 @@ void drawPoint(Vector2D pos, float size, Color3<float> color)
 	glPointSize(size);
 	glBegin(GL_POINTS);
 	glColor3f(color.r / 255.0, color.g / 255.0, color.b / 255.0);
-	glVertex3f((pos.x - 1) * 10, (pos.y - 1) * 10, 0);
+	glVertex3f((pos.x - 1) * DRAW_SIZE, (pos.y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
 
@@ -53,7 +56,7 @@ void drawPoint(Vector2D pos, float size, Color3<double> color)
 	glPointSize(size);
 	glBegin(GL_POINTS);
 	glColor3f(float(color.r) / 255.0, float(color.g) / 255.0, float(color.b) / 255.0);
-	glVertex3f((pos.x - 1) * 10, (pos.y - 1) * 10, 0);
+	glVertex3f((pos.x - 1) * DRAW_SIZE, (pos.y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
 
@@ -64,8 +67,8 @@ void drawLine(double x1, double y1, double x2, double y2) {
 	glLineWidth(1);//设置线段宽度
 	glBegin(GL_LINES);
 	glColor3f(1.0, 0.0, 0.0);
-	glVertex2f((x1 - 1) * 10, (y1 - 1) * 10); //定点坐标范围
-	glVertex2f((x2 - 1) * 10, (y2 - 1) * 10);
+	glVertex2f((x1 - 1) * DRAW_SIZE, (y1 - 1) * DRAW_SIZE); //定点坐标范围
+	glVertex2f((x2 - 1) * DRAW_SIZE, (y2 - 1) * DRAW_SIZE);
 	glEnd();
 	glFlush();
 }
@@ -76,15 +79,15 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 	glLineWidth(1);//设置线段宽度
 	glBegin(GL_LINES);
 	glColor3f(color.r / 255.0, color.g / 255.0, color.b / 255.0);
-	glVertex2f((x1 - 1) * 10, (y1 - 1) * 10); //定点坐标范围
-	glVertex2f((x2 - 1) * 10, (y2 - 1) * 10);
+	glVertex2f((x1 - 1) * DRAW_SIZE, (y1 - 1) * DRAW_SIZE); //定点坐标范围
+	glVertex2f((x2 - 1) * DRAW_SIZE, (y2 - 1) * DRAW_SIZE);
 	glEnd();
 	glFlush();
 }
 
 auto vpSolver = make_shared<VortexParticleSystemSolver2>();
 
-int numberOfparticles = 300;
+int numberOfparticles = 100;
 
 double dt = 0.02;
 
@@ -134,7 +137,7 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(200, 200);
+	glutInitWindowSize(SCREEN_SIZE, SCREEN_SIZE);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("titmouse2d");
 
@@ -161,7 +164,7 @@ int main(int argc, char** argv)
 	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
 	Collider2 collider;
 	collider.push(box1);
-	//vpSolver->setCollider(collider);
+	vpSolver->setCollider(collider);
 
 
 

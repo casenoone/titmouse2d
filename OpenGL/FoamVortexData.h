@@ -43,9 +43,17 @@ public:
 
 	//Array<Panel> panelSet;
 
+	//消去法向分量
 	Eigen::VectorXd strength;
 
+	//消去切向分量
+	Eigen::VectorXd slipStrength;
+
+	//消去法向分量
 	Eigen::MatrixXd A;
+
+	//消去切向分量
+	Eigen::MatrixXd B;
 
 private:
 

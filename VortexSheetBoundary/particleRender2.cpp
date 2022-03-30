@@ -11,7 +11,7 @@ using namespace std;
 
 #include <windows.h>
 
-const float SCREEN_SIZE = 600;
+const float SCREEN_SIZE = 400;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 void split(const string& s, vector<string>& tokens, char delim = ' ') {
 	tokens.clear();
@@ -55,7 +55,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(4.05f);//缺省是1
+	glPointSize(3.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -102,7 +102,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest3\\" + filename + ".txt");
+	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest4\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		//system("pause");

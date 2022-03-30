@@ -38,7 +38,7 @@ public:
 
 	void emitParticles();
 
-
+	void emitParticlesFromPanels(double timeIntervalInSeconds);
 
 private:
 
