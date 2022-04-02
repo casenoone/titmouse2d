@@ -82,7 +82,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 bool clearState = true;
 
 
-ExplicitSurface2Ptr obj1 = make_shared<RegularPolygon>(23, Vector2D(0.6, 1), 0.2);
+ExplicitSurface2Ptr obj1 = make_shared<RegularPolygon>(17, Vector2D(0.1, 1), 0.08);
 
 static void display(void)
 {
@@ -102,7 +102,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest4\\" + filename + ".txt");
+	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest5\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		//system("pause");
@@ -114,7 +114,7 @@ static void display(void)
 	if (temp1 > 3108) {
 		temp1 = 1;
 	}
-	temp1 += 2;
+	temp1 += 1;
 	filename = std::to_string(temp1);
 
 	std::string strLine;

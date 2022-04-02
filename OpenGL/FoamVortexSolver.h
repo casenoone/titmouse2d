@@ -55,7 +55,7 @@ private:
 	void computeBoundaryMatrix();
 
 	//我也不想起这么长的名字
-	Vector2D computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
+	Vector2D computeUnitVelocityFromPanels(const Vector2D& pos, int index);
 
 	Vector2D computeSingleVelocityFromPanels(int index);
 

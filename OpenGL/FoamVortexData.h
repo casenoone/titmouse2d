@@ -55,6 +55,12 @@ public:
 	//消去切向分量
 	Eigen::MatrixXd B;
 
+	Array<Vector2D> newParticles;
+
+	//tracer粒子的速度和位置
+	Array<Vector2D> tracePosition;
+	Array<Vector2D> traceVelocity;
+
 private:
 
 	//二维情况下，涡量是标量
