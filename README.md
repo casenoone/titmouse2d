@@ -82,8 +82,9 @@ titmouse是一个2d离线流体引擎（个人玩具），由于程序性能受�
 
 - 13.Eulerian Smoke(双线性插值，midpoint，边界还有点bug没解决，还没有加vorticity force)
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/eulerian_smoke.gif)
-
-- 14.shallow wave solver
+- 14.kama vortex
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/kamavortex.gif)
+- 15.shallow wave solver
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
 
 即将实现的算法或数据结构：
