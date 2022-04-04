@@ -11,7 +11,7 @@ using namespace std;
 
 #include <windows.h>
 
-const float SCREEN_SIZE = 400;
+const float SCREEN_SIZE = 200;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 void split(const string& s, vector<string>& tokens, char delim = ' ') {
 	tokens.clear();
@@ -82,8 +82,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 bool clearState = true;
 
 
-ExplicitSurface2Ptr obj1 = make_shared<RegularPolygon>(17, Vector2D(0.1, 1), 0.08);
-
+RegularPolygonPtr obj1 = make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
 static void display(void)
 {
 
@@ -102,7 +101,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest5\\" + filename + ".txt");
+	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest8\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		//system("pause");
@@ -111,7 +110,7 @@ static void display(void)
 	}
 
 	auto temp1 = std::atoi(filename.c_str());
-	if (temp1 > 3108) {
+	if (temp1 > 628) {
 		temp1 = 1;
 	}
 	temp1 += 1;
@@ -127,7 +126,9 @@ static void display(void)
 		split(strLine, position, ',');
 		auto x = atof(position[0].c_str());
 		auto y = atof(position[1].c_str());
-		drawPoint(x, y);
+		Vector2D tempPos(x, y);
+		if (tempPos.dis(obj1->center()) > obj1->r())
+			drawPoint(x, y);
 
 	}
 

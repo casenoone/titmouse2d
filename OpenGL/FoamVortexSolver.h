@@ -38,9 +38,14 @@ public:
 
 	void emitParticles();
 
+	void emitTracerParticles();
+
 	void emitParticlesFromPanels(double timeIntervalInSeconds);
 
 private:
+
+	//Çó½âtracerÁ£×Ó
+	void tracerParticlesSolve();
 
 	void emitParticlesFromPanel();
 
