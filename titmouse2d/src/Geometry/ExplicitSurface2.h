@@ -26,6 +26,7 @@ public:
 
 	Vector2D normal;
 
+
 };
 
 
@@ -56,11 +57,13 @@ public:
 
 	Vector2D midPoint(int i)const;
 
+
+
 public:
 
 	vector<SurfaceElement2> _data;
 
-
+	Vector2D velocity = Vector2D::zero();
 };
 
 using ExplicitSurface2Ptr = shared_ptr<ExplicitSurface2>;

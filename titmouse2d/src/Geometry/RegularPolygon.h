@@ -16,6 +16,14 @@ public:
 		return _r;
 	}
 
+	void updatePosition(double dt) {
+		for (auto i = _data.begin(); i != _data.end(); ++i) {
+			i->start += velocity * dt;
+			i->end += velocity * dt;
+		}
+		_center += velocity * dt;
+	}
+
 private:
 	int _edgeNum = 7;
 	Vector2D _center;

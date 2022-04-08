@@ -28,9 +28,6 @@ RegularPolygon::RegularPolygon(int edgeNum_, Vector2D center_, double r_) :
 		auto mid = (temp1.start + temp1.end) * 0.5;
 		temp1.normal = (mid - center_).getNormalize();
 		_data[i] = temp1;
-		//cout << "x" << temp1.start.x << "," << temp1.start.y << endl;
-		//cout << "y" << temp1.end.x << "," << temp1.end.y << endl;
-
 	}
 
 	temp1.start = list[0];
@@ -38,6 +35,5 @@ RegularPolygon::RegularPolygon(int edgeNum_, Vector2D center_, double r_) :
 	auto mid = (temp1.start + temp1.end) * 0.5;
 	temp1.normal = (mid - center_).getNormalize();
 	_data[i] = temp1;
-	//cout << "x" << temp1.start.x << "," << temp1.start.y << endl;
-	//cout << "y" << temp1.end.x << "," << temp1.end.y << endl;
+
 }

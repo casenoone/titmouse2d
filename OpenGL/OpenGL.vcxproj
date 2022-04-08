@@ -144,18 +144,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FoamVortexSolver.h" />
+    <ClCompile Include="vp2005.h" />
+    <ClCompile Include="vp2005.cpp" />
     <ClCompile Include="FoamVortexSolver.cpp" />
-    <ClCompile Include="FoamVortexSolver2.cpp" />
     <ClCompile Include="FoamVortexTest.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="shalowwaveTest.cpp" />
+    <ClCompile Include="vp2005test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="FoamVortexData.h" />
+    <ClInclude Include="FoamVortexSolver.h" />
     <ClInclude Include="MovingFaceCenteredGrid2.h" />
     <ClInclude Include="Shader\shader.h" />
   </ItemGroup>

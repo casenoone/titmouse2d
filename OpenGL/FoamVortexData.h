@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 #include "../titmouse2d/src/Lagrangian/ParticleSystemData2.h"
 
-#include "../titmouse2d/src/Geometry/ExplicitSurface2.h"
+#include "../titmouse2d/src/Geometry/RegularPolygon.h"
 
 #include "MovingFaceCenteredGrid2.h"
 
@@ -37,7 +37,7 @@ public:
 	ArrayD& vorticities();
 
 public:
-	ExplicitSurface2Ptr panelSet;
+	RegularPolygonPtr panelSet;
 
 	MovingFaceCenteredGrid2Ptr movingGrid;
 

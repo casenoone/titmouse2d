@@ -24,19 +24,22 @@
     <ClCompile Include="MovingFaceCenteredGrid2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FoamVortexSolver.h">
+    <ClCompile Include="vp2005.h">
       <Filter>头文件</Filter>
     </ClCompile>
     <ClCompile Include="FoamVortexTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="vp2005.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
     <ClCompile Include="FoamVortexSolver.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="FoamVortexSolver2.cpp">
+    <ClCompile Include="shalowwaveTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="shalowwaveTest.cpp">
+    <ClCompile Include="vp2005test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -51,6 +54,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="FoamVortexData.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FoamVortexSolver.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

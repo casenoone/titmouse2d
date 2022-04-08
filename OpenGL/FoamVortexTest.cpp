@@ -38,7 +38,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(4.05f);//缺省是1
+	glPointSize(3.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -46,7 +46,15 @@ void drawPoint(double x, double y)
 }
 
 
-
+void drawPoint(double x, double y, double color_x, double color_y, double color_z)
+{
+	//在后缓存绘制图形，就一个点
+	glPointSize(4.05f);//缺省是1
+	glBegin(GL_POINTS);
+	glColor3f(color_x / 255, color_y / 255, color_z / 255);
+	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
+	glEnd();
+}
 
 
 void drawLine(double x1, double y1, double x2, double y2) {
@@ -89,7 +97,7 @@ BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movi
 
 double dt = 0.008;
 
-ExplicitSurface2Ptr obj1 = make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
+RegularPolygonPtr obj1 = make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
 
 
 
@@ -101,22 +109,26 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
+	obj1->velocity = Vector2D(1, 0.0);
+	obj1->updatePosition(dt);
+
 	vpSolver->onAdvanceTimeStep(dt);
 	sim_step++;
 	int numberOfParticles = vpSolver->foamVortexData()->numberOfParticles();
 
-	/*for (int i = 0; i < numberOfParticles; ++i) {
+	for (int i = 0; i < numberOfParticles; ++i) {
 
 		auto pos = vpSolver->foamVortexData()->positions();
-		drawPoint(pos[i].x, pos[i].y);
-	}*/
+		//drawPoint(pos[i].x, pos[i].y, 255, 0, 0);
+	}
 
 	//可视化tracer粒子
 	auto tracer_pos = vpSolver->foamVortexData()->tracePosition;
 	int tracer_n = tracer_pos.dataSize();
 
 	for (int i = 0; i < tracer_n; ++i) {
-		drawPoint(tracer_pos[i].x, tracer_pos[i].y);
+		if ((tracer_pos[i] - obj1->center()).getLength() > obj1->r())
+			drawPoint(tracer_pos[i].x, tracer_pos[i].y);
 	}
 
 	int m = 0;
@@ -132,18 +144,6 @@ static void display(void)
 	}
 
 
-	//int m = 0;
-	//for (auto i = explicitSphere1->_data.begin(); i != explicitSphere1->_data.end(); ++i) {
-	//	auto start = i->start;
-	//	auto end = i->end;
-	//	drawLine(start.x, start.y, end.x, end.y);
-
-	//	//可视化法线
-	//	auto midPoint = explicitSphere1->midPoint(m++);
-	//	auto normalEnd = start + 0.2 * i->normal;
-	//	drawPoint(start.x, start.y);
-	//	drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
-	//}
 
 	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
 	for (int i = 0; i < movingSize.x; ++i) {
@@ -192,8 +192,7 @@ int main(int argc, char** argv)
 	//vpSolver->setPanels(explicitSphere1);
 	vpSolver->setPanels(obj1);
 	vpSolver->setMovingGrid(movingGridRes, movingGridDomain);
-	vpSolver->emitParticles();
-
+	vpSolver->emitTracerParticles();
 
 
 	UINT timerId = 1;
@@ -211,8 +210,8 @@ int main(int argc, char** argv)
 	//glutMainLoop();
 
 
-	//这里是写入文件
-//记得重新算的时候要删掉 原来的文件夹
+		//这里是写入文件
+	//记得重新算的时候要删掉 原来的文件夹
 	int frame = 100000;
 
 	auto position = vpSolver->foamVortexData()->positions();
@@ -222,17 +221,21 @@ int main(int argc, char** argv)
 
 	string outfilename = "1";
 
-	system("mkdir FoamTest8");
+	system("mkdir FoamTest10");
 
 	for (int i = 0; i < frame; i += 1) {
 
-		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest8\\" + outfilename + ".txt", ios::app);
-		auto num = vpSolver->foamVortexData()->numberOfParticles();
+		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest10\\" + outfilename + ".txt", ios::app);
+		auto num = vpSolver->foamVortexData()->tracePosition.dataSize();
 		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
+
+		obj1->velocity = Vector2D(1, 0.0);
+		obj1->updatePosition(dt);
+
 		for (int n = 0; n < num; ++n) {
-			auto x = position[n].x;
-			auto y = position[n].y;
-			if (x < 2 && y < 2)
+			auto x = vpSolver->foamVortexData()->tracePosition[n].x;
+			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
+			if (x < 2 && y < 2 && x >= 0 && y >= 0)
 				out << x << "," << y << endl;
 		}
 		vpSolver->onAdvanceTimeStep(dt);

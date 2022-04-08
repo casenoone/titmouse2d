@@ -1,5 +1,5 @@
-#ifndef FOAMVORTEXSOLVER_H
-#define FOAMVORTEXSOLVER_H
+#ifndef FOAMVORTEXSOLVER2_H
+#define FOAMVORTEXSOLVER2_H
 
 
 #include "FoamVortexData.h"
@@ -32,7 +32,7 @@ public:
 		int resolutionX,
 		int resolutionY);
 
-	void setPanels(ExplicitSurface2Ptr surfaces);
+	void setPanels(RegularPolygonPtr surfaces);
 
 	void setMovingGrid(const Vector2I& resolution_, const BoundingBox2& domain_);
 
@@ -52,6 +52,8 @@ private:
 	//把粒子的速度映射到网格上，方便做速度采样
 	void transferFromParticlesToGrids();
 
+	Vector2D computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
+
 	//对panel的数据结构做一个矫正以便于局部坐标系下的计算
 	void correctPanelCoordinateSystem();
 
@@ -65,6 +67,8 @@ private:
 	Vector2D computeSingleVelocityFromPanels(int index);
 
 	void vortexSheetSolve(double timeIntervalInSeconds);
+
+	void slipVortexSheetSolve(double timeIntervalInSeconds);
 
 	void onBeginAdvanceTimeStep();
 

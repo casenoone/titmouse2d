@@ -11,7 +11,7 @@ using namespace std;
 
 #include <windows.h>
 
-const float SCREEN_SIZE = 200;
+const float SCREEN_SIZE = 500;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 void split(const string& s, vector<string>& tokens, char delim = ' ') {
 	tokens.clear();
@@ -55,7 +55,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.05f);//缺省是1
+	glPointSize(2.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -80,7 +80,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 bool clearState = true;
-
+double dt = 0.008;
 
 RegularPolygonPtr obj1 = make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
 static void display(void)
@@ -101,7 +101,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest8\\" + filename + ".txt");
+	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest10\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		//system("pause");
@@ -110,10 +110,12 @@ static void display(void)
 	}
 
 	auto temp1 = std::atoi(filename.c_str());
-	if (temp1 > 628) {
-		temp1 = 1;
+	if (temp1 > 10) {
+		//temp1 = 1;
 	}
-	temp1 += 1;
+
+	int skipNum = 7;
+	temp1 += skipNum;
 	filename = std::to_string(temp1);
 
 	std::string strLine;
@@ -140,7 +142,8 @@ static void display(void)
 		drawLine(start.x, start.y, end.x, end.y);
 	}
 
-
+	obj1->velocity = Vector2D(1, 0.0);
+	obj1->updatePosition(dt * skipNum);
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
