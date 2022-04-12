@@ -221,18 +221,20 @@ int main(int argc, char** argv)
 
 	string outfilename = "1";
 
-	system("mkdir FoamTest10");
+	system("mkdir FoamTest12");
 
 	for (int i = 0; i < frame; i += 1) {
 
-		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest10\\" + outfilename + ".txt", ios::app);
-		auto num = vpSolver->foamVortexData()->tracePosition.dataSize();
+		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest12\\" + outfilename + ".txt", ios::app);
+		auto num = vpSolver->foamVortexData()->numberOfParticles();
 		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
+
+
 
 		obj1->velocity = Vector2D(1, 0.0);
 		obj1->updatePosition(dt);
 
-		for (int n = 0; n < num; ++n) {
+		for (int n = 0; n < tracer_num; ++n) {
 			auto x = vpSolver->foamVortexData()->tracePosition[n].x;
 			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
 			if (x < 2 && y < 2 && x >= 0 && y >= 0)

@@ -113,6 +113,15 @@ using Vector2D = Vector2<double>;
 using Vector2F = Vector2<float>;
 using Vector2I = Vector2<int>;
 
+//template<class T>
+//std::ostream& operator<< (std::ostream& out, Vector2<T>& vec);
+
+////重载一个打印Vector2D的版本
+//template<class T>
+//inline std::ostream& operator<< (std::ostream& out, Vector2<T>& vec) {
+//	std::out << vec.x << " ," << vec.y << endl;
+//	return std::out;
+//}
 
 
 template<class T>

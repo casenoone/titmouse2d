@@ -197,7 +197,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 	auto data = _foamVortexData;
 	auto n = data->numberOfParticles();
 	auto panelVel = data->panelSet->velocity;
-
+	auto panel = data->panelSet;
 	auto& emitParticle = data->newParticles;
 
 	auto emitNum = emitParticle.dataSize();
@@ -208,7 +208,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 		emitParticle[i] += panelVel * timeIntervalInSeconds;
 	}
 
-	if (step % 2 == 0 && n < 100000 && step < 35) {
+	if (step % 4 == 0 && n < 100000 && (panel->center().x - panel->r()) < 1.2) {
 
 
 		auto& pos = data->positions();
@@ -261,6 +261,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 			vor[i] = x[j++];
 		}
 	}
+
 	step++;
 }
 
@@ -319,13 +320,13 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 5000;
+	int emitNum = 20000;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
-		tempPos.x = random_double(0, 1);
-		tempPos.y = random_double(0.7, 1.3);
+		tempPos.x = random_double(0.2, 1.2);
+		tempPos.y = random_double(0.4, 1.6);
 		/*while ((tempPos - panels->center()).getLength() < panels->r()) {
 			tempPos.x = random_double(0, 1);
 			tempPos.y = random_double(0.7, 1.3);
