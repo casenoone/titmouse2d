@@ -9,6 +9,7 @@ public:
 
 	void generateVoronoi(int number, double width, double height);
 
+	void generateVoronoi(const Array<Vector2D>& positions);
 
 
 private:

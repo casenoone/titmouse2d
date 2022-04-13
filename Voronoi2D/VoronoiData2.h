@@ -32,6 +32,8 @@ public:
 			adjacent = edge;
 		}
 
+
+
 	public:
 		Vector2D start;
 		Vector2D end;
@@ -147,7 +149,10 @@ public:
 			if (!notEmpty())return;
 			for (auto iter = queueList.begin(); iter != queueList.end(); ++iter) {
 
+				//这里要把动态内存释放掉的
 				if ((*iter) == E) {
+					delete(*iter);
+					*iter = nullptr;
 					iter = queueList.erase(iter);
 				}
 				if (iter == queueList.end()) {
@@ -163,9 +168,41 @@ public:
 
 	VoronoiData2() = default;
 
-public:
+	//需要把queueList的动态内存全部释放掉
+	//Node申请的动态内存也要释放掉
+	~VoronoiData2() {
+		for (auto i = queue.queueList.begin(); i != queue.queueList.end(); ++i) {
 
-	//需要写析构函数把它解构掉
+			auto k = get<2>(**i);
+			if (k.edge.adjacent) {
+				delete k.edge.adjacent;
+				k.edge.adjacent = nullptr;
+			}
+
+			if (*i)
+				delete(*i);
+			*i = nullptr;
+
+
+
+		}
+
+		auto p = beachline.next;
+		while (p) {
+			auto q = p;
+			auto circle1 = q->circle;
+			if (circle1) {
+				delete circle1;
+				circle1 = nullptr;
+			}
+			p = p->next;
+			delete q;
+			q = nullptr;
+		}
+
+	}
+
+public:
 	Queue queue;
 	Array<Vector2D> sites;
 	VoronoiData2::Node beachline;

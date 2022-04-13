@@ -65,11 +65,14 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 
 	for (int i = 0; i < n; ++i) {
+
 		auto& newVelocity = _newVelocities[i];
 
 
 		auto temp1 = velocities[i] + (forces[i] / MASS) * timeIntervalInSeconds;
-		newVelocity = temp1;
+
+		if (i >= n - 6)
+			newVelocity = temp1;
 
 		auto& newPosition = _newPositions[i];
 		auto temp2 = positions[i] + newVelocity * timeIntervalInSeconds;

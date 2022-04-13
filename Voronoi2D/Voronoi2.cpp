@@ -34,6 +34,38 @@ void Voronoi2::generateVoronoi(int number, double width, double height) {
 
 }
 
+
+void Voronoi2::generateVoronoi(const Array<Vector2D>& positions) {
+	auto& queue = _data.queue;
+	auto len = positions.dataSize();
+	for (auto i = 0; i < len; ++i) {
+		double tempX = positions.lookAt(i).x;
+		double tempY = positions.lookAt(i).y;
+		Vector2D point(tempX, tempY);
+
+		VoronoiData2::Node node;
+		auto e = new tuple(point, true, node);
+		queue.insert(e);
+	}
+
+	variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
+	_data.beachline.set(max_Point, 0);
+
+	while (_data.queue.notEmpty()) {
+		auto event = queue.maxQ();
+		Vector2D ePoint = get<0>(*event);
+		sweepY = ePoint.y;
+		bool isSiteEvent = get<1>(*event);
+		if (isSiteEvent) { addEvent(*event); }
+		else {
+			removeEvent(event);
+		}
+	}
+
+
+}
+
+
 void Voronoi2::addEvent(tuple<Vector2D, bool, VoronoiData2::Node>& event) {
 	auto ePoint = std::get<0>(event);
 	_data.sites.push(ePoint);

@@ -92,6 +92,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="VoronoiTest.cpp" />
     <ClCompile Include="vp2005.h" />
     <ClCompile Include="vp2005.cpp" />
     <ClCompile Include="FoamVortexSolver.cpp" />
@@ -170,6 +172,9 @@
   <ItemGroup>
     <ProjectReference Include="..\titmouse2d\titmouse2d.vcxproj">
       <Project>{94580d84-0ebe-489d-a109-b2cbff52d865}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Voronoi2D\Voronoi2D.vcxproj">
+      <Project>{5a279627-5499-4c8f-a542-3cec9b0c3ba5}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
