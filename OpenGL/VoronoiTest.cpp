@@ -3,7 +3,6 @@ using namespace std;
 
 #include <cmath>
 
-
 #include <fstream>
 #include <sstream>
 #include <cmath>
@@ -76,10 +75,24 @@ void drawVoronoi(const Voronoi2& voronoi) {
 		drawLine(edges[i]->start.x, edges[i]->start.y,
 			edges[i]->end.x, edges[i]->end.y);
 
+		drawPoint(edges[i]->rightPoint.x, edges[i]->rightPoint.y);
+
 	}
 
 	for (int i = 0; i < sites.dataSize(); ++i) {
 		drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
+	}
+
+	auto& node = voronoi._data.beachline;
+	auto  p = node.next;
+	while (p) {
+		auto circle = p->circle;
+		if (circle) {
+			auto p1 = get<0>(*circle);
+			drawPoint(p1.x, p1.y);
+		}
+
+		p = p->next;
 	}
 }
 
@@ -109,7 +122,7 @@ static void display(void)
 	particleSolve.onAdvanceTimeStep(0.009);
 
 	for (int i = 0; i < n; ++i) {
-		drawPoint(pos[i].x, pos[i].y);
+		//drawPoint(pos[i].x, pos[i].y);
 	}
 
 	Voronoi2 voronoiD;

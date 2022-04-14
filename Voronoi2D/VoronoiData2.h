@@ -11,21 +11,23 @@ using namespace std;
 #include "../titmouse2d/src/Array.hpp"
 #include "../titmouse2d/src/MathUtils.hpp"
 
-//我擦，这里暂时不完全实现
 class VoronoiData2 {
 public:
 	struct Edge {
 	public:
 		Edge() = default;
 
-		Edge(Vector2D start_, Vector2D leftPoint, Vector2D rightPoint) {
+		Edge(Vector2D start_, Vector2D leftPoint_, Vector2D rightPoint_) {
 			start = start_;
 			end = Vector2D::zero();
-			m = -1.0 / ((leftPoint.y - rightPoint.y) / (leftPoint.x - rightPoint.x));
+			m = -1.0 / ((leftPoint_.y - rightPoint_.y) / (leftPoint_.x - rightPoint_.x));
 			c = start.y - m * start.x;
-			dir.x = -1 * (leftPoint.y - rightPoint.y);
-			dir.y = leftPoint.x - rightPoint.x;
+			dir.x = -1 * (leftPoint_.y - rightPoint_.y);
+			dir.y = leftPoint_.x - rightPoint_.x;
 			adjacent = nullptr;
+
+			leftPoint = leftPoint_;
+			rightPoint = rightPoint_;
 		}
 
 		void addAdjacent(Edge* edge) {
@@ -41,6 +43,9 @@ public:
 		double c;
 		Vector2D dir;
 		Edge* adjacent;
+
+		Vector2D leftPoint;
+		Vector2D rightPoint;
 	};
 
 	//链表的node
