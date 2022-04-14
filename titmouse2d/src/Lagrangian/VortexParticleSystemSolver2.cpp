@@ -17,8 +17,8 @@ double vs_eps = 0.01;
 //newPosition赋值给positions可以改用移动构造函数，提高效率
 
 VortexParticleSystemSolver2::VortexParticleSystemSolver2() {
-	_particleSystemData = make_shared<VortexParticleSystemData2>();
-	_vortexParticleData = make_shared<VortexParticleSystemData2>();
+	_particleSystemData = std::make_shared<VortexParticleSystemData2>();
+	_vortexParticleData = std::make_shared<VortexParticleSystemData2>();
 	_vortexParticleData = std::dynamic_pointer_cast<VortexParticleSystemData2>(_particleSystemData);
 }
 

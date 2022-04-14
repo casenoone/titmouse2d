@@ -51,7 +51,7 @@ inline MPMSolver2::MPMSolver2(
 	const Vector2I& resolution,
 	const Vector2D& gridSpacing,
 	const Vector2D& gridOrigin) {
-	_mpmData = make_shared<MPMData2>(resolution, gridSpacing, gridOrigin);
+	_mpmData = std::make_shared<MPMData2>(resolution, gridSpacing, gridOrigin);
 
 }
 

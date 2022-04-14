@@ -2,7 +2,7 @@
 
 #include <array>
 
-ScalarGrid2::ScalarGrid2() :_data(vector<vector<double>>()) {
+ScalarGrid2::ScalarGrid2() :_data(std::vector<std::vector<double>>()) {
 }
 
 

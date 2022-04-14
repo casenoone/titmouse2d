@@ -25,15 +25,15 @@ public:
 
 };
 
-using MPMData2Ptr = shared_ptr<MPMData2>;
+using MPMData2Ptr = std::shared_ptr<MPMData2>;
 
 inline MPMData2::MPMData2(
 	const Vector2I& resolution,
 	const Vector2D& gridSpacing,
 	const Vector2D& gridOrigin) {
 
-	g_velocity = make_shared<CellCenteredVectorGrid2<Vector2D>>(resolution, gridOrigin, Vector2D());
-	g_mass = make_shared<CellCenteredScalarGrid2>(resolution, gridOrigin, 0.0);
+	g_velocity = std::make_shared<CellCenteredVectorGrid2<Vector2D>>(resolution, gridOrigin, Vector2D());
+	g_mass = std::make_shared<CellCenteredScalarGrid2>(resolution, gridOrigin, 0.0);
 
 }
 

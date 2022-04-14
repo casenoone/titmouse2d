@@ -5,7 +5,7 @@ Heart2::Heart2(const Vector2D& center, const double& r,
 	const Vector2D& origin,
 	double initialValue) {
 
-	_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
+	_data = std::make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
 
 	computeSdf();
 
@@ -42,8 +42,8 @@ void Heart2::computeSdf() {
 			else {
 
 				auto p2 = p - Vector2D(0.0, 1.0);
-				auto p3 = Vector2D(p.x - 0.5 * max(p.x + p.y, 0.0), p.y - 0.5 * max(p.x + p.y, 0.0));
-				(*_data)(i, j) = sqrt(min(p2.dot(p2), p3.dot(p3))) * sign(p.x - p.y);
+				auto p3 = Vector2D(p.x - 0.5 * std::max(p.x + p.y, 0.0), p.y - 0.5 * std::max(p.x + p.y, 0.0));
+				(*_data)(i, j) = sqrt(std::min(p2.dot(p2), p3.dot(p3))) * sign(p.x - p.y);
 			}
 
 

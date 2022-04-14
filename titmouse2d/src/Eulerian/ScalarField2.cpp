@@ -21,7 +21,7 @@ double ScalarField2::laplacian(const Vector2D& x)const {
 }
 
 
-function<double(const Vector2D&)> ScalarField2::sampler()const {
+std::function<double(const Vector2D&)> ScalarField2::sampler()const {
 	const ScalarField2* self = this;
 	return [self](const Vector2D& x)->double {
 		return self->sample(x);

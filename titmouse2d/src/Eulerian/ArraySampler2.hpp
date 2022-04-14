@@ -69,7 +69,7 @@ private:
 };
 
 template<typename T>
-using LinearArraySampler2Ptr = shared_ptr<LinearArraySampler2<T>>;
+using LinearArraySampler2Ptr = std::shared_ptr<LinearArraySampler2<T>>;
 
 
 

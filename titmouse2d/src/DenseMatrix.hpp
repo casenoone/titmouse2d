@@ -2,7 +2,6 @@
 #define DENSEMATRIX_HPP
 
 #include <iostream>
-using namespace std;
 
 #include <vector>
 

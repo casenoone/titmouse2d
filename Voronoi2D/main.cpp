@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #include <cmath>
 
@@ -102,7 +101,7 @@ static void display(void)
 
 	voronoiD.generateVoronoi(m++, 1, 1);
 
-	cout << m << endl;
+	std::cout << m << std::endl;
 
 	//设置MODELVIEW矩阵，先设为单位阵，再乘上观察矩阵，即从z轴正向100处向 （0，0，0）
 	//看，上方向(0,1,0)

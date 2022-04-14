@@ -17,6 +17,6 @@ private:
 
 };
 
-using IISphData2Ptr = shared_ptr<IISphData2>;
+using IISphData2Ptr = std::shared_ptr<IISphData2>;
 
 #endif

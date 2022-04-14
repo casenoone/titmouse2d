@@ -2,7 +2,6 @@
 #define SURFACE2_H
 
 #include <iostream>
-using namespace std;
 
 #include "../Vector2.hpp"
 
@@ -35,7 +34,7 @@ public:
 
 };
 
-using Surface2Ptr = shared_ptr<Surface2>;
+using Surface2Ptr = std::shared_ptr<Surface2>;
 
 
 #endif

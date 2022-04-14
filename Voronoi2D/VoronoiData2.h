@@ -2,7 +2,6 @@
 #define VORONOIDATA2_H
 
 #include <iostream>
-using namespace std;
 #include <variant>
 #include <list>
 #include <tuple>
@@ -55,7 +54,7 @@ public:
 
 		}
 
-		Node(variant<Vector2D, Edge>& data_, int type) {
+		Node(std::variant<Vector2D, Edge>& data_, int type) {
 			if (type == 0) {
 				point = std::get<0>(data_);
 				type = 0;
@@ -67,7 +66,7 @@ public:
 
 		}
 
-		void set(variant<Vector2D, Edge>& data_, int type) {
+		void set(std::variant<Vector2D, Edge>& data_, int type) {
 			if (type == 0) {
 				point = std::get<0>(data_);
 				type = 0;
@@ -91,7 +90,7 @@ public:
 		Vector2D point;
 		Edge edge;
 		int type;
-		tuple<Vector2D, bool, Node>* circle = nullptr;
+		std::tuple<Vector2D, bool, Node>* circle = nullptr;
 
 		Node* next = nullptr;
 		Node* prev = nullptr;
@@ -101,7 +100,7 @@ public:
 	public:
 		Queue() = default;
 
-		void insert(tuple<Vector2D, bool, Node>* E) {
+		void insert(std::tuple<Vector2D, bool, Node>* E) {
 			auto EPoint = std::get<0>(*E);
 
 			if (queueList.empty()) {
@@ -134,7 +133,7 @@ public:
 			}
 		}
 
-		tuple<Vector2D, bool, Node>* maxQ() {
+		std::tuple<Vector2D, bool, Node>* maxQ() {
 			auto R = queueList.front();
 			queueList.pop_front();
 			return R;
@@ -150,7 +149,7 @@ public:
 
 		//注意迭代器失效问题
 		//可以确保这里没有问题
-		void removeEvent(tuple<Vector2D, bool, Node>* E) {
+		void removeEvent(std::tuple<Vector2D, bool, Node>* E) {
 			if (!notEmpty())return;
 			for (auto iter = queueList.begin(); iter != queueList.end(); ++iter) {
 
@@ -168,7 +167,7 @@ public:
 
 
 	public:
-		list<tuple<Vector2D, bool, Node>*> queueList;
+		std::list<std::tuple<Vector2D, bool, Node>*> queueList;
 	};
 
 	VoronoiData2() = default;
@@ -178,7 +177,7 @@ public:
 	~VoronoiData2() {
 		for (auto i = queue.queueList.begin(); i != queue.queueList.end(); ++i) {
 
-			auto k = get<2>(**i);
+			auto k = std::get<2>(**i);
 			if (k.edge.adjacent) {
 				delete k.edge.adjacent;
 				k.edge.adjacent = nullptr;
@@ -211,7 +210,7 @@ public:
 	Queue queue;
 	Array<Vector2D> sites;
 	VoronoiData2::Node beachline;
-	vector<VoronoiData2::Edge*> edges;
+	std::vector<VoronoiData2::Edge*> edges;
 };
 
 

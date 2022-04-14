@@ -24,7 +24,7 @@ ExplicitSurface2::~ExplicitSurface2() {
 
 }
 
-ExplicitSurface2::ExplicitSurface2(const vector<SurfaceElement2>& data) :
+ExplicitSurface2::ExplicitSurface2(const std::vector<SurfaceElement2>& data) :
 	_data(data)
 {}
 

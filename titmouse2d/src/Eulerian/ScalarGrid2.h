@@ -36,7 +36,7 @@ public:
 	double laplacianAtDataPoint(int i, int j) const;
 
 
-	using DataPositionFunc = function<Vector2D(int, int)>;
+	using DataPositionFunc = std::function<Vector2D(int, int)>;
 
 
 	DataPositionFunc dataPosition() const;

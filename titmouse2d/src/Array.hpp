@@ -2,7 +2,6 @@
 #define ARRAY_HPP
 
 #include <iostream>
-using namespace std;
 #include <vector>
 
 //不实现arrayAccessor类
@@ -18,7 +17,7 @@ public:
 
 	virtual ~Array();
 
-	Array(const vector<T>& data);
+	Array(const std::vector<T>& data);
 
 	Array(int len);
 
@@ -38,7 +37,7 @@ public:
 	void push(const T& e);
 
 
-	void set(const vector<T>& data_);
+	void set(const std::vector<T>& data_);
 
 	void clear();
 
@@ -49,7 +48,7 @@ public:
 
 
 protected:
-	shared_ptr<vector<T>> _data;
+	std::shared_ptr<std::vector<T>> _data;
 
 	int _size;
 };
@@ -61,7 +60,7 @@ using ArrayD = Array<double>;
 
 template<typename T>
 Array<T>::Array() {
-	_data = make_shared<vector<T>>();
+	_data = std::make_shared<std::vector<T>>();
 	_size = 0;
 }
 
@@ -72,9 +71,9 @@ Array<T>::~Array() {
 
 
 template<typename T>
-Array<T>::Array(const vector<T>& data) {
+Array<T>::Array(const std::vector<T>& data) {
 
-	_data = make_shared<vector<T>>();
+	_data = std::make_shared<std::vector<T>>();
 
 	(*_data) = data;
 	_size = (*_data).size();
@@ -82,7 +81,7 @@ Array<T>::Array(const vector<T>& data) {
 
 template<typename T>
 Array<T>::Array(int len) {
-	_data = make_shared<vector<T>>();
+	_data = std::make_shared<std::vector<T>>();
 	(*_data).resize(len);
 	_size = len;
 }
@@ -137,7 +136,7 @@ void Array<T>::push(const T& e) {
 
 
 template<typename T>
-void Array<T>::set(const vector<T>& data_) {
+void Array<T>::set(const std::vector<T>& data_) {
 	(*_data) = data_;
 	_size = (*_data).size();
 }

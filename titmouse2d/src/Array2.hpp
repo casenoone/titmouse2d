@@ -1,18 +1,17 @@
 #ifndef ARRAY2_HPP
 #define ARRAY2_HPP
 
-#include <iostream>
-using namespace std;
 #include <vector>
 
 #include "Size2.h"
+
 
 template<class T>
 class Array2 {
 public:
 	Array2();
 
-	Array2(const vector<vector<T>>& data);
+	Array2(const std::vector<std::vector<T>>& data);
 
 	T lookAt(int i, int j) const;
 
@@ -51,8 +50,8 @@ public:
 	//T clone();
 
 public:
-	//这里换成一维的vector
-	shared_ptr<vector<vector<T>>> _data;
+	//这里换成一维的std::vector
+	std::shared_ptr<std::vector<std::vector<T>>> _data;
 
 	Size2 _size;
 };
@@ -63,13 +62,13 @@ using Array2D = Array2<double>;
 
 template<typename T>
 Array2<T>::Array2() {
-	_data = make_shared<vector<vector<T>>>();
+	_data = std::make_shared<std::vector<std::vector<T>>>();
 }
 
 
 template<typename T>
-Array2<T>::Array2(const vector<vector<T>>& data) {
-	_data = make_shared<vector<vector<T>>>();
+Array2<T>::Array2(const std::vector<std::vector<T>>& data) {
+	_data = std::make_shared<std::vector<std::vector<T>>>();
 	(*_data) = data;
 }
 

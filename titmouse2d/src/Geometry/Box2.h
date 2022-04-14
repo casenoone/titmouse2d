@@ -30,7 +30,7 @@ public:
 };
 
 
-using Box2Ptr = shared_ptr<Box2>;
+using Box2Ptr = std::shared_ptr<Box2>;
 
 
 

@@ -29,8 +29,8 @@ inline EulerianSmokeGridData2::EulerianSmokeGridData2(
 	const Vector2D& gridSpacing,
 	const Vector2D& origin) :GridSystemData2(resolution, gridSpacing, origin) {
 
-	_densities = make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
-	_temperature = make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
+	_densities = std::make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
+	_temperature = std::make_shared<CellCenteredScalarGrid2>(resolution, origin, 0.0);
 
 }
 

@@ -20,7 +20,7 @@ private:
 	Array<Vector2D> _deltaP;
 };
 
-using PBFData2Ptr = shared_ptr<PBFData2>;
+using PBFData2Ptr = std::shared_ptr<PBFData2>;
 
 
 inline ArrayD PBFData2::densities() {

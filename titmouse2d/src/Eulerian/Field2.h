@@ -2,7 +2,6 @@
 #define FIELD2_HPP
 
 #include <iostream>
-using namespace std;
 
 class Field2 {
 public:

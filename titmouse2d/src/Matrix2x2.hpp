@@ -3,7 +3,6 @@
 
 
 #include <iostream>
-using namespace std;
 
 #include <array>
 
@@ -56,14 +55,14 @@ public:
 
 
 private:
-	shared_ptr<std::array<T, 4>> _data;
+	std::shared_ptr<std::array<T, 4>> _data;
 };
 
 
 template<class T>
 Matrix2x2<T>::Matrix2x2() {
 
-	_data = make_shared<std::array<T, 4>>();
+	_data = std::make_shared<std::array<T, 4>>();
 
 	(*_data)[0] = 0;
 	(*_data)[1] = 0;
@@ -82,7 +81,7 @@ Matrix2x2<T>::Matrix2x2(const Matrix2x2<T>& m) {
 template<class T>
 Matrix2x2<T>::Matrix2x2(T x1, T y1, T x2, T y2) {
 
-	_data = make_shared<std::array<T, 4>>();
+	_data = std::make_shared<std::array<T, 4>>();
 
 	(*_data)[0] = x1;
 	(*_data)[1] = y1;

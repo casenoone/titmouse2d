@@ -36,16 +36,16 @@ public:
 	static Builder builder();
 
 	//计算等值线
-	void getLineSegmentSet(vector<LineSegment>& lineSet);
+	void getLineSegmentSet(std::vector<LineSegment>& lineSet);
 
-	void setCircleList(vector<Circle>& circleList);
+	void setCircleList(std::vector<Circle>& circleList);
 
 	void setScalarField(const VertexCenteredScalarGrid2Ptr& _data);
 
-	void getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
+	void getLineSegmentSet(std::vector<SurfaceElement2>& SurfaceSet,
 		const VertexCenteredScalarGrid2Ptr& _data);
 
-	void getLineSegmentSet(vector<LineSegment>& lineSet,
+	void getLineSegmentSet(std::vector<LineSegment>& lineSet,
 		const VertexCenteredScalarGrid2Ptr& _data);
 
 public:
@@ -63,7 +63,7 @@ private:
 	Vector2D calculateIso(int edge, int i, int j);
 
 	//存放圆
-	vector<Circle> _circleList;
+	std::vector<Circle> _circleList;
 
 
 };

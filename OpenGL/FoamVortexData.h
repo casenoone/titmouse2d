@@ -69,7 +69,7 @@ private:
 
 };
 
-using FoamVortexDataPtr = shared_ptr<FoamVortexData>;
+using FoamVortexDataPtr = std::shared_ptr<FoamVortexData>;
 
 inline ArrayD& FoamVortexData::vorticities() {
 	return _vorticities;

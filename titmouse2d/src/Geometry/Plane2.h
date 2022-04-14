@@ -38,7 +38,7 @@ public:
 };
 
 
-using Plane2Ptr = shared_ptr<Plane2>;
+using Plane2Ptr = std::shared_ptr<Plane2>;
 
 
 

@@ -10,8 +10,8 @@ GridFluidSolver2::GridFluidSolver2(
 
 
 	_grids = std::make_shared<GridSystemData2>(resolution, gridSpacing, gridOrigin);
-	_pressureSolver = make_shared<SimplePressureSolver2>();
-	_advectionSolver = make_shared<AdvectionSolver2>();
+	_pressureSolver = std::make_shared<SimplePressureSolver2>();
+	_advectionSolver = std::make_shared<AdvectionSolver2>();
 
 }
 
@@ -24,7 +24,7 @@ void GridFluidSolver2::accumulateForces(double timeIntervalInSeconds) {
 
 
 void GridFluidSolver2::setFluidSdf(const VertexCenteredScalarGrid2& _sdf) {
-	_grids->sdf() = make_shared<VertexCenteredScalarGrid2>(_sdf);
+	_grids->sdf() = std::make_shared<VertexCenteredScalarGrid2>(_sdf);
 }
 
 const VertexCenteredScalarGrid2Ptr GridFluidSolver2::sdf()const {

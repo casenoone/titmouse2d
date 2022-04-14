@@ -2,7 +2,6 @@
 #define LBMDATA2_H
 
 #include <iostream>
-using namespace std;
 
 #include <array>
 
@@ -36,8 +35,8 @@ public:
 	}
 
 public:
-	Array2<vector<double>> f;
-	Array2<vector<double>> f_;
+	Array2<std::vector<double>> f;
+	Array2<std::vector<double>> f_;
 
 	Array2<Vector2D> velocity;
 

@@ -6,7 +6,7 @@
 #include "../Array2.hpp"
 #include "ArraySampler2.hpp"
 #include <iostream>
-using namespace std;
+
 
 #include <vector>
 
@@ -31,7 +31,7 @@ public:
 	double curlAtDataPoint(int i, int j);
 
 
-	function<Vector2D(int, int)> dataPosition() const;
+	std::function<Vector2D(int, int)> dataPosition() const;
 
 	T sample(const Vector2D& x) const;
 
@@ -87,7 +87,7 @@ private:
 };
 
 template<class T>
-using CollocatedVectorGrid2Ptr = shared_ptr<CollocatedVectorGrid2<T>>;
+using CollocatedVectorGrid2Ptr = std::shared_ptr<CollocatedVectorGrid2<T>>;
 
 
 
@@ -131,7 +131,7 @@ double CollocatedVectorGrid2<T>::curlAtDataPoint(int i, int j) {
 }
 
 template<class T>
-function<Vector2D(int, int)> CollocatedVectorGrid2<T>::dataPosition() const {
+std::function<Vector2D(int, int)> CollocatedVectorGrid2<T>::dataPosition() const {
 	Vector2D dataOrigin_ = dataOrigin();
 	return [this, dataOrigin_](double i, double j) -> Vector2D {
 		return dataOrigin_ + this->gridSpacing() * Vector2D({ i, j });

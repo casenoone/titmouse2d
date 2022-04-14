@@ -30,7 +30,7 @@ private:
 	double _r = 0.3;
 };
 
-using RegularPolygonPtr = shared_ptr<RegularPolygon>;
+using RegularPolygonPtr = std::shared_ptr<RegularPolygon>;
 
 
 #endif

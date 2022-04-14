@@ -128,7 +128,7 @@ void PBFSolver2::initDensity() {
 	pbfData()->densities().reSize(n);
 
 	auto neighbor = pbfData()->neighbor->neighBors();
-	vector<double> tempData;
+	std::vector<double> tempData;
 
 	SphPolyKernel2 kernel(pbfKR);
 

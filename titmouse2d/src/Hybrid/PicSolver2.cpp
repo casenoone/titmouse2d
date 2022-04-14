@@ -232,8 +232,8 @@ void PicSolver2::setMarkers() {
 		auto xs = (x - gridOrigin().x) / (gridSpacing().x);
 		auto ys = (y - gridOrigin().y) / (gridSpacing().y);
 
-		int xss = floor(xs);
-		int yss = floor(ys);
+		int xss = static_cast<int>(floor(xs));
+		int yss = static_cast<int>(floor(ys));
 		if (xss >= resolution().x) {
 			xss = resolution().x - 1;
 		}

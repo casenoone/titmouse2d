@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-using namespace std;
 
 #include "../titmouse2d/src/Lagrangian/ParticleSystemSolver2.h"
 #include "../titmouse2d/src/Geometry/Box2.h"
@@ -54,7 +53,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-void drawColliders(const vector<ExplicitSurface2Ptr>& surfaceSet) {
+void drawColliders(const std::vector<ExplicitSurface2Ptr>& surfaceSet) {
 	for (auto i = surfaceSet.begin(); i != surfaceSet.end(); ++i) {
 		auto surface = (*i)->_data;
 		for (auto j = surface.begin(); j != surface.end(); ++j) {
@@ -76,7 +75,7 @@ ParticleSystemSolver2 solver;
 double dt = 0.02;
 Collider2 collider;
 
-vector<ExplicitSurface2Ptr> surfaceSet;
+std::vector<ExplicitSurface2Ptr> surfaceSet;
 
 
 
@@ -143,7 +142,7 @@ int main(int argc, char** argv)
 	int numberOfParticles = 400;
 	int resolutionX = 10;
 	int resolutionY = 10;
-	vector <Vector2D> temp1;
+	std::vector <Vector2D> temp1;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = random_double(0.5, 1.7);
 		auto y = random_double(0.5, 1.2);
@@ -156,9 +155,9 @@ int main(int argc, char** argv)
 
 
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
-	Box2Ptr box2 = make_shared<Box2>(Vector2D(1, 0), Vector2D(1.3, 0.8), false);
-	Plane2Ptr plane1 = make_shared<Plane2>(Vector2D(0.5, 0), Vector2D(1, 0.8), false);
+	Box2Ptr box1 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
+	Box2Ptr box2 = std::make_shared<Box2>(Vector2D(1, 0), Vector2D(1.3, 0.8), false);
+	Plane2Ptr plane1 = std::make_shared<Plane2>(Vector2D(0.5, 0), Vector2D(1, 0.8), false);
 
 	surfaceSet.push_back(box1);
 	//surfaceSet.push_back(box2);

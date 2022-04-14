@@ -10,13 +10,13 @@ VertexCenteredScalarGrid2::VertexCenteredScalarGrid2(
 	double initialValue) {
 	auto gridSpacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 
-	vector<vector<double>> temp;
+	std::vector<std::vector<double>> temp;
 
 	resize(resolution, gridSpacing, origin, initialValue);
 	auto size = resolution + Vector2I(1, 1);
 	_data.reSize(size.x, size.y, initialValue);
 
-	this->_linearSampler = make_shared<LinearArraySampler2<double>>(this->_data, gridSpacing, dataOrigin());
+	this->_linearSampler = std::make_shared<LinearArraySampler2<double>>(this->_data, gridSpacing, dataOrigin());
 
 }
 

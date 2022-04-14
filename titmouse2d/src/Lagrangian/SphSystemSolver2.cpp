@@ -4,8 +4,8 @@
 
 //基类与父类的类型转换
 SphSystemSolver2::SphSystemSolver2() {
-	_particleSystemData = make_shared<SphSystemData2>();
-	_sphSystemData = make_shared<SphSystemData2>();
+	_particleSystemData = std::make_shared<SphSystemData2>();
+	_sphSystemData = std::make_shared<SphSystemData2>();
 	_sphSystemData = std::dynamic_pointer_cast<SphSystemData2>(_particleSystemData);
 
 }

@@ -13,18 +13,18 @@ void Voronoi2::generateVoronoi(int number, double width, double height) {
 		Vector2D point(tempX, tempY);
 
 		VoronoiData2::Node node;
-		auto e = new tuple(point, true, node);
+		auto e = new std::tuple(point, true, node);
 		queue.insert(e);
 	}
 
-	variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
+	std::variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
 	_data.beachline.set(max_Point, 0);
 
 	while (_data.queue.notEmpty()) {
 		auto event = queue.maxQ();
-		Vector2D ePoint = get<0>(*event);
+		Vector2D ePoint = std::get<0>(*event);
 		sweepY = ePoint.y;
-		bool isSiteEvent = get<1>(*event);
+		bool isSiteEvent = std::get<1>(*event);
 		if (isSiteEvent) { addEvent(*event); }
 		else {
 			removeEvent(event);
@@ -44,18 +44,18 @@ void Voronoi2::generateVoronoi(const Array<Vector2D>& positions) {
 		Vector2D point(tempX, tempY);
 
 		VoronoiData2::Node node;
-		auto e = new tuple(point, true, node);
+		auto e = new std::tuple(point, true, node);
 		queue.insert(e);
 	}
 
-	variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
+	std::variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
 	_data.beachline.set(max_Point, 0);
 
 	while (_data.queue.notEmpty()) {
 		auto event = queue.maxQ();
-		Vector2D ePoint = get<0>(*event);
+		Vector2D ePoint = std::get<0>(*event);
 		sweepY = ePoint.y;
-		bool isSiteEvent = get<1>(*event);
+		bool isSiteEvent = std::get<1>(*event);
 		if (isSiteEvent) { addEvent(*event); }
 		else {
 			removeEvent(event);
@@ -66,11 +66,11 @@ void Voronoi2::generateVoronoi(const Array<Vector2D>& positions) {
 }
 
 
-void Voronoi2::addEvent(tuple<Vector2D, bool, VoronoiData2::Node>& event) {
+void Voronoi2::addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event) {
 	auto ePoint = std::get<0>(event);
 	_data.sites.push(ePoint);
 
-	variant<Vector2D, VoronoiData2::Edge> eepoint = ePoint;
+	std::variant<Vector2D, VoronoiData2::Edge> eepoint = ePoint;
 	VoronoiData2::Node* newNode = new VoronoiData2::Node(eepoint, 0);
 	auto node = getNodeOverPoint(ePoint);
 	Vector2D start(ePoint.x, getY(node->point, ePoint));
@@ -81,12 +81,12 @@ void Voronoi2::addEvent(tuple<Vector2D, bool, VoronoiData2::Node>& event) {
 	leftEdge->addAdjacent(rightEdge);
 	rightEdge->addAdjacent(leftEdge);
 
-	variant<Vector2D, VoronoiData2::Edge> left = *leftEdge;
-	variant<Vector2D, VoronoiData2::Edge> right = *rightEdge;
+	std::variant<Vector2D, VoronoiData2::Edge> left = *leftEdge;
+	std::variant<Vector2D, VoronoiData2::Edge> right = *rightEdge;
 	auto leftNode = new VoronoiData2::Node(left, 1);
 	auto rightNode = new VoronoiData2::Node(right, 1);
 
-	variant<Vector2D, VoronoiData2::Edge> nnpoint = node->point;
+	std::variant<Vector2D, VoronoiData2::Edge> nnpoint = node->point;
 	auto duplicateNode = new VoronoiData2::Node(nnpoint, 0);
 
 	duplicateNode->setNext(node->next);
@@ -126,7 +126,7 @@ void Voronoi2::circleCheck(VoronoiData2::Node* node) {
 
 	Vector2D tempPoint(intersection.x, intersection.y - rad);
 
-	auto circleEvent = new tuple(tempPoint, false, *node);
+	auto circleEvent = new std::tuple(tempPoint, false, *node);
 
 
 	node->circle = circleEvent;
@@ -141,7 +141,7 @@ VoronoiData2::Node* Voronoi2::getNodeOverPoint(const Vector2D& point) {
 	//遍历链表
 	while (edgeNode && edgeNode->next) {
 		if (edgeNode->edge.dir.x == 0) {
-			cout << "error 1" << endl;
+			std::cout << "error 1" << std::endl;
 		}
 
 		auto parabola = getEquationOfParabola(siteNode->point, sweepY);
@@ -158,7 +158,7 @@ VoronoiData2::Node* Voronoi2::getNodeOverPoint(const Vector2D& point) {
 		auto max = X1 > X2 ? X1 : X2;
 
 		x = edgeNode->edge.dir.x < 0 ? min : max;
-		if (point.x == x)cout << "warning!" << endl;
+		if (point.x == x)std::cout << "warning!" << std::endl;
 
 		if (point.x < x) {
 			return siteNode;
@@ -171,17 +171,17 @@ VoronoiData2::Node* Voronoi2::getNodeOverPoint(const Vector2D& point) {
 }
 
 
-tuple<double, double, double> Voronoi2::getEquationOfParabola(Vector2D point, double sweepY) {
+std::tuple<double, double, double> Voronoi2::getEquationOfParabola(Vector2D point, double sweepY) {
 	auto k = (point.y + sweepY) / 2.0;
 	auto p = (point.y - sweepY) / 2.0;
 	auto A = 1 / (4.0 * p);
 	auto B = (-1 * point.x) / (2.0 * p);
 	auto C = ((point.x * point.x) / (4.0 * p)) + k;
-	tuple<double, double, double> result(A, B, C);
+	std::tuple<double, double, double> result(A, B, C);
 	return result;
 }
 
-void Voronoi2::removeEvent(tuple<Vector2D, bool, VoronoiData2::Node>* event) {
+void Voronoi2::removeEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>* event) {
 	auto eNode = std::get<2>(*event);
 	VoronoiData2::Edge* leftEdge;
 	VoronoiData2::Edge* rightEdge;
@@ -218,7 +218,7 @@ void Voronoi2::removeEvent(tuple<Vector2D, bool, VoronoiData2::Node>* event) {
 		auto newNode = new VoronoiData2::Node;
 
 		VoronoiData2::Edge tempE(intersection, leftSite->point, rightSite->point);
-		variant<Vector2D, VoronoiData2::Edge> tempE1 = tempE;
+		std::variant<Vector2D, VoronoiData2::Edge> tempE1 = tempE;
 		newNode->set(tempE1, 1);
 
 		newNode->setNext(rightSite);

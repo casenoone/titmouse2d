@@ -3,7 +3,6 @@
 #include <cmath>
 #include <string>
 #include <vector>
-using namespace std;
 
 #include "../titmouse2d/src/ConstVar.h"
 
@@ -96,9 +95,9 @@ Color3<double> blacks(0, 0, 0);
 Color3<double> whites(255, 255, 255);
 
 
-auto velocity = make_shared<FaceCenteredGrid2>(resolution, origin, Vector2D(0, 0));
+auto velocity = std::make_shared<FaceCenteredGrid2>(resolution, origin, Vector2D(0, 0));
 
-auto advectionSolver = make_shared<AdvectionSolver2>();
+auto advectionSolver = std::make_shared<AdvectionSolver2>();
 
 static void display(void)
 {
@@ -162,7 +161,7 @@ int main(int argc, char** argv)
 
 
 
-	advectedData = make_shared<CellCenteredVectorGrid2<Color3<double>>>(resolution, origin, red);
+	advectedData = std::make_shared<CellCenteredVectorGrid2<Color3<double>>>(resolution, origin, red);
 
 	for (int i = 0; i < advectedData->resolution().x; ++i) {
 		for (int j = 0; j < advectedData->resolution().y; ++j) {

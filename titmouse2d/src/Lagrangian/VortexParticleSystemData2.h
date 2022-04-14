@@ -22,7 +22,7 @@ private:
 
 };
 
-using VortexParticleSystemData2Ptr = shared_ptr<VortexParticleSystemData2>;
+using VortexParticleSystemData2Ptr = std::shared_ptr<VortexParticleSystemData2>;
 
 
 #endif

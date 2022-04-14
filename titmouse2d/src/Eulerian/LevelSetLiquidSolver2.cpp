@@ -19,7 +19,7 @@ LevelSetLiquidSolver2::LevelSetLiquidSolver2(const Vector2I& resolution,
 	const Vector2D& gridSpacing,
 	const Vector2D& gridOrigin) : GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
-	_levelsetSolver = make_shared <SimpleLevelSetSolver2>();
+	_levelsetSolver = std::make_shared <SimpleLevelSetSolver2>();
 
 }
 

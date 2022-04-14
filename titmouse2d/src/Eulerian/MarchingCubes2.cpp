@@ -18,7 +18,7 @@ MarchingCube2::MarchingCube2(const Vector2I& resolution,
 	auto k = domainSizeX / resolution.x;
 	auto m = Vector2D(k, k);
 
-	data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
+	data = std::make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
 
 }
 
@@ -27,7 +27,7 @@ MarchingCube2::~MarchingCube2() {
 
 }
 
-void MarchingCube2::setCircleList(vector<Circle>& circleList) {
+void MarchingCube2::setCircleList(std::vector<Circle>& circleList) {
 	_circleList = circleList;
 }
 
@@ -39,7 +39,7 @@ void MarchingCube2::setScalarField(const VertexCenteredScalarGrid2Ptr& _data) {
 
 //重载一个版本
 //在这里需要计算法线，即sdf的梯度
-void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
+void MarchingCube2::getLineSegmentSet(std::vector<SurfaceElement2>& SurfaceSet,
 	const VertexCenteredScalarGrid2Ptr& _data) {
 
 
@@ -79,7 +79,7 @@ void MarchingCube2::getLineSegmentSet(vector<SurfaceElement2>& SurfaceSet,
 }
 
 
-void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet,
+void MarchingCube2::getLineSegmentSet(std::vector<LineSegment>& lineSet,
 	const VertexCenteredScalarGrid2Ptr& _data) {
 
 
@@ -117,7 +117,7 @@ void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet,
 
 
 
-void MarchingCube2::getLineSegmentSet(vector<LineSegment>& lineSet) {
+void MarchingCube2::getLineSegmentSet(std::vector<LineSegment>& lineSet) {
 
 	//计算顶点势能
 	calculateWeight();

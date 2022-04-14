@@ -5,7 +5,6 @@
 #include "../Array2.hpp"
 
 #include <iostream>
-using namespace std;
 
 template<class T>
 Vector2<T> gradient2(const Array2<T>& data,

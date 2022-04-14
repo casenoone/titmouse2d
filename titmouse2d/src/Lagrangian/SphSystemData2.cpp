@@ -21,7 +21,7 @@ ArrayD SphSystemData2::pressures() {
 void SphSystemData2::initDensity() {
 
 	auto tempNeighbor = neighbor->neighBors();
-	vector<double> tempData;
+	std::vector<double> tempData;
 	auto tempPositions = positions();
 	auto tempNumberOfParticles = numberOfParticles();
 	//遍历每一个粒子
@@ -52,7 +52,7 @@ void SphSystemData2::initDensity() {
 
 void SphSystemData2::updateDensities() {
 	auto tempNeighbor = neighbor->neighBors();
-	vector<double> tempData;
+	std::vector<double> tempData;
 
 	auto tempPositions = positions();
 	auto tempNumberOfParticles = numberOfParticles();

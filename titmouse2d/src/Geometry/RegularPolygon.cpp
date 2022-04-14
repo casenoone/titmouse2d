@@ -12,7 +12,7 @@ RegularPolygon::RegularPolygon(int edgeNum_, Vector2D center_, double r_) :
 	double ca = 0;
 	auto aiv = 360.0 / edgeNum_;
 	auto ata = kPiD / 180;
-	vector<Vector2D> list(edgeNum_);
+	std::vector<Vector2D> list(edgeNum_);
 	for (int k = 0; k < edgeNum_; k++) {
 		auto x = cos(ca * ata) * r_ + center_.x;
 		auto y = sin(ca * ata) * r_ + center_.y;

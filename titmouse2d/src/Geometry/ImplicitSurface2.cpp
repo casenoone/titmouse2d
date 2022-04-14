@@ -8,7 +8,7 @@ ImplicitSurface2::ImplicitSurface2(const Vector2I& resolution,
 	const Vector2D& origin,
 	double initialValue) {
 
-	_data = make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
+	_data = std::make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
 }
 
 ImplicitSurface2::~ImplicitSurface2() {
@@ -47,9 +47,9 @@ ExplicitSurface2Ptr ImplicitSurface2::transformToExplicitSurface()const {
 		.withOrigin(origin)
 		.makeShared();
 
-	vector<SurfaceElement2> surfaceSet;
+	std::vector<SurfaceElement2> surfaceSet;
 	mc->getLineSegmentSet(surfaceSet, _data);
-	result = make_shared<ExplicitSurface2>(surfaceSet);
+	result = std::make_shared<ExplicitSurface2>(surfaceSet);
 
 	return result;
 

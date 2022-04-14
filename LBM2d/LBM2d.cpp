@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 
 #include "../titmouse2d/src/ConstVar.h"
 #include "../titmouse2d/src/random.h"
@@ -88,12 +87,12 @@ const double maxVel = 0.1;
 
 
 Vector2I resolution(40, 40);
-auto LBMSolver = make_shared<LBMSolver2>(resolution);
+auto LBMSolver = std::make_shared<LBMSolver2>(resolution);
 auto spacing = 2.0 / resolution.x;
 auto halfSpacing = 0.5 * spacing;
 
 //障碍物
-vector<vector<int>> temp1;
+std::vector<std::vector<int>> temp1;
 
 static void display(void)
 {

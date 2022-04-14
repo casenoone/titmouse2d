@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-using namespace std;
 
 #include "../titmouse2d/src/ConstVar.h"
 
@@ -89,7 +88,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 
 
 
-auto sphSolver = make_shared<SphSystemSolver2>();
+auto sphSolver = std::make_shared<SphSystemSolver2>();
 
 int numberOfParticles = 0;
 
@@ -153,7 +152,7 @@ int main(int argc, char** argv)
 	int res_x = 20;
 	int res_y = 20;
 
-	vector<Vector2D> temp_pos;
+	std::vector<Vector2D> temp_pos;
 
 	for (double i = 0.5; i < 1.5; i += 0.02) {
 		for (double j = 0.4; j < 1.6; j += 0.02) {
@@ -167,9 +166,9 @@ int main(int argc, char** argv)
 
 	sphSolver->setData(numberOfParticles, pos, res_x, res_y);
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
+	Box2Ptr box1 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
 
-	Box2Ptr box2 = make_shared<Box2>(Vector2D(0.3, 0.3), Vector2D(0.6, 0.6), false);
+	Box2Ptr box2 = std::make_shared<Box2>(Vector2D(0.3, 0.3), Vector2D(0.6, 0.6), false);
 
 
 	Collider2 collider;

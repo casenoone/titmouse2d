@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-using namespace std;
 
 
 #include "../titmouse2d/src/LinearSystem/SteepestDescentSolver.hpp"
@@ -101,7 +100,7 @@ int main() {
 	shellSort(a, len);
 
 	for (int i = 0; i < len; ++i) {
-		cout << a[i] << endl;
+		std::cout << a[i] << std::endl;
 	}
 
 
@@ -117,7 +116,7 @@ int main() {
 
 	RelaxedJacobiSolver<double> rjbSolver(0.5);
 
-	vector<vector<double>> A_data = {
+	std::vector<std::vector<double>> A_data = {
 		{10.0, 1.0, 2.0,3.0,4.0},
 		{1.0, 9.0,-1.0,2.0,-3.0},
 		{2.0,-1.0,7.0,3.0,-5},
@@ -136,9 +135,9 @@ int main() {
 
 
 
-	vector<double> b_used = { 12,-27,14,-17,12 };
+	std::vector<double> b_used = { 12,-27,14,-17,12 };
 	//vector<double> b_used = { 1.,4.,-3. };
-	vector<double> x_used;
+	std::vector<double> x_used;
 	x_used.resize(5);
 	VectorN<double> b(b_used);
 	VectorN<double> x(x_used);
@@ -178,14 +177,14 @@ int main() {
 
 
 
-	vector<vector<
+	std::vector<std::vector<
 		double>> dense1 = {
 			{4.,-1.,0.},
 			{-1.,4.,-1.},
 			{0.,-1.,4.}
 	};
 
-	vector<vector<
+	std::vector<std::vector<
 		double>> dense2 = {
 			{2.,1.,0.},
 			{5.,-1.,0.},
@@ -194,7 +193,7 @@ int main() {
 
 	DenseMatrix<double> mat41(3, 3, dense1);
 	DenseMatrix<double> mat42(3, 3, dense2);
-	vector<double> _b = { 1.,4.,-3. };
+	std::vector<double> _b = { 1.,4.,-3. };
 
 	VectorN<double> mat_b(_b);
 

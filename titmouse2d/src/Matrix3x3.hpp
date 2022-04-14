@@ -3,7 +3,6 @@
 
 
 #include <iostream>
-using namespace std;
 
 #include <array>
 
@@ -68,14 +67,14 @@ public:
 	T det()const;
 
 private:
-	shared_ptr<std::array<T, 9>> _data;
+	std::shared_ptr<std::array<T, 9>> _data;
 };
 
 
 template<class T>
 Matrix3x3<T>::Matrix3x3() {
 
-	_data = make_shared<std::array<T, 9>>();
+	_data = std::make_shared<std::array<T, 9>>();
 
 	for (int i = 0; i < 9; ++i) {
 		(*_data)[i] = 0;
@@ -96,7 +95,7 @@ Matrix3x3<T>::Matrix3x3(
 	const Vector3<T>& vec2,
 	const Vector3<T>& vec3) {
 
-	_data = make_shared<std::array<T, 9>>();
+	_data = std::make_shared<std::array<T, 9>>();
 
 	(*_data)[0] = vec1.x;
 	(*_data)[1] = vec1.y;

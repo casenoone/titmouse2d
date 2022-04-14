@@ -3,7 +3,7 @@
 #include "../random.h"
 
 ParticleSystemSolver2::ParticleSystemSolver2() {
-	_particleSystemData = make_shared<ParticleSystemData2>();
+	_particleSystemData = std::make_shared<ParticleSystemData2>();
 }
 
 ParticleSystemSolver2::~ParticleSystemSolver2() {
@@ -21,7 +21,7 @@ void ParticleSystemSolver2::setData(int numberOfParticles,
 
 
 	////初始化neighborSearche
-	_particleSystemData->neighbor = make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
+	_particleSystemData->neighbor = std::make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
 
 	//_particleSystemData->neighbor->setNeiborList(pos);
 }

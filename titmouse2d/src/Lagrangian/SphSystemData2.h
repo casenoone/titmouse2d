@@ -3,7 +3,6 @@
 
 #include "ParticleSystemData2.h"
 #include <vector>
-using namespace std;
 
 #include "../Vector2.hpp"
 #include "../Array2.hpp"
@@ -32,7 +31,7 @@ private:
 	ArrayD _densities;
 	ArrayD _pressures;
 };
-using SphSystemData2Ptr = shared_ptr<SphSystemData2>;
+using SphSystemData2Ptr = std::shared_ptr<SphSystemData2>;
 
 
 

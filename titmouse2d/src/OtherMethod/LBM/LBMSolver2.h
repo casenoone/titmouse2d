@@ -2,7 +2,6 @@
 #define LBMSOLVER2_H
 
 #include <iostream>
-using namespace std;
 
 #include "LBMData2.h"
 

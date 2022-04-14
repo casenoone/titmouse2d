@@ -2,7 +2,6 @@
 #define PARTICLESYSTEMDATA2_H
 
 #include <iostream>
-using namespace std;
 
 #include "../Array.hpp"
 #include "../Vector2.hpp"
@@ -36,7 +35,7 @@ private:
 };
 
 
-using ParticleSystemData2Ptr = shared_ptr<ParticleSystemData2>;
+using ParticleSystemData2Ptr = std::shared_ptr<ParticleSystemData2>;
 
 
 #endif

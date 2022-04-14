@@ -5,7 +5,6 @@
 #include "Vector2.hpp"
 
 #include <iostream>
-using namespace std;
 #include<vector>
 
 //注意这里collider的用法
@@ -32,7 +31,7 @@ public:
 	bool IsNull()const;
 
 public:
-	vector<Surface2Ptr> _surfaces;
+	std::vector<Surface2Ptr> _surfaces;
 
 	struct ColliderQueryResult final {
 		double distance;

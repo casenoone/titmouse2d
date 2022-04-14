@@ -51,8 +51,8 @@ inline ShallowWaveSolver2::ShallowWaveSolver2(
 	const Vector2D& gridSpacing,
 	const Vector2D& gridOrigin) : GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
-	_grids = make_shared<ShallowWaveData2>(resolution, gridSpacing, gridOrigin);
-	_shallowWaveData = make_shared<ShallowWaveData2>(resolution, gridSpacing, gridOrigin);
+	_grids = std::make_shared<ShallowWaveData2>(resolution, gridSpacing, gridOrigin);
+	_shallowWaveData = std::make_shared<ShallowWaveData2>(resolution, gridSpacing, gridOrigin);
 	_shallowWaveData = std::dynamic_pointer_cast<ShallowWaveData2>(_grids);
 }
 

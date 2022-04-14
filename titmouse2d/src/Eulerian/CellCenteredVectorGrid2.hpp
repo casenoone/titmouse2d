@@ -47,7 +47,7 @@ public:
 };
 
 template<class T>
-using CellCenteredVectorGrid2Ptr = shared_ptr<CellCenteredVectorGrid2<T>>;
+using CellCenteredVectorGrid2Ptr = std::shared_ptr<CellCenteredVectorGrid2<T>>;
 
 template<class T>
 CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2() {
@@ -67,7 +67,7 @@ CellCenteredVectorGrid2<T>::CellCenteredVectorGrid2
 
 	auto newgridspacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 	this->resize(resolution, newgridspacing, origin, initialValue);
-	this->_linearSampler = make_shared<LinearArraySampler2<T>>(this->_data, newgridspacing, dataOrigin());
+	this->_linearSampler = std::make_shared<LinearArraySampler2<T>>(this->_data, newgridspacing, dataOrigin());
 
 }
 
@@ -115,7 +115,7 @@ template<class T>
 std::shared_ptr<CellCenteredVectorGrid2<T>> CellCenteredVectorGrid2<T>::clone() const {
 	CellCenteredVectorGrid2 newGrid;
 	newGrid = (*this);
-	auto result = make_shared<CellCenteredVectorGrid2<T>>(newGrid);
+	auto result = std::make_shared<CellCenteredVectorGrid2<T>>(newGrid);
 	return result;
 }
 

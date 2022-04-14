@@ -43,9 +43,10 @@ private:
 
 
 inline IISphSolver2::IISphSolver2() {
-	_particleSystemData = make_shared<IISphData2>();
-	_iisphData = make_shared<IISphData2>();
+	_particleSystemData = std::make_shared<IISphData2>();
+	_iisphData = std::make_shared<IISphData2>();
 	_iisphData = std::dynamic_pointer_cast<IISphData2>(_particleSystemData);
+
 }
 
 

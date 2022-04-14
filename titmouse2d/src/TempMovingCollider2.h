@@ -2,7 +2,6 @@
 #define TEMPMOVINGCOLLIDER2_H
 
 #include <iostream>
-using namespace std;
 #include <cmath>
 
 #include "Array.hpp"

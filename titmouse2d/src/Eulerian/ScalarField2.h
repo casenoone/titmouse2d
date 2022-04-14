@@ -22,7 +22,7 @@ public:
 	//À„¿≠∆’¿≠Àπ
 	virtual double laplacian(const Vector2D& x)const;
 
-	virtual function<double(const Vector2D&)> sampler()const;
+	virtual std::function<double(const Vector2D&)> sampler()const;
 };
 
 

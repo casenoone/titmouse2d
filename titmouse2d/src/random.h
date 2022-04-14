@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <random>
-using namespace std;
 
 inline double random_double(double a, double b) {
 	std::random_device rd;

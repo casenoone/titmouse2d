@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #include <cmath>
 
@@ -27,10 +26,10 @@ const int width = 400;
 const int height = 400;
 #define CHANNEL_NUM 4
 
-RegularPolygonPtr obj1 = make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
+RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
 
 
-string png = ".png";
+std::string png = ".png";
 
 void setLight(int cofee, uint8_t* pixels) {
 	for (int j = height - 1; j >= 0; --j)
@@ -102,7 +101,7 @@ void smooth(int cofee, int size, uint8_t* pixels) {
 
 }
 
-void write_to_pixel(vector<Vector2D> pos, float r, float g, float b, string filename) {
+void write_to_pixel(std::vector<Vector2D> pos, float r, float g, float b, std::string filename) {
 
 	int size = width * height * CHANNEL_NUM;
 
@@ -173,7 +172,7 @@ void write_to_pixel(vector<Vector2D> pos, float r, float g, float b, string file
 
 const float SCREEN_SIZE = 400;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
-void split(const string& s, vector<string>& tokens, char delim = ' ') {
+void split(const std::string& s, std::vector<std::string>& tokens, char delim = ' ') {
 	tokens.clear();
 
 	auto string_find_first_not = [s, delim](size_t pos = 0) -> size_t {
@@ -181,11 +180,11 @@ void split(const string& s, vector<string>& tokens, char delim = ' ') {
 		for (size_t i = pos; i < s.size(); i++) {
 			if (s[i] != delim) return i;
 		}
-		return string::npos;
+		return std::string::npos;
 	};
 	size_t lastPos = string_find_first_not(0);
 	size_t pos = s.find(delim, lastPos);
-	while (lastPos != string::npos) {
+	while (lastPos != std::string::npos) {
 		tokens.emplace_back(s.substr(lastPos, pos - lastPos));
 		lastPos = string_find_first_not(pos);
 		pos = s.find(delim, lastPos);
@@ -193,7 +192,7 @@ void split(const string& s, vector<string>& tokens, char delim = ' ') {
 }
 
 
-string filename = "1";
+std::string filename = "1";
 int PAUSE = 1;
 
 static void key(unsigned char key, int x, int y)
@@ -265,7 +264,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest9\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest9\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -283,10 +282,10 @@ static void display(void)
 	filename = std::to_string(temp1);
 
 	std::string strLine;
-	vector<string> position;
+	std::vector<std::string> position;
 
 
-	vector<Vector2D> posList;
+	std::vector<Vector2D> posList;
 
 	while (getline(myfile, strLine)) {
 		if (strLine.empty()) {

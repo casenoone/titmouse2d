@@ -47,7 +47,7 @@ bool NeighborSearcher2::IsNeighbor(Vector2D& pos1, Vector2D& pos2, const double&
 }
 
 
-void NeighborSearcher2::forEachNeighborGrid(Vector2I& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2D>& positions) {
+void NeighborSearcher2::forEachNeighborGrid(Vector2I& idx, int particleId, std::vector<std::vector<std::vector<int>>>& grids, const Array<Vector2D>& positions) {
 
 	//idx是待求格子的坐标
 	int x = idx.x;
@@ -80,10 +80,10 @@ void NeighborSearcher2::setNeiborList(const Array<Vector2D>& positions) {
 
 
 	//grids里保存粒子映射后的编号
-	vector<vector<vector<int>>> grids;
+	std::vector<std::vector<std::vector<int>>> grids;
 
 	//gridPositions保存了粒子的映射坐标
-	vector<Vector2I> gridPositons;
+	std::vector<Vector2I> gridPositons;
 	//对格子进行初始化
 	grids.resize(_resolutionX);
 	for (auto iter = grids.begin(); iter != grids.end(); iter++) {
@@ -162,6 +162,6 @@ void NeighborSearcher2::setNeiborList(const Array<Vector2D>& positions) {
 
 }
 
-vector<vector<int>>& NeighborSearcher2::neighBors() {
+std::vector<std::vector<int>>& NeighborSearcher2::neighBors() {
 	return _data;
 }

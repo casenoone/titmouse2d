@@ -2,7 +2,6 @@
 #include <fstream>
 #include <cmath>
 #include <string>
-using namespace std;
 
 #include "../titmouse2d/src/Color3.hpp"
 

@@ -2,7 +2,6 @@
 #define NEIGHBORSEARCHER2_H
 
 #include <iostream>
-using namespace std;
 
 #include <vector>
 #include "../Vector2.hpp"
@@ -20,7 +19,7 @@ public:
 
 	void setNeiborList(const Array<Vector2D>& positions);
 
-	vector<vector<int>>& neighBors();
+	std::vector<std::vector<int>>& neighBors();
 
 private:
 
@@ -28,7 +27,7 @@ private:
 	int _resolutionY;
 	int _numberOfParticles;
 
-	vector<vector<int>> _data;
+	std::vector<std::vector<int>> _data;
 
 	void resetDataSize();
 
@@ -40,11 +39,11 @@ private:
 
 	bool IsNeighbor(Vector2 <double>& pos1, Vector2D& pos2, const double& r);
 
-	void forEachNeighborGrid(Vector2I& idx, int particleId, vector<vector<vector<int>>>& grids, const Array<Vector2D>& positions);
+	void forEachNeighborGrid(Vector2I& idx, int particleId, std::vector<std::vector<std::vector<int>>>& grids, const Array<Vector2D>& positions);
 
 };
 
-using NeighborSearcher2Ptr = shared_ptr<NeighborSearcher2>;
+using NeighborSearcher2Ptr = std::shared_ptr<NeighborSearcher2>;
 
 
 #endif

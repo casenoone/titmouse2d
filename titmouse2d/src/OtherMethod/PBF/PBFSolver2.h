@@ -59,8 +59,8 @@ inline void PBFSolver2::setMovingColliderPos(double pos) {
 }
 
 inline PBFSolver2::PBFSolver2() {
-	_particleSystemData = make_shared<PBFData2>();
-	_pbfData = make_shared<PBFData2>();
+	_particleSystemData = std::make_shared<PBFData2>();
+	_pbfData = std::make_shared<PBFData2>();
 	_pbfData = std::dynamic_pointer_cast<PBFData2>(_particleSystemData);
 }
 

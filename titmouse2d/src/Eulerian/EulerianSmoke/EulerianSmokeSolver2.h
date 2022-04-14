@@ -70,8 +70,8 @@ inline EulerianSmokeSolver2::EulerianSmokeSolver2(
 	const Vector2D& gridSpacing,
 	const Vector2D& gridOrigin) :GridFluidSolver2(resolution, gridSpacing, gridOrigin) {
 
-	_grids = make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
-	_eulerianSmokeData = make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
+	_grids = std::make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
+	_eulerianSmokeData = std::make_shared<EulerianSmokeGridData2>(resolution, gridSpacing, gridOrigin);
 	_eulerianSmokeData = std::dynamic_pointer_cast<EulerianSmokeGridData2>(_grids);
 }
 

@@ -2,7 +2,6 @@
 #define EXPLICITSURFACE2_H
 
 #include <iostream>
-using namespace std;
 
 #include <vector>
 
@@ -39,7 +38,7 @@ public:
 
 	virtual ~ExplicitSurface2();
 
-	ExplicitSurface2(const vector<SurfaceElement2>& data);
+	ExplicitSurface2(const std::vector<SurfaceElement2>& data);
 
 	virtual Vector2D closestPoint(const Vector2D& otherPoint)const override;
 
@@ -61,12 +60,12 @@ public:
 
 public:
 
-	vector<SurfaceElement2> _data;
+	std::vector<SurfaceElement2> _data;
 
 	Vector2D velocity = Vector2D::zero();
 };
 
-using ExplicitSurface2Ptr = shared_ptr<ExplicitSurface2>;
+using ExplicitSurface2Ptr = std::shared_ptr<ExplicitSurface2>;
 
 
 inline SurfaceElement2& ExplicitSurface2::operator()(int i) {

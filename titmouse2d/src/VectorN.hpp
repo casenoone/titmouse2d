@@ -2,7 +2,6 @@
 #define VectorN_HPP
 
 #include <iostream>
-using namespace std;
 #include <vector>
 
 #include "Array.hpp"
@@ -18,7 +17,7 @@ public:
 
 	VectorN();
 
-	VectorN(const vector<T>& data);
+	VectorN(const std::vector<T>& data);
 
 	VectorN(int len);
 
@@ -54,7 +53,7 @@ VectorN<T>::VectorN() :Array<T>() {
 
 
 template<class T>
-VectorN<T>::VectorN(const vector<T>& data) : Array<T>(data) {
+VectorN<T>::VectorN(const std::vector<T>& data) : Array<T>(data) {
 
 }
 
@@ -86,7 +85,7 @@ void VectorN<T>::operator*=(const T& r) {
 
 template<class T>
 VectorN<T> VectorN<T>::operator*(const T r) const {
-	vector<T> temp;
+	std::vector<T> temp;
 	temp.resize(this->_size);
 	this->forEachIndex([&](int i) {
 		temp[i] = this->lookAt(i) * r;
@@ -109,7 +108,7 @@ VectorN<T> operator*(const T r, const VectorN<T>& vel) {
 template<class T>
 VectorN<T> VectorN<T>::operator+(const VectorN<T>& vel) const {
 
-	vector<T> temp;
+	std::vector<T> temp;
 	temp.resize(vel.dataSize());
 
 	vel.forEachIndex([&](int i) {
@@ -123,7 +122,7 @@ VectorN<T> VectorN<T>::operator+(const VectorN<T>& vel) const {
 
 template<class T>
 VectorN<T> VectorN<T>::operator-(const VectorN<T>& vel) const {
-	vector<T> temp;
+	std::vector<T> temp;
 	temp.resize(vel.dataSize());
 
 	vel.forEachIndex([&](int i) {

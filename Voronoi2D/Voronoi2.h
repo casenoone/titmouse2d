@@ -13,7 +13,7 @@ public:
 
 
 private:
-	void addEvent(tuple<Vector2D, bool, VoronoiData2::Node>& event);
+	void addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event);
 
 	void circleCheck(VoronoiData2::Node* node);
 
@@ -23,9 +23,9 @@ private:
 
 	VoronoiData2::Node* getNodeOverPoint(const Vector2D& point);
 
-	tuple<double, double, double> getEquationOfParabola(Vector2D point, double sweepY);
+	std::tuple<double, double, double> getEquationOfParabola(Vector2D point, double sweepY);
 
-	void removeEvent(tuple<Vector2D, bool, VoronoiData2::Node>* event);
+	void removeEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>* event);
 
 public:
 	VoronoiData2 _data;

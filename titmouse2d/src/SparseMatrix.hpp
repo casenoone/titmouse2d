@@ -2,7 +2,6 @@
 #define SPARSEMATRIX_HPP
 
 #include <iostream>
-using namespace std;
 
 #include <array>
 
@@ -95,7 +94,7 @@ public:
 
 	SparseMatrix(const int& row, const int& column);
 
-	SparseMatrix(const vector<vector<T>>& mat);
+	SparseMatrix(const std::vector<std::vector<T>>& mat);
 
 	void insert(int i, int j, const T r);
 
@@ -154,15 +153,15 @@ private:
 	int _valuedNum = 0;
 
 	//放置每行首元素位置的偏移量
-	shared_ptr<vector<int>> _rowIndices;
+	std::shared_ptr<std::vector<int>> _rowIndices;
 
 	//矩阵元素对应的列号
-	shared_ptr<vector<int>> _columnOffsets;
+	std::shared_ptr<std::vector<int>> _columnOffsets;
 
 	//存放矩阵元素
-	shared_ptr<vector<T>> _data;
+	std::shared_ptr<std::vector<T>> _data;
 
-	shared_ptr<vector<Triplet<T>>> _tempData;
+	std::shared_ptr<std::vector<Triplet<T>>> _tempData;
 
 };
 
@@ -174,23 +173,23 @@ SparseMatrix<T>::SparseMatrix() {
 
 template<class T>
 SparseMatrix<T>::SparseMatrix(const int& row, const int& column) :_row(row), _column(column) {
-	_tempData = make_shared<vector<Triplet<T>>>();
-	_rowIndices = make_shared<vector<int>>();
+	_tempData = std::make_shared<std::vector<Triplet<T>>>();
+	_rowIndices = std::make_shared<std::vector<int>>();
 	_rowIndices->resize(row + 1);
 
-	_columnOffsets = make_shared<vector<int>>();
+	_columnOffsets = std::make_shared<std::vector<int>>();
 
-	_data = make_shared<vector<T>>();
+	_data = std::make_shared<std::vector<T>>();
 }
 
 template<class T>
-SparseMatrix<T>::SparseMatrix(const vector<vector<T>>& mat) :_row(mat.size()), _column(mat[0].size()) {
-	_tempData = make_shared<vector<Triplet<T>>>();
-	_rowIndices = make_shared<vector<int>>();
+SparseMatrix<T>::SparseMatrix(const std::vector<std::vector<T>>& mat) :_row(mat.size()), _column(mat[0].size()) {
+	_tempData = std::make_shared<std::vector<Triplet<T>>>();
+	_rowIndices = std::make_shared<std::vector<int>>();
 	_rowIndices->resize(mat.size() + 1);
 
-	_columnOffsets = make_shared<vector<int>>();
-	_data = make_shared<vector<T>>();
+	_columnOffsets = std::make_shared<std::vector<int>>();
+	_data = std::make_shared<std::vector<T>>();
 
 	int sizeX = mat.size();
 	int sizeY = mat[0].size();
@@ -376,7 +375,7 @@ VectorN<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 		//引发异常
 	}
 
-	vector<T> temp;
+	std::vector<T> temp;
 	for (int i = 0; i < this->_row; ++i) {
 		//获取该行首元素偏移量
 		auto row_offset = (*_rowIndices)[i];
@@ -410,7 +409,7 @@ VectorN<T> SparseMatrix<T>::operator*(const VectorN<T>& vec) const {
 
 template<class T>
 VectorN<T> operator*(const VectorN<T>& vec, const SparseMatrix<T>& mat) {
-	vector<T> temp;
+	std::vector<T> temp;
 
 	auto _column = mat.size().y;
 

@@ -3,7 +3,6 @@
 
 
 #include <iostream>
-using namespace std;
 #include <array>
 
 int triangleTable[16][4] = {

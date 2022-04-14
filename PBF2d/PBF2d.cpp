@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 
 #include "../titmouse2d/src/ConstVar.h"
 #include "../titmouse2d/src/random.h"
@@ -86,7 +85,7 @@ void drawLine(double x1, double y1, double x2, double y2, Color3<float> color) {
 	glFlush();
 }
 
-auto pbfSolver = make_shared<PBFSolver2>();
+auto pbfSolver = std::make_shared<PBFSolver2>();
 int numberOfParticles = 0;
 static void display(void)
 {
@@ -147,7 +146,7 @@ int main(int argc, char** argv)
 	int res_x = 20;
 	int res_y = 20;
 
-	vector<Vector2D> temp_pos;
+	std::vector<Vector2D> temp_pos;
 
 	numberOfParticles = 1500;
 	for (int i = 0; i < numberOfParticles; ++i) {
@@ -157,14 +156,14 @@ int main(int argc, char** argv)
 		temp_pos.push_back(temp);
 	}
 
-	cout << "粒子数目：" << numberOfParticles << endl;
+	std::cout << "粒子数目：" << numberOfParticles << std::endl;
 	Array<Vector2D> pos(temp_pos);
 
 	pbfSolver->setData(numberOfParticles, pos, res_x, res_y);
 
-	Box2Ptr box1 = make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
+	Box2Ptr box1 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
 
-	Box2Ptr box2 = make_shared<Box2>(Vector2D(0., 0.2), Vector2D(1.8, 0.2), false);
+	Box2Ptr box2 = std::make_shared<Box2>(Vector2D(0., 0.2), Vector2D(1.8, 0.2), false);
 
 
 	Collider2 collider;

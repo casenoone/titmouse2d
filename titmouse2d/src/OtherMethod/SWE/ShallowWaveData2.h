@@ -38,8 +38,8 @@ inline ShallowWaveData2::ShallowWaveData2(
 
 	//默认初始化水面高度为initHeight
 	double initHeight = 0.5;
-	height = make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
-	old_height = make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
+	height = std::make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
+	old_height = std::make_shared<CellCenteredScalarGrid2>(resolution, Vector2D(), initHeight);
 
 	for (int i = 0; i < resolution.x; ++i) {
 		for (int j = 0; j < resolution.y; ++j) {

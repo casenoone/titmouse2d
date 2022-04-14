@@ -2,7 +2,6 @@
 #define SIMPLEPRESSURESOLVER2_H
 
 #include <iostream>
-using namespace std;
 
 #include "FaceCenteredGrid2.h"
 #include "../VectorN.hpp"

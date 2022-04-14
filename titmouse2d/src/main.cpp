@@ -1,12 +1,11 @@
 ﻿#include <iostream>
-using namespace std;
 
 
 
 int main()
 {
 
-	cout << "以什么方式欢迎你呢？" << endl;
+	std::cout << "以什么方式欢迎你呢？" << std::endl;
 
 
 	return 0;

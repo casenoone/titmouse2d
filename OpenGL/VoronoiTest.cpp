@@ -1,5 +1,4 @@
 #include <iostream>
-using namespace std;
 
 #include <cmath>
 
@@ -80,7 +79,7 @@ void drawVoronoi(const Voronoi2& voronoi) {
 	}
 
 	for (int i = 0; i < sites.dataSize(); ++i) {
-		drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
+		//drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
 	}
 
 	auto& node = voronoi._data.beachline;
@@ -182,9 +181,9 @@ int main(int argc, char** argv)
 	pos[n - 1] = Vector2D(1, 2);
 
 	particleSolve.setData(n, pos, 2, 2);
-	vector<ExplicitSurface2Ptr> surfaceSet;
+	std::vector<ExplicitSurface2Ptr> surfaceSet;
 
-	auto box1 = make_shared<Box2>(Vector2D(-0, -0), Vector2D(2, 2), true);
+	auto box1 = std::make_shared<Box2>(Vector2D(-0, -0), Vector2D(2, 2), true);
 	Collider2 collider;
 	collider.push(box1);
 

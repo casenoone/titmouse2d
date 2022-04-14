@@ -19,7 +19,7 @@ CellCenteredScalarGrid2::CellCenteredScalarGrid2(
 	double initialValue) {
 	auto newgridspacing = Vector2D(2.0 / resolution.x, 2.0 / resolution.y);
 	this->resize(resolution, newgridspacing, origin, initialValue);
-	this->_linearSampler = make_shared<LinearArraySampler2<double>>(this->_data, newgridspacing, dataOrigin());
+	this->_linearSampler = std::make_shared<LinearArraySampler2<double>>(this->_data, newgridspacing, dataOrigin());
 
 }
 

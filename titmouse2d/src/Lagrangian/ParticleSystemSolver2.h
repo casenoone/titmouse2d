@@ -2,7 +2,6 @@
 #define PARTICLESYSTEMSOLVER2_H
 
 #include <iostream>
-using namespace std;
 
 #include "../Array.hpp"
 #include "../Vector2.hpp"
@@ -36,7 +35,7 @@ public:
 	virtual void accumulateForces(double timeIntervalInSeconds);
 
 public:
-	shared_ptr<ParticleSystemData2> _particleSystemData;
+	std::shared_ptr<ParticleSystemData2> _particleSystemData;
 	Collider2 _collider;
 
 protected:

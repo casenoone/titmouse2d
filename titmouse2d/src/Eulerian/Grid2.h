@@ -2,7 +2,6 @@
 #define GRID2_HPP
 
 #include <iostream>
-using namespace std;
 
 #include <functional>
 
@@ -12,13 +11,13 @@ using namespace std;
 class Grid2 {
 public:
 
-	using Grid2Ptr = shared_ptr<Grid2>;
+	using Grid2Ptr = std::shared_ptr<Grid2>;
 
 	Grid2();
 	virtual ~Grid2();
 
 	//下标转为位置
-	using DataPositionFunc = function<Vector2D(int, int)>;
+	using DataPositionFunc = std::function<Vector2D(int, int)>;
 
 	const Vector2I& resolution()const;
 
@@ -40,7 +39,7 @@ protected:
 };
 
 
-using Grid2Ptr = shared_ptr<Grid2>;
+using Grid2Ptr = std::shared_ptr<Grid2>;
 
 
 
