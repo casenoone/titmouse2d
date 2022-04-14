@@ -124,7 +124,7 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 			if (marker(i, j) == 1) {
 				if (i + 1 < res.x) {
 					if (marker.lookAt(i + 1, j) == 1) {
-						A.insert(row, cellNum(i + 1, j), -1);
+						A.insert(row, static_cast<int>(cellNum(i + 1, j)), -1);
 					}
 				}
 
@@ -134,7 +134,7 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 
 				if (i - 1 >= 0) {
 					if (marker.lookAt(i - 1, j) == 1) {
-						A.insert(row, cellNum(i - 1, j), -1);
+						A.insert(row, static_cast<int>(cellNum(i - 1, j)), -1);
 					}
 				}
 				else {
@@ -144,7 +144,7 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 
 				if (j + 1 < res.y) {
 					if (marker.lookAt(i, j + 1) == 1) {
-						A.insert(row, cellNum(i, j + 1), -1);
+						A.insert(row, static_cast<int>(cellNum(i, j + 1)), -1);
 					}
 				}
 				else {
@@ -153,7 +153,7 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 
 				if (j - 1 >= 0) {
 					if (marker.lookAt(i, j - 1) == 1) {
-						A.insert(row, cellNum(i, j - 1), -1);
+						A.insert(row, static_cast<int>(cellNum(i, j - 1)), -1);
 					}
 				}
 				else {
@@ -176,8 +176,8 @@ void ShallowWaveSolver2::couplingSolve(double timeIntervalInSeconds) {
 	//×°ÔØÐéÄâË®
 	for (int i = 0; i < res.x; ++i) {
 		for (int j = 0; j < res.y; ++j) {
-			if (cellNum(i, j) != -1) {
-				v(i, j) = x(cellNum(i, j));
+			if (static_cast<int>(cellNum(i, j)) != -1) {
+				v(i, j) = x(static_cast<int>(cellNum(i, j)));
 			}
 		}
 	}
@@ -244,7 +244,7 @@ void ShallowWaveSolver2::setMarkers(const Vector2D& lower, const Vector2D& upper
 	auto marker = data->markers;
 	auto h = data->height;
 
-	marker.reSize(res.x, res.y, 0.0);
+	marker.reSize(res.x, res.y, 0);
 
 	for (int i = 0; i < res.x; ++i) {
 		for (int j = 0; j < res.y; ++j) {
@@ -298,24 +298,24 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			Vector3D p3(tempX3, tempY3, tempZ3);
 
 			auto n = (p2 - p1).cross(p3 - p1).getNormalize();
-			mesh[k] = p1.x;
-			mesh[k + 1] = p1.y;
-			mesh[k + 2] = p1.z;
-			mesh[k + 3] = n.x;
-			mesh[k + 4] = n.y;
-			mesh[k + 5] = n.z;
-			mesh[k + 6] = p2.x;
-			mesh[k + 7] = p2.y;
-			mesh[k + 8] = p2.z;
-			mesh[k + 9] = n.x;
-			mesh[k + 10] = n.y;
-			mesh[k + 11] = n.z;
-			mesh[k + 12] = p3.x;
-			mesh[k + 13] = p3.y;
-			mesh[k + 14] = p3.z;
-			mesh[k + 15] = n.x;
-			mesh[k + 16] = n.y;
-			mesh[k + 17] = n.z;
+			mesh[k] = static_cast<float>(p1.x);
+			mesh[k + 1] = static_cast<float>(p1.y);
+			mesh[k + 2] = static_cast<float>(p1.z);
+			mesh[k + 3] = static_cast<float>(n.x);
+			mesh[k + 4] = static_cast<float>(n.y);
+			mesh[k + 5] = static_cast<float>(n.z);
+			mesh[k + 6] = static_cast<float>(p2.x);
+			mesh[k + 7] = static_cast<float>(p2.y);
+			mesh[k + 8] = static_cast<float>(p2.z);
+			mesh[k + 9] = static_cast<float>(n.x);
+			mesh[k + 10] = static_cast<float>(n.y);
+			mesh[k + 11] = static_cast<float>(n.z);
+			mesh[k + 12] = static_cast<float>(p3.x);
+			mesh[k + 13] = static_cast<float>(p3.y);
+			mesh[k + 14] = static_cast<float>(p3.z);
+			mesh[k + 15] = static_cast<float>(n.x);
+			mesh[k + 16] = static_cast<float>(n.y);
+			mesh[k + 17] = static_cast<float>(n.z);
 			k += 18;
 			triNum += 18;
 		}
@@ -342,28 +342,27 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 
 			auto n = (p2 - p1).cross(p3 - p2).getNormalize();
 
-			mesh[k + 0] = p1.x;
-			mesh[k + 1] = p1.y;
-			mesh[k + 2] = p1.z;
-			mesh[k + 3] = n.x;
-			mesh[k + 4] = n.y;
-			mesh[k + 5] = n.z;
-			mesh[k + 6] = p2.x;
-			mesh[k + 7] = p2.y;
-			mesh[k + 8] = p2.z;
-			mesh[k + 9] = n.x;
-			mesh[k + 10] = n.y;
-			mesh[k + 11] = n.z;
-			mesh[k + 12] = p3.x;
-			mesh[k + 13] = p3.y;
-			mesh[k + 14] = p3.z;
-			mesh[k + 15] = n.x;
-			mesh[k + 16] = n.y;
-			mesh[k + 17] = n.z;
+			mesh[k + 0] = static_cast<float>(p1.x);
+			mesh[k + 1] = static_cast<float>(p1.y);
+			mesh[k + 2] = static_cast<float>(p1.z);
+			mesh[k + 3] = static_cast<float>(n.x);
+			mesh[k + 4] = static_cast<float>(n.y);
+			mesh[k + 5] = static_cast<float>(n.z);
+			mesh[k + 6] = static_cast<float>(p2.x);
+			mesh[k + 7] = static_cast<float>(p2.y);
+			mesh[k + 8] = static_cast<float>(p2.z);
+			mesh[k + 9] = static_cast<float>(n.x);
+			mesh[k + 10] = static_cast<float>(n.y);
+			mesh[k + 11] = static_cast<float>(n.z);
+			mesh[k + 12] = static_cast<float>(p3.x);
+			mesh[k + 13] = static_cast<float>(p3.y);
+			mesh[k + 14] = static_cast<float>(p3.z);
+			mesh[k + 15] = static_cast<float>(n.x);
+			mesh[k + 16] = static_cast<float>(n.y);
+			mesh[k + 17] = static_cast<float>(n.z);
 			k += 18;
 			triNum += 18;
 		}
 	}
-	//cout << triNum << endl;
 	return triNum;
 }

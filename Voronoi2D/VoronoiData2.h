@@ -33,7 +33,10 @@ public:
 			adjacent = edge;
 		}
 
-
+		void setIndex(int i, int j) {
+			leftIndex = i;
+			rightIndex = j;
+		}
 
 	public:
 		Vector2D start;
@@ -45,6 +48,9 @@ public:
 
 		Vector2D leftPoint;
 		Vector2D rightPoint;
+
+		int leftIndex = 0;
+		int rightIndex = 0;
 	};
 
 	//Á´±íµÄnode
@@ -85,12 +91,17 @@ public:
 			this->next = N;
 		}
 
+		void setIndex(int i) {
+			index = i;
+		}
 
 	public:
 		Vector2D point;
 		Edge edge;
 		int type;
 		std::tuple<Vector2D, bool, Node>* circle = nullptr;
+
+		int index = 0;
 
 		Node* next = nullptr;
 		Node* prev = nullptr;

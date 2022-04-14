@@ -65,7 +65,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-void drawVoronoi(const Voronoi2& voronoi) {
+void drawVoronoi(const Voronoi2& voronoi, Array<Vector2D>& pos) {
 	auto& edges = voronoi._data.edges;
 	auto& sites = voronoi._data.sites;
 
@@ -73,13 +73,13 @@ void drawVoronoi(const Voronoi2& voronoi) {
 	for (int i = 0; i < edgeLength; ++i) {
 		drawLine(edges[i]->start.x, edges[i]->start.y,
 			edges[i]->end.x, edges[i]->end.y);
-
-		drawPoint(edges[i]->rightPoint.x, edges[i]->rightPoint.y);
+		int index = edges[i]->leftIndex;
+		drawPoint(pos[index].x, pos[index].y);
 
 	}
 
 	for (int i = 0; i < sites.dataSize(); ++i) {
-		//drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
+		drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
 	}
 
 	auto& node = voronoi._data.beachline;
@@ -127,7 +127,7 @@ static void display(void)
 	Voronoi2 voronoiD;
 	voronoiD.generateVoronoi(pos);
 
-	drawVoronoi(voronoiD);
+	drawVoronoi(voronoiD, pos);
 
 
 	//然后前后缓存交换 

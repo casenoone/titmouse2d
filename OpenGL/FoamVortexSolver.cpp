@@ -31,13 +31,13 @@ Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector
 
 static const int numOfStep = 5;
 
-const double vorticity_eps = 0.04;
+static const double vorticity_eps = 0.04;
 
-const Vector2D vs_vec = Vector2D(2.5, 0.0);
+static const Vector2D vs_vec = Vector2D(2.5, 0.0);
 
-double vs_tau = 1.0;
+static double vs_tau = 1.0;
 
-double fv_eps = 0.00000001;
+static double fv_eps = 0.00000001;
 
 //newPosition赋值给positions可以改用移动构造函数，提高效率
 
@@ -149,7 +149,6 @@ void FoamVortexSolver::setPanels(RegularPolygonPtr surfaces) {
 
 void FoamVortexSolver::setMovingGrid(const Vector2I& resolution_,
 	const BoundingBox2& domain_) {
-	_foamVortexData->movingGrid = std::make_shared<MovingFaceCenteredGrid2>(resolution_, domain_);
 }
 
 
@@ -320,13 +319,13 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 20000;
+	int emitNum = 500;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
-		tempPos.x = random_double(0.2, 1.2);
-		tempPos.y = random_double(0.4, 1.6);
+		tempPos.x = random_double(0.2, 0.5);
+		tempPos.y = random_double(0.4, 0.6);
 		/*while ((tempPos - panels->center()).getLength() < panels->r()) {
 			tempPos.x = random_double(0, 1);
 			tempPos.y = random_double(0.7, 1.3);

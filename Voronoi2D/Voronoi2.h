@@ -13,7 +13,7 @@ public:
 
 
 private:
-	void addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event);
+	void addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event, int index);
 
 	void circleCheck(VoronoiData2::Node* node);
 

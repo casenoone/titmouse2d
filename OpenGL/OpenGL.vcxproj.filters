@@ -62,6 +62,9 @@
     <ClInclude Include="FoamVortexSolver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="vp2005Data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="2.2.basic_lighting.fs" />

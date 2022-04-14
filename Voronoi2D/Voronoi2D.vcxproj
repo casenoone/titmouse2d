@@ -140,10 +140,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bubbleSolver2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Voronoi2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bubbleData2.h" />
+    <ClInclude Include="bubbleSolver2.h" />
     <ClInclude Include="Voronoi2.h" />
     <ClInclude Include="VoronoiData2.h" />
   </ItemGroup>

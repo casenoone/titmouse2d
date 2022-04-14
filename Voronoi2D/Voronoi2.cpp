@@ -13,6 +13,7 @@ void Voronoi2::generateVoronoi(int number, double width, double height) {
 		Vector2D point(tempX, tempY);
 
 		VoronoiData2::Node node;
+		node.setIndex(i);
 		auto e = new std::tuple(point, true, node);
 		queue.insert(e);
 	}
@@ -21,11 +22,13 @@ void Voronoi2::generateVoronoi(int number, double width, double height) {
 	_data.beachline.set(max_Point, 0);
 
 	while (_data.queue.notEmpty()) {
+
 		auto event = queue.maxQ();
 		Vector2D ePoint = std::get<0>(*event);
 		sweepY = ePoint.y;
 		bool isSiteEvent = std::get<1>(*event);
-		if (isSiteEvent) { addEvent(*event); }
+		int index = std::get<2>(*event).index;
+		if (isSiteEvent) { addEvent(*event, index); }
 		else {
 			removeEvent(event);
 		}
@@ -44,19 +47,22 @@ void Voronoi2::generateVoronoi(const Array<Vector2D>& positions) {
 		Vector2D point(tempX, tempY);
 
 		VoronoiData2::Node node;
+		node.setIndex(i);
 		auto e = new std::tuple(point, true, node);
 		queue.insert(e);
 	}
-
-	std::variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
+	auto p = *queue.maxQ();
+	std::variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(p);
 	_data.beachline.set(max_Point, 0);
+	_data.beachline.setIndex(std::get<2>(p).index);
 
 	while (_data.queue.notEmpty()) {
 		auto event = queue.maxQ();
 		Vector2D ePoint = std::get<0>(*event);
 		sweepY = ePoint.y;
 		bool isSiteEvent = std::get<1>(*event);
-		if (isSiteEvent) { addEvent(*event); }
+		int index = std::get<2>(*event).index;
+		if (isSiteEvent) { addEvent(*event, index); }
 		else {
 			removeEvent(event);
 		}
@@ -66,17 +72,24 @@ void Voronoi2::generateVoronoi(const Array<Vector2D>& positions) {
 }
 
 
-void Voronoi2::addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event) {
+//可以在这里增加一个参数，表明是event附带的粒子索引
+void Voronoi2::addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event, int index) {
 	auto ePoint = std::get<0>(event);
 	_data.sites.push(ePoint);
 
 	std::variant<Vector2D, VoronoiData2::Edge> eepoint = ePoint;
 	VoronoiData2::Node* newNode = new VoronoiData2::Node(eepoint, 0);
+	newNode->setIndex(index);
+
 	auto node = getNodeOverPoint(ePoint);
 	Vector2D start(ePoint.x, getY(node->point, ePoint));
 
+	//这里必须传入粒子的索引
 	auto rightEdge = new VoronoiData2::Edge(start, ePoint, node->point);
 	auto leftEdge = new VoronoiData2::Edge(start, node->point, ePoint);
+
+	rightEdge->setIndex(index, node->index);
+	leftEdge->setIndex(node->index, index);
 
 	leftEdge->addAdjacent(rightEdge);
 	rightEdge->addAdjacent(leftEdge);
@@ -218,6 +231,7 @@ void Voronoi2::removeEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>* event
 		auto newNode = new VoronoiData2::Node;
 
 		VoronoiData2::Edge tempE(intersection, leftSite->point, rightSite->point);
+		tempE.setIndex(leftSite->index, rightSite->index);
 		std::variant<Vector2D, VoronoiData2::Edge> tempE1 = tempE;
 		newNode->set(tempE1, 1);
 

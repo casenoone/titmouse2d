@@ -47,15 +47,6 @@ private:
 	//求解tracer粒子
 	void tracerParticlesSolve();
 
-	void emitParticlesFromPanel();
-
-	//把粒子的速度映射到网格上，方便做速度采样
-	void transferFromParticlesToGrids();
-
-	Vector2D computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
-
-	//对panel的数据结构做一个矫正以便于局部坐标系下的计算
-	void correctPanelCoordinateSystem();
 
 	//只要边界形状不变，边界矩阵就不会变
 	//这个函数只调用一次
@@ -63,12 +54,6 @@ private:
 
 	//我也不想起这么长的名字
 	Vector2D computeUnitVelocityFromPanels(const Vector2D& pos, int index);
-
-	Vector2D computeSingleVelocityFromPanels(int index);
-
-	void vortexSheetSolve(double timeIntervalInSeconds);
-
-	void slipVortexSheetSolve(double timeIntervalInSeconds);
 
 	void onBeginAdvanceTimeStep();
 

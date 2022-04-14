@@ -79,11 +79,11 @@
 //
 //
 //
-//auto sphere1 = make_shared<Sphere2>(center1, r1, resolution);
+//auto sphere1 = std::make_shared<Sphere2>(center1, r1, resolution);
 //
 //auto explicitSphere1 = sphere1->transformToExplicitSurface();
 //
-//auto vpSolver = make_shared<FoamVortexSolver>();
+//auto vpSolver = std::make_shared<FoamVortexSolver>();
 //
 //auto sphereBox = sphere1->boundingBox();
 //
@@ -96,7 +96,7 @@
 //
 //double dt = 0.008;
 //
-//RegularPolygonPtr obj1 = make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
+//RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
 //
 //
 //
@@ -206,47 +206,47 @@
 //	glutReshapeFunc(resize);     //改变窗口大小时
 //	glutDisplayFunc(display);    //绘制窗zz口显示时
 //
-//	//glutMainLoop();
+//	glutMainLoop();
 //
 //
-//		//这里是写入文件
-//	//记得重新算的时候要删掉 原来的文件夹
-//	int frame = 100000;
+//	//	//这里是写入文件
+//	////记得重新算的时候要删掉 原来的文件夹
+//	//int frame = 100000;
 //
-//	auto position = vpSolver->foamVortexData()->positions();
-//
-//
-//	int interval = 1;
-//
-//	string outfilename = "1";
-//
-//	system("mkdir FoamTest12");
-//
-//	for (int i = 0; i < frame; i += 1) {
-//
-//		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest12\\" + outfilename + ".txt", ios::app);
-//		auto num = vpSolver->foamVortexData()->numberOfParticles();
-//		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
+//	//auto position = vpSolver->foamVortexData()->positions();
 //
 //
+//	//int interval = 1;
 //
-//		obj1->velocity = Vector2D(1, 0.0);
-//		obj1->updatePosition(dt);
+//	//std::string outfilename = "1";
 //
-//		for (int n = 0; n < tracer_num; ++n) {
-//			auto x = vpSolver->foamVortexData()->tracePosition[n].x;
-//			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
-//			if (x < 2 && y < 2 && x >= 0 && y >= 0)
-//				out << x << "," << y << endl;
-//		}
-//		vpSolver->onAdvanceTimeStep(dt);
-//		sim_step++;
-//		auto temp1 = std::atoi(outfilename.c_str());
-//		temp1++;
-//		outfilename = std::to_string(temp1);
-//		cout << "当前计算到第" << sim_step << "步,系统中粒子数：" << num + tracer_num << endl;
+//	//system("mkdir FoamTest12");
 //
-//	}
+//	//for (int i = 0; i < frame; i += 1) {
+//
+//	//	std::ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest12\\" + outfilename + ".txt", std::ios::app);
+//	//	auto num = vpSolver->foamVortexData()->numberOfParticles();
+//	//	auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
+//
+//
+//
+//	//	obj1->velocity = Vector2D(1, 0.0);
+//	//	obj1->updatePosition(dt);
+//
+//	//	for (int n = 0; n < tracer_num; ++n) {
+//	//		auto x = vpSolver->foamVortexData()->tracePosition[n].x;
+//	//		auto y = vpSolver->foamVortexData()->tracePosition[n].y;
+//	//		if (x < 2 && y < 2 && x >= 0 && y >= 0)
+//	//			out << x << "," << y << std::endl;
+//	//	}
+//	//	vpSolver->onAdvanceTimeStep(dt);
+//	//	sim_step++;
+//	//	auto temp1 = std::atoi(outfilename.c_str());
+//	//	temp1++;
+//	//	outfilename = std::to_string(temp1);
+//	//	std::cout << "当前计算到第" << sim_step << "步,系统中粒子数：" << num + tracer_num << std::endl;
+//
+//	//}
 //
 //
 //
