@@ -25,8 +25,6 @@ public:
 			dir.y = leftPoint_.x - rightPoint_.x;
 			adjacent = nullptr;
 
-			leftPoint = leftPoint_;
-			rightPoint = rightPoint_;
 		}
 
 		void addAdjacent(Edge* edge) {
@@ -45,9 +43,6 @@ public:
 		double c;
 		Vector2D dir;
 		Edge* adjacent;
-
-		Vector2D leftPoint;
-		Vector2D rightPoint;
 
 		int leftIndex = 0;
 		int rightIndex = 0;

@@ -82,17 +82,7 @@ void drawVoronoi(const Voronoi2& voronoi, Array<Vector2D>& pos) {
 		drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
 	}
 
-	auto& node = voronoi._data.beachline;
-	auto  p = node.next;
-	while (p) {
-		auto circle = p->circle;
-		if (circle) {
-			auto p1 = get<0>(*circle);
-			drawPoint(p1.x, p1.y);
-		}
 
-		p = p->next;
-	}
 }
 
 int number = 3;

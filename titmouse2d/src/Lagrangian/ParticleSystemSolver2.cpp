@@ -70,9 +70,7 @@ void ParticleSystemSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 
 		auto temp1 = velocities[i] + (forces[i] / MASS) * timeIntervalInSeconds;
-
-		if (i >= n - 6)
-			newVelocity = temp1;
+		newVelocity = temp1;
 
 		auto& newPosition = _newPositions[i];
 		auto temp2 = positions[i] + newVelocity * timeIntervalInSeconds;

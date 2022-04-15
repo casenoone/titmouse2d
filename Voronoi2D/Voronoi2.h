@@ -31,5 +31,6 @@ public:
 	VoronoiData2 _data;
 };
 
+using VoronoiPtr = std::shared_ptr<Voronoi2>;
 
 #endif

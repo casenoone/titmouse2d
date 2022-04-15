@@ -2,6 +2,7 @@
 
 #include "../titmouse2d/src/Lagrangian/ParticleSystemSolver2.h"
 #include "bubbleData2.h"
+#include "../Voronoi2D/Voronoi2.h"
 
 class BubbleSolver2 : public ParticleSystemSolver2 {
 public:
@@ -11,11 +12,10 @@ public:
 
 	void emitParticles();
 
-	virtual void timeIntegration(double timeIntervalInSeconds)override;
+	void timeIntegration(double timeIntervalInSeconds, const Voronoi2& voronoi);
 
-	virtual void onAdvanceTimeStep(double timeIntervalInSeconds)override;
+	void onAdvanceTimeStep(double timeIntervalInSeconds, const Voronoi2& voronoi);
 
 public:
 	BubbleDataPtr _bubbleData;
-
 };
