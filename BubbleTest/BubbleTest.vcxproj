@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5a279627-5499-4c8f-a542-3cec9b0c3ba5}</ProjectGuid>
-    <RootNamespace>Voronoi2D</RootNamespace>
+    <ProjectGuid>{e8c1ccfd-6109-463c-8ba6-929b4ccf27db}</ProjectGuid>
+    <RootNamespace>BubbleTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,7 +72,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\zhangjian\eigen\eigen3;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -89,7 +88,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,20 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bubbleSolver2.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Voronoi2.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="bubbleData2.h" />
-    <ClInclude Include="bubbleSolver2.h" />
-    <ClInclude Include="Voronoi2.h" />
-    <ClInclude Include="VoronoiData2.h" />
+    <ClCompile Include="BubbleSolver2.cpp" />
+    <ClCompile Include="BubbleTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\titmouse2d\titmouse2d.vcxproj">
       <Project>{94580d84-0ebe-489d-a109-b2cbff52d865}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BubbleData2.h" />
+    <ClInclude Include="BubbleSolver2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

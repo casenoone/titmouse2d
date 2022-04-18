@@ -26,6 +26,8 @@ const int width = 400;
 const int height = 400;
 #define CHANNEL_NUM 4
 
+const double kPiD = 3.1415926535;
+
 RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
 
 
@@ -224,6 +226,32 @@ void drawPoint(double x, double y)
 	glEnd();
 }
 
+void drawCircle(const Vector2D& center, double r, int res) {
+	glBegin(GL_POLYGON);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(1, 128.0 / 255, 51.0 / 255);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(1, 1, 1);
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
 
 
 
@@ -264,7 +292,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest9\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\Voronoi2D\\FoamTest12\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -273,11 +301,8 @@ static void display(void)
 	}
 
 	auto temp1 = std::atoi(filename.c_str());
-	if (temp1 > 10) {
-		//temp1 = 1;
-	}
 
-	int skipNum = 1;
+	int skipNum = 3;
 	temp1 += skipNum;
 	filename = std::to_string(temp1);
 
@@ -296,33 +321,35 @@ static void display(void)
 		auto x = atof(position[0].c_str());
 		auto y = atof(position[1].c_str());
 		Vector2D tempPos(x, y);
-		if (tempPos.dis(obj1->center()) > obj1->r()) {
+		//if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
-			drawPoint(x, y);
-
-			//write_to_pixel(tempPos, 1, 1, 1, filename);
-		}
-		//posList.push_back(tempPos);
+			//drawPoint(x, y);
+		drawCircle(tempPos, 0.05, 50);
+		//write_to_pixel(tempPos, 1, 1, 1, filename);
+	//}
+	//posList.push_back(tempPos);
 	}
 	//write_to_pixel(posList, 1, 1, 1, filename);
 
 	myfile.close();
 
-	for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
+	/*for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
 		auto start = i->start;
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
-	}
+	}*/
 
-	obj1->velocity = Vector2D(0.0, 0.0);
-	obj1->updatePosition(dt * skipNum);
+	//obj1->velocity = Vector2D(0.0, 0.0);
+	//obj1->updatePosition(dt * skipNum);
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
 
 	//延时0.5秒
-	Sleep(20);
 
+	if (temp1 < 6) {
+		Sleep(1000);
+	}
 }
 
 static void idle(void)

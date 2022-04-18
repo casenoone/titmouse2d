@@ -15,6 +15,7 @@
 #include "../titmouse2d/src/random.h"
 #include "../titmouse2d/src/Geometry/Box2.h"
 #include "../titmouse2d/src/Collider2.h"
+#include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
 
 const float SCREEN_SIZE = 600;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -48,7 +49,61 @@ void drawPoint(double x, double y)
 }
 
 
+void drawCircle(const Vector2D& center, double r, int res, float r_, float g_, float b_) {
+	glBegin(GL_POLYGON);
 
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(r_, g_, b_);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	/*glBegin(GL_LINE_LOOP);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(0, 0, 0);
+		glVertex2f(x, y);
+	}
+	glEnd();*/
+}
+
+
+
+void drawCircle(const Vector2D& center, double r, int res) {
+	glBegin(GL_POLYGON);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(1, 128.0 / 255, 51.0 / 255);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(0, 0, 0);
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
 
 
 void drawLine(double x1, double y1, double x2, double y2) {
@@ -64,23 +119,20 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-
+BubbleSolver2 bubbleSolver;
 void drawVoronoi(const Voronoi2& voronoi, Array<Vector2D>& pos) {
 	auto& edges = voronoi._data.edges;
 	auto& sites = voronoi._data.sites;
 
 	auto edgeLength = edges.size();
 	for (int i = 0; i < edgeLength; ++i) {
-		drawLine(edges[i]->start.x, edges[i]->start.y,
-			edges[i]->end.x, edges[i]->end.y);
+		//drawLine(edges[i]->start.x, edges[i]->start.y,
+		//	edges[i]->end.x, edges[i]->end.y);
 		int index = edges[i]->leftIndex;
-		drawPoint(pos[index].x, pos[index].y);
-
+		//drawPoint(pos[index].x, pos[index].y);
+		drawCircle(pos[index], bubbleSolver._bubbleData->particleRadius.lookAt(index), 50);
 	}
 
-	for (int i = 0; i < sites.dataSize(); ++i) {
-		drawPoint(sites.lookAt(i).x, sites.lookAt(i).y);
-	}
 
 
 }
@@ -94,8 +146,9 @@ int n = 100;
 
 
 
-BubbleSolver2 bubbleSolver;
+
 auto& pos = bubbleSolver._bubbleData->positions();
+auto& vortexPos = bubbleSolver._bubbleData->vortexPosition;
 static void display(void)
 {
 
@@ -103,22 +156,22 @@ static void display(void)
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
 	//设置MODELVIEW矩阵，先设为单位阵，再乘上观察矩阵，即从z轴正向100处向 （0，0，0）
 	//看，上方向(0,1,0)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	for (int i = 0; i < n; ++i) {
-		//drawPoint(pos[i].x, pos[i].y);
-	}
 
 	Voronoi2 voronoiD;
 
 	voronoiD.generateVoronoi(pos);
 
 	drawVoronoi(voronoiD, pos);
-	bubbleSolver.onAdvanceTimeStep(0.009, voronoiD);
+	bubbleSolver.onAdvanceTimeStep(0.005, voronoiD);
+
+	for (int i = 0; i < vortexPos.dataSize(); ++i) {
+		drawCircle(vortexPos[i], 0.02, 4, 1, 1, 1);
+	}
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
@@ -160,17 +213,35 @@ int main(int argc, char** argv)
 	//glClearColor(0, 0, 0, 1);
 	glShadeModel(GL_FLAT);
 
-	Array<Vector2D> pos(n);
+
+
+	double temp_r = 0.03;
+	Array<Vector2D> this_pos;
 	Vector2D temp1;
-	for (int i = 0; i < n - 1; ++i) {
-		temp1.x = random_double(0, 2);
-		temp1.y = random_double(0, 2);
-		pos[i] = temp1;
+
+	n = 0;
+	auto grid = CellCenteredScalarGrid2::builder()
+		.withOrigin(0, 0)
+		.withResolution(22, 22)
+		.makeShared();
+
+	Vector2D tempC(1, 1);
+	for (int i = 0; i < grid->resolution().x; ++i) {
+		for (int j = 0; j < grid->resolution().y; ++j) {
+			auto pos = (grid->dataPosition())(i, j);
+			if (pos.dis(tempC) < 0.4) {
+				pos.x += random_double(-0.01, 0.01);
+				pos.y += random_double(-0.01, 0.01);
+
+				this_pos.push(pos);
+				bubbleSolver._bubbleData->particleRadius.push(temp_r);
+				n++;
+			}
+		}
 	}
 
-	pos[n - 1] = Vector2D(1, 2);
-
-	bubbleSolver.setData(n, pos, 2, 2);
+	std::cout << n << std::endl;
+	bubbleSolver.setData(n, this_pos, 2, 2);
 	std::vector<ExplicitSurface2Ptr> surfaceSet;
 
 	auto box1 = std::make_shared<Box2>(Vector2D(-0, -0), Vector2D(2, 2), true);
@@ -178,7 +249,7 @@ int main(int argc, char** argv)
 	collider.push(box1);
 
 	bubbleSolver.setCollider(collider);
-
+	bubbleSolver.emitVortexRing();
 
 
 	glutKeyboardFunc(key);       //键盘按下去时
@@ -187,6 +258,44 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);    //绘制窗zz口显示时
 
 	glutMainLoop();
+
+
+	//这里是写入文件
+//记得重新算的时候要删掉 原来的文件夹
+	int frame = 100000;
+
+	auto position = bubbleSolver._bubbleData->positions();
+	auto num = bubbleSolver._bubbleData->numberOfParticles();
+
+
+	int interval = 1;
+
+	std::string outfilename = "1";
+
+	system("mkdir FoamTest12");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		std::ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\Voronoi2D\\FoamTest12\\" + outfilename + ".txt", std::ios::app);
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			if (x < 2 && y < 2)
+				out << x << "," << y << std::endl;
+		}
+		Voronoi2 voronoiD;
+		voronoiD.generateVoronoi(pos);
+		bubbleSolver.onAdvanceTimeStep(0.005, voronoiD);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+		std::cout << "当前解算到第：" << temp1 << "步" << std::endl;
+	}
+
+
+
+
+
 
 
 

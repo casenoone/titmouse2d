@@ -25,7 +25,7 @@ private:
 
 	std::tuple<double, double, double> getEquationOfParabola(Vector2D point, double sweepY);
 
-	void removeEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>* event);
+	void removeEvent(std::shared_ptr<std::tuple<Vector2D, bool, VoronoiData2::Node>> event);
 
 public:
 	VoronoiData2 _data;

@@ -19,6 +19,8 @@ public:
 
 	void setNeiborList(const Array<Vector2D>& positions);
 
+	void setNeiborList(double r, const Array<Vector2D>& positions);
+
 	std::vector<std::vector<int>>& neighBors();
 
 private:
@@ -40,6 +42,8 @@ private:
 	bool IsNeighbor(Vector2 <double>& pos1, Vector2D& pos2, const double& r);
 
 	void forEachNeighborGrid(Vector2I& idx, int particleId, std::vector<std::vector<std::vector<int>>>& grids, const Array<Vector2D>& positions);
+
+	void forEachNeighborGrid(double r, Vector2I& idx, int particleId, std::vector<std::vector<std::vector<int>>>& grids, const Array<Vector2D>& positions);
 
 };
 

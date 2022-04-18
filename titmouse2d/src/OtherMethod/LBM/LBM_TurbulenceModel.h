@@ -19,7 +19,7 @@ extern const double omga;
 extern const double ldc_velocity;
 
 
-inline double getLesNoneqTensorCoeff(vector<double>& df, double feq[]) {
+inline double getLesNoneqTensorCoeff(std::vector<double>& df, double feq[]) {
 	double Qo = 0.0;
 	for (int m = 0; m < 2; m++) {
 		double qadd = 0.0;
@@ -53,7 +53,7 @@ inline double getLesOmega(double omega, double csmago, double Qo) {
 }
 
 
-inline void collideSmagorinsky(vector<double>& df, int flag) {
+inline void collideSmagorinsky(std::vector<double>& df, int flag) {
 	int l;
 	double rho = df[0];
 	double u_x = 0;

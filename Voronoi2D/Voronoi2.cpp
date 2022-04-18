@@ -6,7 +6,7 @@ static const Vector2D error_interSection(-1000, 0);
 static double sweepY = 0;
 
 void Voronoi2::generateVoronoi(int number, double width, double height) {
-	auto& queue = _data.queue;
+	/*auto& queue = _data.queue;
 	for (auto i = 0; i < number; ++i) {
 		auto tempX = random_double(0, 2);
 		auto tempY = random_double(0, 2);
@@ -14,12 +14,12 @@ void Voronoi2::generateVoronoi(int number, double width, double height) {
 
 		VoronoiData2::Node node;
 		node.setIndex(i);
-		auto e = new std::tuple(point, true, node);
+		auto e = std::make_shared < std::tuple<Vector2D, bool, VoronoiData2::Node>>(point, true, node);
 		queue.insert(e);
 	}
 
-	std::variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(*queue.maxQ());
-	_data.beachline.set(max_Point, 0);
+	std::variant<Vector2D, VoronoiData2::Edge*> max_Point = std::get<0>(*queue.maxQ());
+	_data.beachline->set(max_Point, 0);
 
 	while (_data.queue.notEmpty()) {
 
@@ -32,7 +32,7 @@ void Voronoi2::generateVoronoi(int number, double width, double height) {
 		else {
 			removeEvent(event);
 		}
-	}
+	}*/
 
 
 }
@@ -48,13 +48,15 @@ void Voronoi2::generateVoronoi(const Array<Vector2D>& positions) {
 
 		VoronoiData2::Node node;
 		node.setIndex(i);
-		auto e = new std::tuple(point, true, node);
+		auto e = std::make_shared < std::tuple<Vector2D, bool, VoronoiData2::Node>>(point, true, node);
 		queue.insert(e);
 	}
-	auto p = *queue.maxQ();
-	std::variant<Vector2D, VoronoiData2::Edge> max_Point = std::get<0>(p);
-	_data.beachline.set(max_Point, 0);
-	_data.beachline.setIndex(std::get<2>(p).index);
+	auto p = queue.maxQ();
+	std::variant<Vector2D, VoronoiData2::Edge*> max_Point = std::get<0>(*p);
+	_data.beachline = new VoronoiData2::Node;
+	_data.beachline->set(max_Point, 0);
+	_data.beachline->setIndex(std::get<2>(*p).index);
+	_data.fuckList1.push_back(_data.beachline);
 
 	while (_data.queue.notEmpty()) {
 		auto event = queue.maxQ();
@@ -77,54 +79,60 @@ void Voronoi2::addEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>& event, i
 	auto ePoint = std::get<0>(event);
 	_data.sites.push(ePoint);
 
-	std::variant<Vector2D, VoronoiData2::Edge> eepoint = ePoint;
+	std::variant<Vector2D, VoronoiData2::Edge*> eepoint = ePoint;
 	VoronoiData2::Node* newNode = new VoronoiData2::Node(eepoint, 0);
+	_data.fuckList1.push_back(newNode);
 	newNode->setIndex(index);
 
 	auto node = getNodeOverPoint(ePoint);
-	Vector2D start(ePoint.x, getY(node->point, ePoint));
-
-	//这里必须传入粒子的索引
-	auto rightEdge = new VoronoiData2::Edge(start, ePoint, node->point);
-	auto leftEdge = new VoronoiData2::Edge(start, node->point, ePoint);
-
-	rightEdge->setIndex(index, node->index);
-	leftEdge->setIndex(node->index, index);
-
-	leftEdge->addAdjacent(rightEdge);
-	rightEdge->addAdjacent(leftEdge);
-
-	std::variant<Vector2D, VoronoiData2::Edge> left = *leftEdge;
-	std::variant<Vector2D, VoronoiData2::Edge> right = *rightEdge;
-	auto leftNode = new VoronoiData2::Node(left, 1);
-	auto rightNode = new VoronoiData2::Node(right, 1);
-
-	std::variant<Vector2D, VoronoiData2::Edge> nnpoint = node->point;
-	auto duplicateNode = new VoronoiData2::Node(nnpoint, 0);
-
-	duplicateNode->setNext(node->next);
-	rightNode->setNext(duplicateNode);
-	newNode->setNext(rightNode);
-	leftNode->setNext(newNode);
-	node->setNext(leftNode);
-
-
 	if (node) {
-		_data.queue.removeEvent(node->circle);
-		node->circle = nullptr;
-	}
+		Vector2D start(ePoint.x, getY(node->point, ePoint));
 
-	circleCheck(node);
-	circleCheck(duplicateNode);
+		//这里必须传入粒子的索引
+		auto rightEdge = new VoronoiData2::Edge(start, ePoint, node->point);
+		auto leftEdge = new VoronoiData2::Edge(start, node->point, ePoint);
+		_data.fuckList.push_back(rightEdge);
+		_data.fuckList.push_back(leftEdge);
+		rightEdge->setIndex(index, node->index);
+		leftEdge->setIndex(node->index, index);
+
+		//曹他妈的这里循环引用
+		leftEdge->addAdjacent(rightEdge);
+		rightEdge->addAdjacent(leftEdge);
+
+		std::variant<Vector2D, VoronoiData2::Edge*> left = leftEdge;
+		std::variant<Vector2D, VoronoiData2::Edge*> right = rightEdge;
+		auto leftNode = new VoronoiData2::Node(left, 1);
+		auto rightNode = new VoronoiData2::Node(right, 1);
+		_data.fuckList1.push_back(leftNode);
+		_data.fuckList1.push_back(rightNode);
+		std::variant<Vector2D, VoronoiData2::Edge*> nnpoint = node->point;
+		auto duplicateNode = new VoronoiData2::Node(nnpoint, 0);
+		_data.fuckList1.push_back(duplicateNode);
+		duplicateNode->setNext(node->next);
+		rightNode->setNext(duplicateNode);
+		newNode->setNext(rightNode);
+		leftNode->setNext(newNode);
+		node->setNext(leftNode);
+
+
+		if (node) {
+			_data.queue.removeEvent(node->circle);
+			node->circle = nullptr;
+		}
+
+		circleCheck(node);
+		circleCheck(duplicateNode);
+	}
 }
 
 void Voronoi2::circleCheck(VoronoiData2::Node* node) {
 	VoronoiData2::Edge* leftEdge = nullptr;
 	VoronoiData2::Edge* rightEdge = nullptr;
 	if (node->prev)
-		leftEdge = &node->prev->edge;
+		leftEdge = node->prev->edge;
 	if (node->next)
-		rightEdge = &node->next->edge;
+		rightEdge = node->next->edge;
 
 	auto intersection = getEdgeIntersection(leftEdge, rightEdge);
 	if (intersection.x == -error_interSection.x) {
@@ -139,7 +147,7 @@ void Voronoi2::circleCheck(VoronoiData2::Node* node) {
 
 	Vector2D tempPoint(intersection.x, intersection.y - rad);
 
-	auto circleEvent = new std::tuple(tempPoint, false, *node);
+	auto circleEvent = std::make_shared < std::tuple<Vector2D, bool, VoronoiData2::Node>>(tempPoint, false, *node);
 
 
 	node->circle = circleEvent;
@@ -148,20 +156,20 @@ void Voronoi2::circleCheck(VoronoiData2::Node* node) {
 
 
 VoronoiData2::Node* Voronoi2::getNodeOverPoint(const Vector2D& point) {
-	auto* siteNode = &_data.beachline;
+	auto siteNode = _data.beachline;
 	auto edgeNode = siteNode->next;
 	double x = 0;
 	//遍历链表
 	while (edgeNode && edgeNode->next) {
-		if (edgeNode->edge.dir.x == 0) {
+		if (edgeNode->edge->dir.x == 0) {
 			std::cout << "error 1" << std::endl;
 		}
 
 		auto parabola = getEquationOfParabola(siteNode->point, sweepY);
 
 		auto A = std::get<0>(parabola);
-		auto B = std::get<1>(parabola) - edgeNode->edge.m;
-		auto C = std::get<2>(parabola) - edgeNode->edge.c;
+		auto B = std::get<1>(parabola) - edgeNode->edge->m;
+		auto C = std::get<2>(parabola) - edgeNode->edge->c;
 
 		auto discriminant = (B * B) - (4 * A * C);
 		auto X1 = ((-1 * B) + std::sqrt(discriminant)) / (2 * A);
@@ -170,7 +178,7 @@ VoronoiData2::Node* Voronoi2::getNodeOverPoint(const Vector2D& point) {
 		auto min = X1 < X2 ? X1 : X2;
 		auto max = X1 > X2 ? X1 : X2;
 
-		x = edgeNode->edge.dir.x < 0 ? min : max;
+		x = edgeNode->edge->dir.x < 0 ? min : max;
 		if (point.x == x)std::cout << "warning!" << std::endl;
 
 		if (point.x < x) {
@@ -194,16 +202,14 @@ std::tuple<double, double, double> Voronoi2::getEquationOfParabola(Vector2D poin
 	return result;
 }
 
-void Voronoi2::removeEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>* event) {
+void Voronoi2::removeEvent(std::shared_ptr<std::tuple<Vector2D, bool, VoronoiData2::Node>> event) {
 	auto eNode = std::get<2>(*event);
-	VoronoiData2::Edge* leftEdge;
-	VoronoiData2::Edge* rightEdge;
-	leftEdge = nullptr;
-	rightEdge = nullptr;
+	VoronoiData2::Edge* leftEdge = nullptr;
+	VoronoiData2::Edge* rightEdge = nullptr;
 	if (eNode.prev)
-		leftEdge = &eNode.prev->edge;
+		leftEdge = eNode.prev->edge;
 	if (eNode.next)
-		rightEdge = &eNode.next->edge;
+		rightEdge = eNode.next->edge;
 
 	auto intersection = getEdgeIntersection(leftEdge, rightEdge);
 	if (intersection.x == error_interSection.x) {
@@ -229,10 +235,13 @@ void Voronoi2::removeEvent(std::tuple<Vector2D, bool, VoronoiData2::Node>* event
 
 	if (leftSite && rightSite) {
 		auto newNode = new VoronoiData2::Node;
+		_data.fuckList1.push_back(newNode);
+		auto  tempE = new VoronoiData2::Edge(intersection, leftSite->point, rightSite->point);
+		//这里是漏网之鱼
+		_data.fuckList.push_back(tempE);
 
-		VoronoiData2::Edge tempE(intersection, leftSite->point, rightSite->point);
-		tempE.setIndex(leftSite->index, rightSite->index);
-		std::variant<Vector2D, VoronoiData2::Edge> tempE1 = tempE;
+		tempE->setIndex(leftSite->index, rightSite->index);
+		std::variant<Vector2D, VoronoiData2::Edge*> tempE1 = tempE;
 		newNode->set(tempE1, 1);
 
 		newNode->setNext(rightSite);

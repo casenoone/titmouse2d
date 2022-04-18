@@ -145,7 +145,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="VoronoiTest.cpp" />
     <ClCompile Include="vp2005.h" />
     <ClCompile Include="vp2005.cpp" />
     <ClCompile Include="FoamVortexSolver.cpp" />

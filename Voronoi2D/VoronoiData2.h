@@ -6,6 +6,7 @@
 #include <list>
 #include <tuple>
 
+
 #include "../titmouse2d/src/Vector2.hpp"
 #include "../titmouse2d/src/Array.hpp"
 #include "../titmouse2d/src/MathUtils.hpp"
@@ -46,6 +47,11 @@ public:
 
 		int leftIndex = 0;
 		int rightIndex = 0;
+
+		~Edge() {
+			adjacent = nullptr;
+		}
+
 	};
 
 	//链表的node
@@ -55,7 +61,7 @@ public:
 
 		}
 
-		Node(std::variant<Vector2D, Edge>& data_, int type) {
+		Node(std::variant<Vector2D, VoronoiData2::Edge*>& data_, int type) {
 			if (type == 0) {
 				point = std::get<0>(data_);
 				type = 0;
@@ -67,7 +73,7 @@ public:
 
 		}
 
-		void set(std::variant<Vector2D, Edge>& data_, int type) {
+		void set(std::variant<Vector2D, VoronoiData2::Edge*>& data_, int type) {
 			if (type == 0) {
 				point = std::get<0>(data_);
 				type = 0;
@@ -90,11 +96,15 @@ public:
 			index = i;
 		}
 
+		~Node() {
+			//delete this;
+		}
+
 	public:
 		Vector2D point;
-		Edge edge;
+		Edge* edge;
 		int type;
-		std::tuple<Vector2D, bool, Node>* circle = nullptr;
+		std::shared_ptr<std::tuple<Vector2D, bool, Node>> circle;
 
 		int index = 0;
 
@@ -106,8 +116,9 @@ public:
 	public:
 		Queue() = default;
 
-		void insert(std::tuple<Vector2D, bool, Node>* E) {
+		void insert(std::shared_ptr<std::tuple<Vector2D, bool, Node>> E) {
 			auto EPoint = std::get<0>(*E);
+
 
 			if (queueList.empty()) {
 				queueList.push_back(E);
@@ -139,7 +150,7 @@ public:
 			}
 		}
 
-		std::tuple<Vector2D, bool, Node>* maxQ() {
+		std::shared_ptr < std::tuple<Vector2D, bool, Node>> maxQ() {
 			auto R = queueList.front();
 			queueList.pop_front();
 			return R;
@@ -155,14 +166,12 @@ public:
 
 		//注意迭代器失效问题
 		//可以确保这里没有问题
-		void removeEvent(std::tuple<Vector2D, bool, Node>* E) {
+		void removeEvent(std::shared_ptr<std::tuple<Vector2D, bool, Node>> E) {
 			if (!notEmpty())return;
 			for (auto iter = queueList.begin(); iter != queueList.end(); ++iter) {
 
-				//这里要把动态内存释放掉的
 				if ((*iter) == E) {
-					delete(*iter);
-					*iter = nullptr;
+
 					iter = queueList.erase(iter);
 				}
 				if (iter == queueList.end()) {
@@ -173,41 +182,53 @@ public:
 
 
 	public:
-		std::list<std::tuple<Vector2D, bool, Node>*> queueList;
+		std::list<std::shared_ptr<std::tuple<Vector2D, bool, Node>>> queueList;
 	};
 
 	VoronoiData2() = default;
 
 	//需要把queueList的动态内存全部释放掉
 	//Node申请的动态内存也要释放掉
+	//=除node以外，其他全部地方使用shared_ptr
 	~VoronoiData2() {
-		for (auto i = queue.queueList.begin(); i != queue.queueList.end(); ++i) {
 
-			auto k = std::get<2>(**i);
-			if (k.edge.adjacent) {
-				delete k.edge.adjacent;
-				k.edge.adjacent = nullptr;
+		/*auto p = beachline;
+		auto pprev = beachline->prev;
+		while (p) {
+			if (p) {
+				auto q = p;
+				p = p->next;
+				delete q;
 			}
-
-			if (*i)
-				delete(*i);
-			*i = nullptr;
-
-
-
 		}
 
-		auto p = beachline.next;
-		while (p) {
-			auto q = p;
-			auto circle1 = q->circle;
-			if (circle1) {
-				delete circle1;
-				circle1 = nullptr;
-			}
-			p = p->next;
+		auto p1 = pprev;
+		while (p1) {
+			auto q = p1;
+			p1 = p1->prev;
 			delete q;
-			q = nullptr;
+		}*/
+
+		/*for (auto i = edges.begin(); i != edges.end(); ++i) {
+			if (*i) {
+				delete (*i);
+				*i = nullptr;
+			}
+		}*/
+
+
+		for (auto i = fuckList.begin(); i != fuckList.end(); ++i) {
+			if (*i) {
+				delete (*i);
+				*i = nullptr;
+			}
+		}
+
+		for (auto i = fuckList1.begin(); i != fuckList1.end(); ++i) {
+			if (*i) {
+				delete (*i);
+				*i = nullptr;
+			}
 		}
 
 	}
@@ -215,8 +236,10 @@ public:
 public:
 	Queue queue;
 	Array<Vector2D> sites;
-	VoronoiData2::Node beachline;
+	VoronoiData2::Node* beachline;
 	std::vector<VoronoiData2::Edge*> edges;
+	std::vector<Edge*> fuckList;
+	std::vector<Node*> fuckList1;
 };
 
 

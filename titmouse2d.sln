@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Render2D", "Render2D\Render
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Voronoi2D", "Voronoi2D\Voronoi2D.vcxproj", "{5A279627-5499-4C8F-A542-3CEC9B0C3BA5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BubbleTest", "BubbleTest\BubbleTest.vcxproj", "{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -181,6 +183,14 @@ Global
 		{5A279627-5499-4C8F-A542-3CEC9B0C3BA5}.Release|x64.Build.0 = Release|x64
 		{5A279627-5499-4C8F-A542-3CEC9B0C3BA5}.Release|x86.ActiveCfg = Release|Win32
 		{5A279627-5499-4C8F-A542-3CEC9B0C3BA5}.Release|x86.Build.0 = Release|Win32
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Debug|x64.ActiveCfg = Debug|x64
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Debug|x64.Build.0 = Debug|x64
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Debug|x86.ActiveCfg = Debug|Win32
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Debug|x86.Build.0 = Debug|Win32
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Release|x64.ActiveCfg = Release|x64
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Release|x64.Build.0 = Release|x64
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Release|x86.ActiveCfg = Release|Win32
+		{E8C1CCFD-6109-463C-8BA6-929B4CCF27DB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
