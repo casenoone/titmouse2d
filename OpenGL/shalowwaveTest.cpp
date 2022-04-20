@@ -85,7 +85,8 @@ int main()
 	Shader lightCubeShader("2.2.light_cube.vs", "2.2.light_cube.fs");
 
 
-	float tri[200000];
+	//float tri[200000];
+	float* tri;
 	//float tri[] = { // 第一个三角形
 	//	0.5f, 0.5f, 0.0f,  0.0,0.0,1.0,  // 右上角
 	//	0.5f, -0.5f, 0.0f, 0.0,0.0,1.0, // 右下角
@@ -256,7 +257,9 @@ int main()
 
 		//绘制三角网格
 		glBindVertexArray(meshVAO);
+		tri = new float[(res.y - 1) * (res.x - 1) * 18 * 2];
 		auto triNum = swSolver->getWaterSurface(tri);
+		//std::cout << triNum << std::endl;
 		//cout << triNum << endl;
 		glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
 		glBufferData(GL_ARRAY_BUFFER, triNum * 4, tri, GL_STREAM_DRAW);
@@ -271,7 +274,7 @@ int main()
 
 		glDrawArrays(GL_TRIANGLES, 0, triNum);
 
-
+		delete tri;
 
 
 

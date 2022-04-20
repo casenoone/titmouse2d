@@ -16,6 +16,7 @@
 #include "../titmouse2d/src/Geometry/Box2.h"
 #include "../titmouse2d/src/Collider2.h"
 #include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
+#include "../titmouse2d/src/mesh/objout.hpp"
 
 const float SCREEN_SIZE = 600;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -250,6 +251,14 @@ int main(int argc, char** argv)
 
 	bubbleSolver.setCollider(collider);
 	bubbleSolver.emitVortexRing();
+
+	/*std::string path = "E:\\zhangjian\\solve_data\\test2\\";
+	Objout writer(path, "1");
+	writer.write_in_obj_v(0, 0, 0);
+	writer.write_in_obj_v(1, 0, 0);
+	writer.write_in_obj_v(1, 1, 0);
+	writer.write_in_obj_f(1, 2, 3);*/
+
 
 
 	glutKeyboardFunc(key);       //键盘按下去时
