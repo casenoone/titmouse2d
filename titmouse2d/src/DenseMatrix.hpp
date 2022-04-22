@@ -19,7 +19,7 @@ public:
 
 	DenseMatrix(int row, int column);
 
-	DenseMatrix(int row, int column, const vector<vector<double>>& data);
+	DenseMatrix(int row, int column, const std::vector<std::vector<double>>& data);
 
 	DenseMatrix(Size2 order);
 
@@ -66,7 +66,7 @@ public:
 private:
 	Size2 _size;
 
-	shared_ptr<vector<T>> _data;
+	std::shared_ptr<std::vector<T>> _data;
 
 };
 
@@ -74,7 +74,7 @@ private:
 
 template<class T>
 DenseMatrix<T>::DenseMatrix(Size2 order) {
-	_data = make_shared<vector<T>>();
+	_data = std::make_shared<std::vector<T>>();
 	_size = order;
 	_data->resize(_size.x * _size.y);
 }
@@ -82,14 +82,14 @@ DenseMatrix<T>::DenseMatrix(Size2 order) {
 
 template<class T>
 DenseMatrix<T>::DenseMatrix(int row, int column) {
-	_data = make_shared<vector<T>>();
+	_data = std::make_shared<std::vector<T>>();
 	_size = Size2(row, column);
 	_data->resize(row * column);
 }
 
 template<class T>
-DenseMatrix<T>::DenseMatrix(int row, int column, const vector<vector<double>>& data) {
-	_data = make_shared<vector<T>>();
+DenseMatrix<T>::DenseMatrix(int row, int column, const std::vector<std::vector<double>>& data) {
+	_data = std::make_shared<std::vector<T>>();
 	_size = Size2(row, column);
 	_data->resize(row * column);
 

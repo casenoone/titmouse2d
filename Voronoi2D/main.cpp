@@ -16,7 +16,7 @@
 #include "../titmouse2d/src/Geometry/Box2.h"
 #include "../titmouse2d/src/Collider2.h"
 #include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
-#include "../titmouse2d/src/mesh/objout.hpp"
+#include "../titmouse2d/src/mesh/Plyout.h"
 
 const float SCREEN_SIZE = 600;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -252,15 +252,20 @@ int main(int argc, char** argv)
 	bubbleSolver.setCollider(collider);
 	bubbleSolver.emitVortexRing();
 
-	/*std::string path = "E:\\zhangjian\\solve_data\\test2\\";
-	Objout writer(path, "1");
-	writer.write_in_obj_v(0, 0, 0);
-	writer.write_in_obj_v(1, 0, 0);
-	writer.write_in_obj_v(1, 1, 0);
-	writer.write_in_obj_f(1, 2, 3);*/
+	int fileNum = 50000;
 
 
+	/*std::string path = "E:\\zhangjian\\solve_data\\ply_test\\";
+	Plyout writer(path, "1", fileNum);
+	for (int i = 0; i < fileNum; ++i) {
+		double x_ = random_double(0, 2);
+		double y_ = random_double(0, 2);
+		double z_ = random_double(0, 2);
 
+		writer.write_in_ply(x_, y_, z_);
+	}*/
+
+	std::cout << "写入完毕" << std::endl;
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时
 	glutReshapeFunc(resize);     //改变窗口大小时

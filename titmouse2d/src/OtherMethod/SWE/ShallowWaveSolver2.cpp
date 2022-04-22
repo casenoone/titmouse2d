@@ -2,6 +2,7 @@
 #include "../../LinearSystem/ConjugateGradientSolver.hpp"
 #include "../../Vector3.hpp"
 #include "../../mesh/objout.hpp"
+#include "../../mesh/Plyout.h"
 
 const double shallow_H = 1.0;
 
@@ -280,11 +281,12 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 	double temppp = -5;
 	auto posFunc = data->height->dataPosition();
 
+
 	static int fileNum = 1;
 	std::string	name = std::to_string(fileNum);
 	fileNum++;
-	std::string path = "E:\\zhangjian\\solve_data\\test1\\";
-	Objout writer(path, name);
+	std::string path = "E:\\zhangjian\\solve_data\\ply_test\\";
+	Plyout writer(path, name, res.x * res.y);
 
 
 	//´æ´¢Ë÷Òý
@@ -298,21 +300,19 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			auto tempY1 = (h->lookAt(i, j) - 1) * temp_k;
 			auto tempZ1 = (pos1.y - 1) * temp_k;
 			Vector3D p1(tempX1, tempY1, tempZ1);
-			writer.write_in_obj_v(pos1.x, h->lookAt(i, j), pos1.y);
+			writer.write_in_ply(pos1.x, h->lookAt(i, j), pos1.y);
 
 			auto pos2 = posFunc(i + 1, j);
 			auto tempX2 = (pos2.x - 1) * temp_k;
 			auto tempY2 = (h->lookAt(i + 1, j) - 1) * temp_k;
 			auto tempZ2 = (pos2.y - 1) * temp_k;
 			Vector3D p2(tempX2, tempY2, tempZ2);
-			writer.write_in_obj_v(pos2.x, h->lookAt(i + 1, j), pos2.y);
 
 			auto pos3 = posFunc(i, j - 1);
 			auto tempX3 = (pos3.x - 1) * temp_k;
 			auto tempY3 = (h->lookAt(i, j - 1) - 1) * temp_k;
 			auto tempZ3 = (pos3.y - 1) * temp_k;
 			Vector3D p3(tempX3, tempY3, tempZ3);
-			writer.write_in_obj_v(pos3.x, h->lookAt(i, j - 1), pos3.y);
 
 			auto n = (p2 - p1).cross(p3 - p1).getNormalize();
 			mesh[k] = static_cast<float>(p1.x);
@@ -335,8 +335,8 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			mesh[k + 17] = static_cast<float>(n.z);
 			k += 18;
 			triNum += 18;
-			Vector3I t(indexNum++, indexNum++, indexNum++);
-			tempArray.push_back(t);
+
+
 		}
 	}
 
@@ -347,7 +347,7 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			auto tempY1 = (h->lookAt(i, j) - 1) * temp_k;
 			auto tempZ1 = (pos1.y - 1) * temp_k;
 			Vector3D p1(tempX1, tempY1, tempZ1);
-			writer.write_in_obj_v(pos1.x, h->lookAt(i, j), pos1.y);
+			writer.write_in_ply(pos1.x, h->lookAt(i, j), pos1.y);
 
 
 			auto pos2 = posFunc(i, j - 1);
@@ -355,7 +355,6 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			auto tempY2 = (h->lookAt(i, j - 1) - 1) * temp_k;
 			auto tempZ2 = (pos2.y - 1) * temp_k;
 			Vector3D p2(tempX2, tempY2, tempZ2);
-			writer.write_in_obj_v(pos2.x, h->lookAt(i, j - 1), pos2.y);
 
 
 			auto pos3 = posFunc(i - 1, j - 1);
@@ -363,7 +362,6 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			auto tempY3 = (h->lookAt(i - 1, j - 1) - 1) * temp_k;
 			auto tempZ3 = (pos3.y - 1) * temp_k;
 			Vector3D p3(tempX3, tempY3, tempZ3);
-			writer.write_in_obj_v(pos3.x, h->lookAt(i - 1, j - 1), pos3.y);
 
 
 			auto n = (p2 - p1).cross(p3 - p2).getNormalize();
@@ -388,16 +386,10 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			mesh[k + 17] = static_cast<float>(n.z);
 			k += 18;
 			triNum += 18;
-			Vector3I t(indexNum++, indexNum++, indexNum++);
-			tempArray.push_back(t);
+
+
+
 		}
-	}
-
-	auto arraySize = tempArray.size();
-	std::cout << arraySize << std::endl;
-	for (int i = 0; i < arraySize; i++) {
-		writer.write_in_obj_f(tempArray[i].x, tempArray[i].y, tempArray[i].z);
-
 	}
 
 	return triNum;
