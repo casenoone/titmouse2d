@@ -47,6 +47,15 @@ FoamVortexSolver::FoamVortexSolver() {
 	_foamVortexData = std::dynamic_pointer_cast<FoamVortexData>(_particleSystemData);
 }
 
+FoamVortexSolver::FoamVortexSolver(
+	const Vector2I& resolution,
+	const Vector2D& gridSpacing,
+	const Vector2D& gridOrigin) :FoamVortexSolver() {
+
+	_shallowWaveSolver = std::make_shared<ShallowWaveSolver2>(resolution, gridSpacing, gridOrigin);
+}
+
+
 FoamVortexSolver::~FoamVortexSolver() {
 
 }
@@ -93,7 +102,6 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
 	timeIntegration(timeIntervalInSeconds);
 	onEndAdvanceTimeStep();
-	//emitTracerParticles();
 	emitParticlesFromPanels(timeIntervalInSeconds);
 }
 
@@ -319,13 +327,13 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 500;
+	int emitNum = 10000;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
-		tempPos.x = random_double(0.2, 0.5);
-		tempPos.y = random_double(0.4, 0.6);
+		tempPos.x = random_double(0.2, 1.0);
+		tempPos.y = random_double(0.5, 1.5);
 		/*while ((tempPos - panels->center()).getLength() < panels->r()) {
 			tempPos.x = random_double(0, 1);
 			tempPos.y = random_double(0.7, 1.3);

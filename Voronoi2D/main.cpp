@@ -127,10 +127,8 @@ void drawVoronoi(const Voronoi2& voronoi, Array<Vector2D>& pos) {
 
 	auto edgeLength = edges.size();
 	for (int i = 0; i < edgeLength; ++i) {
-		//drawLine(edges[i]->start.x, edges[i]->start.y,
-		//	edges[i]->end.x, edges[i]->end.y);
+
 		int index = edges[i]->leftIndex;
-		//drawPoint(pos[index].x, pos[index].y);
 		drawCircle(pos[index], bubbleSolver._bubbleData->particleRadius.lookAt(index), 50);
 	}
 
@@ -216,14 +214,14 @@ int main(int argc, char** argv)
 
 
 
-	double temp_r = 0.03;
+	double temp_r = 0.01;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
 	n = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(22, 22)
+		.withResolution(40, 40)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
@@ -252,20 +250,9 @@ int main(int argc, char** argv)
 	bubbleSolver.setCollider(collider);
 	bubbleSolver.emitVortexRing();
 
-	int fileNum = 50000;
 
 
-	/*std::string path = "E:\\zhangjian\\solve_data\\ply_test\\";
-	Plyout writer(path, "1", fileNum);
-	for (int i = 0; i < fileNum; ++i) {
-		double x_ = random_double(0, 2);
-		double y_ = random_double(0, 2);
-		double z_ = random_double(0, 2);
 
-		writer.write_in_ply(x_, y_, z_);
-	}*/
-
-	std::cout << "写入完毕" << std::endl;
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时
 	glutReshapeFunc(resize);     //改变窗口大小时

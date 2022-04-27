@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="couplingTest.cpp" />
     <ClCompile Include="vp2005.h" />
     <ClCompile Include="vp2005.cpp" />
     <ClCompile Include="FoamVortexSolver.cpp" />

@@ -16,10 +16,10 @@ void BubbleSolver2::emitVortexRing() {
 	pos.reSize(n);
 	vel.reSize(n);
 	gamma.reSize(n);
-	Vector2D A(0, 1.2);
-	Vector2D B(0, 1.1);
-	Vector2D C(0, 1.0);
-	Vector2D D(0, 0.9);
+	Vector2D A(0.4, 1.2);
+	Vector2D B(0.4, 1.1);
+	Vector2D C(0.4, 1.0);
+	Vector2D D(0.4, 0.9);
 
 	pos[0] = A;
 	pos[1] = B;

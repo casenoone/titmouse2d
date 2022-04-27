@@ -10,6 +10,7 @@
 //#include "../titmouse2d/src/SparseMatrix.hpp"
 //#include "../titmouse2d/src/Eulerian/MarchingCubes2.h"
 //#include "../titmouse2d/src/Geometry/RegularPolygon.h"
+//#include "../titmouse2d/src/mesh/Plyout.h"
 //#include <GL/glut.h>
 //
 //#include <windows.h>
@@ -94,7 +95,7 @@
 //	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
 //
 //
-//double dt = 0.008;
+//double dt = 0.01;
 //
 //RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
 //
@@ -207,6 +208,31 @@
 //	glutDisplayFunc(display);    //绘制窗zz口显示时
 //
 //	glutMainLoop();
+//
+//	int frame = 100000;
+//	auto position = vpSolver->foamVortexData()->positions();
+//	for (int i = 0; i < frame; i += 1) {
+//
+//		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
+//		obj1->velocity = Vector2D(1, 0.0);
+//		obj1->updatePosition(dt);
+//
+//		static int fileNum = 1;
+//		std::string	name = std::to_string(fileNum);
+//		fileNum++;
+//		std::string path = "E:\\zhangjian\\solve_data\\vortex_test\\";
+//		Plyout writer(path, name, tracer_num);
+//
+//		for (int n = 0; n < tracer_num; ++n) {
+//			auto x = vpSolver->foamVortexData()->tracePosition[n].x;
+//			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
+//			if (x < 2 && y < 2 && x >= 0 && y >= 0)
+//				writer.write_in_ply(x, 0, y);
+//		}
+//		vpSolver->onAdvanceTimeStep(dt);
+//
+//	}
+//
 //
 //
 //	//	//这里是写入文件
