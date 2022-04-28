@@ -100,12 +100,7 @@ void BubbleSolver2::computeStrongForce(const Voronoi2& voronoi) {
 
 		}
 
-		////排斥力
-		//if (dis <= rest_ij) {
-		//	auto f = 1.2 * (1 / dis - 1 / (r_i + r_j)) * (pos[j] - pos[i]);
-		//	force[i] += f;
-		//	force[j] -= f;
-		//}
+
 	}
 }
 

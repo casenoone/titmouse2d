@@ -71,31 +71,19 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 
-Vector2I resolution(13, 13);
-Vector2D origin(0.0, 0.0);
+
 
 Vector2D center1(1.0, 1.1);
 double r1 = 0.4;
 
+auto res = Vector2I(70, 70);
+auto grid_x = 2 / 70.0;
 
-
-
-auto sphere1 = std::make_shared<Sphere2>(center1, r1, resolution);
-
-auto explicitSphere1 = sphere1->transformToExplicitSurface();
-
-auto vpSolver = std::make_shared<FoamVortexSolver>();
-
-auto sphereBox = sphere1->boundingBox();
+auto vpSolver = std::make_shared<FoamVortexSolver>(res, Vector2D(grid_x, grid_x));
 
 double movingCoffe = 0.3;
 
-Vector2I movingGridRes(10, 10);
-BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movingCoffe),
-	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
-
-
-double dt = 0.01;
+double dt = 0.006;
 
 RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
 
@@ -112,14 +100,17 @@ static void display(void)
 	obj1->velocity = Vector2D(1, 0.0);
 	obj1->updatePosition(dt);
 
+
+	vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
+
 	vpSolver->onAdvanceTimeStep(dt);
 	sim_step++;
-	int numberOfParticles = vpSolver->foamVortexData()->numberOfParticles();
+	int n = vpSolver->foamVortexData()->vortexPosition.dataSize();
 
-	for (int i = 0; i < numberOfParticles; ++i) {
+	for (int i = 0; i < n; ++i) {
 
-		auto pos = vpSolver->foamVortexData()->positions();
-		//drawPoint(pos[i].x, pos[i].y, 255, 0, 0);
+		auto pos = vpSolver->foamVortexData()->vortexPosition;
+		drawPoint(pos[i].x, pos[i].y, 255, 0, 0);
 	}
 
 	//可视化tracer粒子
@@ -131,37 +122,17 @@ static void display(void)
 			drawPoint(tracer_pos[i].x, tracer_pos[i].y);
 	}
 
-	int m = 0;
 	for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
 		auto start = i->start;
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
-
-		////可视化法线
-		//auto midPoint = obj1->midPoint(m++);
-		//auto normalEnd = midPoint + 0.2 * i->normal;
-		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
 
-
-
-	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
-	for (int i = 0; i < movingSize.x; ++i) {
-		for (int j = 0; j < movingSize.y; ++j) {
-			auto posfunc = vpSolver->foamVortexData()->movingGrid->uPosition();
-			drawPoint(posfunc(i, j).x, posfunc(i, j).y);
-		}
-	}*/
-
 	glutSwapBuffers();
-
 }
 
-static void idle(void)
-{
-
+static void idle(void) {
 	glutPostRedisplay();
-
 }
 
 static void resize(int width, int height)
@@ -189,10 +160,9 @@ int main(int argc, char** argv)
 	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
 	glShadeModel(GL_FLAT);
 
-	//vpSolver->setPanels(explicitSphere1);
-	vpSolver->setPanels(obj1);
-	vpSolver->setMovingGrid(movingGridRes, movingGridDomain);
+	vpSolver->setMovingBoudnary(obj1);
 	vpSolver->emitTracerParticles();
+
 
 
 	UINT timerId = 1;
@@ -211,69 +181,62 @@ int main(int argc, char** argv)
 
 	int frame = 100000;
 	auto position = vpSolver->foamVortexData()->positions();
+	auto waterdata = vpSolver->_shallowWaveSolver->shallowWaveData();
+	auto water_num = waterdata->resolution().x * waterdata->resolution().x;
+
 	for (int i = 0; i < frame; i += 1) {
 
 		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
 		obj1->velocity = Vector2D(1, 0.0);
 		obj1->updatePosition(dt);
+		vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
 
 		static int fileNum = 1;
 		std::string	name = std::to_string(fileNum);
 		fileNum++;
-		std::string path = "E:\\zhangjian\\solve_data\\vortex_test\\";
-		Plyout writer(path, name, tracer_num);
+		std::string path1 = "E:\\zhangjian\\solve_data\\all\\boundary\\";
+		std::string path2 = "E:\\zhangjian\\solve_data\\all\\thinfoam\\";
+		std::string path3 = "E:\\zhangjian\\solve_data\\all\\water\\";
+		Plyout writer1(path1, name, 1);
+		Plyout writer2(path2, name, tracer_num + 4);
+		Plyout writer3(path3, name, water_num);
 
+
+		//写入移动边界的数据
+		writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
+
+		//写入thinfoam数据
 		for (int n = 0; n < tracer_num; ++n) {
 			auto x = vpSolver->foamVortexData()->tracePosition[n].x;
 			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
-			if (x < 2 && y < 2 && x >= 0 && y >= 0)
-				writer.write_in_ply(x, 0, y);
+			if (x < 2 && y < 2 && x >= 0 && y >= 0) {
+				auto height = waterdata->height->sample(vpSolver->foamVortexData()->tracePosition[n]);
+				writer2.write_in_ply(x, height, y);
+			}
 		}
+
+		//为了保证thinfoam模型与water模型对齐，追加四个点
+		writer2.write_in_ply(0, 0, 0);
+		writer2.write_in_ply(2, 0, 2);
+		writer2.write_in_ply(2, 0, 0);
+		writer2.write_in_ply(0, 0, 2);
+
+		//写入water数据
+		for (int q1 = 0; q1 < waterdata->resolution().x; ++q1) {
+			for (int q2 = 0; q2 < waterdata->resolution().y; ++q2) {
+				auto posFunc = waterdata->height->dataPosition();
+				auto pos = posFunc(q1, q2);
+				auto height = waterdata->height->lookAt(q1, q2);
+				writer3.write_in_ply(pos.x, height, pos.y);
+			}
+		}
+
+
+
+
 		vpSolver->onAdvanceTimeStep(dt);
 
 	}
-
-
-
-	//	//这里是写入文件
-	////记得重新算的时候要删掉 原来的文件夹
-	//int frame = 100000;
-
-	//auto position = vpSolver->foamVortexData()->positions();
-
-
-	//int interval = 1;
-
-	//std::string outfilename = "1";
-
-	//system("mkdir FoamTest12");
-
-	//for (int i = 0; i < frame; i += 1) {
-
-	//	std::ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest12\\" + outfilename + ".txt", std::ios::app);
-	//	auto num = vpSolver->foamVortexData()->numberOfParticles();
-	//	auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
-
-
-
-	//	obj1->velocity = Vector2D(1, 0.0);
-	//	obj1->updatePosition(dt);
-
-	//	for (int n = 0; n < tracer_num; ++n) {
-	//		auto x = vpSolver->foamVortexData()->tracePosition[n].x;
-	//		auto y = vpSolver->foamVortexData()->tracePosition[n].y;
-	//		if (x < 2 && y < 2 && x >= 0 && y >= 0)
-	//			out << x << "," << y << std::endl;
-	//	}
-	//	vpSolver->onAdvanceTimeStep(dt);
-	//	sim_step++;
-	//	auto temp1 = std::atoi(outfilename.c_str());
-	//	temp1++;
-	//	outfilename = std::to_string(temp1);
-	//	std::cout << "当前计算到第" << sim_step << "步,系统中粒子数：" << num + tracer_num << std::endl;
-
-	//}
-
 
 
 	return 0;
