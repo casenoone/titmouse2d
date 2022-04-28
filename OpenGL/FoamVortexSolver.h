@@ -37,7 +37,7 @@ public:
 	//void 
 	void emitTracerParticles();
 	void emitParticlesFromPanels(double timeIntervalInSeconds);
-
+	void emitVortexRing();
 	//为高度场设置移动边界
 	void setShallowWaveMovingBoundary(const Vector2D& center, const double r);
 
@@ -53,6 +53,9 @@ private:
 
 	//我也不想起这么长的名字
 	Vector2D computeUnitVelocityFromPanels(const Vector2D& pos, int index);
+	Vector2D static_computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
+	void no_through_solve(double timeIntervalInSeconds);
+	Vector2D static_computeSingleVelocityFromPanels(int index);
 public:
 	ShallowWaveSolver2Ptr _shallowWaveSolver;
 

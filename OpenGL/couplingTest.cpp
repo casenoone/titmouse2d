@@ -10,6 +10,7 @@
 #include "../titmouse2d/src/SparseMatrix.hpp"
 #include "../titmouse2d/src/Eulerian/MarchingCubes2.h"
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
+#include "../titmouse2d/src/Geometry/Box2.h"
 #include "../titmouse2d/src/mesh/Plyout.h"
 #include <GL/glut.h>
 
@@ -97,7 +98,7 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	obj1->velocity = Vector2D(1, 0.0);
+	obj1->velocity = Vector2D(-1, 0.0);
 	obj1->updatePosition(dt);
 
 
@@ -162,8 +163,10 @@ int main(int argc, char** argv)
 
 	vpSolver->setMovingBoudnary(obj1);
 	vpSolver->emitTracerParticles();
+	vpSolver->emitVortexRing();
+	auto box1 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2, 2), true);
 
-
+	vpSolver->setStaticBoudnary(box1);
 
 	UINT timerId = 1;
 	MSG msg;

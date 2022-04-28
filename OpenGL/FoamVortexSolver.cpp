@@ -19,7 +19,12 @@
 #include <Eigen/SVD>
 #include <Eigen/LU>
 
-
+static const int numOfStep = 0;
+static const double vorticity_eps = 0.02;
+static const Vector2D vs_vec = Vector2D(2.5, 0.0);
+static double vs_tau = 1.0;
+static double fv_eps = 0.00000001;
+static int static_boudary_interval = 15;
 
 Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector2D normal_i) {
 	double cos_theta = normal_i.y; // cos(theta)
@@ -28,16 +33,6 @@ Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector
 		-sin_theta * vel_local.x + cos_theta * vel_local.y);
 	return vel;
 }
-
-static const int numOfStep = 4;
-
-static const double vorticity_eps = 0.02;
-
-static const Vector2D vs_vec = Vector2D(2.5, 0.0);
-
-static double vs_tau = 1.0;
-
-static double fv_eps = 0.00000001;
 
 FoamVortexSolver::FoamVortexSolver() {
 	_particleSystemData = std::make_shared<FoamVortexData>();
@@ -68,7 +63,12 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 				vortexVel += computeUSingle(vortex_pos[i], j);
 			}
 		}
-		tempP[i] = vortex_pos[i] + timeIntervalInSeconds * vortexVel;
+		Vector2D votexSheetVel;
+		votexSheetVel = static_computeSingleVelocityFromPanels(i);
+		//std::cout << votexSheetVel.x << std::endl;
+
+		//votexSheetVel = Vector2D::zero();
+		tempP[i] = vortex_pos[i] + timeIntervalInSeconds * (votexSheetVel + vortexVel);
 	}
 	//这里搞一个移动赋值函数
 	vortex_pos = tempP;
@@ -91,6 +91,7 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
+	no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
 	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
@@ -119,9 +120,59 @@ void FoamVortexSolver::setMovingBoudnary(RegularPolygonPtr surfaces) {
 	constructMovingBoundaryMatrix();
 }
 
+void FoamVortexSolver::setStaticBoudnary(ExplicitSurface2Ptr surfaces) {
+	auto box = surfaces;
+	auto& staticBoundary = _foamVortexData->staticBoundary;
+	int num = 0;
+	for (int i = 0; i < 4; ++i) {
+		auto start = box->lookAt(i).start;
+		auto end = box->lookAt(i).end;
+		auto normal = box->lookAt(i).normal;
+
+		auto line = end - start;
+		auto length = line.getLength();
+		line = line.getNormalize();
+
+		double interval = length / (static_boudary_interval);
+		for (int j = 0; j < static_boudary_interval; ++j) {
+			auto temp_start = start + j * interval * line;
+			auto temp_end = start + (j + 1.0) * interval * line;
+			FoamVortexData::Panel panel(temp_start, temp_end, 0.5 * (temp_start + temp_end), normal);
+			staticBoundary.push_back(panel);
+		}
+
+	}
+
+	constructStaticBoundaryMatrix();
+}
+
 
 void FoamVortexSolver::setShallowWaveMovingBoundary(const Vector2D& center, const double r) {
 	_shallowWaveSolver->setSphereMarkers(center, r);
+}
+
+void FoamVortexSolver::emitVortexRing() {
+	auto& pos = _foamVortexData->vortexPosition;
+	auto& vel = _foamVortexData->vortexVelocity;
+	auto& gamma = _foamVortexData->gamma();
+	int n = 4;
+	pos.reSize(n);
+	vel.reSize(n);
+	gamma.reSize(n);
+	Vector2D A(0.2, 1.2);
+	Vector2D B(0.2, 1.1);
+	Vector2D C(0.2, 1.0);
+	Vector2D D(0.2, 0.9);
+
+	pos[0] = A;
+	pos[1] = B;
+	pos[2] = C;
+	pos[3] = D;
+
+	gamma[0] = random_double(0, 1);
+	gamma[1] = random_double(0, 1);
+	gamma[2] = random_double(0, 1);
+	gamma[3] = random_double(0, 1);
 }
 
 
@@ -212,7 +263,8 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 10000;
+	//int emitNum = 10000;
+	int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
 	Vector2D tempPos;
@@ -242,8 +294,136 @@ void FoamVortexSolver::tracerParticlesSolve() {
 }
 
 
+//这里的index是panel的index
+Vector2D FoamVortexSolver::static_computeUnitVelocityFromPanels(int index, const Vector2D& midPoint) {
+	auto& panel = _foamVortexData->staticBoundary;
+	auto start = panel[index].start;
+	auto end = panel[index].end;
+	auto normal = panel[index].normal;
+
+	Vector2D result;
+
+	//计算beta值.
+	double beta = 0.0;
+	auto vec_r1 = start - midPoint;
+	auto vec_r2 = end - midPoint;
+	auto r1 = vec_r1.getLength();
+	auto r2 = vec_r2.getLength();
+	auto temp1 = vec_r1.dot(vec_r2) / (r1 * r2);
+	beta = acos(temp1);
+	if (isnan(beta)) {
+		beta = kPiD;
+	}
+	//eq(16) eq(17)
+	result.x = beta / (2.0 * kPiD);
+	result.y = log((r2 + fv_eps) / (r1 + fv_eps)) / (2.0 * kPiD);
+
+	result = vel_to_world(result, start, normal);
+	return result;
+}
+
+
+Vector2D FoamVortexSolver::static_computeSingleVelocityFromPanels(int index) {
+	auto& pos = _foamVortexData->vortexPosition;
+	auto& panel = _foamVortexData->staticBoundary;
+	auto panelSize = panel.size();
+	auto& gama1 = _foamVortexData->no_through_strength;
+
+	Vector2D result;
+
+	for (int i = 0; i < panelSize; ++i) {
+
+		auto start = panel[i].start;
+		auto end = panel[i].end;
+		auto normal = panel[i].normal;
+
+		Vector2D temp2;
+
+		//首先，组装坐标变换矩阵
+		//这里可进行优化
+		auto transToLocal = Matrix3x3<double>::transToLocalMatrix(normal, start);
+		auto transToWorld = transToLocal.inverse();
+
+		double beta = 0.0;
+		auto vec_r1 = start - pos[index];
+		auto vec_r2 = end - pos[index];
+		auto r1 = vec_r1.getLength();
+		auto r2 = vec_r2.getLength();
+		auto temp1 = vec_r1.dot(vec_r2) / (r1 * r2);
+		beta = acos(temp1);
+		if (isnan(beta)) {
+			beta = kPiD;
+		}
+
+		temp2.x = beta / (2.0 * kPiD);
+		temp2.y = log((r2 + fv_eps) / (r1 + fv_eps)) / (2.0 * kPiD);
+
+		double tempgamma = 0.0;
+		if (gama1.size() > 0)
+			tempgamma = gama1[i];
+		temp2 = temp2 * tempgamma;
+		temp2 = vel_to_world(temp2, start, normal);
+		result += temp2;
+	}
+
+	return result;
+}
+
+
+
+void FoamVortexSolver::no_through_solve(double timeIntervalInSeconds) {
+	auto data = _foamVortexData;
+	auto& pos = data->vortexPosition;
+
+	auto n = pos.dataSize();
+	auto& panels = data->staticBoundary;
+	auto panelSize = panels.size();
+	Eigen::MatrixXd& A = _foamVortexData->no_through_matrix;
+	Eigen::VectorXd& x = _foamVortexData->no_through_strength;
+	//std::cout << panelSize << std::endl;
+	//组装b
+	Eigen::VectorXd b(panelSize + 1);
+	for (int i = 0; i < panelSize; ++i) {
+		auto normal = panels[i].normal;
+		auto pos = panels[i].mid;
+
+		Vector2D temp;
+		for (int j = 0; j < n; ++j) {
+			temp += computeUSingle(pos, j);
+		}
+		b[i] = temp.dot(normal);
+	}
+
+	b[panelSize] = 0;
+
+	x = A.colPivHouseholderQr().solve(b);
+
+}
+
+
+
 void FoamVortexSolver::constructStaticBoundaryMatrix() {
 
+	auto& panel = _foamVortexData->staticBoundary;
+	auto num = panel.size();
+	Eigen::MatrixXd& mat = _foamVortexData->no_through_matrix;
+	auto sizex = num + 1;
+	auto sizey = num;
+	mat.resize(sizex, sizey);
+	for (int j = 0; j < num; ++j) {
+		for (int i = 0; i < num; ++i) {
+			auto pos = panel[i].mid;
+			//std::cout << pos.x << std::endl;
+			auto normal = panel[i].normal;
+			auto u_ji = static_computeUnitVelocityFromPanels(i, pos).dot(normal);
+			mat(j, i) = -u_ji;
+			//std::cout << u_ji << std::endl;
+		}
+	}
+
+	for (int i = 0; i < num; ++i) {
+		mat(num, i) = 1.0;
+	}
 }
 
 
@@ -289,7 +469,6 @@ void FoamVortexSolver::constructMovingBoundaryMatrix() {
 	B = (A_trans * A + 3 * I).inverse() * A_trans;
 
 
-	//在这里构建静态边界条件
 
 
 }

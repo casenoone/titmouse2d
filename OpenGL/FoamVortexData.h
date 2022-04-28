@@ -8,26 +8,6 @@
 
 #include "MovingFaceCenteredGrid2.h"
 
-class Panel {
-public:
-	Panel() :
-		start(Vector2D::zero()),
-		end(Vector2D::zero()),
-		mid(Vector2D::zero()),
-		normal(Vector2D::zero()),
-		tangent(Vector2D::zero()),
-		gamma(0.0)
-	{}
-
-
-public:
-	Vector2D start;
-	Vector2D end;
-	Vector2D mid;
-	Vector2D normal;
-	Vector2D tangent;
-	double gamma;
-};
 
 
 class FoamVortexData : public ParticleSystemData2 {
@@ -37,17 +17,50 @@ public:
 	ArrayD& gamma();
 
 public:
+
+	class Panel {
+	public:
+		Panel() :
+			start(Vector2D::zero()),
+			end(Vector2D::zero()),
+			mid(Vector2D::zero()),
+			normal(Vector2D::zero()),
+			tangent(Vector2D::zero()),
+			gamma(0.0)
+		{}
+
+		Panel(const Vector2D& start_,
+			const Vector2D& end_,
+			const Vector2D& mid_,
+			const Vector2D& normal_) :
+			start(start_),
+			end(end_),
+			mid(mid_),
+			normal(normal_)
+		{}
+
+	public:
+		Vector2D start;
+		Vector2D end;
+		Vector2D mid;
+		Vector2D normal;
+		Vector2D tangent;
+		double gamma;
+	};
+
+
 	RegularPolygonPtr panelSet;
+	std::vector<Panel> staticBoundary;
 
 	//2021 paper 边界处理
 	//消去切向分量
 	Eigen::VectorXd slip_strength;
 
 	//消去法向分量
-	Eigen::VectorXd no_throught_strength;
+	Eigen::VectorXd no_through_strength;
 
 	//消去法向分量
-	Eigen::MatrixXd A;
+	Eigen::MatrixXd no_through_matrix;
 
 	//消去切向分量
 	Eigen::MatrixXd slip_matrix;
