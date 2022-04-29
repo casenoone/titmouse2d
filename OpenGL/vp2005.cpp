@@ -356,10 +356,6 @@
 //	auto end = panel->lookAt(index).end;
 //	auto normal = panel->lookAt(index).normal;
 //
-//	//首先，组装坐标变换矩阵
-//	//auto transToLocal = Matrix3x3<double>::transToLocalMatrix(normal, start);
-//	//auto transToWorld = transToLocal.inverse();
-//
 //	Vector2D result;
 //
 //	//计算beta值.
