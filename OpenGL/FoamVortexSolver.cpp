@@ -19,8 +19,8 @@
 #include <Eigen/SVD>
 #include <Eigen/LU>
 
-static const int numOfStep = 0;
-static const double vorticity_eps = 0.06;
+static const int numOfStep = 7;
+static const double vorticity_eps = 0.08;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
 
@@ -82,7 +82,10 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 	auto tracer_n = tracerPos.dataSize();
 	for (int i = 0; i < tracer_n; ++i) {
 		tracerPos[i] += (traceVel[i]) * timeIntervalInSeconds;
+		tarcerCollisionSolve(tracerPos[i]);
 	}
+
+
 
 }
 
@@ -92,6 +95,7 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
+	decayVorticity();
 	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 }
 
@@ -197,7 +201,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 		emitParticle[i] += panelVel * timeIntervalInSeconds;
 	}
 
-	if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 1.2) {
+	if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 1.5) {
 		auto& pos = data->vortexPosition;
 		auto& vel = data->vortexVelocity;
 		auto panels = data->panelSet;
@@ -268,8 +272,8 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	//int emitNum = 10000;
-	int emitNum = 1;
+	int emitNum = 10000;
+	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
 	Vector2D tempPos;
@@ -460,12 +464,28 @@ void FoamVortexSolver::constructMovingBoundaryMatrix() {
 	Eigen::MatrixXd A_trans = A.transpose();
 
 	auto I = Eigen::MatrixXd::Identity(emitNum, emitNum);
-
 	B = (A_trans * A + 3 * I).inverse() * A_trans;
+}
 
-
-
-
+void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
+	if (pos.x > 2)
+		pos.x = 2;
+	if (pos.x < 0)
+		pos.x = 0;
+	if (pos.y > 2)
+		pos.y = 2;
+	if (pos.y < 0)
+		pos.y = 0;
 }
 
 
+
+void FoamVortexSolver::decayVorticity() {
+	auto& vorticity = _foamVortexData->gamma();
+	auto len = vorticity.dataSize();
+	for (int i = 0; i < len; ++i) {
+		static double init = vorticity[i];
+		if (vorticity[i] >= init * 0.2)
+			vorticity[i] = vorticity[i] - vorticity[i] * 0.008;
+	}
+}

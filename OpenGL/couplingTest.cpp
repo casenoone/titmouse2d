@@ -81,16 +81,9 @@ auto res = Vector2I(70, 70);
 auto grid_x = 2 / 70.0;
 
 auto vpSolver = std::make_shared<FoamVortexSolver>(res, Vector2D(grid_x, grid_x));
-
-double movingCoffe = 0.3;
+RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
 
 double dt = 0.006;
-
-RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
-
-
-
-
 static void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -98,7 +91,7 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	obj1->velocity = Vector2D(-1, 0.0);
+	obj1->velocity = Vector2D(2, 0.0);
 	obj1->updatePosition(dt);
 
 
@@ -163,7 +156,6 @@ int main(int argc, char** argv)
 
 	vpSolver->setMovingBoudnary(obj1);
 	vpSolver->emitTracerParticles();
-	vpSolver->emitVortexRing();
 	auto box1 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2, 2), true);
 
 	vpSolver->setStaticBoudnary(box1);
@@ -180,7 +172,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗zz口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 	int frame = 100000;
 	auto position = vpSolver->foamVortexData()->positions();
@@ -190,16 +182,16 @@ int main(int argc, char** argv)
 	for (int i = 0; i < frame; i += 1) {
 
 		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
-		obj1->velocity = Vector2D(1, 0.0);
+		obj1->velocity = Vector2D(2, 0.0);
 		obj1->updatePosition(dt);
 		vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
 
 		static int fileNum = 1;
 		std::string	name = std::to_string(fileNum);
 		fileNum++;
-		std::string path1 = "E:\\zhangjian\\solve_data\\all\\boundary\\";
-		std::string path2 = "E:\\zhangjian\\solve_data\\all\\thinfoam\\";
-		std::string path3 = "E:\\zhangjian\\solve_data\\all\\water\\";
+		std::string path1 = "E:\\zhangjian\\solve_data\\all\\boundary1\\";
+		std::string path2 = "E:\\zhangjian\\solve_data\\all\\thinfoam1\\";
+		std::string path3 = "E:\\zhangjian\\solve_data\\all\\water1\\";
 		Plyout writer1(path1, name, 1);
 		Plyout writer2(path2, name, tracer_num + 4);
 		Plyout writer3(path3, name, water_num);
@@ -217,6 +209,8 @@ int main(int argc, char** argv)
 				writer2.write_in_ply(x, height, y);
 			}
 		}
+		auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();
+		std::cout << "当前解算到第：" << i << "步，涡粒子数：" << vortex_num << std::endl;
 
 		//为了保证thinfoam模型与water模型对齐，追加四个点
 		writer2.write_in_ply(0, 0, 0);
@@ -233,9 +227,6 @@ int main(int argc, char** argv)
 				writer3.write_in_ply(pos.x, height, pos.y);
 			}
 		}
-
-
-
 
 		vpSolver->onAdvanceTimeStep(dt);
 

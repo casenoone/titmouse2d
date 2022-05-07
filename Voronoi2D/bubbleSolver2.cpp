@@ -1,7 +1,7 @@
 ﻿#include "bubbleSolver2.h"
 
-static const double stiffness = 3;
-static const double drag = 1000;
+static const double stiffness = 10;
+static const double drag = 200000;
 BubbleSolver2::BubbleSolver2() {
 	_particleSystemData = std::make_shared<BubbleData2>();
 	_bubbleData = std::make_shared<BubbleData2>();
@@ -38,7 +38,7 @@ Vector2D BubbleSolver2::computeSingeStrongForce(const Vector2D& p1,
 	const Vector2D& p2,
 	double l_ij) {
 	Vector2D result;
-	auto x_ij = p1 - p2.getNormalize();
+	auto x_ij = (p1 - p2).getNormalize();
 
 	return -stiffness * (p1 - p2 - l_ij * x_ij);
 }
@@ -90,13 +90,13 @@ void BubbleSolver2::computeStrongForce(const Voronoi2& voronoi) {
 		auto r_j = radius[j];
 		auto rest_ij = computeRestLen(r_i, r_j);
 		auto dis = pos[i].dis(pos[j]);
-		if (dis > rest_ij && dis <= (r_i + r_j + 0.06)) {
+		if (/*dis > rest_ij && */dis <= (r_i + r_j + 0.0001)) {
 			auto f = computeSingeStrongForce(pos[i], pos[j], rest_ij);
 			force[i] += f;
 			force[j] -= f;
 		}
 		else {
-			computeDragForce(voronoi, i);
+			//computeDragForce(voronoi, i);
 
 		}
 

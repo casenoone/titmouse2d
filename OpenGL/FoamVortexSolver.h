@@ -56,6 +56,10 @@ private:
 	Vector2D static_computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
 	void no_through_solve(double timeIntervalInSeconds);
 	Vector2D static_computeSingleVelocityFromPanels(int index);
+
+	void tarcerCollisionSolve(Vector2D& pos);
+
+	void decayVorticity();
 public:
 	ShallowWaveSolver2Ptr _shallowWaveSolver;
 
