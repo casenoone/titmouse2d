@@ -153,26 +153,26 @@ int main(int argc, char** argv)
 
 
 
-	double temp_r = 0.035;
+	double temp_r = 0.032;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
 	n = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(30, 30)
+		.withResolution(40, 40)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
-			if (pos.dis(tempC) < 0.4) {
-				//pos.x += random_double(-0.05, 0.05);
-				//pos.y += random_double(-0.05, 0.05);
+			if (pos.dis(tempC) < 0.30) {
+				pos.x += random_double(-0.02, 0.02);
+				pos.y += random_double(-0.02, 0.02);
 
 				this_pos.push(pos);
-				//temp_r = random_double(0.01, 0.03);
+				temp_r = random_double(0.01, 0.03);
 				bubbleSolver._bubbleData->particleRadius.push(temp_r);
 				n++;
 			}

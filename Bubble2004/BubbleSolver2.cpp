@@ -1,7 +1,7 @@
 #include "bubbleSolver2.h"
 
-static const double stiffness = 10;
-static const double drag = 10000;
+
+static const double rad_k = 0.01;
 BubbleSolver2::BubbleSolver2() {
 	_particleSystemData = std::make_shared<BubbleData2>();
 	_bubbleData = std::make_shared<BubbleData2>();
@@ -14,91 +14,115 @@ void BubbleSolver2::emitParticles() {
 }
 
 
-Vector2D BubbleSolver2::computeSingeStrongForce(const Vector2D& p1,
-	const Vector2D& p2,
-	double l_ij) {
-	Vector2D result;
-	auto x_ij = (p1 - p2).getNormalize();
 
-	return -stiffness * (p1 - p2 - l_ij * x_ij);
-}
-
-
-void BubbleSolver2::computeDragForce(int i) {
-	auto& pos = _bubbleData->positions();
+Vector2D BubbleSolver2::computeF_rB(int i, int j) const {
+	auto pos = _bubbleData->positions();
 	auto& radius = _bubbleData->particleRadius;
-	auto& force = _bubbleData->forces();
-	auto& n = _bubbleData->numberOfParticles();
-	auto& vel = _bubbleData->velocities();
 
-	force[i] += drag * radius[i] * radius[i] * -1 * vel(i);
+	auto p_ij = pos[i] - pos[j];
+	auto rad_ij = radius[i] + radius[j];
+	auto p_ij_norm2 = p_ij.getLength();
 
+	return _bubbleData->kr * (1 / (p_ij_norm2)-(1 / rad_ij)) * p_ij;
 }
 
-
-void BubbleSolver2::computeDragForce() {
-	auto& pos = _bubbleData->positions();
+Vector2D BubbleSolver2::computeF_aB(int i, int j) const {
+	auto pos = _bubbleData->positions();
 	auto& radius = _bubbleData->particleRadius;
-	auto& force = _bubbleData->forces();
-	auto& n = _bubbleData->numberOfParticles();
-	auto& vel = _bubbleData->velocities();
-	for (int i = 0; i < n; ++i) {
-		force[i] += drag * radius[i] * radius[i] * -1 * vel(i) * vel(i).getLength();
-	}
-
-
-}
-
-
-void BubbleSolver2::computeStrongForce() {
-	auto n = _bubbleData->numberOfParticles();
 	auto& neighbor = _bubbleData->neighbor->neighBors();
-	auto& pos = _bubbleData->positions();
-	auto& radius = _bubbleData->particleRadius;
-	auto& force = _bubbleData->forces();
 
+	int NB_i = 0;
+	int NB_j = 0;
 
+	auto& p_i = pos[i];
+	auto& p_j = pos[j];
+	auto p_ji = pos[j] - pos[i];
+	auto p_ij_norm2 = (p_i - p_j).getLength();
 
-	auto& vel = _bubbleData->velocities();
-	force.clear();
-
-	//强相互作用力的计算
-	for (int i = 0; i < n; ++i) {
-		for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
-			auto j = *iter;
-			if (i != j) {
-				auto r_i = radius[i];
-				auto r_j = radius[j];
-				auto rest_ij = computeRestLen(r_i, r_j);
-				auto direction = pos[j] - pos[i];
-				auto dis = pos[i].dis(pos[j]);
-				if (/*dis > rest_ij &&*/ dis <= (r_i + r_j + 0.001)) {
-					auto f = computeSingeStrongForce(pos[i], pos[j], rest_ij);
-					force[i] += f;
-
-				}
-
-
-				else {
-					//computeDragForce(i);
-
-				}
-			}
+	for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
+		auto neighbor_index = *iter;
+		auto rad_each = radius[i] + radius[neighbor_index];
+		auto dis = pos[i].dis(pos[neighbor_index]);
+		if (dis <= rad_each + rad_k && i != neighbor_index) {
+			NB_i++;
 		}
 	}
 
+	for (auto iter = neighbor[j].begin(); iter != neighbor[j].end(); iter++) {
+		auto neighbor_index = *iter;
+		auto rad_each = radius[j] + radius[neighbor_index];
+		auto dis = pos[j].dis(pos[neighbor_index]);
+		if (dis <= rad_each + rad_k && j != neighbor_index) {
+			NB_j++;
+		}
+	}
 
+	double inv_NBi = 0;
+	double inv_NBj = 0;
+	if (NB_i > 0)
+		inv_NBi = 1 / NB_i;
+	if (NB_j > 0)
+		inv_NBj = 1 / NB_j;
 
+	double c_nb = 0.5 * (inv_NBi + inv_NBj);
+	double c_dist = (p_ij_norm2 - std::max(radius[i], radius[j]))
+		/ std::min(radius[i], radius[j]);
 
-
-
+	return _bubbleData->ka * c_nb * c_dist * (p_ji / p_ij_norm2);
 
 }
 
-void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
+void BubbleSolver2::computeF_a0() {
 
-	computeStrongForce();
-	computeDragForce();
+}
+
+//暂时先不计算与固体的力
+void BubbleSolver2::computeF_ra() {
+	auto pos = _bubbleData->positions();
+	auto n = _bubbleData->numberOfParticles();
+	auto& forces = _bubbleData->forces();
+	auto& neighbor = _bubbleData->neighbor->neighBors();
+	auto& radius = _bubbleData->particleRadius;
+
+	for (int i = 0; i < n; ++i) {
+		Vector2D temp_f_r;
+		Vector2D temp_f_a;
+		for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
+			auto neighbor_index = *iter;
+			auto rad_each = radius[i] + radius[neighbor_index];
+			auto dis = pos[i].dis(pos[neighbor_index]);
+			if (dis <= rad_each + rad_k && i != neighbor_index) {
+				temp_f_r += computeF_rB(i, neighbor_index);
+				temp_f_a += computeF_aB(i, neighbor_index);
+			}
+		}
+
+		forces[i] += (temp_f_r + temp_f_a);
+		//std::cout << forces[i].x << std::endl;
+	}
+}
+
+Vector2D BubbleSolver2::computeF_air(int i) {
+	auto vel = _bubbleData->velocities();
+	return -_bubbleData->kair * vel[i];
+}
+
+//这里暂时不累加fv还有与障碍物的力
+void BubbleSolver2::computeF_fr() {
+	auto n = _bubbleData->numberOfParticles();
+	auto& forces = _bubbleData->forces();
+
+	for (int i = 0; i < n; ++i) {
+		forces[i] += computeF_air(i);
+	}
+}
+
+void BubbleSolver2::computeTotalForce() {
+	computeF_ra();
+	computeF_fr();
+}
+
+void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 	int n = _bubbleData->numberOfParticles();
 	auto& force = _bubbleData->forces();
 	auto& pos = _bubbleData->positions();
@@ -106,9 +130,6 @@ void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 	for (int i = 0; i < n; ++i) {
 		auto& newVelocity = _newVelocities[i];
-
-
-
 		newVelocity = vel[i] + (force[i] / 1) * timeIntervalInSeconds;
 
 		auto& newPosition = _newPositions[i];
@@ -121,6 +142,7 @@ void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 void BubbleSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	_bubbleData->neighbor->setNeiborList(0.12, _bubbleData->positions());
 	beginAdvanceTimeStep();
+	computeTotalForce();
 	timeIntegration(timeIntervalInSeconds);
 	//resolveCollision();
 	endAdvanceTimeStep();
