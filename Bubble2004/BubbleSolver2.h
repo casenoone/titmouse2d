@@ -15,6 +15,7 @@ public:
 
 	void onAdvanceTimeStep(double timeIntervalInSeconds);
 
+private:
 	//计算bubble之间的排斥力
 	Vector2D computeF_rB(int i, int j) const;
 
@@ -35,6 +36,9 @@ public:
 
 	//计算所有的力
 	void computeTotalForce();
+
+	//气泡消失，随机删除气泡
+	void bubbleBreakUp();
 
 public:
 	BubbleDataPtr _bubbleData;

@@ -292,7 +292,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\Voronoi2D\\FoamTest12\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\paper_and_project\\titmouse2d\\Bubble2004\\bubbletest1\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -324,7 +324,7 @@ static void display(void)
 		//if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
 			//drawPoint(x, y);
-		drawCircle(tempPos, 0.05, 50);
+		drawCircle(tempPos, 0.01, 50);
 		//write_to_pixel(tempPos, 1, 1, 1, filename);
 	//}
 	//posList.push_back(tempPos);
@@ -347,9 +347,9 @@ static void display(void)
 
 	//延时0.5秒
 
-	if (temp1 < 6) {
-		Sleep(1000);
-	}
+
+	Sleep(0);
+
 }
 
 static void idle(void)

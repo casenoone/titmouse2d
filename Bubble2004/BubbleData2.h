@@ -13,7 +13,7 @@ public:
 	double kr = 18;
 
 	//调节bubble之间吸引力的系数
-	double ka = 4;
+	double ka = 15;
 
 	//调节空气阻力
 	double kair = 7;

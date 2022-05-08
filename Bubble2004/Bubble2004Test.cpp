@@ -103,7 +103,7 @@ static void display(void)
 	//看，上方向(0,1,0)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
-
+	n = bubbleSolver._bubbleData->numberOfParticles();
 	for (int i = 0; i < n; ++i) {
 		drawCircle(pos[i], bubbleSolver._bubbleData->particleRadius(i), 50);
 	}
@@ -153,7 +153,7 @@ int main(int argc, char** argv)
 
 
 
-	double temp_r = 0.032;
+	double temp_r = 0.025;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
@@ -198,44 +198,37 @@ int main(int argc, char** argv)
 
 	glutMainLoop();
 
-	//
-	//	//这里是写入文件
-	////记得重新算的时候要删掉 原来的文件夹
-	//	int frame = 100000;
-	//
-	//	auto position = bubbleSolver._bubbleData->positions();
-	//	auto num = bubbleSolver._bubbleData->numberOfParticles();
-	//
-	//
-	//	int interval = 1;
-	//
-	//	std::string outfilename = "1";
-	//
-	//	system("mkdir FoamTest12");
-	//
-	//	for (int i = 0; i < frame; i += 1) {
-	//
-	//		std::ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\Voronoi2D\\FoamTest12\\" + outfilename + ".txt", std::ios::app);
-	//		for (int n = 0; n < num; ++n) {
-	//			auto x = position[n].x;
-	//			auto y = position[n].y;
-	//			if (x < 2 && y < 2)
-	//				out << x << "," << y << std::endl;
-	//		}
-	//		Voronoi2 voronoiD;
-	//		voronoiD.generateVoronoi(pos);
-	//		bubbleSolver.onAdvanceTimeStep(0.005, voronoiD);
-	//		auto temp1 = std::atoi(outfilename.c_str());
-	//		temp1++;
-	//		outfilename = std::to_string(temp1);
-	//		std::cout << "当前解算到第：" << temp1 << "步" << std::endl;
-	//	}
+
+	//这里是写入文件
+//记得重新算的时候要删掉 原来的文件夹
+	int frame = 100000;
+
+	auto position = bubbleSolver._bubbleData->positions();
 
 
 
+	int interval = 1;
 
+	std::string outfilename = "1";
 
+	system("mkdir bubbletest1");
 
+	for (int i = 0; i < frame; i += 1) {
+		auto num = bubbleSolver._bubbleData->numberOfParticles();
+		std::ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\Bubble2004\\bubbletest1\\" + outfilename + ".txt", std::ios::app);
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			if (x < 2 && y < 2)
+				out << x << "," << y << std::endl;
+		}
+
+		bubbleSolver.onAdvanceTimeStep(0.006);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+		std::cout << "当前解算到第：" << temp1 << "步" << std::endl;
+	}
 
 
 	return 0;

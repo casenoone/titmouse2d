@@ -103,6 +103,7 @@ public:
 	}
 
 
+
 public:
 	T x;
 	T y;

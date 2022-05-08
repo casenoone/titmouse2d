@@ -45,7 +45,10 @@ public:
 	void forEachIndex(Callback func) const;
 
 
-
+	void pop_back() {
+		_data->pop_back();
+		_size--;
+	}
 
 protected:
 	std::shared_ptr<std::vector<T>> _data;

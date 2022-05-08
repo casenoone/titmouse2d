@@ -122,6 +122,28 @@ void BubbleSolver2::computeTotalForce() {
 	computeF_fr();
 }
 
+void BubbleSolver2::bubbleBreakUp() {
+	static int step = 0;
+	if (_bubbleData->numberOfParticles() >= 2) {
+
+		auto& pos = _bubbleData->positions();
+		auto& vel = _bubbleData->velocities();
+		auto& forces = _bubbleData->forces();
+		auto& radius = _bubbleData->particleRadius;
+		if (step % 50 == 0) {
+			pos.pop_back();
+			vel.pop_back();
+			forces.pop_back();
+			radius.pop_back();
+			_newPositions.pop_back();
+			_newVelocities.pop_back();
+			_bubbleData->numberOfParticles()--;
+		}
+		step++;
+
+	}
+}
+
 void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 	int n = _bubbleData->numberOfParticles();
 	auto& force = _bubbleData->forces();
@@ -140,10 +162,13 @@ void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 }
 
 void BubbleSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
+
 	_bubbleData->neighbor->setNeiborList(0.12, _bubbleData->positions());
+
 	beginAdvanceTimeStep();
 	computeTotalForce();
 	timeIntegration(timeIntervalInSeconds);
 	//resolveCollision();
 	endAdvanceTimeStep();
+	bubbleBreakUp();
 }
