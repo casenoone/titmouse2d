@@ -12,6 +12,7 @@
 #include "../titmouse2d/src/Geometry/Box2.h"
 #include "../titmouse2d/src/Collider2.h"
 #include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
+#include "../titmouse2d/src/mesh/Plyout.h"
 
 const float SCREEN_SIZE = 600;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -104,13 +105,28 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 	n = bubbleSolver._bubbleData->numberOfParticles();
+
+
+	static int fileNum = 1;
+	std::string	name = std::to_string(fileNum);
+	fileNum++;
+	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
+	Plyout writer1(path1, name, n);
+
 	for (int i = 0; i < n; ++i) {
 		drawCircle(pos[i], bubbleSolver._bubbleData->particleRadius(i), 50);
+		//写入移动边界的数据
+		//writer1.write_in_ply(pos[i].x, 0, pos[i].y);
 	}
 
+	//绘制涡粒子
+	int vortex_length = bubbleSolver._bubbleData->vortexPosition.dataSize();
+	auto& vortex_pos = bubbleSolver._bubbleData->vortexPosition;
+	for (int m = 0; m < vortex_length; ++m) {
+		drawCircle(vortex_pos[m], 0.01, 50);
+	}
 
-	bubbleSolver.onAdvanceTimeStep(0.005);
-
+	bubbleSolver.onAdvanceTimeStep(0.006);
 	//然后前后缓存交换 
 	glutSwapBuffers();
 
@@ -153,26 +169,26 @@ int main(int argc, char** argv)
 
 
 
-	double temp_r = 0.025;
+	double temp_r = 0.02;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
 	n = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(40, 40)
+		.withResolution(50, 50)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
-			if (pos.dis(tempC) < 0.30) {
+			if (pos.dis(tempC) < 0.2) {
 				pos.x += random_double(-0.02, 0.02);
 				pos.y += random_double(-0.02, 0.02);
 
 				this_pos.push(pos);
-				temp_r = random_double(0.01, 0.03);
+				//temp_r = random_double(0.01, 0.03);
 				bubbleSolver._bubbleData->particleRadius.push(temp_r);
 				n++;
 			}
@@ -188,7 +204,7 @@ int main(int argc, char** argv)
 	collider.push(box1);
 
 	bubbleSolver.setCollider(collider);
-
+	bubbleSolver.emitVortexRing();
 
 
 	glutKeyboardFunc(key);       //键盘按下去时

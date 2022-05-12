@@ -1,6 +1,5 @@
 #include "bubbleSolver2.h"
 
-
 static const double rad_k = 0.01;
 BubbleSolver2::BubbleSolver2() {
 	_particleSystemData = std::make_shared<BubbleData2>();
@@ -130,7 +129,7 @@ void BubbleSolver2::bubbleBreakUp() {
 		auto& vel = _bubbleData->velocities();
 		auto& forces = _bubbleData->forces();
 		auto& radius = _bubbleData->particleRadius;
-		if (step % 50 == 0) {
+		if (step % 100 == 0) {
 			pos.pop_back();
 			vel.pop_back();
 			forces.pop_back();
@@ -144,7 +143,59 @@ void BubbleSolver2::bubbleBreakUp() {
 	}
 }
 
+
+
+
+void BubbleSolver2::emitVortexRing() {
+	auto& pos = _bubbleData->vortexPosition;
+	auto& vel = _bubbleData->vortexVelocity;
+	auto& gamma = _bubbleData->vorticities();
+	int n = 4;
+	pos.reSize(n);
+	vel.reSize(n);
+	gamma.reSize(n);
+	Vector2D A(0.4, 1.2);
+	Vector2D B(0.4, 1.1);
+	Vector2D C(0.4, 1.0);
+	Vector2D D(0.4, 0.9);
+
+	pos[0] = A;
+	pos[1] = B;
+	pos[2] = C;
+	pos[3] = D;
+
+	gamma[0] = 0.6;
+	gamma[1] = 0.6;
+	gamma[2] = -0.6;
+	gamma[3] = -0.6;
+}
+
+
 void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
+
+	//更新涡粒子
+	auto& vortex_pos = _bubbleData->vortexPosition;
+	auto& vortex_vel = _bubbleData->vortexVelocity;
+	auto vortex_num = vortex_pos.dataSize();
+
+	Array<Vector2D> tempP(vortex_num);
+
+	for (int i = 0; i < vortex_num; ++i) {
+		Vector2D vortexVel;
+		for (int j = 0; j < vortex_num; ++j) {
+			if (i != j) {
+
+				vortexVel += computeUSingle(vortex_pos[i], j);
+			}
+		}
+
+		tempP[i] = vortex_pos[i] + timeIntervalInSeconds * vortexVel;
+	}
+
+	vortex_pos = tempP;
+
+
+
 	int n = _bubbleData->numberOfParticles();
 	auto& force = _bubbleData->forces();
 	auto& pos = _bubbleData->positions();
@@ -152,12 +203,22 @@ void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 
 	for (int i = 0; i < n; ++i) {
 		auto& newVelocity = _newVelocities[i];
-		newVelocity = vel[i] + (force[i] / 1) * timeIntervalInSeconds;
 
+		//计算诱导速度
+		/**********************/
+		Vector2D induce_v;
+		for (int j = 0; j < vortex_num; ++j) {
+			induce_v += computeUSingle(pos[i], j);
+		}
+
+		/**********************/
+
+		newVelocity = vel[i] + (force[i] / 1) * timeIntervalInSeconds;
 		auto& newPosition = _newPositions[i];
-		auto temp2 = pos[i] + newVelocity * timeIntervalInSeconds;
+		auto temp2 = pos[i] + (newVelocity + induce_v) * timeIntervalInSeconds;
 		newPosition = temp2;
 	}
+
 
 }
 
