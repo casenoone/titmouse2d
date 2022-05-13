@@ -1,4 +1,5 @@
 #include "bubbleSolver2.h"
+#include "../titmouse2d/src/random.h"
 
 static const double rad_k = 0.01;
 BubbleSolver2::BubbleSolver2() {
@@ -129,7 +130,7 @@ void BubbleSolver2::bubbleBreakUp() {
 		auto& vel = _bubbleData->velocities();
 		auto& forces = _bubbleData->forces();
 		auto& radius = _bubbleData->particleRadius;
-		if (step % 100 == 0) {
+		if (step % 50 == 0) {
 			pos.pop_back();
 			vel.pop_back();
 			forces.pop_back();
@@ -223,7 +224,6 @@ void BubbleSolver2::timeIntegration(double timeIntervalInSeconds) {
 }
 
 void BubbleSolver2::onAdvanceTimeStep(double timeIntervalInSeconds) {
-
 	_bubbleData->neighbor->setNeiborList(0.12, _bubbleData->positions());
 
 	beginAdvanceTimeStep();

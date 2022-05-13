@@ -100,10 +100,9 @@ void NeighborSearcher2::forEachNeighborGrid(double r, Vector2I& idx, int particl
 
 
 void NeighborSearcher2::setNeiborList(double r, const Array<Vector2D>& positions) {
+
 	clearData();
 	resetDataSize();
-
-
 
 	//grids里保存粒子映射后的编号
 	std::vector<std::vector<std::vector<int>>> grids;

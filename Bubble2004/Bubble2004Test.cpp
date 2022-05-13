@@ -111,12 +111,15 @@ static void display(void)
 	std::string	name = std::to_string(fileNum);
 	fileNum++;
 	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
-	Plyout writer1(path1, name, n);
+	Plyout writer1(path1, name, n, "r");
 
 	for (int i = 0; i < n; ++i) {
 		drawCircle(pos[i], bubbleSolver._bubbleData->particleRadius(i), 50);
+		auto r = bubbleSolver._bubbleData->particleRadius(i);
 		//写入移动边界的数据
 		//writer1.write_in_ply(pos[i].x, 0, pos[i].y);
+		//writer1.write_in_ply(pos[i].x, 0, pos[i].y, r);
+
 	}
 
 	//绘制涡粒子
@@ -176,19 +179,19 @@ int main(int argc, char** argv)
 	n = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(50, 50)
+		.withResolution(40, 40)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
-			if (pos.dis(tempC) < 0.2) {
+			if (pos.dis(tempC) < 0.4) {
 				pos.x += random_double(-0.02, 0.02);
 				pos.y += random_double(-0.02, 0.02);
 
 				this_pos.push(pos);
-				//temp_r = random_double(0.01, 0.03);
+				temp_r = random_double(0.01, 0.03);
 				bubbleSolver._bubbleData->particleRadius.push(temp_r);
 				n++;
 			}
@@ -204,7 +207,7 @@ int main(int argc, char** argv)
 	collider.push(box1);
 
 	bubbleSolver.setCollider(collider);
-	bubbleSolver.emitVortexRing();
+	//bubbleSolver.emitVortexRing();
 
 
 	glutKeyboardFunc(key);       //键盘按下去时

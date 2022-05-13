@@ -34,7 +34,7 @@ public:
 	Vector2D computeUSingle(const Vector2D& pos, int i)const;
 	void setMovingBoudnary(RegularPolygonPtr surfaces);
 	void setStaticBoudnary(ExplicitSurface2Ptr surfaces);
-	//void 
+
 	void emitTracerParticles();
 	void emitParticlesFromPanels(double timeIntervalInSeconds);
 	void emitVortexRing();
@@ -60,6 +60,32 @@ private:
 	void tarcerCollisionSolve(Vector2D& pos);
 
 	void decayVorticity();
+
+private:
+	//计算bubble之间的排斥力
+	Vector2D computeF_rB(int i, int j) const;
+
+	//计算bubble之间的吸引力
+	Vector2D computeF_aB(int i, int j) const;
+
+	//计算障碍物对bubble的吸引力
+	void computeF_a0();
+
+	//计算所有的吸引力和排斥力
+	void computeF_ra();
+
+	//计算空气阻力
+	Vector2D computeF_air(int i);
+
+	//计算所有的阻力
+	void computeF_fr();
+
+	//计算所有的力
+	void computeTotalForce();
+
+	//气泡消失，随机删除气泡
+	void bubbleBreakUp();
+
 public:
 	ShallowWaveSolver2Ptr _shallowWaveSolver;
 

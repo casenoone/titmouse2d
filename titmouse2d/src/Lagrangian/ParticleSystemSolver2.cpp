@@ -22,8 +22,6 @@ void ParticleSystemSolver2::setData(int numberOfParticles,
 
 	////初始化neighborSearche
 	_particleSystemData->neighbor = std::make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
-
-	//_particleSystemData->neighbor->setNeiborList(pos);
 }
 
 

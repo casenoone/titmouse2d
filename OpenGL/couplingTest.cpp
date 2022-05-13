@@ -69,6 +69,32 @@ void drawLine(double x1, double y1, double x2, double y2) {
 	glFlush();
 }
 
+void drawCircle(const Vector2D& center, double r, int res) {
+	glBegin(GL_POLYGON);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(1, 128.0 / 255, 51.0 / 255);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(0, 0, 0);
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
 
 
 
@@ -84,6 +110,8 @@ auto vpSolver = std::make_shared<FoamVortexSolver>(res, Vector2D(grid_x, grid_x)
 RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
 
 double dt = 0.006;
+int bubble_num = 0;
+
 static void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -94,9 +122,21 @@ static void display(void)
 	obj1->velocity = Vector2D(2, 0.0);
 	obj1->updatePosition(dt);
 
+	auto& bubble_pos = vpSolver->foamVortexData()->positions();
+	//可视化气泡
+	static int fileNum = 1;
+	std::string	name = std::to_string(fileNum);
+	fileNum++;
+	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
+	Plyout writer1(path1, name, bubble_pos.dataSize(), "r");
+	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
+		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->particleRadius(i), 50);
+		auto r = vpSolver->foamVortexData()->particleRadius(i);
+		writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
+	}
+
 
 	vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
-
 	vpSolver->onAdvanceTimeStep(dt);
 	sim_step++;
 	int n = vpSolver->foamVortexData()->vortexPosition.dataSize();
@@ -116,11 +156,14 @@ static void display(void)
 			drawPoint(tracer_pos[i].x, tracer_pos[i].y);
 	}
 
+	//可视化移动边界
 	for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
 		auto start = i->start;
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
 	}
+
+
 
 	glutSwapBuffers();
 }
@@ -160,11 +203,48 @@ int main(int argc, char** argv)
 
 	vpSolver->setStaticBoudnary(box1);
 
+
+	/**********以下生成气泡**********/
+	double temp_r = 0.02;
+	Array<Vector2D> this_pos;
+	Vector2D temp1;
+
+	auto grid = CellCenteredScalarGrid2::builder()
+		.withOrigin(0, 0)
+		.withResolution(40, 40)
+		.makeShared();
+
+	Vector2D tempC(1.0, 1.0);
+	for (int i = 0; i < grid->resolution().x; ++i) {
+		for (int j = 0; j < grid->resolution().y; ++j) {
+			auto pos = (grid->dataPosition())(i, j);
+			if (pos.dis(tempC) < 0.4) {
+				pos.x += random_double(-0.02, 0.02);
+				pos.y += random_double(-0.02, 0.02);
+				this_pos.push(pos);
+				temp_r = random_double(0.01, 0.03);
+				vpSolver->foamVortexData()->particleRadius.push(temp_r);
+				bubble_num++;
+			}
+		}
+	}
+
+	vpSolver->setData(bubble_num, this_pos, 5, 5);
+
+	Collider2 collider;
+	collider.push(box1);
+
+	vpSolver->setCollider(collider);
+	/**********以上生成气泡**********/
+
+
+
+
+
+
 	UINT timerId = 1;
 	MSG msg;
 	SetTimer(NULL, timerId, 1, TimerProc);
-
-
 
 
 	glutKeyboardFunc(key);       //键盘按下去时
@@ -172,7 +252,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗zz口显示时
 
-	//glutMainLoop();
+	glutMainLoop();
 
 	int frame = 100000;
 	auto position = vpSolver->foamVortexData()->positions();
