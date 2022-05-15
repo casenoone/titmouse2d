@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BubbleTest", "BubbleTest\Bu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bubble2004", "Bubble2004\Bubble2004.vcxproj", "{9FFF09F3-8F77-49F7-A455-C4D1725F4131}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vortex_particles_twoway_coupling", "vortex_particles_twoway_coupling\vortex_particles_twoway_coupling.vcxproj", "{E41770D6-18D9-4960-848C-E556BBCD15D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -201,6 +203,14 @@ Global
 		{9FFF09F3-8F77-49F7-A455-C4D1725F4131}.Release|x64.Build.0 = Release|x64
 		{9FFF09F3-8F77-49F7-A455-C4D1725F4131}.Release|x86.ActiveCfg = Release|Win32
 		{9FFF09F3-8F77-49F7-A455-C4D1725F4131}.Release|x86.Build.0 = Release|Win32
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Debug|x64.ActiveCfg = Debug|x64
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Debug|x64.Build.0 = Debug|x64
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Debug|x86.ActiveCfg = Debug|Win32
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Debug|x86.Build.0 = Debug|Win32
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Release|x64.ActiveCfg = Release|x64
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Release|x64.Build.0 = Release|x64
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Release|x86.ActiveCfg = Release|Win32
+		{E41770D6-18D9-4960-848C-E556BBCD15D4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

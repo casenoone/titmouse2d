@@ -1,5 +1,4 @@
-//#ifndef FOAMVORTEXDATA_H
-//#define FOAMVORTEXDATA_H
+//#pragma once
 //
 //#include <Eigen/Dense>
 //#include "../titmouse2d/src/Lagrangian/ParticleSystemData2.h"
@@ -74,5 +73,3 @@
 //inline ArrayD& FoamVortexData::vorticities() {
 //	return _vorticities;
 //}
-//
-//#endif

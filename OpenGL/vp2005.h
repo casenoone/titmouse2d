@@ -1,5 +1,4 @@
-//#ifndef FOAMVORTEXSOLVER_H
-//#define FOAMVORTEXSOLVER_H
+//#pragma once
 //
 //
 //#include "vp2005Data.h"
@@ -32,7 +31,7 @@
 //		int resolutionX,
 //		int resolutionY);
 //
-//	void setPanels(ExplicitSurface2Ptr surfaces);
+//	void setPanels(RegularPolygonPtr surfaces);
 //
 //	void setMovingGrid(const Vector2I& resolution_, const BoundingBox2& domain_);
 //
@@ -76,5 +75,3 @@
 //};
 //
 //
-//
-//#endif

@@ -71,25 +71,12 @@
 //
 //
 //
-//auto sphere1 = make_shared<Sphere2>(center1, r1, resolution);
-//
-//auto explicitSphere1 = sphere1->transformToExplicitSurface();
-//
-//auto vpSolver = make_shared<FoamVortexSolver>();
-//
-//auto sphereBox = sphere1->boundingBox();
-//
-//double movingCoffe = 0.3;
-//
-//Vector2I movingGridRes(10, 10);
-//BoundingBox2 movingGridDomain(sphereBox.lowerCorner - Vector2D(movingCoffe, movingCoffe),
-//	sphereBox.upperCorner + Vector2D(movingCoffe, movingCoffe));
-//
+//auto vpSolver = std::make_shared<FoamVortexSolver>();
 //
 //double dt = 0.008;
 //
 ////double dt = 0.0008;
-//ExplicitSurface2Ptr obj1 = make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
+//RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
 //
 //
 //
@@ -191,7 +178,6 @@
 //
 //	//vpSolver->setPanels(explicitSphere1);
 //	vpSolver->setPanels(obj1);
-//	vpSolver->setMovingGrid(movingGridRes, movingGridDomain);
 //	//vpSolver->emitParticles();
 //
 //
@@ -207,11 +193,11 @@
 //	glutReshapeFunc(resize);     //改变窗口大小时
 //	glutDisplayFunc(display);    //绘制窗zz口显示时
 //
-//	//glutMainLoop();
+//	glutMainLoop();
 //
 //
-//		//这里是写入文件
-//	//记得重新算的时候要删掉 原来的文件夹
+//	//这里是写入文件
+////记得重新算的时候要删掉 原来的文件夹
 //	int frame = 100000;
 //
 //	auto position = vpSolver->foamVortexData()->positions();
@@ -219,27 +205,27 @@
 //
 //	int interval = 1;
 //
-//	string outfilename = "1";
+//	std::string outfilename = "1";
 //
 //	system("mkdir FoamTest9");
 //
 //	for (int i = 0; i < frame; i += 1) {
 //
-//		ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest9\\" + outfilename + ".txt", ios::app);
+//		std::ofstream out("E:\\zhangjian\\paper_and_project\\titmouse2d\\OpenGL\\FoamTest9\\" + outfilename + ".txt", std::ios::app);
 //		auto num = vpSolver->foamVortexData()->numberOfParticles();
 //		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
 //		for (int n = 0; n < num; ++n) {
 //			auto x = position[n].x;
 //			auto y = position[n].y;
 //			if (x < 2 && y < 2)
-//				out << x << "," << y << endl;
+//				out << x << "," << y << std::endl;
 //		}
 //		vpSolver->onAdvanceTimeStep(dt);
 //		sim_step++;
 //		auto temp1 = std::atoi(outfilename.c_str());
 //		temp1++;
 //		outfilename = std::to_string(temp1);
-//		cout << "当前计算到第" << sim_step << "步,系统中粒子数：" << num + tracer_num << endl;
+//		std::cout << "当前计算到第" << sim_step << "步,系统中粒子数：" << num + tracer_num << std::endl;
 //
 //	}
 //

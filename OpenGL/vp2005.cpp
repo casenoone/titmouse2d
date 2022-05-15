@@ -42,8 +42,8 @@
 ////newPosition赋值给positions可以改用移动构造函数，提高效率
 //
 //FoamVortexSolver::FoamVortexSolver() {
-//	_particleSystemData = make_shared<FoamVortexData>();
-//	_foamVortexData = make_shared<FoamVortexData>();
+//	_particleSystemData = std::make_shared<FoamVortexData>();
+//	_foamVortexData = std::make_shared<FoamVortexData>();
 //	_foamVortexData = std::dynamic_pointer_cast<FoamVortexData>(_particleSystemData);
 //}
 //
@@ -167,7 +167,7 @@
 //
 //}
 //
-//void FoamVortexSolver::setPanels(ExplicitSurface2Ptr surfaces) {
+//void FoamVortexSolver::setPanels(RegularPolygonPtr surfaces) {
 //	_foamVortexData->panelSet = surfaces;
 //	correctPanelCoordinateSystem();
 //	computeBoundaryMatrix();
@@ -175,7 +175,7 @@
 //
 //void FoamVortexSolver::setMovingGrid(const Vector2I& resolution_,
 //	const BoundingBox2& domain_) {
-//	_foamVortexData->movingGrid = make_shared<MovingFaceCenteredGrid2>(resolution_, domain_);
+//	_foamVortexData->movingGrid = std::make_shared<MovingFaceCenteredGrid2>(resolution_, domain_);
 //}
 //
 //
