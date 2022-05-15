@@ -64,7 +64,6 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 		Vector2D votexSheetVel;
 		votexSheetVel = static_computeSingleVelocityFromPanels(i);
 
-		//votexSheetVel = Vector2D::zero();
 		tempP[i] = vortex_pos[i] + timeIntervalInSeconds * (votexSheetVel + vortexVel);
 	}
 	//这里搞一个移动赋值函数

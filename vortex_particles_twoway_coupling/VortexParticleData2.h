@@ -38,22 +38,26 @@ public:
 	RegularPolygonPtr panelSet;
 
 	//消去法向分量
-	Eigen::VectorXd strength;
+	Eigen::VectorXd no_through_strength;
 
 	//消去切向分量
-	Eigen::VectorXd slipStrength;
+	Eigen::VectorXd slip_Strength;
 
 	//消去法向分量
-	Eigen::MatrixXd A;
+	Eigen::MatrixXd no_through_matrix;
 
 	//消去切向分量
-	Eigen::MatrixXd B;
+	Eigen::MatrixXd slip_matrix;
 
 	Array<Vector2D> newParticles;
 
 	//tracer粒子的速度和位置
 	Array<Vector2D> tracePosition;
 	Array<Vector2D> traceVelocity;
+
+	//存放发射出去的涡粒子的信息
+	Array<Vector2D> vortexPosition;
+	Array<Vector2D> vortexVelocity;
 
 private:
 

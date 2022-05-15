@@ -90,12 +90,13 @@ static void display(void)
 
 	vpSolver->onAdvanceTimeStep(dt);
 	sim_step++;
-	int numberOfParticles = vpSolver->foamVortexData()->numberOfParticles();
 
-	for (int i = 0; i < numberOfParticles; ++i) {
+	//可视化涡粒子
+	auto vor_pos = vpSolver->foamVortexData()->vortexPosition;
+	int vor_n = vor_pos.dataSize();
+	for (int i = 0; i < vor_n; ++i) {
+		drawPoint(vor_pos[i].x, vor_pos[i].y);
 
-		auto pos = vpSolver->foamVortexData()->positions();
-		drawPoint(pos[i].x, pos[i].y);
 	}
 
 	//可视化tracer粒子
