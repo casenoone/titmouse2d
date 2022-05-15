@@ -32,13 +32,10 @@ public:
 		int resolutionY);
 
 	void setPanels(RegularPolygonPtr surfaces);
-
-	void setMovingGrid(const Vector2I& resolution_, const BoundingBox2& domain_);
-
-	void emitParticles();
-
+	void emitVortexRing();
 	void emitParticlesFromPanels(double timeIntervalInSeconds);
 
+	Vector2D computeForce(double timeIntervalInSeconds);
 
 
 private:
@@ -64,9 +61,12 @@ private:
 
 	void slipVortexSheetSolve(double timeIntervalInSeconds);
 
+	void movingSlipVortexSheetSolve(double timeIntervalInSeconds);
+
 	void onBeginAdvanceTimeStep();
 
 	void onEndAdvanceTimeStep();
+
 
 
 private:

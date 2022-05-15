@@ -119,7 +119,6 @@ static void display(void)
 	glLoadIdentity();
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
-	obj1->velocity = Vector2D(2, 0.0);
 	obj1->updatePosition(dt);
 
 	auto& bubble_pos = vpSolver->foamVortexData()->positions();
@@ -237,6 +236,7 @@ int main(int argc, char** argv)
 	vpSolver->setCollider(collider);
 	/**********以上生成气泡**********/
 
+	obj1->velocity = Vector2D(2, 0.0);
 
 
 

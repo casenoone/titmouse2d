@@ -66,8 +66,8 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 			}
 		}
 		Vector2D votexSheetVel;
-		votexSheetVel = computeSingleVelocityFromPanels(i);
-		tempP[i] = vortex_pos[i] + timeIntervalInSeconds * (votexSheetVel + vortexVel + vs_vec);
+		//votexSheetVel = computeSingleVelocityFromPanels(i);
+		tempP[i] = vortex_pos[i] + timeIntervalInSeconds * (votexSheetVel + vortexVel /* + vs_vec*/);
 
 	}
 	vortex_pos = tempP;
@@ -108,12 +108,12 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	beginAdvanceTimeStep();
 
 	//消去法向分量
-	vortexSheetSolve(timeIntervalInSeconds);
+	//vortexSheetSolve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
-	onEndAdvanceTimeStep();
-	emitParticlesFromPanels(timeIntervalInSeconds);
+	//emitParticlesFromPanels(timeIntervalInSeconds);
 	//消去切向分量
-	slipVortexSheetSolve(timeIntervalInSeconds);
+	//slipVortexSheetSolve(timeIntervalInSeconds);
+	movingSlipVortexSheetSolve(timeIntervalInSeconds);
 	endAdvanceTimeStep();
 
 }
@@ -132,7 +132,25 @@ void FoamVortexSolver::onEndAdvanceTimeStep() {
 	ParticleSystemSolver2::endAdvanceTimeStep();
 }
 
+Vector2D FoamVortexSolver::computeForce(double timeIntervalInSeconds) {
+	auto& panelset = _foamVortexData->panelSet;
+	int len = panelset->size();
 
+	double rho = 1.0;
+	double c = 0.008;
+	double dt = timeIntervalInSeconds;
+	auto& gamma = _foamVortexData->slip_Strength;
+	Vector2D f;
+	for (int i = 0; i < len; ++i) {
+		auto midPoint = panelset->midPoint(i);
+		auto term1 = c * gamma[i] / dt;
+		auto term2 = rho * Vector2D(midPoint.y * term1, -midPoint.x * term1);
+		f += term2;
+	}
+	f = f * -0.5;
+	//std::cout << f.x << "," << f.y << std::endl;
+	return f;
+}
 
 Vector2D FoamVortexSolver::computeUSingle(const Vector2D& pos, int i)const {
 
@@ -159,55 +177,15 @@ void FoamVortexSolver::setPanels(RegularPolygonPtr surfaces) {
 	computeBoundaryMatrix();
 }
 
-void FoamVortexSolver::setMovingGrid(const Vector2I& resolution_,
-	const BoundingBox2& domain_) {
-}
 
 
-//void FoamVortexSolver::emitParticles() {
-//	auto data = _foamVortexData;
-//	auto n = data->numberOfParticles();
-//	auto& pos = data->positions();
-//	auto& vel = data->velocities();
-//
-//	double dx = 0.05;
-//	double dy = 0.05;
-//	Vector2D center(0.3, 1.0);
-//	Vector2D lower(center.x - dx, center.y - dy);
-//	Vector2D upper(center.x + dx, center.y + dy);
-//
-//	int emitNum = 10;
-//	Vector2D tempPos;
-//	for (int i = 0; i < emitNum; ++i) {
-//
-//		tempPos.x = random_double(lower.x, upper.x);
-//		tempPos.y = random_double(lower.y, upper.y);
-//
-//		pos.push(tempPos);
-//		vel.push(Vector2D(0.0, 0.0));
-//		data->vorticities().push(0.000);
-//		_newVelocities.push(Vector2D(0.0, 0.0));
-//		_newPositions.push(Vector2D());
-//
-//		data->numberOfParticles()++;
-//	}
-//
-//
-//}
-
-
-void FoamVortexSolver::emitParticles() {
+void FoamVortexSolver::emitVortexRing() {
 	auto data = _foamVortexData;
-	auto& vel = data->velocities();
-	auto& n = data->numberOfParticles();
-	auto& pos = data->positions();
+	auto& vel = data->vortexVelocity;
+	auto& pos = data->vortexPosition;
 	auto& gamma = data->vorticities();
-	data->numberOfParticles() = 4;
 
-	_newVelocities.reSize(n);
-	_newPositions.reSize(n);
-	vel.reSize(n);
-
+	vel.reSize(4);
 
 	Vector2D A(0.2, 1.2);
 	Vector2D B(0.2, 1.1);
@@ -219,64 +197,18 @@ void FoamVortexSolver::emitParticles() {
 	pos.push(C);
 	pos.push(D);
 
-	gamma.push(1.0);
-	gamma.push(1.0);
-	gamma.push(-1.0);
-	gamma.push(-1.0);
+	gamma.push(0.6);
+	gamma.push(0.6);
+	gamma.push(-0.6);
+	gamma.push(-0.6);
 
-	int tracerNum = 1000;
-	data->tracePosition.reSize(tracerNum);
-	data->traceVelocity.reSize(tracerNum);
+	/*gamma.push(random_double(0.4, 0.8));
+	gamma.push(random_double(0.4, 0.8));
+	gamma.push(-random_double(0.4, 0.8));
+	gamma.push(-random_double(0.4, 0.8));*/
 
-	for (int i = 0; i < tracerNum; ++i) {
-		Vector2D tempPos;
-		tempPos.x = random_double(0, 0.4);
-		tempPos.y = random_double(0.7, 1.4);
-		data->tracePosition[i] = tempPos;
-	}
 }
 
-
-//void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
-//	auto data = _foamVortexData;
-//	auto n = data->numberOfParticles();
-//	auto& pos = data->positions();
-//	auto& vel = data->velocities();
-//	auto panels = data->panelSet;
-//
-//	auto gamma = data->slip_Strength;
-//	int emitNum = panels->size();
-//	Vector2D tempPos;
-//	static int step = 0;
-//
-//	if (step % 3 == 0) {
-//		for (int i = 0; i < emitNum; ++i) {
-//
-//			auto line = panels->lookAt(i).end - panels->lookAt(i).start;
-//			double panelLength = line.getLength();
-//			auto lambda = random_double(0, 1);
-//			//tempPos = panels->lookAt(i).start + lambda * line;
-//			tempPos = panels->midPoint(i);
-//			tempPos += panels->lookAt(i).normal * random_double(0.01, 0.02);
-//
-//			pos.push(tempPos);
-//			vel.push(Vector2D(0.0, 0.0));
-//			double temp_vorticity = 0.00;
-//
-//			if (gamma.size() > 0) {
-//				//temp_vorticity = (vs_tau * gamma[i] * timeIntervalInSeconds * panelLength);
-//
-//			}
-//			data->vorticities().push(temp_vorticity);
-//			_newVelocities.push(Vector2D(0.0, 0.0));
-//			_newPositions.push(Vector2D());
-//
-//			data->numberOfParticles()++;
-//		}
-//
-//	}
-//	step++;
-//}
 
 void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 	auto data = _foamVortexData;
@@ -390,6 +322,7 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector
 	result = vel_to_world(result, start, normal);
 	return result;
 }
+
 
 
 
@@ -526,4 +459,42 @@ void FoamVortexSolver::slipVortexSheetSolve(double timeIntervalInSeconds) {
 	for (int i = 0; i < panelSize; ++i) {
 		vorticity[n - i - 1] = (vs_tau * x1[panelSize - i - 1] * timeIntervalInSeconds * panelLength);
 	}
+}
+
+
+
+//在这里求解vortex sheet strength
+void FoamVortexSolver::movingSlipVortexSheetSolve(double timeIntervalInSeconds) {
+	auto data = _foamVortexData;
+	auto panels = data->panelSet;
+	auto panelSize = panels->size();
+	auto& pos = data->vortexPosition;
+	auto n = pos.dataSize();
+
+	auto& vorticity = data->vorticities();
+
+	Eigen::MatrixXd& B = _foamVortexData->slip_matrix;
+	Eigen::VectorXd& x1 = _foamVortexData->slip_Strength;
+
+
+
+	Eigen::VectorXd b1(panelSize + 1);
+	for (int i = 0; i < panelSize; ++i) {
+		auto normal = panels->lookAt(i).normal;
+		Vector2D tengent(normal.y, -normal.x);
+
+		auto pos = panels->midPoint(i);
+		//auto vec = vs_vec;
+		auto vec = Vector2D::zero();
+		Vector2D temp;
+		for (int j = 0; j < n; ++j) {
+			temp += computeUSingle(pos, j);
+		}
+		b1[i] = (vec + temp).dot(tengent);
+	}
+
+	b1[panelSize] = 0;
+
+	x1 = B.colPivHouseholderQr().solve(b1);
+
 }

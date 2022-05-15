@@ -73,10 +73,10 @@ double r1 = 0.4;
 
 auto vpSolver = std::make_shared<FoamVortexSolver>();
 
-double dt = 0.008;
+double dt = 0.0018;
 
 //double dt = 0.0008;
-RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.1);
+RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(1.0, 1.0), 0.058);
 
 
 
@@ -90,6 +90,9 @@ static void display(void)
 
 	vpSolver->onAdvanceTimeStep(dt);
 	sim_step++;
+	auto newF = vpSolver->computeForce(dt);
+
+	obj1->velocity += newF * dt;
 
 	//可视化涡粒子
 	auto vor_pos = vpSolver->foamVortexData()->vortexPosition;
@@ -107,39 +110,15 @@ static void display(void)
 		drawPoint(tracer_pos[i].x, tracer_pos[i].y);
 	}
 
+
+	obj1->updatePosition(dt);
+
 	int m = 0;
 	for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
 		auto start = i->start;
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
-
-		////可视化法线
-		//auto midPoint = obj1->midPoint(m++);
-		//auto normalEnd = midPoint + 0.2 * i->normal;
-		//drawLine(midPoint.x, midPoint.y, normalEnd.x, normalEnd.y);
 	}
-
-
-	//int m = 0;
-	//for (auto i = explicitSphere1->_data.begin(); i != explicitSphere1->_data.end(); ++i) {
-	//	auto start = i->start;
-	//	auto end = i->end;
-	//	drawLine(start.x, start.y, end.x, end.y);
-
-	//	//可视化法线
-	//	auto midPoint = explicitSphere1->midPoint(m++);
-	//	auto normalEnd = start + 0.2 * i->normal;
-	//	drawPoint(start.x, start.y);
-	//	drawLine(start.x, start.y, normalEnd.x, normalEnd.y);
-	//}
-
-	/*auto movingSize = vpSolver->foamVortexData()->movingGrid->uSize();
-	for (int i = 0; i < movingSize.x; ++i) {
-		for (int j = 0; j < movingSize.y; ++j) {
-			auto posfunc = vpSolver->foamVortexData()->movingGrid->uPosition();
-			drawPoint(posfunc(i, j).x, posfunc(i, j).y);
-		}
-	}*/
 
 	glutSwapBuffers();
 
@@ -180,7 +159,9 @@ int main(int argc, char** argv)
 	//vpSolver->setPanels(explicitSphere1);
 	vpSolver->setPanels(obj1);
 	//vpSolver->emitParticles();
+	vpSolver->emitVortexRing();
 
+	obj1->velocity = Vector2D(0, .0);
 
 	UINT timerId = 1;
 	MSG msg;
