@@ -59,6 +59,16 @@ public:
 	Array<Vector2D> vortexPosition;
 	Array<Vector2D> vortexVelocity;
 
+	//存放气泡对应的panel模型
+	Array<RegularPolygonPtr> bubble_panelset;
+
+	//气泡所需要用到的矩阵和gamma
+	Eigen::MatrixXd bubble_slip_matrix;
+
+	Array<Eigen::VectorXd> bubble_slip_strength;
+
+
+
 private:
 
 	//二维情况下，涡量是标量

@@ -35,8 +35,11 @@ public:
 	void emitVortexRing();
 	void emitParticlesFromPanels(double timeIntervalInSeconds);
 
-	Vector2D computeForce(double timeIntervalInSeconds);
+	Vector2D computeTwoWayForce(double timeIntervalInSeconds);
 
+	Vector2D computeTwoWayForce(int index, double dt);
+
+	void generatePanelSet(const Array<Vector2D>& pos, const Array<double>& radius);
 
 private:
 
@@ -45,8 +48,6 @@ private:
 
 	Vector2D computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
 
-	//对panel的数据结构做一个矫正以便于局部坐标系下的计算
-	void correctPanelCoordinateSystem();
 
 	//只要边界形状不变，边界矩阵就不会变
 	//这个函数只调用一次
@@ -62,6 +63,8 @@ private:
 	void slipVortexSheetSolve(double timeIntervalInSeconds);
 
 	void movingSlipVortexSheetSolve(double timeIntervalInSeconds);
+
+	void all_movingSlipVortexSheetSolve(double timeIntervalInSeconds);
 
 	void onBeginAdvanceTimeStep();
 

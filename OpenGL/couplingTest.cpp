@@ -131,7 +131,7 @@ static void display(void)
 	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
 		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->particleRadius(i), 50);
 		auto r = vpSolver->foamVortexData()->particleRadius(i);
-		writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
+		//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
 	}
 
 
@@ -278,7 +278,7 @@ int main(int argc, char** argv)
 
 
 		//写入移动边界的数据
-		writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
+		//writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
 
 		//写入thinfoam数据
 		for (int n = 0; n < tracer_num; ++n) {
@@ -286,17 +286,17 @@ int main(int argc, char** argv)
 			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
 			if (x < 2 && y < 2 && x >= 0 && y >= 0) {
 				auto height = waterdata->height->sample(vpSolver->foamVortexData()->tracePosition[n]);
-				writer2.write_in_ply(x, height, y);
+				//writer2.write_in_ply(x, height, y);
 			}
 		}
 		auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();
 		std::cout << "当前解算到第：" << i << "步，涡粒子数：" << vortex_num << std::endl;
 
 		//为了保证thinfoam模型与water模型对齐，追加四个点
-		writer2.write_in_ply(0, 0, 0);
+		/*writer2.write_in_ply(0, 0, 0);
 		writer2.write_in_ply(2, 0, 2);
 		writer2.write_in_ply(2, 0, 0);
-		writer2.write_in_ply(0, 0, 2);
+		writer2.write_in_ply(0, 0, 2);*/
 
 		//写入water数据
 		for (int q1 = 0; q1 < waterdata->resolution().x; ++q1) {
@@ -304,7 +304,7 @@ int main(int argc, char** argv)
 				auto posFunc = waterdata->height->dataPosition();
 				auto pos = posFunc(q1, q2);
 				auto height = waterdata->height->lookAt(q1, q2);
-				writer3.write_in_ply(pos.x, height, pos.y);
+				//writer3.write_in_ply(pos.x, height, pos.y);
 			}
 		}
 

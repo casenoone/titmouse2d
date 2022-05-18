@@ -47,6 +47,7 @@ FoamVortexSolver::FoamVortexSolver(
 }
 
 
+
 void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 	auto& vortex_pos = _foamVortexData->vortexPosition;
@@ -117,7 +118,7 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
 	decayVorticity();
-	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
+	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 
 	endAdvanceTimeStep();
 	bubbleBreakUp();

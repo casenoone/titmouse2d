@@ -114,6 +114,7 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	//消去切向分量
 	//slipVortexSheetSolve(timeIntervalInSeconds);
 	movingSlipVortexSheetSolve(timeIntervalInSeconds);
+	all_movingSlipVortexSheetSolve(timeIntervalInSeconds);
 	endAdvanceTimeStep();
 
 }
@@ -132,12 +133,12 @@ void FoamVortexSolver::onEndAdvanceTimeStep() {
 	ParticleSystemSolver2::endAdvanceTimeStep();
 }
 
-Vector2D FoamVortexSolver::computeForce(double timeIntervalInSeconds) {
+Vector2D FoamVortexSolver::computeTwoWayForce(double timeIntervalInSeconds) {
 	auto& panelset = _foamVortexData->panelSet;
 	int len = panelset->size();
 
 	double rho = 1.0;
-	double c = 0.008;
+	double c = 0.07;
 	double dt = timeIntervalInSeconds;
 	auto& gamma = _foamVortexData->slip_Strength;
 	Vector2D f;
@@ -148,9 +149,41 @@ Vector2D FoamVortexSolver::computeForce(double timeIntervalInSeconds) {
 		f += term2;
 	}
 	f = f * -0.5;
-	//std::cout << f.x << "," << f.y << std::endl;
 	return f;
 }
+
+//index:bubble的索引
+Vector2D FoamVortexSolver::computeTwoWayForce(int index, double dt) {
+	auto& bubble_panelset = _foamVortexData->bubble_panelset;
+	int len = bubble_panelset[index]->size();
+	double rho = 1.0;
+	double c = 0.2;
+	auto& gammas = _foamVortexData->bubble_slip_strength;
+	Vector2D f;
+	for (int i = 0; i < len; ++i) {
+		auto midPoint = bubble_panelset[index]->midPoint(i);
+		auto term1 = c * gammas[index][i] / dt;
+		auto term2 = rho * Vector2D(midPoint.y * term1, -midPoint.x * term1);
+		f += term2;
+	}
+	f = f * -0.5;
+	return f;
+}
+
+
+void FoamVortexSolver::generatePanelSet(const Array<Vector2D>& pos,
+	const Array<double>& radius) {
+
+	int n = pos.dataSize();
+	for (int i = 0; i < n; ++i) {
+		RegularPolygonPtr obj = std::make_shared<RegularPolygon>(10, pos.lookAt(i), radius.lookAt(i));
+		_foamVortexData->bubble_panelset.push(obj);
+	}
+	_foamVortexData->bubble_slip_strength.reSize(n);
+
+}
+
+
 
 Vector2D FoamVortexSolver::computeUSingle(const Vector2D& pos, int i)const {
 
@@ -173,7 +206,6 @@ void FoamVortexSolver::setData(int numberOfParticles,
 
 void FoamVortexSolver::setPanels(RegularPolygonPtr surfaces) {
 	_foamVortexData->panelSet = surfaces;
-	correctPanelCoordinateSystem();
 	computeBoundaryMatrix();
 }
 
@@ -327,22 +359,6 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(int index, const Vector
 
 
 
-//要确保normal x (end - start) < 0
-void FoamVortexSolver::correctPanelCoordinateSystem() {
-	auto panels = _foamVortexData->panelSet;
-	auto size = panels->size();
-
-	for (int i = 0; i < size; ++i) {
-		auto& data = (*panels)[i];
-		if (data.normal.cross(data.end - data.start) > 0) {
-
-			//std::swap(data.end, data.start);
-		}
-		else {
-		}
-	}
-}
-
 //只执行一次
 void FoamVortexSolver::computeBoundaryMatrix() {
 	auto panels = _foamVortexData->panelSet;
@@ -382,8 +398,6 @@ void FoamVortexSolver::computeBoundaryMatrix() {
 		B(panelSize, i) = 1.0;
 	}
 }
-
-
 
 
 
@@ -433,7 +447,6 @@ void FoamVortexSolver::slipVortexSheetSolve(double timeIntervalInSeconds) {
 	Eigen::VectorXd& x1 = _foamVortexData->slip_Strength;
 
 
-
 	Eigen::VectorXd b1(panelSize + 1);
 	for (int i = 0; i < panelSize; ++i) {
 		auto normal = panels->lookAt(i).normal;
@@ -463,7 +476,7 @@ void FoamVortexSolver::slipVortexSheetSolve(double timeIntervalInSeconds) {
 
 
 
-//在这里求解vortex sheet strength
+//求解two-way下的vortex strength
 void FoamVortexSolver::movingSlipVortexSheetSolve(double timeIntervalInSeconds) {
 	auto data = _foamVortexData;
 	auto panels = data->panelSet;
@@ -471,14 +484,10 @@ void FoamVortexSolver::movingSlipVortexSheetSolve(double timeIntervalInSeconds) 
 	auto& pos = data->vortexPosition;
 	auto n = pos.dataSize();
 
-	auto& vorticity = data->vorticities();
-
 	Eigen::MatrixXd& B = _foamVortexData->slip_matrix;
 	Eigen::VectorXd& x1 = _foamVortexData->slip_Strength;
-
-
-
 	Eigen::VectorXd b1(panelSize + 1);
+
 	for (int i = 0; i < panelSize; ++i) {
 		auto normal = panels->lookAt(i).normal;
 		Vector2D tengent(normal.y, -normal.x);
@@ -494,7 +503,43 @@ void FoamVortexSolver::movingSlipVortexSheetSolve(double timeIntervalInSeconds) 
 	}
 
 	b1[panelSize] = 0;
-
 	x1 = B.colPivHouseholderQr().solve(b1);
 
 }
+
+
+//求解two-way下的vortex strength
+//求解整个bubble团上的vortex strength
+void FoamVortexSolver::all_movingSlipVortexSheetSolve(double dt) {
+	auto& bubble_panelSet = _foamVortexData->bubble_panelset;
+	int bubble_num = bubble_panelSet.dataSize();
+	Eigen::MatrixXd& B = _foamVortexData->slip_matrix;
+	auto& pos = _foamVortexData->vortexPosition;
+	auto n = pos.dataSize();
+	auto& vorticity = _foamVortexData->vorticities();
+
+	//遍历所有的bubble_panelset
+	for (int i = 0; i < bubble_num; ++i) {
+		auto panels = bubble_panelSet[i];
+		auto panelSize = panels->size();
+		Eigen::VectorXd& x1 = _foamVortexData->bubble_slip_strength[i];
+		Eigen::VectorXd b1(panelSize + 1);
+
+		for (int j = 0; j < panelSize; ++j) {
+			auto normal = panels->lookAt(j).normal;
+			Vector2D tangent(normal.y, -normal.x);
+			auto mid_pos = panels->midPoint(j);
+			Vector2D temp;
+			for (int k = 0; k < n; ++k) {
+				temp += computeUSingle(mid_pos, k);
+
+			}
+			b1[j] = temp.dot(tangent);
+		}
+
+		b1[panelSize] = 0;
+		x1 = B.colPivHouseholderQr().solve(b1);
+	}
+
+}
+

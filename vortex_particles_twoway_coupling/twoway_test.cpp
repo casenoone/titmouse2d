@@ -10,6 +10,9 @@
 #include "../titmouse2d/src/SparseMatrix.hpp"
 #include "../titmouse2d/src/Eulerian/MarchingCubes2.h"
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
+#include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
+#include "../titmouse2d/src/random.h"
+
 #include <GL/glut.h>
 
 #include <windows.h>
@@ -73,10 +76,10 @@ double r1 = 0.4;
 
 auto vpSolver = std::make_shared<FoamVortexSolver>();
 
-double dt = 0.0018;
+double dt = 0.01;
 
 //double dt = 0.0008;
-RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(1.0, 1.0), 0.058);
+RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(10, Vector2D(1.0, 1.0), 0.01);
 
 
 
@@ -90,9 +93,30 @@ static void display(void)
 
 	vpSolver->onAdvanceTimeStep(dt);
 	sim_step++;
-	auto newF = vpSolver->computeForce(dt);
-
+	auto newF = vpSolver->computeTwoWayForce(dt);
 	obj1->velocity += newF * dt;
+	obj1->updatePosition(dt);
+
+	/***********以下临时测验bubble_panelSet**********/
+
+
+	/***********以上临时测验bubble_panelSet**********/
+
+	//可视化泡沫
+	auto& bubble_circle = vpSolver->foamVortexData()->bubble_panelset;
+	auto bubble_circle_n = bubble_circle.dataSize();
+	for (int i = 0; i < bubble_circle_n; ++i) {
+
+		for (auto j = bubble_circle[i]->_data.begin(); j != bubble_circle[i]->_data.end(); ++j) {
+			auto start = j->start;
+			auto end = j->end;
+			drawLine(start.x, start.y, end.x, end.y);
+		}
+
+		auto newF = vpSolver->computeTwoWayForce(i, dt);
+		bubble_circle[i]->velocity += newF * dt;
+		bubble_circle[i]->updatePosition(dt);
+	}
 
 	//可视化涡粒子
 	auto vor_pos = vpSolver->foamVortexData()->vortexPosition;
@@ -111,7 +135,6 @@ static void display(void)
 	}
 
 
-	obj1->updatePosition(dt);
 
 	int m = 0;
 	for (auto i = obj1->_data.begin(); i != obj1->_data.end(); ++i) {
@@ -119,6 +142,8 @@ static void display(void)
 		auto end = i->end;
 		drawLine(start.x, start.y, end.x, end.y);
 	}
+
+
 
 	glutSwapBuffers();
 
@@ -162,6 +187,43 @@ int main(int argc, char** argv)
 	vpSolver->emitVortexRing();
 
 	obj1->velocity = Vector2D(0, .0);
+
+
+
+
+
+	double temp_r = 0.01;
+	Array<Vector2D> this_pos;
+	Array<double> this_radius;
+	Vector2D temp1;
+
+	int bubble_num = 0;
+	auto grid = CellCenteredScalarGrid2::builder()
+		.withOrigin(0, 0)
+		.withResolution(40, 40)
+		.makeShared();
+
+	Vector2D tempC(1, 1);
+	for (int i = 0; i < grid->resolution().x; ++i) {
+		for (int j = 0; j < grid->resolution().y; ++j) {
+			auto pos = (grid->dataPosition())(i, j);
+			if (pos.dis(tempC) < 0.2) {
+				pos.x += random_double(-0.02, 0.02);
+				pos.y += random_double(-0.02, 0.02);
+
+				this_pos.push(pos);
+				//temp_r = random_double(0.01, 0.03);
+				this_radius.push(temp_r);
+				//bubbleSolver._bubbleData->particleRadius.push(temp_r);
+				bubble_num++;
+			}
+		}
+	}
+
+	//vpSolver->setData(bubble_num, this_pos, 2, 2);
+
+	vpSolver->generatePanelSet(this_pos, this_radius);
+
 
 	UINT timerId = 1;
 	MSG msg;

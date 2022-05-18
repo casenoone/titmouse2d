@@ -149,7 +149,6 @@
     <ClCompile Include="vp2005.h" />
     <ClCompile Include="vp2005.cpp" />
     <ClCompile Include="FoamVortexSolver.cpp" />
-    <ClCompile Include="FoamVortexTest.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
     <ClCompile Include="OpenGL.cpp" />

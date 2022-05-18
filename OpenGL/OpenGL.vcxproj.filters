@@ -27,9 +27,6 @@
     <ClCompile Include="vp2005.h">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="FoamVortexTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="vp2005.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
