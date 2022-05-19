@@ -98,10 +98,6 @@ static void display(void)
 	obj1->updatePosition(dt);
 
 	/***********以下临时测验bubble_panelSet**********/
-
-
-	/***********以上临时测验bubble_panelSet**********/
-
 	//可视化泡沫
 	auto& bubble_circle = vpSolver->foamVortexData()->bubble_panelset;
 	auto bubble_circle_n = bubble_circle.dataSize();
@@ -117,6 +113,9 @@ static void display(void)
 		bubble_circle[i]->velocity += newF * dt;
 		bubble_circle[i]->updatePosition(dt);
 	}
+	/***********以上临时测验bubble_panelSet**********/
+
+
 
 	//可视化涡粒子
 	auto vor_pos = vpSolver->foamVortexData()->vortexPosition;
@@ -200,7 +199,7 @@ int main(int argc, char** argv)
 	int bubble_num = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(40, 40)
+		.withResolution(30, 30)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
@@ -208,8 +207,8 @@ int main(int argc, char** argv)
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
 			if (pos.dis(tempC) < 0.2) {
-				pos.x += random_double(-0.02, 0.02);
-				pos.y += random_double(-0.02, 0.02);
+				pos.x += random_double(-0.01, 0.01);
+				pos.y += random_double(-0.01, 0.01);
 
 				this_pos.push(pos);
 				//temp_r = random_double(0.01, 0.03);

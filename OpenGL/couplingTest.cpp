@@ -204,7 +204,7 @@ int main(int argc, char** argv)
 
 
 	/**********以下生成气泡**********/
-	double temp_r = 0.02;
+	double temp_r = 0.01;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
@@ -217,18 +217,18 @@ int main(int argc, char** argv)
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
-			if (pos.dis(tempC) < 0.4) {
+			if (pos.dis(tempC) < 0.2) {
 				pos.x += random_double(-0.02, 0.02);
 				pos.y += random_double(-0.02, 0.02);
 				this_pos.push(pos);
-				temp_r = random_double(0.01, 0.03);
+				//temp_r = random_double(0.01, 0.03);
 				vpSolver->foamVortexData()->particleRadius.push(temp_r);
 				bubble_num++;
 			}
 		}
 	}
 
-	vpSolver->setData(bubble_num, this_pos, 5, 5);
+	vpSolver->setData(bubble_num, this_pos, 20, 20);
 
 	Collider2 collider;
 	collider.push(box1);
@@ -236,7 +236,7 @@ int main(int argc, char** argv)
 	vpSolver->setCollider(collider);
 	/**********以上生成气泡**********/
 
-	obj1->velocity = Vector2D(2, 0.0);
+	obj1->velocity = Vector2D(3, 0.0);
 
 
 

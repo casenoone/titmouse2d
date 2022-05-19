@@ -179,6 +179,38 @@ void FoamVortexSolver::setShallowWaveMovingBoundary(const Vector2D& center, cons
 	_shallowWaveSolver->setSphereMarkers(center, r);
 }
 
+//index:bubbleµÄË÷Òý
+Vector2D FoamVortexSolver::computeTwoWayForce(int index, double dt) {
+	auto& bubble_panelset = _foamVortexData->bubble_panelset;
+	int len = bubble_panelset[index]->size();
+	double rho = 1.0;
+	double c = 0.2;
+	auto& gammas = _foamVortexData->bubble_slip_strength;
+	Vector2D f;
+	for (int i = 0; i < len; ++i) {
+		auto midPoint = bubble_panelset[index]->midPoint(i);
+		auto term1 = c * gammas[index][i] / dt;
+		auto term2 = rho * Vector2D(midPoint.y * term1, -midPoint.x * term1);
+		f += term2;
+	}
+	f = f * -0.5;
+	return f;
+}
+
+void FoamVortexSolver::generatePanelSet(const Array<Vector2D>& pos,
+	const Array<double>& radius) {
+
+	int n = pos.dataSize();
+	for (int i = 0; i < n; ++i) {
+		RegularPolygonPtr obj = std::make_shared<RegularPolygon>(10, pos.lookAt(i), radius.lookAt(i));
+		_foamVortexData->bubble_panelset.push(obj);
+	}
+	_foamVortexData->bubble_slip_strength.reSize(n);
+
+}
+
+
+
 void FoamVortexSolver::emitVortexRing() {
 	auto& pos = _foamVortexData->vortexPosition;
 	auto& vel = _foamVortexData->vortexVelocity;

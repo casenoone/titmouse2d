@@ -12,9 +12,6 @@
 
 #include <iostream>
 #include <cmath>
-#include <windows.h>
-#include <Eigen/SVD>
-#include <Eigen/LU>
 
 
 
