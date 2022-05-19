@@ -17,7 +17,7 @@
 #include <cmath>
 
 
-static const int numOfStep = 0;
+static const int numOfStep = 1;
 static const double vorticity_eps = 0.08;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
@@ -110,19 +110,21 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
-
 	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
 	beginAdvanceTimeStep();
-	//computeTotalForce();
+	computeTotalForce(timeIntervalInSeconds);
 	//no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
 	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
-	//decayVorticity();
+
+	update_bubble_panelset_pos(timeIntervalInSeconds);
+
+	decayVorticity();
 	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 
 	endAdvanceTimeStep();
-	bubbleBreakUp();
+	//bubbleBreakUp();
 
 }
 
@@ -184,13 +186,16 @@ void FoamVortexSolver::setShallowWaveMovingBoundary(const Vector2D& center, cons
 Vector2D FoamVortexSolver::computeTwoWayForce(int index, double dt) {
 	auto& bubble_panelset = _foamVortexData->bubble_panelset;
 	int len = bubble_panelset[index]->size();
+
 	double rho = 1.0;
-	double c = 0.2;
+	double c = 0.8;
 	auto& gammas = _foamVortexData->bubble_slip_strength;
 	Vector2D f;
 	for (int i = 0; i < len; ++i) {
 		auto midPoint = bubble_panelset[index]->midPoint(i);
-		auto term1 = c * gammas[index][i] / dt;
+		double term1 = 0;
+		if (gammas[index].size() != 0)
+			term1 = c * gammas[index][i] / dt;
 		auto term2 = rho * Vector2D(midPoint.y * term1, -midPoint.x * term1);
 		f += term2;
 	}
@@ -636,6 +641,19 @@ void FoamVortexSolver::decayVorticity() {
 }
 
 
+void FoamVortexSolver::update_bubble_panelset_pos(double dt) {
+	auto& bubble_panelset = _foamVortexData->bubble_panelset;
+	auto bubble_panelset_n = bubble_panelset.dataSize();
+	auto& force = _foamVortexData->forces();
+	for (int i = 0; i < bubble_panelset_n; ++i) {
+		auto currentPanels = bubble_panelset[i];
+		currentPanels->updateVelocity(dt, force[i]);
+		currentPanels->updatePosition(dt);
+	}
+	//std::cout << 888 << std::endl;
+}
+
+
 Vector2D FoamVortexSolver::computeF_rB(int i, int j) const {
 	auto pos = _foamVortexData->positions();
 	auto& radius = _foamVortexData->particleRadius;
@@ -738,10 +756,20 @@ void FoamVortexSolver::computeF_fr() {
 	}
 }
 
-void FoamVortexSolver::computeTotalForce() {
+void FoamVortexSolver::compute_all_twoway_force(double dt) {
+	auto n = _foamVortexData->numberOfParticles();
+	auto& forces = _foamVortexData->forces();
+	for (int i = 0; i < n; ++i) {
+		forces[i] += computeTwoWayForce(i, dt);
+	}
+}
+
+
+void FoamVortexSolver::computeTotalForce(double dt) {
 
 	computeF_ra();
 	computeF_fr();
+	compute_all_twoway_force(dt);
 }
 
 void FoamVortexSolver::bubbleBreakUp() {

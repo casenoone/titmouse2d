@@ -122,23 +122,18 @@ static void display(void)
 
 	obj1->updatePosition(dt);
 
-	/***********以下临时测验bubble_panelSet**********/
-	auto& bubble_circle = vpSolver->foamVortexData()->bubble_panelset;
-	auto bubble_circle_n = bubble_circle.dataSize();
-	for (int i = 0; i < bubble_circle_n; ++i) {
+	///***********以下临时测验bubble_panelSet**********/
+	//auto& bubble_circle = vpSolver->foamVortexData()->bubble_panelset;
+	//auto bubble_circle_n = bubble_circle.dataSize();
+	//for (int i = 0; i < bubble_circle_n; ++i) {
 
-		for (auto j = bubble_circle[i]->_data.begin(); j != bubble_circle[i]->_data.end(); ++j) {
-			auto start = j->start;
-			auto end = j->end;
-			drawLine(start.x, start.y, end.x, end.y);
-		}
-
-		auto newF = vpSolver->computeTwoWayForce(i, dt);
-		bubble_circle[i]->velocity += newF * dt;
-		bubble_circle[i]->updatePosition(dt);
-	}
-	/***********以上临时测验bubble_panelSet**********/
-
+	//	for (auto j = bubble_circle[i]->_data.begin(); j != bubble_circle[i]->_data.end(); ++j) {
+	//		auto start = j->start;
+	//		auto end = j->end;
+	//		drawLine(start.x, start.y, end.x, end.y);
+	//	}
+	//}
+	///***********以上临时测验bubble_panelSet**********/
 
 	auto& bubble_pos = vpSolver->foamVortexData()->positions();
 	//可视化气泡
@@ -147,11 +142,11 @@ static void display(void)
 	fileNum++;
 	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
 	Plyout writer1(path1, name, bubble_pos.dataSize(), "r");
-	//for (int i = 0; i < bubble_pos.dataSize(); ++i) {
-	//	drawCircle(bubble_pos[i], vpSolver->foamVortexData()->particleRadius(i), 50);
-	//	auto r = vpSolver->foamVortexData()->particleRadius(i);
-	//	//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
-	//}
+	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
+		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->particleRadius(i), 50);
+		auto r = vpSolver->foamVortexData()->particleRadius(i);
+		//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
+	}
 
 
 	vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
@@ -228,7 +223,7 @@ int main(int argc, char** argv)
 
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(15, 15)
+		.withResolution(50, 50)
 		.makeShared();
 
 	Vector2D tempC(1.0, 1.0);
@@ -254,10 +249,10 @@ int main(int argc, char** argv)
 	vpSolver->setCollider(collider);
 	/**********以上生成气泡**********/
 
-	obj1->velocity = Vector2D(0, 0.0);
+	obj1->velocity = Vector2D(3, 0.0);
 
 	vpSolver->generatePanelSet(this_pos, vpSolver->foamVortexData()->particleRadius);
-	vpSolver->emitVortexRing();
+	//vpSolver->emitVortexRing();
 
 
 	UINT timerId = 1;

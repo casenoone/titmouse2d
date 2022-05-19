@@ -24,6 +24,10 @@ public:
 		_center += velocity * dt;
 	}
 
+	void updateVelocity(double dt, const Vector2D& force) {
+		velocity += dt * force;
+	}
+
 private:
 	int _edgeNum = 7;
 	Vector2D _center;

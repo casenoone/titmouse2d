@@ -102,6 +102,9 @@ private:
 	//涡量耗散（这里可否提出一些稍微物理一点的耗散模型）
 	void decayVorticity();
 
+	//更新bubble_panelset的位置
+	void update_bubble_panelset_pos(double dt);
+
 private:
 	//计算bubble之间的排斥力
 	Vector2D computeF_rB(int i, int j) const;
@@ -121,8 +124,11 @@ private:
 	//计算所有的阻力
 	void computeF_fr();
 
+	//计算所有的two-way力
+	void compute_all_twoway_force(double dt);
+
 	//计算所有的力
-	void computeTotalForce();
+	void computeTotalForce(double dt);
 
 	//气泡消失，随机删除气泡
 	void bubbleBreakUp();
