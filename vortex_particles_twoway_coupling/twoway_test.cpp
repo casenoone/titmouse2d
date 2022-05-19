@@ -199,7 +199,7 @@ int main(int argc, char** argv)
 	int bubble_num = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(30, 30)
+		.withResolution(15, 15)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
@@ -207,8 +207,8 @@ int main(int argc, char** argv)
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
 			if (pos.dis(tempC) < 0.2) {
-				pos.x += random_double(-0.01, 0.01);
-				pos.y += random_double(-0.01, 0.01);
+				//pos.x += random_double(-0.01, 0.01);
+				//pos.y += random_double(-0.01, 0.01);
 
 				this_pos.push(pos);
 				//temp_r = random_double(0.01, 0.03);

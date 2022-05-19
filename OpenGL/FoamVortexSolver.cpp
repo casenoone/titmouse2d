@@ -17,7 +17,7 @@
 #include <cmath>
 
 
-static const int numOfStep = 1;
+static const int numOfStep = 0;
 static const double vorticity_eps = 0.08;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
@@ -113,11 +113,12 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
 	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
 	beginAdvanceTimeStep();
-	computeTotalForce();
-	no_through_solve(timeIntervalInSeconds);
+	//computeTotalForce();
+	//no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
-	decayVorticity();
+	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
+	//decayVorticity();
 	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 
 	endAdvanceTimeStep();
@@ -206,6 +207,8 @@ void FoamVortexSolver::generatePanelSet(const Array<Vector2D>& pos,
 		_foamVortexData->bubble_panelset.push(obj);
 	}
 	_foamVortexData->bubble_slip_strength.reSize(n);
+
+	constructTwoWayBoundaryMatrix();
 
 }
 
@@ -323,7 +326,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 1;
+	int emitNum = 0;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
@@ -382,6 +385,34 @@ Vector2D FoamVortexSolver::static_computeUnitVelocityFromPanels(int index, const
 	return result;
 }
 
+
+//two-way
+Vector2D FoamVortexSolver::two_way_computeUnitVelocityFromPanels(int bubble_idx, int panelIdx, const Vector2D& midPoint) {
+	auto& panel = _foamVortexData->bubble_panelset[bubble_idx];
+	auto start = panel->lookAt(panelIdx).start;
+	auto end = panel->lookAt(panelIdx).end;
+	auto normal = panel->lookAt(panelIdx).normal;
+
+	Vector2D result;
+
+	//计算beta值.
+	double beta = 0.0;
+	auto vec_r1 = start - midPoint;
+	auto vec_r2 = end - midPoint;
+	auto r1 = vec_r1.getLength();
+	auto r2 = vec_r2.getLength();
+	auto temp1 = vec_r1.dot(vec_r2) / (r1 * r2);
+	beta = acos(temp1);
+	if (isnan(beta)) {
+		beta = kPiD;
+	}
+	//eq(16) eq(17)
+	result.x = beta / (2.0 * kPiD);
+	result.y = log((r2 + fv_eps) / (r1 + fv_eps)) / (2.0 * kPiD);
+
+	result = vel_to_world(result, start, normal);
+	return result;
+}
 
 Vector2D FoamVortexSolver::static_computeSingleVelocityFromPanels(int index) {
 	auto& pos = _foamVortexData->vortexPosition;
@@ -475,6 +506,69 @@ void FoamVortexSolver::constructStaticBoundaryMatrix() {
 		mat(num, i) = 1.0;
 	}
 }
+
+
+void FoamVortexSolver::constructTwoWayBoundaryMatrix() {
+	auto& bubble_panelSet = _foamVortexData->bubble_panelset;
+	int bubble_num = bubble_panelSet.dataSize();
+
+
+	auto& panels = bubble_panelSet[0];
+	auto panelSize = panels->size();
+	Eigen::MatrixXd& B = _foamVortexData->bubble_slip_matrix;
+
+	auto sizex = panelSize + 1;
+	auto sizey = panelSize;
+	B.resize(sizex, sizey);
+
+	for (int j = 0; j < panelSize; ++j) {
+		auto normal = panels->lookAt(j).normal;
+		Vector2D tengent(normal.y, -normal.x);
+		for (int i = 0; i < panelSize; ++i) {
+			auto mid_j = panels->midPoint(j);
+			auto u_ji = two_way_computeUnitVelocityFromPanels(0, i, mid_j).dot(tengent);
+			B(j, i) = -u_ji;
+		}
+	}
+
+	for (int i = 0; i < panelSize; ++i) {
+		B(panelSize, i) = 1.0;
+	}
+}
+
+
+void FoamVortexSolver::all_bubble_vortexStrengthSolve(double dt) {
+	auto& bubble_panelSet = _foamVortexData->bubble_panelset;
+	int bubble_num = bubble_panelSet.dataSize();
+	Eigen::MatrixXd& B = _foamVortexData->bubble_slip_matrix;
+	auto& pos = _foamVortexData->vortexPosition;
+	auto n = pos.dataSize();
+	auto& vorticity = _foamVortexData->gamma();
+
+	//遍历所有的bubble_panelset
+	for (int i = 0; i < bubble_num; ++i) {
+		auto panels = bubble_panelSet[i];
+		auto panelSize = panels->size();
+		Eigen::VectorXd& x1 = _foamVortexData->bubble_slip_strength[i];
+		Eigen::VectorXd b1(panelSize + 1);
+
+		for (int j = 0; j < panelSize; ++j) {
+			auto normal = panels->lookAt(j).normal;
+			Vector2D tangent(normal.y, -normal.x);
+			auto mid_pos = panels->midPoint(j);
+			Vector2D temp;
+			for (int k = 0; k < n; ++k) {
+				temp += computeUSingle(mid_pos, k);
+
+			}
+			b1[j] = temp.dot(tangent);
+		}
+
+		b1[panelSize] = 0;
+		x1 = B.colPivHouseholderQr().solve(b1);
+	}
+}
+
 
 
 

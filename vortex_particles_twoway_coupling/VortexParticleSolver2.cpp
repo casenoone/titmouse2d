@@ -394,6 +394,7 @@ void FoamVortexSolver::computeBoundaryMatrix() {
 	for (int i = 0; i < panelSize; ++i) {
 		B(panelSize, i) = 1.0;
 	}
+	std::cout << B << std::endl;
 }
 
 

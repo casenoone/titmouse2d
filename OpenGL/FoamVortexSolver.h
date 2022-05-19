@@ -75,11 +75,20 @@ private:
 	//静态边界求解边界积分方程时使用的矩阵（SIGGRAPH2005）
 	void constructStaticBoundaryMatrix();
 
+	//组装求解two-way问题时用到的矩阵
+	void constructTwoWayBoundaryMatrix();
+
+	//求解整个泡沫团上的vortex strength
+	void all_bubble_vortexStrengthSolve(double dt);
+
 	//组装移动边界对应的矩阵所用
 	Vector2D computeUnitVelocityFromPanels(const Vector2D& pos, int index);
 
 	//组装静态边界对应的矩阵所用
 	Vector2D static_computeUnitVelocityFromPanels(int index, const Vector2D& midPoint);
+
+	//组装twoway对应的矩阵所用
+	Vector2D two_way_computeUnitVelocityFromPanels(int bubble_idx, int panelIdx, const Vector2D& midPoint);
 
 	//求解静态边界满足不穿透边界条件下的vortex_strength
 	void no_through_solve(double timeIntervalInSeconds);
