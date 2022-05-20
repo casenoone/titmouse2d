@@ -22,7 +22,7 @@ static const double vorticity_eps = 0.08;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
 
-static const double rad_k = 0.01;
+static const double rad_k = 0.012;
 
 Vector2D vel_to_world(const Vector2D vel_local, const Vector2D n_i, const Vector2D normal_i) {
 	double cos_theta = normal_i.y; // cos(theta)
@@ -188,7 +188,7 @@ Vector2D FoamVortexSolver::computeTwoWayForce(int index, double dt) {
 	int len = bubble_panelset[index]->size();
 
 	double rho = 1.0;
-	double c = 0.8;
+	double c = 0.6;
 	auto& gammas = _foamVortexData->bubble_slip_strength;
 	Vector2D f;
 	for (int i = 0; i < len; ++i) {

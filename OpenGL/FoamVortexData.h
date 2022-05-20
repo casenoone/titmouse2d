@@ -51,13 +51,13 @@ public:
 	/**************以下泡沫**************/
 
 	//调节bubble之间排斥力的系数
-	double kr = 18;
+	double kr = 50;
 
 	//调节bubble之间吸引力的系数
-	double ka = 15;
+	double ka = 30;
 
 	//调节空气阻力
-	double kair = 7;
+	double kair = 15;
 
 	ArrayD particleRadius;
 
