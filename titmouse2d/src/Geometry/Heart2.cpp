@@ -31,7 +31,7 @@ void Heart2::computeSdf() {
 			auto posFunc = _data->dataPosition();
 			auto p = posFunc(i, j);
 
-			p.x -= 0.7;
+			p.x -= 0.9;
 			p.x = fabs(p.x);
 			p.y -= 0.8;
 
@@ -45,8 +45,7 @@ void Heart2::computeSdf() {
 				auto p3 = Vector2D(p.x - 0.5 * std::max(p.x + p.y, 0.0), p.y - 0.5 * std::max(p.x + p.y, 0.0));
 				(*_data)(i, j) = sqrt(std::min(p2.dot(p2), p3.dot(p3))) * sign(p.x - p.y);
 			}
-
-
+			(*_data)(i, j) += 0.1;
 
 		}
 	}

@@ -9,7 +9,7 @@
 #include "../titmouse2d/src/Geometry/Plane2.h"
 
 #include "../titmouse2d/src/Hybrid/ApicSolver2.h"
-
+#include "../titmouse2d/src/Geometry/Heart2.h"
 
 #include <GL/glut.h>
 #include <cmath>
@@ -32,7 +32,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(4.0f);//缺省是1
+	glPointSize(2.5f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -66,11 +66,11 @@ void drawColliders(const std::vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto apicSolver = ApicSolver2::builder()
 .withOrigin(Vector2D(0.0, 0.0))
-.withResolution(Vector2I(20, 20))
+.withResolution(Vector2I(40, 40))
 .makeShared();
 
 
-double dt = 0.02;
+double dt = 0.008;
 Collider2 collider;
 
 std::vector<ExplicitSurface2Ptr> surfaceSet;
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 
-	int numberOfParticles = 500;
+	int numberOfParticles = 0;
 	int resolutionX = 20;
 	int resolutionY = 20;
 	std::vector <Vector2D> temp1;
@@ -147,10 +147,26 @@ int main(int argc, char** argv)
 		temp1.push_back(temp);
 	}
 
+
+	Heart2 heart(Vector2D(1, 1), 0.1, Vector2I(100, 100), Vector2D::zero(), 0);
+	numberOfParticles = 0;
+	auto& heart_sdf = heart.sdf();
+	auto heart_res = heart_sdf->resolution();
+	for (int i = 0; i < heart_res.x; ++i) {
+		for (int j = 0; j < heart_res.y; ++j) {
+			if (heart_sdf->lookAt(i, j) < 0) {
+				auto cell_center = heart_sdf->cellCenterPosition()(i, j);
+				temp1.push_back(cell_center);
+				numberOfParticles++;
+			}
+		}
+	}
+
+
 	Array<Vector2D> pos(temp1);
 
 
-	Box2Ptr box1 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2.0, 2.0), true);
+	Box2Ptr box1 = std::make_shared<Box2>(Vector2D(-0.01, -0.01), Vector2D(2.1, 2.1), true);
 	Box2Ptr box2 = std::make_shared<Box2>(Vector2D(0.1, 0.1), Vector2D(1.9, 1.9), true);
 	Box2Ptr box3 = std::make_shared<Box2>(Vector2D(0.6, 0.6), Vector2D(1.0, 0.7), false);
 	Plane2Ptr plane1 = std::make_shared<Plane2>(Vector2D(0.7, 0.8), Vector2D(1.0, 0.8), false);
@@ -171,7 +187,41 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
+
+
+
+
+
+		//这里是写入文件
+	//记得重新算的时候要删掉 原来的文件夹
+	int frame = 10000;
+	auto num = apicSolver->particleSystemData()->numberOfParticles();
+	auto position = apicSolver->particleSystemData()->positions();
+
+
+	int interval = 1;
+
+	std::string outfilename = "1";
+
+	//system("mkdir FlipData3");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		std::ofstream out("E:\\zhangjian\\solve_data\\test520_1\\" + outfilename + ".txt", std::ios::app);
+
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			out << x << "," << y << std::endl;
+		}
+		apicSolver->onAdvanceTimeStep(dt);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+		std::cout << "当前解算到第" << temp1 << "帧" << std::endl;
+	}
+
 
 
 

@@ -218,10 +218,10 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.05f);//缺省是1
+	glPointSize(3.0f);//缺省是1
 	glBegin(GL_POINTS);
-	//glColor3f(1, 128.0 / 255, 51.0 / 255);
-	glColor3f(1, 1, 1);
+	glColor3f(1, 128.0 / 255, 51.0 / 255);
+	//glColor3f(1, 1, 1);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
@@ -302,13 +302,12 @@ static void display(void)
 
 	auto temp1 = std::atoi(filename.c_str());
 
-	int skipNum = 1;
+	int skipNum = 3;
 	temp1 += skipNum;
 	filename = std::to_string(temp1);
 
 	std::string strLine;
 	std::vector<std::string> position;
-
 
 	std::vector<Vector2D> posList;
 
@@ -324,7 +323,8 @@ static void display(void)
 		//if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
 			//drawPoint(x, y);
-		drawCircle(tempPos, 0.01, 50);
+		//drawCircle(tempPos, 0.01, 50);
+		drawPoint(x, y);
 		//write_to_pixel(tempPos, 1, 1, 1, filename);
 	//}
 	//posList.push_back(tempPos);
@@ -342,15 +342,15 @@ static void display(void)
 	obj1->velocity = Vector2D(3.0, 0.0);
 	obj1->updatePosition(dt * skipNum);
 
-	drawCircle(obj1->center(), obj1->r(), 50);
+	//drawCircle(obj1->center(), obj1->r(), 50);
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
 
 	//延时0.5秒
 
-
-	Sleep(20);
+	if (temp1 <= 4)
+		Sleep(2000);
 
 }
 
@@ -383,8 +383,8 @@ int main(int argc, char** argv)
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("titmouse2d");
 
-	//glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
-	glClearColor(0, 0, 0, 1);
+	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
+	//glClearColor(0, 0, 0, 1);
 	glShadeModel(GL_FLAT);
 
 

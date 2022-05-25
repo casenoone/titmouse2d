@@ -80,16 +80,14 @@ void drawLine(double x1, double y1, double x2, double y2) {
 }
 
 
-Vector2I resolution(40, 40);
+Vector2I resolution(50, 50);
 Vector2D origin(0.0, 0.0);
 Color3<double> red(255, 0.0, 0.0);
 
 CellCenteredVectorGrid2Ptr<Color3<double>> advectedData;
 
 
-Vector2D center1(1.0, 1.0);
-double r1 = 0.5;
-double r1_sqr = r1 * r1;
+
 
 Color3<double> blacks(0, 0, 0);
 Color3<double> whites(255, 255, 255);
@@ -114,11 +112,11 @@ static void display(void)
 			auto dataFunc = advectedData->dataPosition();
 			auto pos = dataFunc(i, j);
 			auto color = (*advectedData)(i, j);
-			drawPoint(pos, 3.5f, color);
+			drawPoint(pos, 2.5f, color);
 		}
 	}
 
-	advectionSolver->solve(velocity, advectedData, 0.1);
+	advectionSolver->solve(velocity, advectedData, 0.01);
 
 	glutSwapBuffers();
 
@@ -157,7 +155,9 @@ int main(int argc, char** argv)
 	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
 	glShadeModel(GL_FLAT);
 
-
+	Vector2D center1(1.0, 1.0);
+	double r1 = 0.05;
+	double r1_sqr = r1 * r1;
 
 
 
@@ -175,8 +175,11 @@ int main(int argc, char** argv)
 		}
 	}
 
+	//设置一个扩散场的速度范围
+	Vector2D diff_center(1, 1);
+	double diff_r = 0.05;
 
-
+	double diff_vel_value = 2;
 	//设置一个旋转的速度场
 	auto velSizeU = velocity->uSize();
 
@@ -184,8 +187,10 @@ int main(int argc, char** argv)
 		for (int j = 0; j < velSizeU.y; ++j) {
 			auto posFunc = velocity->uPosition();
 			auto pos = posFunc(i, j);
-			auto tempVec = (pos - center1);
-			velocity->u(i, j) = tempVec.x * cos(kPiD / 2) - tempVec.y * sin(kPiD / 2);
+			//if (pos.dis(diff_center) <= diff_r) {
+			auto tempVec = (pos - center1).getNormalize();
+			velocity->u(i, j) = (diff_vel_value * tempVec).dot(Vector2D(1, 0));
+			//}
 		}
 	}
 
@@ -195,10 +200,37 @@ int main(int argc, char** argv)
 		for (int j = 0; j < velSizeV.y; ++j) {
 			auto posFunc = velocity->vPosition();
 			auto pos = posFunc(i, j);
-			auto tempVec = (pos - center1);
-			velocity->v(i, j) = tempVec.x * sin(kPiD / 2) + tempVec.y * cos(kPiD / 2);
+			//if (pos.dis(diff_center) <= diff_r) {
+			auto tempVec = (pos - center1).getNormalize();
+			velocity->v(i, j) = (diff_vel_value * tempVec).dot(Vector2D(0, 1));
+			//}
 		}
 	}
+
+
+
+	////设置一个旋转的速度场
+	//auto velSizeU = velocity->uSize();
+
+	//for (int i = 0; i < velSizeU.x; ++i) {
+	//	for (int j = 0; j < velSizeU.y; ++j) {
+	//		auto posFunc = velocity->uPosition();
+	//		auto pos = posFunc(i, j);
+	//		auto tempVec = (pos - center1);
+	//		velocity->u(i, j) = tempVec.x * cos(kPiD / 2) - tempVec.y * sin(kPiD / 2);
+	//	}
+	//}
+
+	//auto velSizeV = velocity->vSize();
+
+	//for (int i = 0; i < velSizeV.x; ++i) {
+	//	for (int j = 0; j < velSizeV.y; ++j) {
+	//		auto posFunc = velocity->vPosition();
+	//		auto pos = posFunc(i, j);
+	//		auto tempVec = (pos - center1);
+	//		velocity->v(i, j) = tempVec.x * sin(kPiD / 2) + tempVec.y * cos(kPiD / 2);
+	//	}
+	//}
 
 
 
