@@ -20,8 +20,18 @@ public:
 	//构造系统中质点之间的约束
 	void constructConstraint();
 
-	void onAdvanceTimeStep(double dt);
+	//求导数（用于组装jacobin中的元素）
+	Vector2D getDerivation(int phi_idx, int x_idx);
 
+	double computeConstraint(int idx);
+
+	//构造解线性系统用到的constraint向量
+	void construct_ConstraintVector(Eigen::VectorXd& vec);
+
+	//构造求解线性系统用到的速度场向量组
+	void construct_VelocityVector(Eigen::VectorXd& vec);
+
+	void onAdvanceTimeStep(double dt);
 
 public:
 	MassSpringData2Ptr massSpringData;
