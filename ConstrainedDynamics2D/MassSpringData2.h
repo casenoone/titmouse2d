@@ -14,7 +14,6 @@ public:
 		positions.set(pos);
 		numberOfPoint = pos.size();
 		velocities.reSize(numberOfPoint);
-		forces.reSize(numberOfPoint);
 	}
 
 	struct Edge {
@@ -23,17 +22,12 @@ public:
 	};
 
 public:
-	Array<Vector2D> newVelocities;
 	Array<Vector2D> velocities;
 
 	Array<Vector2D> positions;
-	Array<Vector2D> newPositions;
 
 	//系统中的约束
 	Array<Edge> edges;
-
-	//系统中质点所受力
-	Array<Vector2D> forces;
 
 	//系统中质点的数量
 	int numberOfPoint = 0;

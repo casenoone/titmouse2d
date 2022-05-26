@@ -8,6 +8,11 @@ public:
 		massSpringData = std::make_shared<MassSpringData2>(pos);
 	}
 
+
+
+	void onAdvanceTimeStep(double dt);
+
+private:
 	//时间积分
 	void timeIntegration(double dt);
 
@@ -30,8 +35,6 @@ public:
 
 	//构造求解线性系统用到的速度场向量组
 	void construct_VelocityVector(Eigen::VectorXd& vec);
-
-	void onAdvanceTimeStep(double dt);
 
 public:
 	MassSpringData2Ptr massSpringData;
