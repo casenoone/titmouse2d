@@ -9,7 +9,6 @@ public:
 	}
 
 
-
 	void onAdvanceTimeStep(double dt);
 
 private:

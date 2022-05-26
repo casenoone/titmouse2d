@@ -11,7 +11,13 @@ void ConstrainedSolver2::constructCompliantMat() {
 	compliantMat.resize(edgeNum, edgeNum);
 	int j = 0;
 	for (int i = 0; i < edgeNum; ++i) {
-		compliantMat(i, j++) = c;
+		for (int j = 0; j < edgeNum; ++j) {
+			compliantMat(i, j) = 0;
+			if (i == j) {
+				compliantMat(i, j) = c;
+			}
+		}
+
 	}
 }
 
@@ -24,7 +30,7 @@ void ConstrainedSolver2::constructJacobinMat() {
 	jacobinMat.resize(edgeNum, 2 * n);
 
 	for (int i = 0; i < edgeNum; ++i) {
-		for (int j = 0; j < n; j += 2) {
+		for (int j = 0; j < n * 2; j += 2) {
 			auto temp_v = getDerivation(i, j * 2);
 			jacobinMat(i, j) = temp_v.x;
 			jacobinMat(i, j + 1) = temp_v.y;
@@ -39,12 +45,16 @@ void ConstrainedSolver2::constructConstraint() {
 	auto& edge = massSpringData->edges;
 	auto restLen = massSpringData->restLen;
 
+	//这里要改进一下clear函数，有问题,
+	edge.reSize(0);
+	edge.clear();
+
 	for (int i = 0; i < n; ++i) {
-		for (int j = 0; j < n; ++j) {
+		for (int j = i + 1; j < n; ++j) {
 			auto& pos_i = pos[i];
 			auto& pos_j = pos[j];
 			//如果满足这个条件就建立约束
-			if (pos_i.dis(pos_j) <= restLen + 0.1) {
+			if (pos_i.dis(pos_j) <= 0.1) {
 				edge.push(MassSpringData2::Edge{ i,j });
 			}
 		}
@@ -109,6 +119,8 @@ void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
 
 	//构造雅可比矩阵
 	constructJacobinMat();
+
+	timeIntegration(dt);
 }
 
 void ConstrainedSolver2::timeIntegration(double dt) {
@@ -127,19 +139,22 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 	construct_ConstraintVector(phi);
 	construct_VelocityVector(vel);
 
-	Eigen::MatrixXd	jaconin_trans = jacobinMat.transpose();
-	auto A = (t2 * jacobinMat * jaconin_trans + compliantMat);
-	auto b = -1 * phi - dt * jacobinMat * vel;
+	Eigen::MatrixXd	jacobin_trans = jacobinMat.transpose();
+	auto A = (t2 * jacobinMat * jacobin_trans + compliantMat);
 
+	auto b = -1 * phi - dt * jacobinMat * vel;
 	lambda = A.colPivHouseholderQr().solve(b);
-	vel_new = vel - dt * jaconin_trans * lambda;
+	vel_new = vel - dt * jacobin_trans * lambda;
 
 
 	auto& velocities = massSpringData->velocities;
 	auto& positions = massSpringData->positions;
 
+
 	for (int i = 0; i < n; ++i) {
 		velocities[i] = Vector2D(vel_new[i], vel_new[i + n]);
 		positions[i] += velocities[i] * dt;
+
 	}
+
 }
