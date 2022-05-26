@@ -3,8 +3,6 @@
 //CompliantMat的尺寸：ExE
 //E:约束的数量
 //暂时使用稠密矩阵吧
-
-//检查过了，完全没有问题
 void ConstrainedSolver2::constructCompliantMat() {
 	auto& edge = massSpringData->edges;
 	auto edgeNum = edge.dataSize();
@@ -24,25 +22,6 @@ void ConstrainedSolver2::constructCompliantMat() {
 }
 
 
-//void ConstrainedSolver2::constructJacobinMat() {
-//	auto& edge = massSpringData->edges;
-//	auto edgeNum = edge.dataSize();
-//	auto n = massSpringData->numberOfPoint;
-//	auto& jacobinMat = massSpringData->JacobinMat;
-//	jacobinMat.resize(edgeNum, 2 * n);
-//
-//	for (int i = 0; i < edgeNum; ++i) {
-//		for (int j = 0; j < n * 2; j += 2) {
-//			auto temp_v = getDerivation(i, j * 2);
-//			jacobinMat(i, j) = temp_v.x;
-//			jacobinMat(i, j + 1) = temp_v.y;
-//		}
-//	}
-//
-//}
-
-
-//检查过了，没有问题
 void ConstrainedSolver2::constructJacobinMat() {
 	auto& edge = massSpringData->edges;
 	auto edgeNum = edge.dataSize();
@@ -60,7 +39,6 @@ void ConstrainedSolver2::constructJacobinMat() {
 
 }
 
-//检查过了，没有问题
 void ConstrainedSolver2::constructConstraint() {
 	auto& pos = massSpringData->positions;
 	auto n = massSpringData->numberOfPoint;
@@ -83,8 +61,7 @@ void ConstrainedSolver2::constructConstraint() {
 	}
 }
 
-
-//检查过了，没有问题
+//注意这里向量的方向一定不要搞错了
 Vector2D ConstrainedSolver2::getDerivation(int phi_idx, int x_idx) {
 	auto& pos = massSpringData->positions;
 	auto& edge = massSpringData->edges;
@@ -104,7 +81,6 @@ Vector2D ConstrainedSolver2::getDerivation(int phi_idx, int x_idx) {
 	return Vector2D::zero();
 }
 
-//检查过了，没有问题
 double ConstrainedSolver2::computeConstraint(int idx) {
 	auto& pos = massSpringData->positions;
 	auto& edge = massSpringData->edges;
@@ -113,7 +89,6 @@ double ConstrainedSolver2::computeConstraint(int idx) {
 	return (pos[edge[idx].i] - pos[edge[idx].j]).getLength() - restLen;
 }
 
-//检查过了，没有问题
 void ConstrainedSolver2::construct_ConstraintVector(Eigen::VectorXd& vec) {
 	auto& edge = massSpringData->edges;
 	auto edgeNum = edge.dataSize();
@@ -123,7 +98,6 @@ void ConstrainedSolver2::construct_ConstraintVector(Eigen::VectorXd& vec) {
 	}
 }
 
-//检察过了，没有问题
 //千万记得要优化！优化！优化！
 void ConstrainedSolver2::construct_VelocityVector(Eigen::VectorXd& vec) {
 	auto& velocities = massSpringData->velocities;
@@ -136,7 +110,6 @@ void ConstrainedSolver2::construct_VelocityVector(Eigen::VectorXd& vec) {
 
 }
 
-//检查过了，没有问题
 void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
 	//构造质点之间的约束
 	constructConstraint();
@@ -150,9 +123,10 @@ void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
 	timeIntegration(dt);
 }
 
-//检查过了，没有问题
 //如果想通过一点拉动整个系统，不要改变质点的速度，而是去修改质点的位置
 //思考一下这是为什么
+//因为那个速度是通过求解线性系统得来的，其满足弹簧约束
+//而施加的外力并没有在隐式系统中求解
 void ConstrainedSolver2::timeIntegration(double dt) {
 	double t2 = dt * dt;
 	auto& jacobinMat = massSpringData->JacobinMat;
@@ -182,17 +156,14 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 
 	for (int i = 0; i < n; ++i) {
 		velocities[i] = Vector2D(vel_new[i], vel_new[i + n]);
-		//positions[i] += velocities[i] * dt;
 	}
 
 	for (int i = 0; i < n; ++i) {
-		velocities[i] += (-1.0 * velocities[i]) * dt * 70;
+		velocities[i] += (-1.0 * velocities[i]) * dt * 60;
 	}
 
-	//velocities[0] = Vector2D(0.5, 0);
-	//velocities[1] = Vector2D(0.5, 0);
-	for (int i = 0; i < n; ++i) {
+	for (int i = 1; i < n; ++i) {
 		positions[i] += velocities[i] * dt;
 	}
-	positions[0] += dt * Vector2D(2, 0);
+	positions[1] += dt * Vector2D(-2, 0);
 }
