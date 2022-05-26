@@ -39,6 +39,9 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - Eulerian Smoke 
 - Shallow Wave Solver
 
+实现的弹性体/刚体算法：
+- Constraint Dynamics （Mass-spring system）
+
 
 - 1.FLIP算法
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
@@ -89,7 +92,6 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 即将实现的算法或数据结构：
 - PCISPH
 - BVH加速结构
-- Explicit/Implicit Mass Spring System
 - Clebsch gauge fluid solver
 - Multigrid Method
 - FVM（有限体积法）
