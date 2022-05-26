@@ -43,7 +43,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - Constraint Dynamics （Mass-spring system）
 
 
-- 1.FLIP算法
+- 1.FLIP算法（没有在网格上对边界条件进行处理，因此边界处速度有散度）
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
 
 - 2.advection测试
