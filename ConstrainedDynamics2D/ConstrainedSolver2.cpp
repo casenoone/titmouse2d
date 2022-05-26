@@ -10,9 +10,27 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 
 	Eigen::VectorXd vel(2 * n, 1);
 	Eigen::VectorXd phi(edgeNum, 1);
+	Eigen::VectorXd lambda(edgeNum, 1);
+	Eigen::VectorXd vel_new(2 * n, 1);
 
 	construct_ConstraintVector(phi);
 	construct_VelocityVector(vel);
+
+	Eigen::MatrixXd	jaconin_trans = jacobinMat.transpose();
+	auto A = (t2 * jacobinMat * jaconin_trans + compliantMat);
+	auto b = -1 * phi - dt * jacobinMat * vel;
+
+	lambda = A.colPivHouseholderQr().solve(b);
+	vel_new = vel - dt * jaconin_trans * lambda;
+
+
+	auto& velocities = massSpringData->velocities;
+	auto& positions = massSpringData->positions;
+
+	for (int i = 0; i < n; ++i) {
+		velocities[i] = Vector2D(vel_new[i], vel_new[i + n]);
+		positions[i] += velocities[i] * dt;
+	}
 }
 
 //CompliantMat的尺寸：ExE
