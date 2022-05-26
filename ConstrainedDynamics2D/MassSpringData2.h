@@ -39,10 +39,10 @@ public:
 	Eigen::MatrixXd JacobinMat;
 
 	//临时的静止长度
-	double restLen = 0.08;
+	double restLen = 0.0666667;
 
 	//临时的刚度
-	double stiff = 1000;
+	double stiff = 10;
 };
 
 using MassSpringData2Ptr = std::shared_ptr<MassSpringData2>;

@@ -46,7 +46,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 std::shared_ptr<ConstrainedSolver2> constSolver;
-double dt = 0.02;
+double dt = 0.01;
 int n;
 static void display(void)
 {
