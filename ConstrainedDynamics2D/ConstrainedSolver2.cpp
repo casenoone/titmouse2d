@@ -14,7 +14,7 @@ void ConstrainedSolver2::constructCompliantMat() {
 		for (int j = 0; j < edgeNum; ++j) {
 			compliantMat(i, j) = 0;
 			if (i == j) {
-				compliantMat(i, j) = 0;
+				compliantMat(i, j) = c;
 			}
 		}
 
@@ -48,7 +48,6 @@ void ConstrainedSolver2::constructConstraint() {
 	//这里要改进一下clear函数，有问题,
 	edge.reSize(0);
 	edge.clear();
-
 	for (int i = 0; i < n; ++i) {
 		for (int j = i + 1; j < n; ++j) {
 			auto& pos_i = pos[i];
@@ -59,6 +58,9 @@ void ConstrainedSolver2::constructConstraint() {
 			}
 		}
 	}
+
+
+
 }
 
 //注意这里向量的方向一定不要搞错了
@@ -71,12 +73,12 @@ Vector2D ConstrainedSolver2::getDerivation(int phi_idx, int x_idx) {
 
 	if (e_i == x_idx) {
 		auto vec_ei_ej = pos[e_i] - pos[e_j];
-		return vec_ei_ej.getNormalize() * -1;
+		return vec_ei_ej.getNormalize() * 1;
 	}
 
 	if (e_j == x_idx) {
 		auto vec_ei_ej = pos[e_i] - pos[e_j];
-		return vec_ei_ej.getNormalize() * 1;
+		return vec_ei_ej.getNormalize() * -1;
 	}
 	return Vector2D::zero();
 }
@@ -105,10 +107,27 @@ void ConstrainedSolver2::construct_VelocityVector(Eigen::VectorXd& vec) {
 	int n = massSpringData->numberOfPoint;
 	for (int i = 0; i < n; ++i) {
 		vec[i] = velocities[i].x;
-		vec[i + n] = velocities[i].y;
+		vec[i + n] = velocities[i].y - 1 * 0.01;
 	}
 
 }
+
+//计算弹簧之间的阻尼
+Vector2D ConstrainedSolver2::computeSpringDragForce(int idx) {
+	auto& pos = massSpringData->positions;
+	auto& vel = massSpringData->velocities;
+	auto& edges = massSpringData->edges;
+	double& dc = massSpringData->dampingCoeff;
+
+	int i = edges[idx].i;
+	int j = edges[idx].j;
+
+	auto dir = (pos[i] - pos[j]).getNormalize();
+
+	auto damping = -dc * (dir.dot(vel[i] - vel[j])) * dir;
+	return damping;
+}
+
 
 void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
 	//构造质点之间的约束
@@ -123,22 +142,30 @@ void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
 	timeIntegration(dt);
 }
 
-//如果想通过一点拉动整个系统，不要改变质点的速度，而是去修改质点的位置
-//思考一下这是为什么
-//因为那个速度是通过求解线性系统得来的，其满足弹簧约束
-//而施加的外力并没有在隐式系统中求解
+
 void ConstrainedSolver2::timeIntegration(double dt) {
 	double t2 = dt * dt;
 	auto& jacobinMat = massSpringData->JacobinMat;
 	auto& compliantMat = massSpringData->CompliantMat;
 
 	int n = massSpringData->numberOfPoint;
+	auto& edges = massSpringData->edges;
 	int edgeNum = massSpringData->edges.dataSize();
+	auto& pos = massSpringData->positions;
 
 	Eigen::VectorXd vel(2 * n, 1);
 	Eigen::VectorXd phi(edgeNum, 1);
 	Eigen::VectorXd lambda(edgeNum, 1);
 	Eigen::VectorXd vel_new(2 * n, 1);
+
+	auto& velocities = massSpringData->velocities;
+	auto& positions = massSpringData->positions;
+
+
+
+
+
+
 
 	construct_ConstraintVector(phi);
 	construct_VelocityVector(vel);
@@ -148,22 +175,59 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 
 	auto b = -1 * phi - dt * jacobinMat * vel;
 	lambda = A.colPivHouseholderQr().solve(b);
-	vel_new = vel - dt * jacobin_trans * lambda;
-
-
-	auto& velocities = massSpringData->velocities;
-	auto& positions = massSpringData->positions;
+	//注意这里的符号，视频里写错了
+	vel_new = vel + dt * jacobin_trans * lambda;
 
 	for (int i = 0; i < n; ++i) {
 		velocities[i] = Vector2D(vel_new[i], vel_new[i + n]);
 	}
 
+	//施加重力
 	for (int i = 0; i < n; ++i) {
-		velocities[i] += (-1.0 * velocities[i]) * dt * 60;
+		//velocities[i] += Vector2D(0, -9.0) * dt;
 	}
 
-	for (int i = 1; i < n; ++i) {
+
+
+	for (int k = 0; k < edgeNum; ++k) {
+		int i = edges[k].i;
+		int j = edges[k].j;
+		auto damping = computeSpringDragForce(k) * dt;
+		//std::cout << damping.x << std::endl;
+		velocities[i] += damping;
+		velocities[j] -= damping;
+	}
+
+	//阻尼
+	for (int i = 0; i < n; ++i) {
+		velocities[i] += (-1.0 * velocities[i]) * dt * 0.5;
+	}
+
+
+	for (int i = 0; i < n; ++i) {
 		positions[i] += velocities[i] * dt;
 	}
-	positions[1] += dt * Vector2D(-2, 0);
+
+	for (int i = 0; i < n; ++i) {
+		if (positions[i].x < 0)
+		{
+			positions[i].x = 0;
+			velocities[i].x = 0;
+		}
+		if (positions[i].x > 2)
+		{
+			positions[i].x = 2;
+			velocities[i].x = 0;
+		}
+		if (positions[i].y < 0)
+		{
+			positions[i].y = 0;
+			velocities[i].y = 0;
+		}
+		if (positions[i].y > 2)
+		{
+			positions[i].y = 2;
+			velocities[i].y = 0;
+		}
+	}
 }

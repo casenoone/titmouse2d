@@ -1,7 +1,7 @@
 #pragma once
-
+#include <iostream>
 #include "MassSpringData2.h"
-
+#include <tuple>
 class ConstrainedSolver2 {
 public:
 	ConstrainedSolver2(const std::vector<Vector2D>& pos) {
@@ -34,6 +34,10 @@ private:
 
 	//构造求解线性系统用到的速度场向量组
 	void construct_VelocityVector(Eigen::VectorXd& vec);
+
+	//计算弹簧之间的阻尼
+	Vector2D computeSpringDragForce(int idx);
+
 
 public:
 	MassSpringData2Ptr massSpringData;

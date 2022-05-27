@@ -21,6 +21,8 @@ public:
 		int j;
 	};
 
+
+
 public:
 	Array<Vector2D> velocities;
 
@@ -39,10 +41,13 @@ public:
 	Eigen::MatrixXd JacobinMat;
 
 	//临时的静止长度
-	double restLen = 0.0666667;
+	double restLen = 0.06667;
 
 	//临时的刚度
-	double stiff = 10;
+	double stiff = 500;
+
+	//阻尼系数
+	double dampingCoeff = 20;
 };
 
 using MassSpringData2Ptr = std::shared_ptr<MassSpringData2>;

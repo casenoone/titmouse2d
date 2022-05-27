@@ -46,7 +46,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 std::shared_ptr<ConstrainedSolver2> constSolver;
-double dt = 0.01;
+double dt = 0.006;
 int n;
 static void display(void)
 {
@@ -129,7 +129,7 @@ int main(int argc, char** argv)
 		.makeShared();
 
 
-	Vector2D tempC(1, 1);
+	Vector2D tempC(1, 1.8);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto c_pos = (grid->dataPosition())(i, j);
