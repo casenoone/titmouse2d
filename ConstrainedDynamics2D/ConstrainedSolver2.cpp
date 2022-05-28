@@ -3,7 +3,7 @@
 
 //CompliantMat的尺寸：ExE
 //E:约束的数量
-//暂时使用稠密矩阵吧
+
 void ConstrainedSolver2::constructCompliantMat() {
 	auto& edge = massSpringData->edges;
 	auto edgeNum = edge.dataSize();
@@ -11,15 +11,6 @@ void ConstrainedSolver2::constructCompliantMat() {
 	auto& compliantMat = massSpringData->CompliantMat;
 	compliantMat.resize(edgeNum, edgeNum);
 	int j = 0;
-	//for (int i = 0; i < edgeNum; ++i) {
-	//	for (int j = 0; j < edgeNum; ++j) {
-	//		compliantMat(i, j) = 0;
-	//		if (i == j) {
-	//			compliantMat(i, j) = c;
-	//		}
-	//	}
-
-	//}
 	for (int i = 0; i < edgeNum; ++i) {
 		compliantMat.insert(i, j++) = c;
 	}
@@ -78,7 +69,7 @@ Vector2D ConstrainedSolver2::getDerivation(int phi_idx, int x_idx) {
 
 	if (e_i == x_idx) {
 		auto vec_ei_ej = pos[e_i] - pos[e_j];
-		return vec_ei_ej.getNormalize() * 1;
+		return vec_ei_ej.getNormalize();
 	}
 
 	if (e_j == x_idx) {
@@ -105,7 +96,6 @@ void ConstrainedSolver2::construct_ConstraintVector(Eigen::VectorXd& vec) {
 	}
 }
 
-//千万记得要优化！优化！优化！
 void ConstrainedSolver2::construct_VelocityVector(Eigen::VectorXd& vec) {
 	auto& velocities = massSpringData->velocities;
 
@@ -144,6 +134,7 @@ void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
 	//构造雅可比矩阵
 	constructJacobinMat();
 
+	//时间积分
 	timeIntegration(dt);
 }
 
@@ -166,12 +157,6 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 	auto& velocities = massSpringData->velocities;
 	auto& positions = massSpringData->positions;
 
-
-
-
-
-
-
 	construct_ConstraintVector(phi);
 	construct_VelocityVector(vel);
 
@@ -179,7 +164,6 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 	auto A = (t2 * jacobinMat * jacobin_trans + compliantMat);
 
 	auto b = -1 * phi - dt * jacobinMat * vel;
-	//lambda = A.colPivHouseholderQr().solve(b);
 	Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
 	cg.compute(A);
 	lambda = cg.solve(b);
@@ -191,18 +175,10 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 		velocities[i] = Vector2D(vel_new[i], vel_new[i + n]);
 	}
 
-	//施加重力
-	for (int i = 0; i < n; ++i) {
-		//velocities[i] += Vector2D(0, -9.0) * dt;
-	}
-
-
-
 	for (int k = 0; k < edgeNum; ++k) {
 		int i = edges[k].i;
 		int j = edges[k].j;
 		auto damping = computeSpringDragForce(k) * dt;
-		//std::cout << damping.x << std::endl;
 		velocities[i] += damping;
 		velocities[j] -= damping;
 	}
@@ -212,11 +188,12 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 		velocities[i] += (-1.0 * velocities[i]) * dt * 0.5;
 	}
 
-
+	//位置更新
 	for (int i = 0; i < n; ++i) {
 		positions[i] += velocities[i] * dt;
 	}
 
+	//边界处理
 	for (int i = 0; i < n; ++i) {
 		if (positions[i].x < 0)
 		{

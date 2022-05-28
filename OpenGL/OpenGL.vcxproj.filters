@@ -42,6 +42,12 @@
     <ClCompile Include="couplingTest.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="couplingTest2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FoamVortexSolver2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader\shader.h">
@@ -60,6 +66,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="vp2005Data.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FoamVortexData2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FoamVortexSolver2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

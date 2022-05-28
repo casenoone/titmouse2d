@@ -146,6 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="couplingTest.cpp" />
+    <ClCompile Include="couplingTest2.cpp" />
+    <ClCompile Include="FoamVortexSolver2.cpp" />
     <ClCompile Include="vp2005.h" />
     <ClCompile Include="vp2005.cpp" />
     <ClCompile Include="FoamVortexSolver.cpp" />
@@ -158,7 +160,9 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="FoamVortexData.h" />
+    <ClInclude Include="FoamVortexData2.h" />
     <ClInclude Include="FoamVortexSolver.h" />
+    <ClInclude Include="FoamVortexSolver2.h" />
     <ClInclude Include="MovingFaceCenteredGrid2.h" />
     <ClInclude Include="Shader\shader.h" />
     <ClInclude Include="vp2005Data.h" />

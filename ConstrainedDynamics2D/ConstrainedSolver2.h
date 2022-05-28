@@ -8,7 +8,6 @@ public:
 		massSpringData = std::make_shared<MassSpringData2>(pos);
 	}
 
-
 	void onAdvanceTimeStep(double dt);
 
 private:
