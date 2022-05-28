@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto c_pos = (grid->dataPosition())(i, j);
-			if (c_pos.dis(tempC) < 0.17) {
+			if (c_pos.dis(tempC) < 0.2) {
 
 				pos.push_back(c_pos);
 				n++;
@@ -156,21 +156,4 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

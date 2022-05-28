@@ -1,4 +1,5 @@
 ﻿#include "ConstrainedSolver2.h"
+#include<Eigen/IterativeLinearSolvers>
 
 //CompliantMat的尺寸：ExE
 //E:约束的数量
@@ -10,14 +11,17 @@ void ConstrainedSolver2::constructCompliantMat() {
 	auto& compliantMat = massSpringData->CompliantMat;
 	compliantMat.resize(edgeNum, edgeNum);
 	int j = 0;
-	for (int i = 0; i < edgeNum; ++i) {
-		for (int j = 0; j < edgeNum; ++j) {
-			compliantMat(i, j) = 0;
-			if (i == j) {
-				compliantMat(i, j) = c;
-			}
-		}
+	//for (int i = 0; i < edgeNum; ++i) {
+	//	for (int j = 0; j < edgeNum; ++j) {
+	//		compliantMat(i, j) = 0;
+	//		if (i == j) {
+	//			compliantMat(i, j) = c;
+	//		}
+	//	}
 
+	//}
+	for (int i = 0; i < edgeNum; ++i) {
+		compliantMat.insert(i, j++) = c;
 	}
 }
 
@@ -32,11 +36,12 @@ void ConstrainedSolver2::constructJacobinMat() {
 	for (int i = 0; i < edgeNum; ++i) {
 		for (int j = 0; j < n; ++j) {
 			auto temp_v = getDerivation(i, j);
-			jacobinMat(i, j) = temp_v.x;
-			jacobinMat(i, j + n) = temp_v.y;
+			if (temp_v.x)
+				jacobinMat.insert(i, j) = temp_v.x;
+			if (temp_v.y)
+				jacobinMat.insert(i, j + n) = temp_v.y;
 		}
 	}
-
 }
 
 void ConstrainedSolver2::constructConstraint() {
@@ -170,11 +175,15 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 	construct_ConstraintVector(phi);
 	construct_VelocityVector(vel);
 
-	Eigen::MatrixXd	jacobin_trans = jacobinMat.transpose();
+	auto jacobin_trans = jacobinMat.transpose();
 	auto A = (t2 * jacobinMat * jacobin_trans + compliantMat);
 
 	auto b = -1 * phi - dt * jacobinMat * vel;
-	lambda = A.colPivHouseholderQr().solve(b);
+	//lambda = A.colPivHouseholderQr().solve(b);
+	Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
+	cg.compute(A);
+	lambda = cg.solve(b);
+
 	//注意这里的符号，视频里写错了
 	vel_new = vel + dt * jacobin_trans * lambda;
 
