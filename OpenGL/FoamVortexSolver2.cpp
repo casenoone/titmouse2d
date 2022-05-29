@@ -4,13 +4,8 @@
 
 #include "../titmouse2d/src/random.h"
 
-#include "../titmouse2d/src/Matrix3x3.hpp"
-
 #include "../titmouse2d/src/boundingbox2.h"
 
-#include "../titmouse2d/src/LinearSystem/JacobiSolver.hpp"
-
-#include "../titmouse2d/src/LinearSystem/ConjugateGradientSolver.hpp"
 #include <omp.h>
 
 #include <iostream>
@@ -74,7 +69,6 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 	//求解tracer粒子的速度场
 	tracerParticlesSolve();
 
-
 	//在这里更新tracer粒子
 	auto tracerPos = _foamVortexData->tracePosition;
 	auto traceVel = _foamVortexData->traceVelocity;
@@ -83,38 +77,15 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 		tracerPos[i] += (traceVel[i]) * timeIntervalInSeconds;
 		tarcerCollisionSolve(tracerPos[i]);
 	}
-
-
-	//气泡的时间积分
-	int bubble_num = _foamVortexData->numberOfParticles();
-	auto& force = _foamVortexData->forces();
-	auto& bubble_pos = _foamVortexData->positions();
-	auto& bubble_vel = _foamVortexData->velocities();
-	int vortex_num = _foamVortexData->vortexPosition.dataSize();
-
-	for (int i = 0; i < bubble_num; ++i) {
-		auto& newVelocity = _newVelocities[i];
-		Vector2D induce_v;
-		for (int j = 0; j < vortex_num; ++j) {
-			induce_v += computeUSingle(bubble_pos[i], j);
-		}
-
-		newVelocity = bubble_vel[i] + (force[i] / 1) * timeIntervalInSeconds;
-		auto& newPosition = _newPositions[i];
-		auto temp2 = bubble_pos[i] + (newVelocity + induce_v) * timeIntervalInSeconds;
-		newPosition = temp2;
-		tarcerCollisionSolve(newPosition);
-	}
-
 }
 
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
-	beginAdvanceTimeStep();
 	computeTotalForce(timeIntervalInSeconds);
 	//no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
+	bubble_timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
 	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
 
@@ -122,10 +93,6 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 
 	decayVorticity();
 	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
-
-	endAdvanceTimeStep();
-	//bubbleBreakUp();
-
 }
 
 
@@ -209,6 +176,20 @@ void FoamVortexSolver::generatePanelSet(const Array<Vector2D>& pos,
 	int n = pos.dataSize();
 	for (int i = 0; i < n; ++i) {
 		RegularPolygonPtr obj = std::make_shared<RegularPolygon>(10, pos.lookAt(i), radius.lookAt(i));
+		_foamVortexData->bubble_panelset.push(obj);
+	}
+	_foamVortexData->bubble_slip_strength.reSize(n);
+
+	constructTwoWayBoundaryMatrix();
+
+}
+
+
+void FoamVortexSolver::generatePanelSet(const Array<Vector2D>& pos) {
+
+	int n = pos.dataSize();
+	for (int i = 0; i < n; ++i) {
+		RegularPolygonPtr obj = std::make_shared<RegularPolygon>(10, pos.lookAt(i), 0.03);
 		_foamVortexData->bubble_panelset.push(obj);
 	}
 	_foamVortexData->bubble_slip_strength.reSize(n);
@@ -654,107 +635,334 @@ void FoamVortexSolver::update_bubble_panelset_pos(double dt) {
 }
 
 
-Vector2D FoamVortexSolver::computeF_rB(int i, int j) const {
-	auto pos = _foamVortexData->positions();
-	auto& radius = _foamVortexData->particleRadius;
-
-	auto p_ij = pos[i] - pos[j];
-	auto rad_ij = radius[i] + radius[j];
-	auto p_ij_norm2 = p_ij.getLength();
-
-	return _foamVortexData->kr * (1 / (p_ij_norm2)-(1 / rad_ij)) * p_ij;
-}
 
 
-Vector2D FoamVortexSolver::computeF_aB(int i, int j) const {
-	auto pos = _foamVortexData->positions();
-	auto& radius = _foamVortexData->particleRadius;
-	auto& neighbor = _foamVortexData->neighbor->neighBors();
 
-	int NB_i = 0;
-	int NB_j = 0;
 
-	auto& p_i = pos[i];
-	auto& p_j = pos[j];
-	auto p_ji = pos[j] - pos[i];
-	auto p_ij_norm2 = (p_i - p_j).getLength();
 
-	for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
-		auto neighbor_index = *iter;
-		auto rad_each = radius[i] + radius[neighbor_index];
-		auto dis = pos[i].dis(pos[neighbor_index]);
-		if (dis <= rad_each + rad_k && i != neighbor_index) {
-			NB_i++;
-		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void FoamVortexSolver::constructCompliantMat() {
+	auto& edge = _foamVortexData->edges;
+	auto edgeNum = edge.dataSize();
+	auto c = 1 / _foamVortexData->stiff;
+	auto& compliantMat = _foamVortexData->CompliantMat;
+	compliantMat.resize(edgeNum, edgeNum);
+	int j = 0;
+	for (int i = 0; i < edgeNum; ++i) {
+		compliantMat.insert(i, j++) = c;
 	}
-
-	for (auto iter = neighbor[j].begin(); iter != neighbor[j].end(); iter++) {
-		auto neighbor_index = *iter;
-		auto rad_each = radius[j] + radius[neighbor_index];
-		auto dis = pos[j].dis(pos[neighbor_index]);
-		if (dis <= rad_each + rad_k && j != neighbor_index) {
-			NB_j++;
-		}
-	}
-
-	double inv_NBi = 0;
-	double inv_NBj = 0;
-	if (NB_i > 0)
-		inv_NBi = 1 / NB_i;
-	if (NB_j > 0)
-		inv_NBj = 1 / NB_j;
-
-	double c_nb = 0.5 * (inv_NBi + inv_NBj);
-	double c_dist = (p_ij_norm2 - std::max(radius[i], radius[j]))
-		/ std::min(radius[i], radius[j]);
-
-	return _foamVortexData->ka * c_nb * c_dist * (p_ji / p_ij_norm2);
-
 }
 
-void FoamVortexSolver::computeF_a0() {
-
-}
-
-//暂时先不计算与固体的力
-void FoamVortexSolver::computeF_ra() {
-	auto pos = _foamVortexData->positions();
+void FoamVortexSolver::constructJacobinMat() {
+	auto& edge = _foamVortexData->edges;
+	auto edgeNum = edge.dataSize();
 	auto n = _foamVortexData->numberOfParticles();
-	auto& forces = _foamVortexData->forces();
-	auto& neighbor = _foamVortexData->neighbor->neighBors();
-	auto& radius = _foamVortexData->particleRadius;
+	auto& jacobinMat = _foamVortexData->JacobinMat;
+	jacobinMat.resize(edgeNum, 2 * n);
 
+	for (int i = 0; i < edgeNum; ++i) {
+		for (int j = 0; j < n; ++j) {
+			auto temp_v = getDerivation(i, j);
+			if (temp_v.x)
+				jacobinMat.insert(i, j) = temp_v.x;
+			if (temp_v.y)
+				jacobinMat.insert(i, j + n) = temp_v.y;
+		}
+	}
+}
+
+void FoamVortexSolver::constructConstraint() {
+	auto& pos = _foamVortexData->positions();
+	auto n = _foamVortexData->numberOfParticles();
+	auto& edge = _foamVortexData->edges;
+	auto restLen = _foamVortexData->restLen;
+
+	//这里要改进一下clear函数，有问题,
+	edge.reSize(0);
+	edge.clear();
 	for (int i = 0; i < n; ++i) {
-		Vector2D temp_f_r;
-		Vector2D temp_f_a;
-		for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
-			auto neighbor_index = *iter;
-			auto rad_each = radius[i] + radius[neighbor_index];
-			auto dis = pos[i].dis(pos[neighbor_index]);
-			if (dis <= rad_each + rad_k && i != neighbor_index) {
-				temp_f_r += computeF_rB(i, neighbor_index);
-				temp_f_a += computeF_aB(i, neighbor_index);
+		for (int j = i + 1; j < n; ++j) {
+			auto& pos_i = pos[i];
+			auto& pos_j = pos[j];
+			//如果满足这个条件就建立约束
+			if (pos_i.dis(pos_j) <= 0.08) {
+				edge.push(FoamVortexData::Edge{ i,j });
 			}
 		}
+	}
 
-		forces[i] += (temp_f_r + temp_f_a);
+}
+
+//注意这里向量的方向一定不要搞错了
+Vector2D FoamVortexSolver::getDerivation(int phi_idx, int x_idx) {
+	auto& pos = _foamVortexData->positions();
+	auto& edge = _foamVortexData->edges;
+
+	int e_i = edge(phi_idx).i;
+	int e_j = edge(phi_idx).j;
+
+	if (e_i == x_idx) {
+		auto vec_ei_ej = pos[e_i] - pos[e_j];
+		return vec_ei_ej.getNormalize();
+	}
+
+	if (e_j == x_idx) {
+		auto vec_ei_ej = pos[e_i] - pos[e_j];
+		return vec_ei_ej.getNormalize() * -1;
+	}
+	return Vector2D::zero();
+}
+
+double FoamVortexSolver::computeConstraint(int idx) {
+	auto& pos = _foamVortexData->positions();
+	auto& edge = _foamVortexData->edges;
+	auto restLen = _foamVortexData->restLen;
+
+	return (pos[edge[idx].i] - pos[edge[idx].j]).getLength() - restLen;
+}
+
+void FoamVortexSolver::construct_ConstraintVector(Eigen::VectorXd& vec) {
+	auto& edge = _foamVortexData->edges;
+	auto edgeNum = edge.dataSize();
+
+	for (int i = 0; i < edgeNum; ++i) {
+		vec[i] = computeConstraint(i);
 	}
 }
 
-Vector2D FoamVortexSolver::computeF_air(int i) {
-	auto vel = _foamVortexData->velocities();
-	return -_foamVortexData->kair * vel[i];
+void FoamVortexSolver::construct_VelocityVector(Eigen::VectorXd& vec) {
+	auto& velocities = _foamVortexData->velocities();
+
+	int n = _foamVortexData->numberOfParticles();
+	for (int i = 0; i < n; ++i) {
+		vec[i] = velocities[i].x;
+		vec[i + n] = velocities[i].y - 0 * 0.01;
+	}
+
 }
 
-//这里暂时不累加fv还有与障碍物的力
-void FoamVortexSolver::computeF_fr() {
-	auto n = _foamVortexData->numberOfParticles();
-	auto& forces = _foamVortexData->forces();
+//计算弹簧之间的阻尼
+Vector2D FoamVortexSolver::computeSpringDragForce(int idx) {
+	auto& pos = _foamVortexData->positions();
+	auto& vel = _foamVortexData->velocities();
+	auto& edges = _foamVortexData->edges;
+	double& dc = _foamVortexData->dampingCoeff;
+
+	int i = edges[idx].i;
+	int j = edges[idx].j;
+
+	auto dir = (pos[i] - pos[j]).getNormalize();
+
+	auto damping = -dc * (dir.dot(vel[i] - vel[j])) * dir;
+	return damping;
+}
+
+
+void FoamVortexSolver::bubble_timeIntegration(double dt) {
+
+	constructConstraint();
+	constructCompliantMat();
+	constructJacobinMat();
+
+	double t2 = dt * dt;
+	auto& jacobinMat = _foamVortexData->JacobinMat;
+	auto& compliantMat = _foamVortexData->CompliantMat;
+
+	int n = _foamVortexData->numberOfParticles();
+	auto& edges = _foamVortexData->edges;
+	int edgeNum = _foamVortexData->edges.dataSize();
+	auto& pos = _foamVortexData->positions();
+
+	Eigen::VectorXd vel(2 * n, 1);
+	Eigen::VectorXd phi(edgeNum, 1);
+	Eigen::VectorXd lambda(edgeNum, 1);
+	Eigen::VectorXd vel_new(2 * n, 1);
+
+	auto& velocities = _foamVortexData->velocities();
+	auto& positions = _foamVortexData->positions();
+
+	construct_ConstraintVector(phi);
+	construct_VelocityVector(vel);
+
+	auto jacobin_trans = jacobinMat.transpose();
+	auto A = (t2 * jacobinMat * jacobin_trans + compliantMat);
+
+	auto b = -1 * phi - dt * jacobinMat * vel;
+	Eigen::ConjugateGradient<Eigen::SparseMatrix<double>, Eigen::Lower | Eigen::Upper> cg;
+	cg.compute(A);
+	lambda = cg.solve(b);
+
+	//注意这里的符号，视频里写错了
+	vel_new = vel + dt * jacobin_trans * lambda;
 
 	for (int i = 0; i < n; ++i) {
-		forces[i] += computeF_air(i);
+		velocities[i] = Vector2D(vel_new[i], vel_new[i + n]);
+	}
+
+	//计算two-way force
+	for (int i = 0; i < n; ++i) {
+		velocities[i] += computeTwoWayForce(i, dt) * dt;
+	}
+
+	//弹簧阻尼计算
+	for (int k = 0; k < edgeNum; ++k) {
+		int i = edges[k].i;
+		int j = edges[k].j;
+		auto damping = computeSpringDragForce(k) * dt;
+		velocities[i] += damping;
+		velocities[j] -= damping;
+	}
+
+
+	//位置更新
+	for (int i = 0; i < n; ++i) {
+		positions[i] += velocities[i] * dt;
+	}
+
+	//边界处理
+	for (int i = 0; i < n; ++i) {
+		if (positions[i].x < 0)
+		{
+			positions[i].x = 0;
+			velocities[i].x = 0;
+		}
+		if (positions[i].x > 2)
+		{
+			positions[i].x = 2;
+			velocities[i].x = 0;
+		}
+		if (positions[i].y < 0)
+		{
+			positions[i].y = 0;
+			velocities[i].y = 0;
+		}
+		if (positions[i].y > 2)
+		{
+			positions[i].y = 2;
+			velocities[i].y = 0;
+		}
 	}
 }
+
+
+//Vector2D FoamVortexSolver::computeF_rB(int i, int j) const {
+//	auto pos = _foamVortexData->positions();
+//	auto& radius = _foamVortexData->particleRadius;
+//
+//	auto p_ij = pos[i] - pos[j];
+//	auto rad_ij = radius[i] + radius[j];
+//	auto p_ij_norm2 = p_ij.getLength();
+//
+//	return _foamVortexData->kr * (1 / (p_ij_norm2)-(1 / rad_ij)) * p_ij;
+//}
+//
+//
+//Vector2D FoamVortexSolver::computeF_aB(int i, int j) const {
+//	auto pos = _foamVortexData->positions();
+//	auto& radius = _foamVortexData->particleRadius;
+//	auto& neighbor = _foamVortexData->neighbor->neighBors();
+//
+//	int NB_i = 0;
+//	int NB_j = 0;
+//
+//	auto& p_i = pos[i];
+//	auto& p_j = pos[j];
+//	auto p_ji = pos[j] - pos[i];
+//	auto p_ij_norm2 = (p_i - p_j).getLength();
+//
+//	for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
+//		auto neighbor_index = *iter;
+//		auto rad_each = radius[i] + radius[neighbor_index];
+//		auto dis = pos[i].dis(pos[neighbor_index]);
+//		if (dis <= rad_each + rad_k && i != neighbor_index) {
+//			NB_i++;
+//		}
+//	}
+//
+//	for (auto iter = neighbor[j].begin(); iter != neighbor[j].end(); iter++) {
+//		auto neighbor_index = *iter;
+//		auto rad_each = radius[j] + radius[neighbor_index];
+//		auto dis = pos[j].dis(pos[neighbor_index]);
+//		if (dis <= rad_each + rad_k && j != neighbor_index) {
+//			NB_j++;
+//		}
+//	}
+//
+//	double inv_NBi = 0;
+//	double inv_NBj = 0;
+//	if (NB_i > 0)
+//		inv_NBi = 1 / NB_i;
+//	if (NB_j > 0)
+//		inv_NBj = 1 / NB_j;
+//
+//	double c_nb = 0.5 * (inv_NBi + inv_NBj);
+//	double c_dist = (p_ij_norm2 - std::max(radius[i], radius[j]))
+//		/ std::min(radius[i], radius[j]);
+//
+//	return _foamVortexData->ka * c_nb * c_dist * (p_ji / p_ij_norm2);
+//
+//}
+//
+//void FoamVortexSolver::computeF_a0() {
+//
+//}
+//
+////暂时先不计算与固体的力
+//void FoamVortexSolver::computeF_ra() {
+//	auto pos = _foamVortexData->positions();
+//	auto n = _foamVortexData->numberOfParticles();
+//	auto& forces = _foamVortexData->forces();
+//	auto& neighbor = _foamVortexData->neighbor->neighBors();
+//	auto& radius = _foamVortexData->particleRadius;
+//
+//	for (int i = 0; i < n; ++i) {
+//		Vector2D temp_f_r;
+//		Vector2D temp_f_a;
+//		for (auto iter = neighbor[i].begin(); iter != neighbor[i].end(); iter++) {
+//			auto neighbor_index = *iter;
+//			auto rad_each = radius[i] + radius[neighbor_index];
+//			auto dis = pos[i].dis(pos[neighbor_index]);
+//			if (dis <= rad_each + rad_k && i != neighbor_index) {
+//				temp_f_r += computeF_rB(i, neighbor_index);
+//				temp_f_a += computeF_aB(i, neighbor_index);
+//			}
+//		}
+//
+//		forces[i] += (temp_f_r + temp_f_a);
+//	}
+//}
+//
+//Vector2D FoamVortexSolver::computeF_air(int i) {
+//	auto vel = _foamVortexData->velocities();
+//	return -_foamVortexData->kair * vel[i];
+//}
+//
+////这里暂时不累加fv还有与障碍物的力
+//void FoamVortexSolver::computeF_fr() {
+//	auto n = _foamVortexData->numberOfParticles();
+//	auto& forces = _foamVortexData->forces();
+//
+//	for (int i = 0; i < n; ++i) {
+//		forces[i] += computeF_air(i);
+//	}
+//}
 
 void FoamVortexSolver::compute_all_twoway_force(double dt) {
 	auto n = _foamVortexData->numberOfParticles();
@@ -767,29 +975,8 @@ void FoamVortexSolver::compute_all_twoway_force(double dt) {
 
 void FoamVortexSolver::computeTotalForce(double dt) {
 
-	computeF_ra();
-	computeF_fr();
-	compute_all_twoway_force(dt);
+	//computeF_ra();
+	//computeF_fr();
+	//compute_all_twoway_force(dt);
 }
 
-void FoamVortexSolver::bubbleBreakUp() {
-	static int step = 0;
-	if (_foamVortexData->numberOfParticles() >= 2) {
-
-		auto& pos = _foamVortexData->positions();
-		auto& vel = _foamVortexData->velocities();
-		auto& forces = _foamVortexData->forces();
-		auto& radius = _foamVortexData->particleRadius;
-		if (step % 50 == 0) {
-			pos.pop_back();
-			vel.pop_back();
-			forces.pop_back();
-			radius.pop_back();
-			_newPositions.pop_back();
-			_newVelocities.pop_back();
-			_foamVortexData->numberOfParticles()--;
-		}
-		step++;
-
-	}
-}

@@ -63,6 +63,8 @@ public:
 	//生成气泡对应的panelset
 	void generatePanelSet(const Array<Vector2D>& pos, const Array<double>& radius);
 
+	void generatePanelSet(const Array<Vector2D>& pos);
+
 
 private:
 	//求解tracer粒子
@@ -106,23 +108,33 @@ private:
 	void update_bubble_panelset_pos(double dt);
 
 private:
-	//计算bubble之间的排斥力
-	Vector2D computeF_rB(int i, int j) const;
+	/**************以下泡沫**************/
 
-	//计算bubble之间的吸引力
-	Vector2D computeF_aB(int i, int j) const;
+	void bubble_timeIntegration(double dt);
 
-	//计算障碍物对bubble的吸引力
-	void computeF_a0();
+	//构造Compliant Matrix
+	void constructCompliantMat();
 
-	//计算所有的吸引力和排斥力
-	void computeF_ra();
+	//构造Jacobin Matrix
+	void constructJacobinMat();
 
-	//计算空气阻力
-	Vector2D computeF_air(int i);
+	//构造系统中质点之间的约束
+	void constructConstraint();
 
-	//计算所有的阻力
-	void computeF_fr();
+	//求导数（用于组装jacobin中的元素）
+	Vector2D getDerivation(int phi_idx, int x_idx);
+
+	//这个要修改成基于网格搜索的结构
+	double computeConstraint(int idx);
+
+	//构造解线性系统用到的constraint向量
+	void construct_ConstraintVector(Eigen::VectorXd& vec);
+
+	//构造求解线性系统用到的速度场向量组
+	void construct_VelocityVector(Eigen::VectorXd& vec);
+
+	//计算弹簧之间的阻尼
+	Vector2D computeSpringDragForce(int idx);
 
 	//计算所有的two-way力
 	void compute_all_twoway_force(double dt);
@@ -130,8 +142,8 @@ private:
 	//计算所有的力
 	void computeTotalForce(double dt);
 
-	//气泡消失，随机删除气泡
-	void bubbleBreakUp();
+	/**************以上泡沫**************/
+
 
 public:
 	ShallowWaveSolver2Ptr _shallowWaveSolver;

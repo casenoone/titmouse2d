@@ -26,9 +26,11 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(2.5f);//缺省是1
+	glPointSize(5.0f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
+	glColor3f(1.0, 0.0, 0.0);
+
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
@@ -38,6 +40,8 @@ void drawLine(double x1, double y1, double x2, double y2) {
 	glLineWidth(1);//设置线段宽度
 	glBegin(GL_LINES);
 	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1, 128.0 / 255, 51.0 / 255);
+
 	glVertex2f((x1 - 1) * DRAW_SIZE, (y1 - 1) * DRAW_SIZE); //定点坐标范围
 	glVertex2f((x2 - 1) * DRAW_SIZE, (y2 - 1) * DRAW_SIZE);
 	glEnd();
@@ -156,4 +160,3 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-

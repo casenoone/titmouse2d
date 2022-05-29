@@ -3,12 +3,9 @@
 
 #include <Eigen/Dense>
 #include "../titmouse2d/src/Lagrangian/ParticleSystemData2.h"
-
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
-
 #include "MovingFaceCenteredGrid2.h"
-
-
+#include <Eigen/Sparse>
 
 class FoamVortexData : public ParticleSystemData2 {
 public:
@@ -48,8 +45,30 @@ public:
 		double gamma;
 	};
 
+	struct Edge {
+		int i;
+		int j;
+	};
+
 	/**************以下泡沫**************/
 
+	//系统中的约束
+	Array<Edge> edges;
+
+	//控制系统的刚度
+	Eigen::SparseMatrix<double> CompliantMat;
+
+	//Jacobin矩阵
+	Eigen::SparseMatrix<double> JacobinMat;
+
+	//临时的静止长度
+	double restLen = 0.07;
+
+	//临时的刚度
+	double stiff = 8000000;
+
+	//阻尼系数
+	double dampingCoeff = 20;
 
 	/**************以上泡沫**************/
 
@@ -81,7 +100,6 @@ public:
 	Array<Vector2D> vortexPosition;
 	Array<Vector2D> vortexVelocity;
 
-	//two-way bubble
 
 	//存放气泡对应的panel模型
 	Array<RegularPolygonPtr> bubble_panelset;

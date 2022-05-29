@@ -44,7 +44,8 @@ public:
 	double restLen = 0.06667;
 
 	//临时的刚度
-	double stiff = 80000;
+	double stiff = 8000000000;
+	//double stiff = 10000;
 
 	//阻尼系数
 	double dampingCoeff = 20;

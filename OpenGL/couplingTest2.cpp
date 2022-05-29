@@ -143,8 +143,8 @@ static void display(void)
 	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
 	Plyout writer1(path1, name, bubble_pos.dataSize(), "r");
 	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
-		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->particleRadius(i), 50);
-		auto r = vpSolver->foamVortexData()->particleRadius(i);
+		drawCircle(bubble_pos[i], 0.03, 50);
+		auto r = 0.03;
 		//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
 	}
 
@@ -223,19 +223,18 @@ int main(int argc, char** argv)
 
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(50, 50)
+		.withResolution(30, 30)
 		.makeShared();
 
 	Vector2D tempC(1.0, 1.0);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
-			if (pos.dis(tempC) < 0.2) {
+			if (pos.dis(tempC) < 0.3) {
 				//pos.x += random_double(-0.02, 0.02);
 				//pos.y += random_double(-0.02, 0.02);
 				this_pos.push(pos);
 				//temp_r = random_double(0.01, 0.03);
-				vpSolver->foamVortexData()->particleRadius.push(temp_r);
 				bubble_num++;
 			}
 		}
@@ -249,9 +248,9 @@ int main(int argc, char** argv)
 	vpSolver->setCollider(collider);
 	/**********以上生成气泡**********/
 
-	obj1->velocity = Vector2D(3, 0.0);
+	obj1->velocity = Vector2D(2, 0.0);
 
-	vpSolver->generatePanelSet(this_pos, vpSolver->foamVortexData()->particleRadius);
+	vpSolver->generatePanelSet(this_pos);
 	//vpSolver->emitVortexRing();
 
 
@@ -265,7 +264,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 
@@ -383,7 +382,7 @@ int main(int argc, char** argv)
 
 	for (int i = 0; i < frame; i += 1) {
 
-		std::ofstream out("E:\\zhangjian\\solve_data\\test520_1\\" + outfilename + ".txt", std::ios::app);
+		std::ofstream out("E:\\zhangjian\\solve_data\\consbubble\\" + outfilename + ".txt", std::ios::app);
 
 		for (int n = 0; n < num; ++n) {
 			auto x = position[n].x;
