@@ -661,12 +661,21 @@ void FoamVortexSolver::update_bubble_panelset_pos(double dt) {
 void FoamVortexSolver::constructCompliantMat() {
 	auto& edge = _foamVortexData->edges;
 	auto edgeNum = edge.dataSize();
+	auto& pos = _foamVortexData->positions();
+	auto& obj = _foamVortexData->panelSet;
+
 	auto c = 1 / _foamVortexData->stiff;
 	auto& compliantMat = _foamVortexData->CompliantMat;
 	compliantMat.resize(edgeNum, edgeNum);
 	int j = 0;
 	for (int i = 0; i < edgeNum; ++i) {
-		compliantMat.insert(i, j++) = c;
+		auto midP = 0.5 * (pos[edge[i].i] + pos[edge[i].j]);
+		if (midP.dis(obj->center()) > 0.3) {
+			compliantMat.insert(i, j++) = c;
+		}
+		else {
+			compliantMat.insert(i, j++) = 10;
+		}
 	}
 }
 
@@ -830,6 +839,10 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 		velocities[j] -= damping;
 	}
 
+	//×èÄá
+	for (int i = 0; i < n; ++i) {
+		velocities[i] += (-1.0 * velocities[i]) * dt * 10;
+	}
 
 	//Î»ÖÃ¸üĞÂ
 	for (int i = 0; i < n; ++i) {

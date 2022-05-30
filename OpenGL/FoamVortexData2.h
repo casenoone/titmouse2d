@@ -66,7 +66,7 @@ public:
 
 	//临时的刚度
 	double stiff = 8000000;
-
+	//double stiff = 10000;
 	//阻尼系数
 	double dampingCoeff = 20;
 

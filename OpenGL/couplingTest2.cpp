@@ -251,7 +251,7 @@ int main(int argc, char** argv)
 	obj1->velocity = Vector2D(2, 0.0);
 
 	vpSolver->generatePanelSet(this_pos);
-	//vpSolver->emitVortexRing();
+	vpSolver->emitVortexRing();
 
 
 	UINT timerId = 1;
