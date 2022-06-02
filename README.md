@@ -88,6 +88,8 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/kamavortex.gif)
 - 15.shallow wave solver
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
+- 16.Constrained Dynamics
+- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/constrained_dynamics.gif)
 
 即将实现的算法或数据结构：
 - PCISPH
