@@ -102,7 +102,7 @@ void ConstrainedSolver2::construct_VelocityVector(Eigen::VectorXd& vec) {
 	int n = massSpringData->numberOfPoint;
 	for (int i = 0; i < n; ++i) {
 		vec[i] = velocities[i].x;
-		vec[i + n] = velocities[i].y - 1 * 0.01;
+		vec[i + n] = velocities[i].y - 0.5 * 0.01;
 	}
 
 }

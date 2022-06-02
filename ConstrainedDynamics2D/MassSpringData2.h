@@ -44,11 +44,11 @@ public:
 	double restLen = 0.06667;
 
 	//临时的刚度
-	double stiff = 8000000000;
+	double stiff = 1000;
 	//double stiff = 10000;
 
 	//阻尼系数
-	double dampingCoeff = 20;
+	double dampingCoeff = 1;
 };
 
 using MassSpringData2Ptr = std::shared_ptr<MassSpringData2>;

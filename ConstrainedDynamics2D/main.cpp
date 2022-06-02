@@ -7,6 +7,7 @@
 #include "ConstrainedSolver2.h"
 #include "../titmouse2d/src/random.h"
 #include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
+#include "../titmouse2d/src/Geometry/Heart2.h"
 
 const float SCREEN_SIZE = 400;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -50,8 +51,10 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 std::shared_ptr<ConstrainedSolver2> constSolver;
-double dt = 0.006;
+double dt = 0.01;
 int n;
+std::vector<ExplicitSurface2Ptr> surfaceSet;
+
 static void display(void)
 {
 
@@ -127,7 +130,7 @@ int main(int argc, char** argv)
 		pos[i].y = random_double(0.1, 0.7);
 	}*/
 
-	auto grid = CellCenteredScalarGrid2::builder()
+	/*auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
 		.withResolution(30, 30)
 		.makeShared();
@@ -143,11 +146,24 @@ int main(int argc, char** argv)
 				n++;
 			}
 		}
+	}*/
+
+	Heart2 heart(Vector2D(1, 1), 0.1, Vector2I(30, 30), Vector2D::zero(), 0);
+	auto& heart_sdf = heart.sdf();
+	auto heart_res = heart_sdf->resolution();
+	for (int i = 0; i < heart_res.x; ++i) {
+		for (int j = 0; j < heart_res.y; ++j) {
+			if (heart_sdf->lookAt(i, j) < 0) {
+				auto cell_center = heart_sdf->cellCenterPosition()(i, j);
+				pos.push_back(cell_center);
+				n++;
+			}
+		}
 	}
 
 	constSolver = std::make_shared<ConstrainedSolver2>(pos);
 	//constSolver->massSpringData->restLen = grid->gridSpacing().x;
-	std::cout << "质点间距:" << grid->gridSpacing().x << std::endl;
+	//std::cout << "质点间距:" << grid->gridSpacing().x << std::endl;
 	/*************************以上程序主逻辑***************************/
 
 	glutKeyboardFunc(key);       //键盘按下去时
@@ -155,7 +171,36 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
+
+		//这里是写入文件
+	//记得重新算的时候要删掉 原来的文件夹
+	int frame = 10000;
+	auto num = constSolver->massSpringData->numberOfPoint;
+	auto position = constSolver->massSpringData->positions;
+
+
+	int interval = 1;
+
+	std::string outfilename = "1";
+
+	//system("mkdir FlipData3");
+
+	for (int i = 0; i < frame; i += 1) {
+
+		std::ofstream out("E:\\zhangjian\\solve_data\\test520_1\\" + outfilename + ".txt", std::ios::app);
+
+		for (int n = 0; n < num; ++n) {
+			auto x = position[n].x;
+			auto y = position[n].y;
+			out << x << "," << y << std::endl;
+		}
+		constSolver->onAdvanceTimeStep(dt);
+		auto temp1 = std::atoi(outfilename.c_str());
+		temp1++;
+		outfilename = std::to_string(temp1);
+		std::cout << "当前解算到第" << temp1 << "帧" << std::endl;
+	}
 
 
 	return 0;
