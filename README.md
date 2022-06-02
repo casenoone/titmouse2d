@@ -92,6 +92,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - Clebsch gauge fluid solver
 - Multigrid Method
 - FVM（有限体积法）
+- TreeCode多体问题加速
 - FMM(快速多极展开)
 - 更适合物理模拟的稀疏矩阵结构
 
