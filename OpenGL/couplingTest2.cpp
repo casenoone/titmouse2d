@@ -143,7 +143,7 @@ static void display(void)
 	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
 	Plyout writer1(path1, name, bubble_pos.dataSize(), "r");
 	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
-		drawCircle(bubble_pos[i], 0.03, 50);
+		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->radius, 50);
 		auto r = 0.03;
 		//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
 	}
@@ -217,20 +217,20 @@ int main(int argc, char** argv)
 
 
 	/**********以下生成气泡**********/
-	double temp_r = 0.01;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(30, 30)
+		.withResolution(110, 110)
 		.makeShared();
+	double temp_r = 0.01;// grid->gridSpacing().x * 0.5;
 
 	Vector2D tempC(1.0, 1.0);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
-			if (pos.dis(tempC) < 0.3) {
+			if (pos.dis(tempC) < 0.4) {
 				//pos.x += random_double(-0.02, 0.02);
 				//pos.y += random_double(-0.02, 0.02);
 				this_pos.push(pos);
@@ -251,9 +251,9 @@ int main(int argc, char** argv)
 	obj1->velocity = Vector2D(2, 0.0);
 
 	vpSolver->generatePanelSet(this_pos);
-	vpSolver->emitVortexRing();
 
-
+	vpSolver->foamVortexData()->restLen = grid->gridSpacing().x;
+	vpSolver->foamVortexData()->radius = grid->gridSpacing().x / 2;
 	UINT timerId = 1;
 	MSG msg;
 	SetTimer(NULL, timerId, 1, TimerProc);
@@ -301,101 +301,117 @@ int main(int argc, char** argv)
 
 
 
-	//int frame = 100000;
+	int frame = 100000;
+	auto position = vpSolver->foamVortexData()->positions();
+	auto waterdata = vpSolver->_shallowWaveSolver->shallowWaveData();
+	auto water_num = waterdata->resolution().x * waterdata->resolution().x;
+	auto bubble_num = vpSolver->foamVortexData()->numberOfParticles();
+	for (int i = 0; i < frame; i += 1) {
+
+		auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
+		obj1->velocity = Vector2D(2, 0.0);
+		obj1->updatePosition(dt);
+		vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
+
+		static int fileNum = 1;
+		std::string	name = std::to_string(fileNum);
+		fileNum++;
+		std::string path1 = "E:\\zhangjian\\solve_data\\all_1\\boundary\\";
+		std::string path2 = "E:\\zhangjian\\solve_data\\all_1\\thinfoam\\";
+		std::string path3 = "E:\\zhangjian\\solve_data\\all_1\\water\\";
+		std::string path4 = "E:\\zhangjian\\solve_data\\all_1\\bubble\\";
+
+		Plyout writer1(path1, name, 1);
+		Plyout writer2(path2, name, tracer_num + 4);
+		Plyout writer3(path3, name, water_num);
+		Plyout writer4(path4, name, bubble_num + 4);
+
+
+		//写入移动边界的数据
+		writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
+
+		//写入thinfoam数据
+		for (int n = 0; n < tracer_num; ++n) {
+			auto x = vpSolver->foamVortexData()->tracePosition[n].x;
+			auto y = vpSolver->foamVortexData()->tracePosition[n].y;
+			if (x < 2 && y < 2 && x >= 0 && y >= 0) {
+				auto height = waterdata->height->sample(vpSolver->foamVortexData()->tracePosition[n]);
+				writer2.write_in_ply(x, height, y);
+			}
+		}
+
+
+		//为了保证thinfoam模型与water模型对齐，追加四个点
+		writer2.write_in_ply(0, 0, 0);
+		writer2.write_in_ply(2, 0, 2);
+		writer2.write_in_ply(2, 0, 0);
+		writer2.write_in_ply(0, 0, 2);
+
+		//写入water数据
+		for (int q1 = 0; q1 < waterdata->resolution().x; ++q1) {
+			for (int q2 = 0; q2 < waterdata->resolution().y; ++q2) {
+				auto posFunc = waterdata->height->dataPosition();
+				auto pos = posFunc(q1, q2);
+				auto height = waterdata->height->lookAt(q1, q2);
+				writer3.write_in_ply(pos.x, height, pos.y);
+			}
+		}
+
+
+		//写入bubble数据
+		for (int n = 0; n < bubble_num; ++n) {
+			auto height = waterdata->height->sample(position[n]);
+			writer4.write_in_ply(position[n].x, height, position[n].y);
+		}
+
+		//为了保证bubble模型与water模型对齐，追加四个点
+		writer4.write_in_ply(0, 0, 0);
+		writer4.write_in_ply(2, 0, 2);
+		writer4.write_in_ply(2, 0, 0);
+		writer4.write_in_ply(0, 0, 2);
+
+		vpSolver->onAdvanceTimeStep(dt);
+		auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();
+		std::cout << "当前解算到第：" << i << "步，涡粒子数：" << vortex_num << std::endl;
+
+	}
+
+
+
+
+
+
+
+
+	//	//这里是写入文件
+	////记得重新算的时候要删掉 原来的文件夹
+	//int frame = 1000;
+	//auto num = vpSolver->foamVortexData()->numberOfParticles();
 	//auto position = vpSolver->foamVortexData()->positions();
-	//auto waterdata = vpSolver->_shallowWaveSolver->shallowWaveData();
-	//auto water_num = waterdata->resolution().x * waterdata->resolution().x;
+
+
+	//int interval = 1;
+
+	//std::string outfilename = "1";
+
+	////system("mkdir FlipData3");
 
 	//for (int i = 0; i < frame; i += 1) {
 
-	//	auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
-	//	obj1->velocity = Vector2D(2, 0.0);
-	//	obj1->updatePosition(dt);
-	//	vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
+	//	std::ofstream out("E:\\zhangjian\\solve_data\\consbubble\\" + outfilename + ".txt", std::ios::app);
 
-	//	static int fileNum = 1;
-	//	std::string	name = std::to_string(fileNum);
-	//	fileNum++;
-	//	std::string path1 = "E:\\zhangjian\\solve_data\\all\\boundary1\\";
-	//	std::string path2 = "E:\\zhangjian\\solve_data\\all\\thinfoam1\\";
-	//	//std::string path2 = "E:\\zhangjian\\solve_data\\test520_1\\";
-	//	std::string path3 = "E:\\zhangjian\\solve_data\\all\\water1\\";
-	//	Plyout writer1(path1, name, 1);
-	//	Plyout writer2(path2, name, tracer_num + 4);
-	//	Plyout writer3(path3, name, water_num);
-
-
-	//	//写入移动边界的数据
-	//	//writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
-
-	//	//写入thinfoam数据
-	//	for (int n = 0; n < tracer_num; ++n) {
-	//		auto x = vpSolver->foamVortexData()->tracePosition[n].x;
-	//		auto y = vpSolver->foamVortexData()->tracePosition[n].y;
-	//		if (x < 2 && y < 2 && x >= 0 && y >= 0) {
-	//			auto height = waterdata->height->sample(vpSolver->foamVortexData()->tracePosition[n]);
-	//			//writer2.write_in_ply(x, height, y);
-	//		}
+	//	for (int n = 0; n < num; ++n) {
+	//		auto x = position[n].x;
+	//		auto y = position[n].y;
+	//		out << x << "," << y << std::endl;
 	//	}
-	//	auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();
-	//	std::cout << "当前解算到第：" << i << "步，涡粒子数：" << vortex_num << std::endl;
-
-	//	//为了保证thinfoam模型与water模型对齐，追加四个点
-	//	/*writer2.write_in_ply(0, 0, 0);
-	//	writer2.write_in_ply(2, 0, 2);
-	//	writer2.write_in_ply(2, 0, 0);
-	//	writer2.write_in_ply(0, 0, 2);*/
-
-	//	//写入water数据
-	//	for (int q1 = 0; q1 < waterdata->resolution().x; ++q1) {
-	//		for (int q2 = 0; q2 < waterdata->resolution().y; ++q2) {
-	//			auto posFunc = waterdata->height->dataPosition();
-	//			auto pos = posFunc(q1, q2);
-	//			auto height = waterdata->height->lookAt(q1, q2);
-	//			//writer3.write_in_ply(pos.x, height, pos.y);
-	//		}
-	//	}
-
 	//	vpSolver->onAdvanceTimeStep(dt);
+	//	obj1->updatePosition(dt);
+	//	auto temp1 = std::atoi(outfilename.c_str());
+	//	temp1++;
+	//	outfilename = std::to_string(temp1);
 
 	//}
-
-
-
-
-
-
-
-
-		//这里是写入文件
-	//记得重新算的时候要删掉 原来的文件夹
-	int frame = 1000;
-	auto num = vpSolver->foamVortexData()->numberOfParticles();
-	auto position = vpSolver->foamVortexData()->positions();
-
-
-	int interval = 1;
-
-	std::string outfilename = "1";
-
-	//system("mkdir FlipData3");
-
-	for (int i = 0; i < frame; i += 1) {
-
-		std::ofstream out("E:\\zhangjian\\solve_data\\consbubble\\" + outfilename + ".txt", std::ios::app);
-
-		for (int n = 0; n < num; ++n) {
-			auto x = position[n].x;
-			auto y = position[n].y;
-			out << x << "," << y << std::endl;
-		}
-		vpSolver->onAdvanceTimeStep(dt);
-		obj1->updatePosition(dt);
-		auto temp1 = std::atoi(outfilename.c_str());
-		temp1++;
-		outfilename = std::to_string(temp1);
-
-	}
 
 
 

@@ -21,14 +21,15 @@
 #include <windows.h>
 #include <omp.h>
 
+
 //stb所需数据
-const int width = 400;
-const int height = 400;
+const int width = 600;
+const int height = 600;
 #define CHANNEL_NUM 4
 
 const double kPiD = 3.1415926535;
 
-RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(15, Vector2D(0.1, 1), 0.1);
+RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
 
 
 std::string png = ".png";
@@ -172,7 +173,7 @@ void write_to_pixel(std::vector<Vector2D> pos, float r, float g, float b, std::s
 
 
 
-const float SCREEN_SIZE = 400;
+const float SCREEN_SIZE = 600;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 void split(const std::string& s, std::vector<std::string>& tokens, char delim = ' ') {
 	tokens.clear();
@@ -270,7 +271,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 bool clearState = true;
-double dt = 0.008;
+double dt = 0.006;
 
 
 
@@ -292,7 +293,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\solve_data\\test520_1\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\solve_data\\consbubble\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -323,7 +324,7 @@ static void display(void)
 		//if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
 			//drawPoint(x, y);
-		drawCircle(tempPos, 0.02, 50);
+		drawCircle(tempPos, 0.01, 20);
 		//drawPoint(x, y);
 		//write_to_pixel(tempPos, 1, 1, 1, filename);
 	//}
@@ -342,15 +343,15 @@ static void display(void)
 	obj1->velocity = Vector2D(2.0, 0.0);
 	obj1->updatePosition(dt * skipNum);
 
-	//drawCircle(obj1->center(), obj1->r(), 50);
+	drawCircle(obj1->center(), obj1->r(), 50);
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
 
 	//延时0.5秒
 
-	if (temp1 <= 2)
-		Sleep(1000);
+
+	Sleep(20);
 
 }
 

@@ -65,10 +65,13 @@ public:
 	double restLen = 0.07;
 
 	//临时的刚度
-	double stiff = 8000000;
-	//double stiff = 10000;
+	//double stiff = 8000000;
+	double stiff = 100000;
 	//阻尼系数
-	double dampingCoeff = 20;
+	double dampingCoeff = 30;
+
+	//临时的bubble尺寸
+	double radius = 0.1;
 
 	/**************以上泡沫**************/
 

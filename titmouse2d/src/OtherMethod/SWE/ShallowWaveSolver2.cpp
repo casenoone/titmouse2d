@@ -12,7 +12,7 @@ const double shallow_beta = 0.9;
 //控制耦合稳定性
 const double shallow_gama = 0.4;
 
-const double shallow_e = 0.02;
+const double shallow_e = 0.035;
 
 //假设标签的值为1时是被固体占据
 void ShallowWaveSolver2::setCouplingCellNum() {
@@ -323,7 +323,7 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			auto tempY1 = (h->lookAt(i, j) - 1) * temp_k;
 			auto tempZ1 = (pos1.y - 1) * temp_k;
 			Vector3D p1(tempX1, tempY1, tempZ1);
-			writer.write_in_ply(pos1.x, h->lookAt(i, j), pos1.y);
+			//writer.write_in_ply(pos1.x, h->lookAt(i, j), pos1.y);
 
 			auto pos2 = posFunc(i + 1, j);
 			auto tempX2 = (pos2.x - 1) * temp_k;
@@ -370,7 +370,7 @@ int ShallowWaveSolver2::getWaterSurface(float* mesh) {
 			auto tempY1 = (h->lookAt(i, j) - 1) * temp_k;
 			auto tempZ1 = (pos1.y - 1) * temp_k;
 			Vector3D p1(tempX1, tempY1, tempZ1);
-			writer.write_in_ply(pos1.x, h->lookAt(i, j), pos1.y);
+			//writer.write_in_ply(pos1.x, h->lookAt(i, j), pos1.y);
 
 
 			auto pos2 = posFunc(i, j - 1);

@@ -12,7 +12,7 @@
 #include <cmath>
 
 
-static const int numOfStep = 1;
+static const int numOfStep = 5;
 static const double vorticity_eps = 0.08;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
@@ -83,7 +83,7 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
 	computeTotalForce(timeIntervalInSeconds);
-	//no_through_solve(timeIntervalInSeconds);
+	no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
 	bubble_timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
@@ -92,7 +92,7 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	update_bubble_panelset_pos(timeIntervalInSeconds);
 
 	decayVorticity();
-	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
+	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 }
 
 
@@ -189,7 +189,7 @@ void FoamVortexSolver::generatePanelSet(const Array<Vector2D>& pos) {
 
 	int n = pos.dataSize();
 	for (int i = 0; i < n; ++i) {
-		RegularPolygonPtr obj = std::make_shared<RegularPolygon>(10, pos.lookAt(i), 0.03);
+		RegularPolygonPtr obj = std::make_shared<RegularPolygon>(10, pos.lookAt(i), foamVortexData()->radius);
 		_foamVortexData->bubble_panelset.push(obj);
 	}
 	_foamVortexData->bubble_slip_strength.reSize(n);
@@ -312,7 +312,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 0;
+	int emitNum = 10000;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
@@ -663,18 +663,19 @@ void FoamVortexSolver::constructCompliantMat() {
 	auto edgeNum = edge.dataSize();
 	auto& pos = _foamVortexData->positions();
 	auto& obj = _foamVortexData->panelSet;
-
+	auto radius = _foamVortexData->radius;
 	auto c = 1 / _foamVortexData->stiff;
 	auto& compliantMat = _foamVortexData->CompliantMat;
 	compliantMat.resize(edgeNum, edgeNum);
 	int j = 0;
 	for (int i = 0; i < edgeNum; ++i) {
 		auto midP = 0.5 * (pos[edge[i].i] + pos[edge[i].j]);
-		if (midP.dis(obj->center()) > 0.3) {
-			compliantMat.insert(i, j++) = c;
+		if (midP.dis(obj->center()) < radius * 4) {
+			compliantMat.insert(i, j++) = 10;
 		}
 		else {
-			compliantMat.insert(i, j++) = 10;
+
+			compliantMat.insert(i, j++) = c;
 		}
 	}
 }
@@ -711,7 +712,7 @@ void FoamVortexSolver::constructConstraint() {
 			auto& pos_i = pos[i];
 			auto& pos_j = pos[j];
 			//如果满足这个条件就建立约束
-			if (pos_i.dis(pos_j) <= 0.08) {
+			if (pos_i.dis(pos_j) <= restLen * 1.2) {
 				edge.push(FoamVortexData::Edge{ i,j });
 			}
 		}
@@ -841,13 +842,15 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 
 	//阻尼
 	for (int i = 0; i < n; ++i) {
-		velocities[i] += (-1.0 * velocities[i]) * dt * 10;
+		velocities[i] += (-1.0 * velocities[i]) * dt * 30;
 	}
 
 	//位置更新
 	for (int i = 0; i < n; ++i) {
 		positions[i] += velocities[i] * dt;
 	}
+
+	auto& obj = _foamVortexData->panelSet;
 
 	//边界处理
 	for (int i = 0; i < n; ++i) {
@@ -871,7 +874,15 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 			positions[i].y = 2;
 			velocities[i].y = 0;
 		}
+
+		if (positions[i].dis(obj->center()) < (foamVortexData()->radius + obj->r())) {
+			auto dir = (positions[i] - obj->center()).getNormalize();
+			positions[i] = obj->center() + (foamVortexData()->radius + obj->r()) * dir;
+			//velocities[i] = obj->velocity;
+		}
 	}
+
+
 }
 
 
