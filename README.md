@@ -17,11 +17,6 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - 显式/隐式曲面转换
 - 常用几何形状的sdf计算
 - 有限差分计算用到的均匀网格结构
-- PIC/FLIP/APIC格式
-- 半拉格朗日对流求解器
-- 压力泊松方程求解
-- 涡粒子法
-- LBM Method(格子-玻尔兹曼方法)
 - MarchingSquare algorthm 
 - Framework or Api(使用的框架或接口): 
   - OpenGL/GLUT/GLAD/GLFW
@@ -42,7 +37,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 实现的弹性体/刚体算法：
 - Constraint Dynamics （Mass-spring system）
 
-
+效果图
 - 1.FLIP算法（没有在网格上对边界条件进行处理，因此边界处速度有散度）
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
 
@@ -88,6 +83,8 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/kamavortex.gif)
 - 15.shallow wave solver
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
+- 16.Constrained Dynamics
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/constrained_dynamics.gif" width="300">
 
 即将实现的算法或数据结构：
 - PCISPH
@@ -95,6 +92,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - Clebsch gauge fluid solver
 - Multigrid Method
 - FVM（有限体积法）
+- TreeCode多体问题加速
 - FMM(快速多极展开)
 - 更适合物理模拟的稀疏矩阵结构
 
