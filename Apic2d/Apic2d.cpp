@@ -66,7 +66,7 @@ void drawColliders(const std::vector<ExplicitSurface2Ptr>& surfaceSet) {
 
 auto apicSolver = ApicSolver2::builder()
 .withOrigin(Vector2D(0.0, 0.0))
-.withResolution(Vector2I(40, 40))
+.withResolution(Vector2I(20, 20))
 .makeShared();
 
 
@@ -187,14 +187,14 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	//glutMainLoop();
+	glutMainLoop();
 
 
 
 
 
-		//这里是写入文件
-	//记得重新算的时候要删掉 原来的文件夹
+	//这里是写入文件
+//记得重新算的时候要删掉 原来的文件夹
 	int frame = 10000;
 	auto num = apicSolver->particleSystemData()->numberOfParticles();
 	auto position = apicSolver->particleSystemData()->positions();

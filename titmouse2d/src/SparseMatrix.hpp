@@ -290,7 +290,7 @@ SparseMatrix<T> SparseMatrix<T>::diagonalMatrix() const {
 	for (int i = 0; i < this->_row; ++i) {
 
 		auto value = this->lookAt(i, i);
-		if (value == 0)value = 1.0;
+		if (value == 0) { value = 1.0; std::cout << "无法计算对角矩阵" << std::endl; }
 		D.insert(i, i, value);
 	}
 

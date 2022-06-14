@@ -89,6 +89,8 @@ public:
 	T x;
 	T y;
 	T z;
+	//没有意义，仅仅是为了字节对齐
+	T none = 0;
 };
 
 using Vector3D = Vector3<double>;
