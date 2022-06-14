@@ -212,7 +212,7 @@
     <ClInclude Include="src\LinearSystem\ConjugateGradientSolver.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\LinearSystem\PreConjugateGradientSolver.hpp">
+    <ClInclude Include="src\LinearSystem\JacobiPCG.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\LinearSystem\MICCGSolver.hpp">
@@ -435,6 +435,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\mesh\Plyout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\ICCGSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\GSPCGSolver.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinearSystem\SORPCG.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

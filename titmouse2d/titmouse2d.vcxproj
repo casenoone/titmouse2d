@@ -198,7 +198,10 @@
     <ClInclude Include="src\Geometry\RegularPolygon.h" />
     <ClInclude Include="src\LinearSystem\DirectSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussianElimSolver.hpp" />
+    <ClInclude Include="src\LinearSystem\GSPCGSolver.hpp" />
+    <ClInclude Include="src\LinearSystem\ICCGSolver.hpp" />
     <ClInclude Include="src\LinearSystem\RelaxedJacobiSolver.hpp" />
+    <ClInclude Include="src\LinearSystem\SORPCG.hpp" />
     <ClInclude Include="src\Matrix2x2.hpp" />
     <ClInclude Include="src\Array.hpp" />
     <ClInclude Include="src\Array2.hpp" />
@@ -256,7 +259,7 @@
     <ClInclude Include="src\LinearSystem\MICCGSolver.hpp" />
     <ClInclude Include="src\LinearSystem\IterativeSystemSolver.hpp" />
     <ClInclude Include="src\LinearSystem\JacobiSolver.hpp" />
-    <ClInclude Include="src\LinearSystem\PreConjugateGradientSolver.hpp" />
+    <ClInclude Include="src\LinearSystem\JacobiPCG.hpp" />
     <ClInclude Include="src\LinearSystem\SORsolver.hpp" />
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
     <ClInclude Include="src\MathUtils.hpp" />
