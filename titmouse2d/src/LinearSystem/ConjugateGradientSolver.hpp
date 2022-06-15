@@ -1,5 +1,4 @@
-#ifndef CONJUGATEGRADIENTSOLVER_HPP
-#define CONJUGATEGRADIENTSOLVER_HPP
+#pragma once
 
 #include "IterativeSystemSolver.hpp"
 
@@ -86,7 +85,7 @@ void ConjugateGradientSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x
 
 	}
 
-	//std::cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << std::endl;
+	std::cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << std::endl;
 }
 
 
@@ -113,4 +112,3 @@ void ConjugateGradientSolver<T>::computeD() {
 	_d = _r1 + _beta * _d;
 }
 
-#endif

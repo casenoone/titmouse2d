@@ -187,7 +187,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 
@@ -208,7 +208,7 @@ int main(int argc, char** argv)
 
 	for (int i = 0; i < frame; i += 1) {
 
-		std::ofstream out("E:\\zhangjian\\solve_data\\test520_1\\" + outfilename + ".txt", std::ios::app);
+		std::ofstream out("E:\\zhangjian\\solve_data\\1\\" + outfilename + ".txt", std::ios::app);
 
 		for (int n = 0; n < num; ++n) {
 			auto x = position[n].x;

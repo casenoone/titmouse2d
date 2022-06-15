@@ -6,6 +6,7 @@
 #include "../LinearSystem/RelaxedJacobiSolver.hpp"
 #include "../LinearSystem/JacobiPCG.hpp"
 #include "../LinearSystem/GSPCGSolver.hpp"
+#include "../LinearSystem/ICCGSolver.hpp"
 #include "../ConstVar.h"
 
 
@@ -141,9 +142,10 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	//SORSolver<double> sorSolver(1.67);
 	//JacobiPCGSolver<double> jpcgSplver;
 	//GSPCGSolver<double> gspcgSolver;
+	ICCGSolver<double> iccgSolver;
 
 	////线性系统求解可作并行优化
-	cgSolver.compute(A, x, b);
+	//cgSolver.compute(A, x, b);
 	////gauSolver.compute(A, x, b);
 	////steepSolver.compute(A, x, b);
 	////JacobiSolver.compute(A, x, b);
@@ -151,6 +153,7 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	//sorSolver.compute(A, x, b);
 	//jpcgSplver.compute(A, x, b);
 	//gspcgSolver.compute(A, x, b);
+	iccgSolver.compute(A, x, b);
 }
 
 void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,

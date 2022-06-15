@@ -293,7 +293,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\solve_data\\consbubble\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\solve_data\\1\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -303,7 +303,7 @@ static void display(void)
 
 	auto temp1 = std::atoi(filename.c_str());
 
-	int skipNum = 1;
+	int skipNum = 3;
 	temp1 += skipNum;
 	filename = std::to_string(temp1);
 
@@ -324,8 +324,8 @@ static void display(void)
 		//if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
 			//drawPoint(x, y);
-		drawCircle(tempPos, 0.01, 20);
-		//drawPoint(x, y);
+		//drawCircle(tempPos, 0.01, 20);
+		drawPoint(x, y);
 		//write_to_pixel(tempPos, 1, 1, 1, filename);
 	//}
 	//posList.push_back(tempPos);
@@ -340,10 +340,10 @@ static void display(void)
 		drawLine(start.x, start.y, end.x, end.y);
 	}*/
 
-	obj1->velocity = Vector2D(2.0, 0.0);
-	obj1->updatePosition(dt * skipNum);
+	//obj1->velocity = Vector2D(2.0, 0.0);
+	//obj1->updatePosition(dt * skipNum);
 
-	drawCircle(obj1->center(), obj1->r(), 50);
+	//drawCircle(obj1->center(), obj1->r(), 50);
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
@@ -351,7 +351,7 @@ static void display(void)
 	//延时0.5秒
 
 
-	Sleep(20);
+	Sleep(1);
 
 }
 

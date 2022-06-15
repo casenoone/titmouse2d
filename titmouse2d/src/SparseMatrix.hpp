@@ -94,6 +94,8 @@ public:
 
 	SparseMatrix(const int& row, const int& column);
 
+	SparseMatrix(const SparseMatrix<T>& mat);
+
 	SparseMatrix(const std::vector<std::vector<T>>& mat);
 
 	void insert(int i, int j, const T r);
@@ -187,6 +189,20 @@ SparseMatrix<T>::SparseMatrix(const int& row, const int& column) :_row(row), _co
 
 	_data = std::make_shared<std::vector<T>>();
 }
+
+
+template<class T>
+SparseMatrix<T>::SparseMatrix(const SparseMatrix<T>& mat) :SparseMatrix(mat._row, mat._column) {
+	this->_row = mat._row;
+	this->_column = mat._column;
+	this->_valuedNum = mat._valuedNum;
+	*(this->_rowIndices) = *(mat._rowIndices);
+	*(this->_columnOffsets) = *(mat._columnOffsets);
+	*(this->_data) = *(mat._data);
+	this->_tempData = nullptr;
+}
+
+
 
 template<class T>
 SparseMatrix<T>::SparseMatrix(const std::vector<std::vector<T>>& mat) :_row(mat.size()), _column(mat[0].size()) {
@@ -311,17 +327,18 @@ template<class T>
 SparseMatrix<T> SparseMatrix<T>::ICholesky0()const {
 	//这里可以改进以下，获取A矩阵的下三角矩阵
 	auto L = *this;
-
-	for (int k = 0; k < this->_row; ++k) {
+	int n = this->_row;
+	for (int k = 0; k < n; ++k) {
 		L.modify(k, k) = std::sqrt(this->lookAt(k, k));
 
-		for (int i = k + 1; i < this->_row; ++i) {
+		for (int i = k + 1; i < n; ++i) {
 			if (L(i, k) != 0) {
 				L.modify(i, k) = L(i, k) / L(k, k);
+				//std::cout << (*this)(k, k) << std::endl;
 			}
 		}
-		for (int j = k + 1; j < this->_row; ++j) {
-			for (int l = j; l < this->_row; ++l) {
+		for (int j = k + 1; j < n; ++j) {
+			for (int l = j; l < n; ++l) {
 				if (L(l, j) != 0)
 					L.modify(l, j) = L(l, j) - L(l, k) * L(j, k);
 			}
