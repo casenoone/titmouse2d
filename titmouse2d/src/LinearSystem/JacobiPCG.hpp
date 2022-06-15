@@ -26,7 +26,7 @@ private:
 
 template<class T>
 void JacobiPCGSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const VectorN<T>& b) {
-	this->_maxIterNum = 50;
+	this->_maxIterNum = 300;
 
 	this->correctResidual(A, x, b);
 	auto delta_new = this->_r * this->_r;
@@ -44,7 +44,7 @@ void JacobiPCGSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const 
 	for (int i = 0; i < A.size().x; ++i) {
 		r0_hat[i] = r0[i] / M.lookAt(i, i);
 	}
-
+	std::cout << minR2 << std::endl;
 	auto p0 = r0_hat;
 	VectorN<T> p1(A.size().x);
 	while (this->_iterNum <= this->_maxIterNum
@@ -65,10 +65,11 @@ void JacobiPCGSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const 
 		p0 = p1;
 		r0_hat = r1_hat;
 
-		delta_new = this->_r * this->_r;
+		delta_new = this->_r.norm();
 
 		this->_iterNum++;
 	}
+	std::cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << std::endl;
 }
 
 

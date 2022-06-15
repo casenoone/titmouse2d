@@ -100,6 +100,8 @@ public:
 
 	T operator()(int i, int j) const;
 
+	T& modify(int i, int j);
+
 	void operator=(const SparseMatrix& mat);
 
 	//矩阵右乘列向量
@@ -140,6 +142,10 @@ public:
 
 	//求矩阵的对角矩阵
 	SparseMatrix<T> diagonalMatrix() const;
+
+	//求矩阵的不完全Cholesky IC（0）分解
+	//返回下三角
+	SparseMatrix<T> ICholesky0()const;
 
 private:
 	//获取矩阵某一行的元素个数
@@ -300,6 +306,31 @@ SparseMatrix<T> SparseMatrix<T>::diagonalMatrix() const {
 }
 
 
+//参考：https://www.zhihu.com/search?type=content&q=%E4%B8%8D%E5%AE%8C%E5%85%A8Cholesky%E5%88%86%E8%A7%A3%E9%A2%84%E5%A4%84%E7%90%86%E5%85%B1%E8%BD%AD%E6%A2%AF%E5%BA%A6
+template<class T>
+SparseMatrix<T> SparseMatrix<T>::ICholesky0()const {
+	//这里可以改进以下，获取A矩阵的下三角矩阵
+	auto L = *this;
+
+	for (int k = 0; k < this->_row; ++k) {
+		L.modify(k, k) = std::sqrt(this->lookAt(k, k));
+
+		for (int i = k + 1; i < this->_row; ++i) {
+			if (L(i, k) != 0) {
+				L.modify(i, k) = L(i, k) / L(k, k);
+			}
+		}
+		for (int j = k + 1; j < this->_row; ++j) {
+			for (int l = j; l < this->_row; ++l) {
+				if (L(l, j) != 0)
+					L.modify(l, j) = L(l, j) - L(l, k) * L(j, k);
+			}
+		}
+	}
+
+	return L;
+}
+
 template<class T>
 T SparseMatrix<T>::getRowElementNum(int i) const {
 	auto row_offset = (*_rowIndices)[i];
@@ -321,6 +352,34 @@ void SparseMatrix<T>::operator=(const SparseMatrix& mat) {
 }
 
 
+template<class T>
+T& SparseMatrix<T>::modify(int i, int j) {
+	//待查询处的行号
+	int row = i;
+	//该行首元素的偏移量
+	auto row_offset = (*_rowIndices)[row];
+	//下一行首元素的偏移量
+	auto next_row_offset = (*_rowIndices)[row + 1];
+
+	//如果该行不是空行
+	if (row_offset != next_row_offset && _valuedNum >= 1) {
+		//待查询处的列号
+		int col = j;
+		//该行首元素的列号
+		auto idx = (*_columnOffsets)[row_offset];
+		//该行中元素的个数
+		auto row_element_num = next_row_offset - row_offset;
+
+		int count = 0;
+		while (count < row_element_num) {
+			auto e_idx = row_offset + count;
+			if ((*_columnOffsets)[e_idx] == col) {
+				return (*_data)[e_idx];
+			}
+			count++;
+		}
+	}
+}
 
 template<class T>
 T SparseMatrix<T>::operator()(int i, int j) const {
