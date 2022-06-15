@@ -3,15 +3,17 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - C++ 11
 - 基本的向量操作
 - 基本的数组结构
-- 基本的稠密矩阵结构及操作
-- CSR稀疏矩阵结构以及相关操作
+- 基本的稠密矩阵结构
+- CSR稀疏矩阵结构
 - Iterative Solve Linea System：
-  - Steepest Descent method(最速下降法)
-  - ConjugateGradient method(共轭梯度法)
-  - Jaocobi method(雅可比迭代法)
-  - Gauss-Seidel method(高斯赛德法)
+  - Steepest Descent method
+  - ConjugateGradient method
+  - Jaocobi method
+  - Gauss-Seidel method
   - Relaxation jacobi
   - Successive over relaxation
+  - Jacobi PCG
+  - ICCG
 - 基于网格的粒子邻近搜索结构
 - 2D情况下任意几何形状的碰撞检测与处理
 - 显式/隐式曲面转换
