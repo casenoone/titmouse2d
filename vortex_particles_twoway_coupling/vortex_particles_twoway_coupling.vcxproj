@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="quadtreeTest.cpp" />
     <ClCompile Include="twoway_test.cpp" />
     <ClCompile Include="VortexParticleSolver2.cpp" />
   </ItemGroup>

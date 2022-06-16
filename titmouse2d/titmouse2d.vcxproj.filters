@@ -446,5 +446,11 @@
     <ClInclude Include="src\LinearSystem\SORPCG.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\DataStructure\quadtree.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\VortexParticles\VortexTreeCode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

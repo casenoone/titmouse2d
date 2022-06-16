@@ -3,6 +3,7 @@
 
 
 //先实现一个简单的Jacobi预处理共轭梯度法
+//这个方法没写对，我擦，精度很差，迭代次数也很多
 template<class T>
 class JacobiPCGSolver : public IterativeSystemSolver<T> {
 public:
@@ -35,7 +36,7 @@ void JacobiPCGSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const 
 
 	//首先，选取预处理矩阵M
 	//这里是Jacobi预处理，因此M矩阵即A矩阵对应的对角矩阵
-	auto M = A.diagonalMatrix();
+	auto& M = A;
 	auto r0 = b;
 	VectorN<T> r0_hat(A.size().x);
 	VectorN<T> r1_hat(A.size().x);

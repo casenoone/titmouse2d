@@ -192,6 +192,7 @@
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\DataStructure\quadtree.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
     <ClInclude Include="src\Geometry\Heart2.h" />
@@ -277,6 +278,7 @@
     <ClInclude Include="src\OtherMethod\PCISPH\PCISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\SWE\ShallowWaveData2.h" />
     <ClInclude Include="src\OtherMethod\SWE\ShallowWaveSolver2.h" />
+    <ClInclude Include="src\OtherMethod\VortexParticles\VortexTreeCode.h" />
     <ClInclude Include="src\random.h" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />

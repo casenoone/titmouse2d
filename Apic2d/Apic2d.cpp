@@ -187,7 +187,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	//glutMainLoop();
+	glutMainLoop();
 
 
 
