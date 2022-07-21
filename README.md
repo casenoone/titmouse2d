@@ -85,7 +85,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/kamavortex.gif)
 - 15.shallow wave solver
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
-- 16.Constrained Dynamics
+- 16.Constrained Dynamics（这玩意弹簧系数调大了是可以做刚体的，为什么会碎呢，是因为我的约束条件的问题，超过一定距离就把约束撤掉了）
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/constrained_dynamics.gif" width="300">
 
 即将实现的算法或数据结构：
