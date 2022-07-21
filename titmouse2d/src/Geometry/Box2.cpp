@@ -28,6 +28,14 @@ Box2::Box2(const Vector2D& _lowerCorner,
 	Vector2D C(upperCorner.x, lowerCorner.y);
 	Vector2D D = lowerCorner;
 
+	//生成顶点列表
+	vertexList.push_back(A);
+	vertexList.push_back(B);
+	vertexList.push_back(C);
+	vertexList.push_back(D);
+
+	//指定质心位置
+
 	if (IsFliped) {
 		SurfaceElement2 e1(A, B, Vector2D(0, -1));
 		SurfaceElement2 e2(B, C, Vector2D(-1, 0));

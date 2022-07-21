@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f2dcce0e-43ed-4f15-b6cb-059c9727fe88}</ProjectGuid>
-    <RootNamespace>OpenGL</RootNamespace>
+    <ProjectGuid>{0823e4ac-274f-44ed-bfe6-b199cd9a2ea5}</ProjectGuid>
+    <RootNamespace>RigidBody2D</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Experiment1</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -73,8 +72,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\opengl\Include;E:\zhangjian\eigen\eigen3;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\opengl\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -91,13 +88,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <OpenMPSupport>true</OpenMPSupport>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,41 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="001.cpp" />
-    <ClCompile Include="couplingTest.cpp" />
-    <ClCompile Include="couplingTest2.cpp" />
-    <ClCompile Include="FoamVortexSolver2.cpp" />
-    <ClCompile Include="vp2005.h" />
-    <ClCompile Include="vp2005.cpp" />
-    <ClCompile Include="FoamVortexSolver.cpp" />
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="MovingFaceCenteredGrid2.cpp" />
-    <ClCompile Include="OpenGL.cpp" />
-    <ClCompile Include="shalowwaveTest.cpp" />
-    <ClCompile Include="vp2005test.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="FoamVortexData.h" />
-    <ClInclude Include="FoamVortexData2.h" />
-    <ClInclude Include="FoamVortexSolver.h" />
-    <ClInclude Include="FoamVortexSolver2.h" />
-    <ClInclude Include="MovingFaceCenteredGrid2.h" />
-    <ClInclude Include="Shader\shader.h" />
-    <ClInclude Include="vp2005Data.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="2.2.basic_lighting.fs" />
-    <None Include="2.2.basic_lighting.vs" />
-    <None Include="2.2.light_cube.vs" />
-    <None Include="2.2.light_cube.fs" />
+    <ClCompile Include="RigidBody2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\titmouse2d\titmouse2d.vcxproj">
       <Project>{94580d84-0ebe-489d-a109-b2cbff52d865}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Voronoi2D\Voronoi2D.vcxproj">
-      <Project>{5a279627-5499-4c8f-a542-3cec9b0c3ba5}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -9,6 +9,11 @@
 #include "../Vector2.hpp"
 #include "../Array.hpp"
 
+
+//重构程序
+//改成存储顶点，边的信息直接保存点的索引
+//完了再说吧，先集中精力实现算法
+
 class SurfaceElement2 {
 public:
 	SurfaceElement2();
@@ -24,7 +29,6 @@ public:
 	Vector2D end;
 
 	Vector2D normal;
-
 
 };
 
@@ -57,12 +61,16 @@ public:
 	Vector2D midPoint(int i)const;
 
 
-
 public:
 
 	std::vector<SurfaceElement2> _data;
 
+	//这个速度变量应该放在具体的solver中
 	Vector2D velocity = Vector2D::zero();
+
+	//顶点列表
+	//因为刚体做碰撞需要用到顶点
+	std::vector<Vector2D> vertexList;
 };
 
 using ExplicitSurface2Ptr = std::shared_ptr<ExplicitSurface2>;

@@ -15,7 +15,6 @@ public:
 		std::unique_ptr<Node> p2 = nullptr;
 		std::unique_ptr<Node> p3 = nullptr;
 		std::unique_ptr<Node> p4 = nullptr;
-		std::unique_ptr<Node> father = nullptr;
 
 		//标记当前节点在树的第几层
 		int level = 0;

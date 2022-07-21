@@ -32,144 +32,6 @@ const double kPiD = 3.1415926535;
 RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
 
 
-std::string png = ".png";
-
-void setLight(int cofee, uint8_t* pixels) {
-	for (int j = height - 1; j >= 0; --j)
-	{
-		for (int i = 0; i < width; ++i)
-		{
-			int index = (height * j + i) * 4;
-
-			pixels[index + 0] = min(255, pixels[index + 0] * cofee);
-			pixels[index + 1] = min(255, pixels[index + 1] * cofee);
-			pixels[index + 2] = min(255, pixels[index + 2] * cofee);
-			pixels[index + 3] = 255;
-
-
-		}
-	}
-}
-void smooth(int cofee, int size, uint8_t* pixels) {
-
-	uint8_t* tempPixels = new uint8_t[size];
-	memcpy(tempPixels, pixels, size * sizeof(uint8_t));
-
-	int cofee2 = cofee * cofee;
-
-	for (int j = height - 1; j >= 0; --j)
-	{
-		for (int i = 0; i < width; ++i)
-		{
-
-			int index = (height * j + i) * 4;
-
-			int endi = i + cofee;
-			int endj = j - cofee;
-
-			for (int tempJ = j; tempJ > endj; tempJ--) {
-				for (int tempI = i; tempI < endi; tempI++) {
-					if (tempJ >= 0 & tempJ < height && tempI >= 0 && tempI < width) {
-						int tempIndex = ((height * tempJ + tempI) - 1) * 4;
-						tempPixels[index + 0] += pixels[tempIndex + 0];
-						tempPixels[index + 1] += pixels[tempIndex + 1];
-						tempPixels[index + 2] += pixels[tempIndex + 2];
-					}
-				}
-			}
-
-
-		}
-	}
-
-
-	for (int j = height - 1; j >= 0; --j)
-	{
-		for (int i = 0; i < width; ++i)
-		{
-
-			int index = (height * j + i) * 4;
-
-
-			tempPixels[index + 0] /= cofee2;
-			tempPixels[index + 1] /= cofee2;
-			tempPixels[index + 2] /= cofee2;
-			tempPixels[index + 3] = 255;
-
-		}
-	}
-
-	memcpy(pixels, tempPixels, size * sizeof(uint8_t));
-	delete[] tempPixels;
-
-}
-
-void write_to_pixel(std::vector<Vector2D> pos, float r, float g, float b, std::string filename) {
-
-	int size = width * height * CHANNEL_NUM;
-
-	uint8_t* pixels = new uint8_t[size];
-
-	int b_r = 0, b_g = 0, b_b = 0, b_a = 255;
-
-	int index = 0;
-	for (int j = height - 1; j >= 0; --j)
-	{
-		for (int i = 0; i < width; ++i)
-		{
-			Vector2D pos(i * (2.0 / width), j * (2.0 / height));
-
-			if (pos.dis(obj1->center()) > obj1->r()) {
-
-				pixels[index++] = b_r;
-				pixels[index++] = b_g;
-				pixels[index++] = b_b;
-				pixels[index++] = 255;
-			}
-			else {
-				pixels[index++] = 255;
-				pixels[index++] = 255;
-				pixels[index++] = 0;
-				pixels[index++] = 255;
-			}
-
-
-
-		}
-	}
-
-
-	for (auto iter = pos.begin(); iter != pos.end(); ++iter) {
-		int ir = int(255.99 * r);
-		int ig = int(255.99 * g);
-		int ib = int(255.99 * b);
-		int ia = int(255.99 * 1);
-
-		int index = 0;
-		int i = iter->x * (width / 2);
-		int j = (2 - iter->y) * (height / 2);
-
-		index = height * j + i;
-		index = (index) * 4;
-		pixels[index + 0] = ir;
-		pixels[index + 1] = ig;
-		pixels[index + 2] = ib;
-		pixels[index + 3] = ia;
-
-
-
-	}
-
-	smooth(5, size, pixels);
-	setLight(25, pixels);
-	stbi_write_png((filename + png).c_str(), width, height, CHANNEL_NUM, pixels, width * CHANNEL_NUM);
-	delete[] pixels;
-
-}
-
-
-
-
 
 
 
@@ -219,10 +81,10 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.0f);//缺省是1
+	glPointSize(1.f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
-	//glColor3f(1, 1, 1);
+	glColor3f(1, 1, 1);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
 	glEnd();
 }
@@ -293,7 +155,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\solve_data\\1\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\solve_data\\0016\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -321,16 +183,13 @@ static void display(void)
 		auto x = atof(position[0].c_str());
 		auto y = atof(position[1].c_str());
 		Vector2D tempPos(x, y);
-		//if (tempPos.dis(obj1->center()) > obj1->r()) {
+		if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
+			drawPoint(x, y);
+			//drawCircle(tempPos, 0.01, 20);
 			//drawPoint(x, y);
-		//drawCircle(tempPos, 0.01, 20);
-		drawPoint(x, y);
-		//write_to_pixel(tempPos, 1, 1, 1, filename);
-	//}
-	//posList.push_back(tempPos);
+		}
 	}
-	//write_to_pixel(posList, 1, 1, 1, filename);
 
 	myfile.close();
 
@@ -340,10 +199,10 @@ static void display(void)
 		drawLine(start.x, start.y, end.x, end.y);
 	}*/
 
-	//obj1->velocity = Vector2D(2.0, 0.0);
-	//obj1->updatePosition(dt * skipNum);
+	obj1->velocity = Vector2D(3, 0.0);
+	obj1->updatePosition(dt * skipNum);
 
-	//drawCircle(obj1->center(), obj1->r(), 50);
+	drawCircle(obj1->center(), obj1->r(), 50);
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
@@ -351,7 +210,7 @@ static void display(void)
 	//延时0.5秒
 
 
-	Sleep(1);
+	Sleep(0);
 
 }
 
@@ -385,7 +244,7 @@ int main(int argc, char** argv)
 	glutCreateWindow("titmouse2d");
 
 	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
-	//glClearColor(0, 0, 0, 1);
+	glClearColor(0, 0, 0, 1);
 	glShadeModel(GL_FLAT);
 
 

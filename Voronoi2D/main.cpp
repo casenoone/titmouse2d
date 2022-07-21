@@ -214,14 +214,14 @@ int main(int argc, char** argv)
 
 
 
-	double temp_r = 0.03;
+	double temp_r = 0.1;
 	Array<Vector2D> this_pos;
 	Vector2D temp1;
 
 	n = 0;
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(50, 50)
+		.withResolution(30, 30)
 		.makeShared();
 
 	Vector2D tempC(1, 1);
@@ -249,7 +249,7 @@ int main(int argc, char** argv)
 	collider.push(box1);
 
 	bubbleSolver.setCollider(collider);
-	//bubbleSolver.emitVortexRing();
+	bubbleSolver.emitVortexRing();
 
 
 

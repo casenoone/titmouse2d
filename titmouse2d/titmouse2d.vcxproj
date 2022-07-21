@@ -188,6 +188,7 @@
     <ClCompile Include="src\OtherMethod\LBM\LBMSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\MPM\MPMSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp" />
+    <ClCompile Include="src\OtherMethod\RigidBody\RigidBodySolver2.cpp" />
     <ClCompile Include="src\OtherMethod\SWE\ShallowWaveSolver2.cpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
@@ -276,6 +277,8 @@
     <ClInclude Include="src\OtherMethod\PBF\PBFData2.h" />
     <ClInclude Include="src\OtherMethod\PBF\PBFSolver2.h" />
     <ClInclude Include="src\OtherMethod\PCISPH\PCISPHSolver2.h" />
+    <ClInclude Include="src\OtherMethod\RigidBody\RigidBodyData2.h" />
+    <ClInclude Include="src\OtherMethod\RigidBody\RigidBodySolver2.h" />
     <ClInclude Include="src\OtherMethod\SWE\ShallowWaveData2.h" />
     <ClInclude Include="src\OtherMethod\SWE\ShallowWaveSolver2.h" />
     <ClInclude Include="src\OtherMethod\VortexParticles\VortexTreeCode.h" />
