@@ -10,6 +10,10 @@ public:
 		rigidBodyData = std::make_shared<RigidBodyData2>(rigidBodyList);
 	}
 
+	void accumulateGravityForce(double dt);
+
+	void accumulateTotalForce(double dt);
+
 	void timeIntegration(double dt);
 
 	void onAdvanceTimeStep(double dt);

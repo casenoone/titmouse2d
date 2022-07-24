@@ -241,7 +241,7 @@ int main(int argc, char** argv)
 	}
 
 	vpSolver->setData(bubble_num, this_pos, 20, 20);
-	vpSolver->emitVortexRing();
+	//vpSolver->emitVortexRing();
 
 	Collider2 collider;
 	collider.push(box1);
@@ -265,7 +265,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	glutMainLoop();
+	//glutMainLoop();
 
 
 

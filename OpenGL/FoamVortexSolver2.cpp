@@ -12,7 +12,7 @@
 #include <cmath>
 
 
-static const int numOfStep = 0;
+static const int numOfStep = 7;
 static const double vorticity_eps = 0.04;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
@@ -204,10 +204,12 @@ void FoamVortexSolver::emitVortexRing() {
 	auto& pos = _foamVortexData->vortexPosition;
 	auto& vel = _foamVortexData->vortexVelocity;
 	auto& gamma = _foamVortexData->gamma();
+	auto& initGamma = _foamVortexData->initVorticity;
 	int n = 4;
 	pos.reSize(n);
 	vel.reSize(n);
 	gamma.reSize(n);
+	initGamma.reSize(n);
 	Vector2D A(0.2, 1.2);
 	Vector2D B(0.2, 1.1);
 	Vector2D C(0.2, 1.0);
@@ -222,6 +224,22 @@ void FoamVortexSolver::emitVortexRing() {
 	gamma[1] = 0.6;
 	gamma[2] = -0.6;
 	gamma[3] = -0.6;
+
+	initGamma[0] = 0.6;
+	initGamma[1] = 0.6;
+	initGamma[2] = -0.6;
+	initGamma[3] = -0.6;
+
+
+	/*gamma[0] = 0.6;
+	gamma[1] = 0.6;
+	gamma[2] = 0.6;
+	gamma[3] = 0.6;
+
+	initGamma[0] = 0.6;
+	initGamma[1] = 0.6;
+	initGamma[2] = 0.6;
+	initGamma[3] = 0.6;*/
 
 
 }
@@ -248,7 +266,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 		auto& vel = data->vortexVelocity;
 		auto panels = data->panelSet;
 		auto gamma = data->slip_strength;
-
+		auto initGamma = data->initVorticity;
 		Vector2D tempPos;
 
 		auto startNum = pos.dataSize();
@@ -259,6 +277,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 			vel.push(Vector2D(0.0, 0.0));
 			double temp_gamma = 0;
 			data->gamma().push(temp_gamma);
+			data->initVorticity.push(temp_gamma);
 		}
 
 
@@ -286,6 +305,7 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 		int j = 0;
 		for (int i = startNum; i < pos.dataSize(); ++i) {
 			vor[i] = x[j++];
+			data->initVorticity[i] = vor[i];
 		}
 	}
 
@@ -314,7 +334,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 1000;
+	int emitNum = 10000;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
@@ -610,6 +630,21 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 		pos.y = 0;
 }
 
+////线性耗散
+//void FoamVortexSolver::decayVorticity() {
+//	auto& vorticity = _foamVortexData->gamma();
+//	auto len = vorticity.dataSize();
+//	for (int i = 0; i < len; ++i) {
+//		static double init = vorticity[i];
+//		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
+//			vorticity[i] -= vorticity[i] * 0.008;
+//		else {
+//			vorticity[i] = 0;
+//
+//		}
+//	}
+//}
+
 
 ////线性耗散
 //void FoamVortexSolver::decayVorticity() {
@@ -630,37 +665,52 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 //线性+非线性耗散
 void FoamVortexSolver::decayVorticity() {
 
+	auto& initVorticites = _foamVortexData->initVorticity;
+
 	static int timeStep = 0;
 	double t = timeStep * 0.006;
 	double t2 = t * t;
-	double k1 = 1;
-	double k2 = 2;
+	double k1 = 0.1;
+	double k2 = 0.1;
 
 	auto& vorticity = _foamVortexData->gamma();
 	auto len = vorticity.dataSize();
 	for (int i = 0; i < len; ++i) {
-		static double omega0 = vorticity[i];
-		auto omega1 = omega0 * 0.6;
+		double omega0 = initVorticites[i];
+		auto omega1 = omega0 * 0.2;
 
 		if (std::fabs(vorticity[i]) >= std::fabs(omega1)) {
-			auto temp1 = -k1 * t2 + omega0;
-			if (vorticity[i] > 0)
+			auto temp1 = -k1 * t2 + std::fabs(omega0);
+			if (vorticity[i] > 0) {
 				vorticity[i] = temp1;
+
+			}
 			else {
 				vorticity[i] = -temp1;
 			}
 		}
-
 		else {
-			double t_1 = std::sqrt((omega1 - omega0) / (-k1));
-			if (vorticity[i] > 0) {
+			vorticity[i] = 0;
 
-			}
-			else {
-
-			}
-			//vorticity[i] = k2 * (t_1 - t) + omega1;
 		}
+
+		//else {
+		//	double t_1 = 0;
+		//	if (std::fabs(vorticity[i]) > std::fabs(omega0) * 0.2) {
+		//		if (vorticity[i] > 0) {
+		//			t_1 = std::sqrt((omega1 - omega0) / (-k1));
+		//			vorticity[i] = -k2 * (t - t_1) + omega1;
+		//		}
+		//		else {
+		//			//t_1 = std::sqrt((omega1 - omega0) / k1);
+		//			//vorticity[i] = (k2 * (t - t_1) + omega1);
+		//		}
+		//	}
+		//	else {
+
+		//		//vorticity[i] = 0;
+		//	}
+		//}
 	}
 
 	timeStep++;

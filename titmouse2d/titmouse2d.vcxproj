@@ -190,6 +190,7 @@
     <ClCompile Include="src\OtherMethod\PBF\PBFSolver2.cpp" />
     <ClCompile Include="src\OtherMethod\RigidBody\RigidBodySolver2.cpp" />
     <ClCompile Include="src\OtherMethod\SWE\ShallowWaveSolver2.cpp" />
+    <ClCompile Include="src\Quaternion.cpp" />
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -282,6 +283,7 @@
     <ClInclude Include="src\OtherMethod\SWE\ShallowWaveData2.h" />
     <ClInclude Include="src\OtherMethod\SWE\ShallowWaveSolver2.h" />
     <ClInclude Include="src\OtherMethod\VortexParticles\VortexTreeCode.h" />
+    <ClInclude Include="src\Quaternion.h" />
     <ClInclude Include="src\random.h" />
     <ClInclude Include="src\Size2.h" />
     <ClInclude Include="src\Lagrangian\ParticleSystemData2.h" />

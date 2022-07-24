@@ -112,10 +112,15 @@ public:
 
 	Array<Eigen::VectorXd> bubble_slip_strength;
 
+	//保存初始涡量
+	ArrayD initVorticity;
+
 private:
 
 	//二维情况下，涡量是标量
 	ArrayD _gamma;
+
+
 
 
 };
