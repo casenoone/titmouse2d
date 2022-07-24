@@ -81,6 +81,7 @@ public:
 	//叉积运算
 	T cross(const Vector2<T>& vec)const;
 
+	//向量外积
 
 
 	//求两vector之间的距离，此时vector代表点

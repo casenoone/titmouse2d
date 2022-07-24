@@ -27,6 +27,7 @@ public:
 	Array<Vector2D>	vertex_positions;
 	Array<Vector2D> vertex_velocities;
 	Array<Vector2D>	vertex_forces;
+	Array<Vector2D> r;
 
 	//质心位置
 	Vector2D position;
@@ -35,7 +36,7 @@ public:
 	//质心受力
 	Vector2D force;
 	//质心力矩
-	Vector2D torque;
+	double torque;
 	//质心转动惯量
 	Matrix2x2<double> inertia;
 	//质心角速度，由于是2D下求解，因此角速度为标量

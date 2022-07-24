@@ -8,7 +8,12 @@ public:
 
 	RigidBodySolver2(ExplicitSurface2Ptr rigidBodyList) {
 		rigidBodyData = std::make_shared<RigidBodyData2>(rigidBodyList);
+		computeReference();
 	}
+
+	void computeTorque();
+
+	void computeInertia();
 
 	void accumulateGravityForce(double dt);
 
@@ -17,6 +22,17 @@ public:
 	void timeIntegration(double dt);
 
 	void onAdvanceTimeStep(double dt);
+
+private:
+	//只计算一次
+	void computeReference() {
+		int n = rigidBodyData->vertex_positions.dataSize();
+		auto& r = rigidBodyData->r;
+		auto& vertexList = rigidBodyData->rigidBodyList->vertexList;
+		for (int i = 0; i < n; ++i) {
+			r[i] = vertexList[i] - rigidBodyData->position;
+		}
+	}
 
 public:
 	RigidBodyData2Ptr rigidBodyData;

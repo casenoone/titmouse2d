@@ -53,6 +53,11 @@ public:
 
 	T trace()const;
 
+	static Matrix2x2<T> identityMatrix() {
+		Matrix2x2<T> result(1, 0, 0, 1);
+		return result;
+	}
+
 
 private:
 	std::shared_ptr<std::array<T, 4>> _data;

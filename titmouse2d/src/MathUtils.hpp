@@ -9,6 +9,19 @@
 //这里直接Ctrl CV了 doyub kim的代码
 //仅改了数据类型
 
+//二维向量的外积
+template<class T>
+Matrix2x2<T> crossProduct(const Vector2<T>& a, const Vector2<T>& b) {
+	auto x11 = a.x * b.x;
+	auto x12 = a.x * b.y;
+	auto x21 = a.y * b.x;
+	auto x22 = a.y * b.y;
+
+	Matrix2x2<T> result(x11, x12, x21, x22);
+	return result;
+}
+
+
 //计算平方
 template<class T>
 inline T sqr(const T& x)
