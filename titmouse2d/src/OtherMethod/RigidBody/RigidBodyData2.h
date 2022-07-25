@@ -12,7 +12,7 @@
 class RigidBodyData2 {
 public:
 	RigidBodyData2() = default;
-	RigidBodyData2(ExplicitSurface2Ptr rigidBodyList_) {
+	RigidBodyData2(ExplicitSurface2Ptr rigidBodyList_) :q(1, Vector3D(0, 0, 0)) {
 		//计算质心位置,暂时不封装了
 		auto& vertexList = rigidBodyList_->vertexList;
 		auto size = vertexList.size();

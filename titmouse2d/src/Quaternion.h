@@ -8,8 +8,8 @@ public:
 	Quaternion() = default;
 	//angle为旋转角度
 	//v为旋转轴
-	Quaternion(double angle, const Vector3D& v_) :
-		s(std::cos(angle / 2)), v(v_) {}
+	Quaternion(double s_, const Vector3D& v_) :
+		s(s_), v(v_) {}
 
 	//四元数转矩阵
 	Matrix3x3<double> toMatrix();
@@ -29,13 +29,15 @@ public:
 	//归一化
 	void normalized() {
 		auto s2 = s * s;
-		auto v2 = v.getLengthSquared();
+		auto v2 = v.dot(v);
 		auto len = std::sqrt(s2 + v2);
-		s /= len;
-		v /= len;
+		if (len) {
+			s /= len;
+			v /= len;
+		}
 	}
 
 public:
-	double s = 0;
+	double s = 1;
 	Vector3D v;
 };

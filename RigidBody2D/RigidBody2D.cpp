@@ -134,12 +134,7 @@ int main(int argc, char** argv)
 	Matrix2x2<int> a(1, 3, 2, 5);
 	Matrix2x2<int> b(0, 1, 6, 4);
 
-	auto c = a * b;
-	for (int i = 0; i < 2; ++i) {
-		for (int j = 0; j < 2; ++j) {
-			std::cout << c(i, j) << std::endl;
-		}
-	}
+
 
 	glutKeyboardFunc(key);       //键盘按下去时
 	glutIdleFunc(idle);          //空闲时
