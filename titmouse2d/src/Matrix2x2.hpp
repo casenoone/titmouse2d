@@ -40,6 +40,8 @@ public:
 
 	Matrix2x2<T> operator*(T num)const;
 
+	Matrix2x2<T> operator*(const Matrix2x2<T>& mat)const;
+
 	Matrix2x2<T> operator/(T num)const;
 
 	Matrix2x2<T>& operator*=(T num);
@@ -120,6 +122,18 @@ Matrix2x2<T>  Matrix2x2<T>::operator*(T num)const {
 	}
 	return result;
 }
+
+template<class T>
+Matrix2x2<T> Matrix2x2<T>::operator*(const Matrix2x2<T>& mat)const {
+	auto x11 = (*_data)[0] * mat.lookAt(0, 0) + (*_data)[1] * mat.lookAt(1, 0);
+	auto x12 = (*_data)[0] * mat.lookAt(0, 1) + (*_data)[1] * mat.lookAt(1, 1);
+	auto x21 = (*_data)[2] * mat.lookAt(0, 0) + (*_data)[3] * mat.lookAt(1, 0);
+	auto x22 = (*_data)[2] * mat.lookAt(0, 1) + (*_data)[3] * mat.lookAt(1, 1);
+
+	Matrix2x2<T> result(x11, x12, x21, x22);
+	return result;
+}
+
 
 template<class T>
 Matrix2x2<T>  Matrix2x2<T>::operator/(T num)const {

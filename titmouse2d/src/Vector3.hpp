@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 
+#include "Vector2.hpp"
 
 template<class T>
 class Vector3 {
@@ -13,6 +14,9 @@ public:
 	~Vector3();
 
 	Vector3(const T& _x, const T& _y, const T& _z);
+
+	Vector3(const Vector2<T>& vec, T value) :
+		x(vec.x), y(vec.y), z(value) {}
 
 	//¿½±´¹¹Ôìº¯Êý
 	Vector3(const Vector3<T>& var);

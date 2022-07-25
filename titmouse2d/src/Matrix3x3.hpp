@@ -24,6 +24,8 @@ public:
 		const Vector3<T>& vec2,
 		const Vector3<T>& vec3);
 
+	Matrix3x3(T x11, T x12, T x13, T x21, T x22, T x23, T x31, T x32, T x33);
+
 	Matrix3x3(const Matrix3x3<T>& m);
 
 	T& operator()(int i, int j);
@@ -66,6 +68,11 @@ public:
 
 	T det()const;
 
+	static Matrix3x3<T> identityMatrix() {
+		Matrix3x3<T> result(1, 0, 0, 0, 1, 0, 0, 0, 1);
+		return result;
+	}
+
 private:
 	std::shared_ptr<std::array<T, 9>> _data;
 };
@@ -107,6 +114,20 @@ Matrix3x3<T>::Matrix3x3(
 	(*_data)[7] = vec3.y;
 	(*_data)[8] = vec3.z;
 }
+
+template<class T>
+Matrix3x3<T>::Matrix3x3(T x11, T x12, T x13, T x21, T x22, T x23, T x31, T x32, T x33) {
+	(*_data)[0] = x11;
+	(*_data)[1] = x12;
+	(*_data)[2] = x13;
+	(*_data)[3] = x21;
+	(*_data)[4] = x22;
+	(*_data)[5] = x23;
+	(*_data)[6] = x31;
+	(*_data)[7] = x32;
+	(*_data)[8] = x33;
+}
+
 
 template<class T>
 T& Matrix3x3<T>::operator()(int i, int j) {

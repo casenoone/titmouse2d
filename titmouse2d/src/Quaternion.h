@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.hpp"
 #include "Matrix2x2.hpp"
+#include "Matrix3x3.hpp"
 
 class Quaternion {
 public:
@@ -11,7 +12,7 @@ public:
 		s(std::cos(angle / 2)), v(v_) {}
 
 	//四元数转矩阵
-	Matrix2x2<double> toMatrix();
+	Matrix3x3<double> toMatrix();
 
 	//加法
 	Quaternion operator+(const Quaternion& q) {

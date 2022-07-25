@@ -5,6 +5,8 @@
 
 #include <cmath>
 #include "ConstVar.h"
+#include "Matrix2x2.hpp"
+#include "Matrix3x3.hpp"
 
 //这里直接Ctrl CV了 doyub kim的代码
 //仅改了数据类型
@@ -18,6 +20,23 @@ Matrix2x2<T> crossProduct(const Vector2<T>& a, const Vector2<T>& b) {
 	auto x22 = a.y * b.y;
 
 	Matrix2x2<T> result(x11, x12, x21, x22);
+	return result;
+}
+
+//三维向量的外积
+template<class T>
+Matrix3x3<T> crossProduct(const Vector3<T>& a, const Vector3<T>& b) {
+	auto x11 = a.x * b.x;
+	auto x12 = a.x * b.y;
+	auto x13 = a.x * b.z;
+	auto x21 = a.y * b.x;
+	auto x22 = a.y * b.y;
+	auto x23 = a.y * b.z;
+	auto x31 = a.z * b.x;
+	auto x32 = a.z * b.y;
+	auto x33 = a.z * b.z;
+
+	Matrix3x3<T> result(x11, x12, x13, x21, x22, x23, x31, x32, x33);
 	return result;
 }
 
