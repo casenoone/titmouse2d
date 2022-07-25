@@ -5,6 +5,7 @@
 #include "../../Geometry/ExplicitSurface2.h"
 #include "../../Matrix2x2.hpp"
 #include "../../Matrix3x3.hpp"
+#include "../../Quaternion.h"
 
 //暂时只搞一个刚体，多个刚体涉及到刚体与刚体之间的碰撞，暂时搞不定
 
@@ -22,10 +23,10 @@ public:
 		position = tempP / size;
 
 		rigidBodyList = rigidBodyList_;
+		vertex_forces.reSize(size);
+		R = Matrix3x3<double>::identityMatrix();
 	}
 public:
-	//顶点位置
-	Array<Vector2D>	vertex_positions;
 	Array<Vector2D> vertex_velocities;
 	Array<Vector2D>	vertex_forces;
 	Array<Vector2D> r;
@@ -46,6 +47,7 @@ public:
 	//刚体姿态矩阵
 	//Matrix2x2<double> R;
 	Matrix3x3<double> R;
+	Quaternion q;
 
 	//刚体列表(暂时只搞一个刚体)
 	ExplicitSurface2Ptr rigidBodyList;

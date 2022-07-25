@@ -11,6 +11,8 @@ public:
 		computeReference();
 	}
 
+	void computeExternalForce();
+
 	void computeTorque();
 
 	void computeInertia();
@@ -23,11 +25,14 @@ public:
 
 	void onAdvanceTimeStep(double dt);
 
+	void clearForces();
+
 private:
 	//只计算一次
 	void computeReference() {
-		int n = rigidBodyData->vertex_positions.dataSize();
+		int n = rigidBodyData->rigidBodyList->vertexList.size();
 		auto& r = rigidBodyData->r;
+		r.reSize(n);
 		auto& vertexList = rigidBodyData->rigidBodyList->vertexList;
 		for (int i = 0; i < n; ++i) {
 			r[i] = vertexList[i] - rigidBodyData->position;

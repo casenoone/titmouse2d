@@ -44,10 +44,39 @@ void drawLine(double x1, double y1, double x2, double y2) {
 	glFlush();
 }
 
+void drawLine(Vector2D s, Vector2D e) {
+
+	glLineWidth(1);//设置线段宽度
+	glBegin(GL_LINES);
+	glColor3f(1.0, 0.0, 0.0);
+	glVertex2f((s.x - 1) * 10, (s.y - 1) * 10); //定点坐标范围
+	glVertex2f((e.x - 1) * 10, (e.y - 1) * 10);
+	glEnd();
+	glFlush();
+}
+
 
 double dt = 0.01;
 auto box1 = std::make_shared<Box2>(Vector2D(0.8, 0.8), Vector2D(1.2, 1.2));
 auto rigidSolver = std::make_shared<RigidBodySolver2>(box1);
+
+void drawRigidBody(const RigidBodySolver2Ptr solver) {
+	auto& vertex = solver->rigidBodyData->rigidBodyList->vertexList;
+
+	//由于显式曲面数据结构的缺陷，暂时就这样弄一下吧
+	/*auto& surface = obj->_data;
+	for (auto j = surface.begin(); j != surface.end(); ++j) {
+		auto start = j->start;
+		auto end = j->end;
+		drawLine(start.x, start.y, end.x, end.y);
+	}*/
+
+	drawLine(vertex[0], vertex[1]);
+	drawLine(vertex[1], vertex[2]);
+	drawLine(vertex[2], vertex[3]);
+	drawLine(vertex[3], vertex[0]);
+
+}
 
 static void display(void)
 {
@@ -62,7 +91,8 @@ static void display(void)
 	auto rigidPos = rigidSolver->rigidBodyData->position;
 
 	drawPoint(rigidPos.x, rigidPos.y);
-
+	rigidSolver->onAdvanceTimeStep(dt);
+	drawRigidBody(rigidSolver);
 	glutSwapBuffers();
 
 }

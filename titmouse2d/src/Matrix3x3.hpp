@@ -68,6 +68,9 @@ public:
 
 	T det()const;
 
+	//·µ»Ø¾ØÕóµÄ×ªÖÃ
+	Matrix3x3<T> transpose();
+
 	static Matrix3x3<T> identityMatrix() {
 		Matrix3x3<T> result(1, 0, 0, 0, 1, 0, 0, 0, 1);
 		return result;
@@ -117,6 +120,10 @@ Matrix3x3<T>::Matrix3x3(
 
 template<class T>
 Matrix3x3<T>::Matrix3x3(T x11, T x12, T x13, T x21, T x22, T x23, T x31, T x32, T x33) {
+
+	_data = std::make_shared<std::array<T, 9>>();
+
+
 	(*_data)[0] = x11;
 	(*_data)[1] = x12;
 	(*_data)[2] = x13;
@@ -269,6 +276,22 @@ T Matrix3x3<T>::det()const {
 			a11 * a23 * a32);
 }
 
+
+template<class T>
+Matrix3x3<T> Matrix3x3<T>::transpose() {
+	auto a11 = (*_data)[0];
+	auto a12 = (*_data)[3];
+	auto a13 = (*_data)[6];
+	auto a21 = (*_data)[1];
+	auto a22 = (*_data)[4];
+	auto a23 = (*_data)[7];
+	auto a31 = (*_data)[2];
+	auto a32 = (*_data)[5];
+	auto a33 = (*_data)[8];
+
+	Matrix3x3<double> result(a11, a12, a13, a21, a22, a23, a31, a32, a33);
+	return result;
+}
 
 template<class T>
 Matrix3x3<T> Matrix3x3<T>::transToLocalMatrix(

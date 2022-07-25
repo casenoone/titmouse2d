@@ -107,7 +107,7 @@ template<class T>
 Vector3<T>::Vector3() :
 	x(static_cast<T>(0)),
 	y(static_cast<T>(0)),
-	y(static_cast<T>(0)) {}
+	z(static_cast<T>(0)) {}
 
 
 template<class T>
