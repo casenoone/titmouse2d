@@ -67,7 +67,7 @@ void RigidBodySolver2::timeIntegration(double dt) {
 	auto& pos = rigidBodyData->position;
 
 	//更新质心位置
-	Vector2D f(0, -9.8);
+	Vector2D f(0, 0);
 
 	//要去看一下数组求和的优化方法
 	for (int i = 0; i < n; ++i) {

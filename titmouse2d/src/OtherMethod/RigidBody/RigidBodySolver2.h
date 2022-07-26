@@ -2,6 +2,9 @@
 
 #include "RigidBodyData2.h"
 
+//bug记录：有重力情况下物体会穿墙
+//先记录一下，太累了，暂时不想写了
+
 class RigidBodySolver2 {
 public:
 	RigidBodySolver2() = default;
