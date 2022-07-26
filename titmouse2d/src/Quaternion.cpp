@@ -22,8 +22,6 @@ Matrix3x3<double> Quaternion::toMatrix() {
 	auto x32 = 2 * (yz + sx);
 	auto x33 = s2 - x2 - y2 + z2;
 
-	//std::cout << x33 << std::endl;
-
 	Matrix3x3<double> result(x11, x12, x13, x21, x22, x23, x31, x32, x33);
 	if (result.det() == 0) {
 		return Matrix3x3<double>::identityMatrix();

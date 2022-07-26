@@ -27,6 +27,10 @@ public:
 
 	void clearForces();
 
+	void computeVertexVelocity();
+
+	void CollisionResponseByImpulse();
+
 private:
 	//只计算一次
 	void computeReference() {

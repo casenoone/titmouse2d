@@ -30,7 +30,6 @@ void RigidBodySolver2::computeTorque() {
 	torque = tempT;
 }
 
-//这里应该不会有问题
 void RigidBodySolver2::computeInertia() {
 	auto& R = rigidBodyData->R;
 	auto& r = rigidBodyData->r;
@@ -122,4 +121,43 @@ void RigidBodySolver2::clearForces() {
 	auto n = force.dataSize();
 	force.clear();
 	force.reSize(n);
+}
+
+
+void RigidBodySolver2::computeVertexVelocity() {
+	auto& vertexList = rigidBodyData->rigidBodyList->vertexList;
+	auto n = vertexList.size();
+	auto& vel = rigidBodyData->velocity;
+	auto& vertex_vel = rigidBodyData->vertex_velocities;
+	auto& omega = rigidBodyData->palstance;
+	auto& R = rigidBodyData->R;
+	auto& r = rigidBodyData->r;
+
+	for (int i = 0; i < n; ++i) {
+		Vector3D temp_omega(0, 0, omega);
+		auto Rr = R * r[i];
+		Vector3D temp_Rr(Rr, 0);
+		auto temp_delta_v = temp_omega.cross(temp_Rr);
+		auto delta_v = Vector2D(temp_delta_v.x, temp_delta_v.y);
+		vertex_vel[i] = vel + delta_v;
+	}
+}
+
+
+void RigidBodySolver2::CollisionResponseByImpulse() {
+	auto& R = rigidBodyData->R;
+	auto& r = rigidBodyData->r;
+	auto& vertexList = rigidBodyData->rigidBodyList->vertexList;
+	auto n = vertexList.size();
+	auto& vel = rigidBodyData->velocity;
+	auto& vertex_vel = rigidBodyData->vertex_velocities;
+	auto& collder = rigidBodyData->collider;
+
+	Array<Vector2D> new_vertexVel(n);
+	for (int i = 0; i < n; ++i) {
+		collder->resolveCollision(0.002, 0.2, vertexList[i], vertex_vel[i], new_vertexVel[i]);
+
+	}
+
+
 }

@@ -6,6 +6,7 @@
 #include "../../Matrix2x2.hpp"
 #include "../../Matrix3x3.hpp"
 #include "../../Quaternion.h"
+#include "RigidBodyCollider2.h"
 
 //暂时只搞一个刚体，多个刚体涉及到刚体与刚体之间的碰撞，暂时搞不定
 
@@ -24,7 +25,10 @@ public:
 
 		rigidBodyList = rigidBodyList_;
 		vertex_forces.reSize(size);
+		vertex_velocities.reSize(size);
 		R = Matrix3x3<double>::identityMatrix();
+
+		collider = std::make_shared<RigidBodyCollider2>();
 	}
 public:
 	Array<Vector2D> vertex_velocities;
@@ -51,6 +55,9 @@ public:
 
 	//刚体列表(暂时只搞一个刚体)
 	ExplicitSurface2Ptr rigidBodyList;
+
+	//碰撞处理器
+	RigidBodyCollider2Ptr collider;
 };
 
 using RigidBodyData2Ptr = std::shared_ptr<RigidBodyData2>;

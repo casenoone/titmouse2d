@@ -168,6 +168,9 @@
     <ClCompile Include="src\Quaternion.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\OtherMethod\RigidBody\RigidBodyCollider2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">
@@ -465,6 +468,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\Quaternion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\RigidBody\RigidBodyCollider2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\RigidBody\ShapeMatch2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
