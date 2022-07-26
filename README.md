@@ -41,7 +41,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - 单个刚体动力学
 效果图
 - 1.FLIP算法（没有在网格上对边界条件进行处理，因此边界处速度有散度）
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif" width="300">
 
 - 2.advection测试
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif" width="300">
@@ -55,10 +55,10 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif" width="300">
 
 - 6.PIC
-- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif" width="300">
 
 - 7.Vortex Particles Method
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif" width="300">
 
 - 8.LBM(湍流模型模拟顶盖流动)
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif)
