@@ -76,6 +76,11 @@ public:
 		return result;
 	}
 
+	static Matrix3x3<T> constructMatrixProduct(const Vector3<T>& r) {
+		Matrix3x3<T> result(0, -r.z, r.y, r.z, 0, -r.x, -r.y, r.x, 0);
+		return result;
+	}
+
 private:
 	std::shared_ptr<std::array<T, 9>> _data;
 };

@@ -13,7 +13,7 @@ public:
 		surfaces.push_back(_surface);
 	}
 
-	void resolveCollision(
+	bool resolveCollision(
 		double radius,
 		double restitutionCoefficient,
 		const Vector2D& position,

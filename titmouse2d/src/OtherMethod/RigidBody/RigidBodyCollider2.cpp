@@ -11,7 +11,6 @@ void RigidBodyCollider2::getClosestPoint(
 	for (auto i = surfaces.begin(); i != surfaces.end(); ++i) {
 		(*i)->getClosedInformation(queryPoint);
 		auto surfaceInformation = (*i)->_surfaceQueryResult;
-		//cout << surfaceInformation.distance << endl;
 		if (surfaceInformation.distance < minDis) {
 			minDis = surfaceInformation.distance;
 			resultIter = i;
@@ -24,19 +23,17 @@ void RigidBodyCollider2::getClosestPoint(
 }
 
 
-void RigidBodyCollider2::resolveCollision(
+bool RigidBodyCollider2::resolveCollision(
 	double radius,
 	double restitutionCoefficient,
 	const Vector2D& position,
 	const Vector2D& velocity,
 	Vector2D& newVelocity
 ) {
-
 	ColliderQueryResult colliderPoint;
 
 	getClosestPoint(position, &colliderPoint);
-	if (isPenetrating(colliderPoint, position, 0.00001)) {
-
+	if (isPenetrating(colliderPoint, position, 0.001)) {
 
 		Vector2D targetNormal = colliderPoint.normal;
 		Vector2D targetPoint = colliderPoint.point + targetNormal * radius;
@@ -52,6 +49,7 @@ void RigidBodyCollider2::resolveCollision(
 		Vector2D relativeVelT = relativeVel - relativeVelN;
 
 		if (normalDotRelativeVel < 0.0) {
+
 			Vector2D deltaRelativeVelN =
 				relativeVelN * (-restitutionCoefficient - 1.0);
 			relativeVelN = relativeVelN * -restitutionCoefficient;
@@ -69,8 +67,10 @@ void RigidBodyCollider2::resolveCollision(
 			//合成最终速度
 			newVelocity =
 				relativeVelN + relativeVelT + colliderVelAtTargetPoint;
+			return true;
 		}
 	}
+	return false;
 }
 
 

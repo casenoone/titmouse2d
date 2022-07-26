@@ -131,9 +131,8 @@ int main(int argc, char** argv)
 	glShadeModel(GL_FLAT);
 
 
-	Matrix2x2<int> a(1, 3, 2, 5);
-	Matrix2x2<int> b(0, 1, 6, 4);
-
+	auto box2 = std::make_shared<Box2>(Vector2D(0, 0), Vector2D(2, 2), true);
+	rigidSolver->rigidBodyData->collider->push(box2);
 
 
 	glutKeyboardFunc(key);       //键盘按下去时

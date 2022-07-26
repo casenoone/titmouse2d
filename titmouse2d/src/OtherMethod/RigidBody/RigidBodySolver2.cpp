@@ -7,8 +7,8 @@ void RigidBodySolver2::computeExternalForce() {
 
 	static bool state = true;
 	if (state) {
-		vertex_force[2] = Vector2D(-100, -100);
-		vertex_force[0] = Vector2D(100, 100);
+		vertex_force[2] = Vector2D(-1000, -100);
+		vertex_force[0] = Vector2D(10, 100);
 
 		state = false;
 	}
@@ -67,7 +67,7 @@ void RigidBodySolver2::timeIntegration(double dt) {
 	auto& pos = rigidBodyData->position;
 
 	//更新质心位置
-	Vector2D f(0, 0);
+	Vector2D f(0, -9.8);
 
 	//要去看一下数组求和的优化方法
 	for (int i = 0; i < n; ++i) {
@@ -108,6 +108,7 @@ void RigidBodySolver2::timeIntegration(double dt) {
 }
 
 void RigidBodySolver2::onAdvanceTimeStep(double dt) {
+	CollisionResponseByImpulse();
 	clearForces();
 	accumulateTotalForce(dt);
 	computeTorque();
@@ -152,11 +153,27 @@ void RigidBodySolver2::CollisionResponseByImpulse() {
 	auto& vel = rigidBodyData->velocity;
 	auto& vertex_vel = rigidBodyData->vertex_velocities;
 	auto& collder = rigidBodyData->collider;
-
+	auto& I = rigidBodyData->inertia;
+	auto I_inverse = I.inverse();
+	auto& omega = rigidBodyData->palstance;
 	Array<Vector2D> new_vertexVel(n);
-	for (int i = 0; i < n; ++i) {
-		collder->resolveCollision(0.002, 0.2, vertexList[i], vertex_vel[i], new_vertexVel[i]);
 
+	computeVertexVelocity();
+
+	for (int i = 0; i < n; ++i) {
+		auto state = collder->resolveCollision(0.02, 0.05, vertexList[i], vertex_vel[i], new_vertexVel[i]);
+		if (state) {
+			Vector3D temp_r(r[i], 0);
+			auto Rr_mat = Matrix3x3<double>::constructMatrixProduct(R * temp_r);
+			auto K = Matrix3x3<double>::identityMatrix() - Rr_mat * I_inverse * Rr_mat;
+			auto j = K.inverse() * (new_vertexVel[i] - vertex_vel[i]);
+			vel += j;
+
+			Vector3D temp_j(j, 0);
+			Vector3D temp_omega(0, 0, omega);
+			temp_omega += I_inverse * ((R * temp_r).cross(temp_j));
+			omega = temp_omega.z;
+		}
 	}
 
 
