@@ -87,7 +87,8 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
 - 16.Constrained Dynamics（这玩意弹簧系数调大了是可以做刚体的，为什么会碎呢，是因为我的约束条件的问题，超过一定距离就把约束撤掉了）
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/constrained_dynamics.gif" width="300">
-
+- 17.RigidBody(单个刚体的模拟，多个刚体之间碰撞尚未实现)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/rigidbody1.gif" width="300">
 即将实现的算法或数据结构：
 - PCISPH
 - BVH加速结构
