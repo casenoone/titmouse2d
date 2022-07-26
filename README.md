@@ -46,14 +46,13 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - 2.advection测试
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif" width="300">
 - 3.level set free surface flow
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif)
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif" width="300">
 
 - 4.Marching cube2d
-- ![Image]( https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/marching%20cube2d.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/marching%20cube2d.gif" width="300">
 
 - 5.SSPH
-- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif" width="300">
 
 - 6.PIC
 - ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif)
