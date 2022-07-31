@@ -81,15 +81,14 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	//_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
-	//computeTotalForce(timeIntervalInSeconds);
+	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
 	no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
-	//bubble_timeIntegration(timeIntervalInSeconds);
+	bubble_timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
-	//all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
+	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
 
-	//update_bubble_panelset_pos(timeIntervalInSeconds);
+	update_bubble_panelset_pos(timeIntervalInSeconds);
 
 	decayVorticity();
 	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
@@ -229,19 +228,6 @@ void FoamVortexSolver::emitVortexRing() {
 	initGamma[1] = 0.6;
 	initGamma[2] = -0.6;
 	initGamma[3] = -0.6;
-
-
-	/*gamma[0] = 0.6;
-	gamma[1] = 0.6;
-	gamma[2] = 0.6;
-	gamma[3] = 0.6;
-
-	initGamma[0] = 0.6;
-	initGamma[1] = 0.6;
-	initGamma[2] = 0.6;
-	initGamma[3] = 0.6;*/
-
-
 }
 
 
@@ -334,7 +320,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 10000;
+	int emitNum = 0;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
@@ -630,91 +616,91 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 		pos.y = 0;
 }
 
-////线性耗散
-//void FoamVortexSolver::decayVorticity() {
-//	auto& vorticity = _foamVortexData->gamma();
-//	auto len = vorticity.dataSize();
-//	for (int i = 0; i < len; ++i) {
-//		static double init = vorticity[i];
-//		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
-//			vorticity[i] -= vorticity[i] * 0.008;
-//		else {
-//			vorticity[i] = 0;
-//
-//		}
-//	}
-//}
-
-
-////线性耗散
-//void FoamVortexSolver::decayVorticity() {
-//	auto& vorticity = _foamVortexData->gamma();
-//	auto len = vorticity.dataSize();
-//	for (int i = 0; i < len; ++i) {
-//		static double init = vorticity[i];
-//		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
-//			vorticity[i] -= vorticity[i] * 0.008;
-//		else {
-//			vorticity[i] = 0;
-//
-//		}
-//	}
-//}
-
-
-//线性+非线性耗散
+//线性耗散
 void FoamVortexSolver::decayVorticity() {
-
-	auto& initVorticites = _foamVortexData->initVorticity;
-
-	static int timeStep = 0;
-	double t = timeStep * 0.006;
-	double t2 = t * t;
-	double k1 = 0.1;
-	double k2 = 0.1;
-
 	auto& vorticity = _foamVortexData->gamma();
 	auto len = vorticity.dataSize();
 	for (int i = 0; i < len; ++i) {
-		double omega0 = initVorticites[i];
-		auto omega1 = omega0 * 0.2;
-
-		if (std::fabs(vorticity[i]) >= std::fabs(omega1)) {
-			auto temp1 = -k1 * t2 + std::fabs(omega0);
-			if (vorticity[i] > 0) {
-				vorticity[i] = temp1;
-
-			}
-			else {
-				vorticity[i] = -temp1;
-			}
-		}
+		static double init = vorticity[i];
+		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
+			vorticity[i] -= vorticity[i] * 0.005;
 		else {
 			vorticity[i] = 0;
 
 		}
-
-		//else {
-		//	double t_1 = 0;
-		//	if (std::fabs(vorticity[i]) > std::fabs(omega0) * 0.2) {
-		//		if (vorticity[i] > 0) {
-		//			t_1 = std::sqrt((omega1 - omega0) / (-k1));
-		//			vorticity[i] = -k2 * (t - t_1) + omega1;
-		//		}
-		//		else {
-		//			//t_1 = std::sqrt((omega1 - omega0) / k1);
-		//			//vorticity[i] = (k2 * (t - t_1) + omega1);
-		//		}
-		//	}
-		//	else {
-
-		//		//vorticity[i] = 0;
-		//	}
-		//}
 	}
-
-	timeStep++;
 }
+
+
+////线性耗散
+//void FoamVortexSolver::decayVorticity() {
+//	auto& initVorticites = _foamVortexData->initVorticity;
+//	auto& vorticity = _foamVortexData->gamma();
+//	auto len = vorticity.dataSize();
+//	for (int i = 0; i < len; ++i) {
+//		if (std::fabs(vorticity[i]) >= std::fabs(initVorticites[i] * 0.2))
+//			vorticity[i] -= vorticity[i] * 0.01;
+//		else {
+//			vorticity[i] = 0;
+//
+//		}
+//	}
+//}
+
+
+////线性+非线性耗散
+//void FoamVortexSolver::decayVorticity() {
+//
+//	auto& initVorticites = _foamVortexData->initVorticity;
+//
+//	static int timeStep = 0;
+//	double t = timeStep * 0.006;
+//	double t2 = t * t;
+//	double k1 = 0.1;
+//	double k2 = 0.1;
+//
+//	auto& vorticity = _foamVortexData->gamma();
+//	auto len = vorticity.dataSize();
+//	for (int i = 0; i < len; ++i) {
+//		double omega0 = initVorticites[i];
+//		auto omega1 = omega0 * 0.2;
+//
+//		if (std::fabs(vorticity[i]) >= std::fabs(omega1)) {
+//			auto temp1 = -k1 * t2 + std::fabs(omega0);
+//			if (vorticity[i] > 0) {
+//				vorticity[i] = temp1;
+//
+//			}
+//			else {
+//				vorticity[i] = -temp1;
+//			}
+//		}
+//		else {
+//			//vorticity[i] = 0;
+//
+//		}
+//
+//		//else {
+//		//	double t_1 = 0;
+//		//	if (std::fabs(vorticity[i]) > std::fabs(omega0) * 0.2) {
+//		//		if (vorticity[i] > 0) {
+//		//			t_1 = std::sqrt((omega1 - omega0) / (-k1));
+//		//			vorticity[i] = -k2 * (t - t_1) + omega1;
+//		//		}
+//		//		else {
+//		//			//t_1 = std::sqrt((omega1 - omega0) / k1);
+//		//			//vorticity[i] = (k2 * (t - t_1) + omega1);
+//		//		}
+//		//	}
+//		//	else {
+//
+//		//		//vorticity[i] = 0;
+//		//	}
+//		//}
+//	}
+//
+//	timeStep++;
+//}
 
 
 void FoamVortexSolver::update_bubble_panelset_pos(double dt) {
@@ -940,10 +926,27 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 		velocities[i] += (-1.0 * velocities[i]) * dt * 30;
 	}
 
+
+	/*auto& tracerPos = positions;
+	auto vor_n = _foamVortexData->vortexPosition.dataSize();
+
+	for (int i = 0; i < n; ++i) {
+		Vector2D tempVel;
+		Vector2D pos = tracerPos(i);
+		for (int j = 0; j < vor_n; ++j) {
+			tempVel += computeUSingle(pos, j);
+		}
+		velocities(i) = tempVel;
+	}*/
+
+
+
 	//位置更新
 	for (int i = 0; i < n; ++i) {
 		positions[i] += velocities[i] * dt;
 	}
+
+
 
 	auto& obj = _foamVortexData->panelSet;
 

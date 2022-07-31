@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="001.cpp" />
+    <ClCompile Include="bubble.cpp" />
     <ClCompile Include="couplingTest.cpp" />
     <ClCompile Include="couplingTest2.cpp" />
     <ClCompile Include="FoamVortexSolver2.cpp" />

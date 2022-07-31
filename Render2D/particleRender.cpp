@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
+#include "../titmouse2d/src/Color3.hpp"
 #include <GL/glut.h>
 
 #include <windows.h>
@@ -81,7 +82,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(1.f);//缺省是1
+	glPointSize(1.5f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glColor3f(1, 1, 1);
@@ -99,6 +100,34 @@ void drawCircle(const Vector2D& center, double r, int res) {
 		y = (y - 1) * DRAW_SIZE;
 
 		glColor3f(1, 128.0 / 255, 51.0 / 255);
+		glVertex2f(x, y);
+	}
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(1, 1, 1);
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
+
+
+void drawCircle(const Vector2D& center, double r, int res, Color3<double> color) {
+	glBegin(GL_POLYGON);
+
+	for (int i = 0; i < res; ++i) {
+		auto x = (r * cos(2 * kPiD / res * i)) + center.x;
+		auto y = (r * sin(2 * kPiD / res * i)) + center.y;
+		x = (x - 1) * DRAW_SIZE;
+		y = (y - 1) * DRAW_SIZE;
+
+		glColor3f(color.r / 255, color.g / 255, color.b / 255);
 		glVertex2f(x, y);
 	}
 	glEnd();
@@ -155,7 +184,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\solve_data\\0016\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\solve_data\\0022\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -165,7 +194,7 @@ static void display(void)
 
 	auto temp1 = std::atoi(filename.c_str());
 
-	int skipNum = 3;
+	int skipNum = 2;
 	temp1 += skipNum;
 	filename = std::to_string(temp1);
 
@@ -185,8 +214,9 @@ static void display(void)
 		Vector2D tempPos(x, y);
 		if (tempPos.dis(obj1->center()) > obj1->r()) {
 			//在这里写入像素
-			drawPoint(x, y);
-			//drawCircle(tempPos, 0.01, 20);
+			//drawPoint(x, y);
+			//drawCircle(Vector2D(x, y), 0.03, 20); 
+			drawCircle(tempPos, 0.01, 20);
 			//drawPoint(x, y);
 		}
 	}
@@ -202,7 +232,8 @@ static void display(void)
 	obj1->velocity = Vector2D(3, 0.0);
 	obj1->updatePosition(dt * skipNum);
 
-	drawCircle(obj1->center(), obj1->r(), 50);
+	//drawCircle(obj1->center(), obj1->r(), 50);
+	drawCircle(obj1->center(), obj1->r(), 50, Color3<double>(0, 191, 255));
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
@@ -210,7 +241,7 @@ static void display(void)
 	//延时0.5秒
 
 
-	Sleep(0);
+	//Sleep(25);
 
 }
 

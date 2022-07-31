@@ -81,9 +81,6 @@
     <ClCompile Include="src\Collider2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\ColliderSet2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Geometry\Plane2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -296,9 +293,6 @@
     <ClInclude Include="src\Geometry\Box2.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\ColliderSet2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\Geometry\Plane2.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -474,6 +468,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\OtherMethod\RigidBody\ShapeMatch2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\FEM\FEMSolver2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OtherMethod\FEM\FEMData2.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

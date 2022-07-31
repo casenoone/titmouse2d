@@ -142,11 +142,11 @@ static void display(void)
 	fileNum++;
 	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
 	Plyout writer1(path1, name, bubble_pos.dataSize(), "r");
-	//for (int i = 0; i < bubble_pos.dataSize(); ++i) {
-	//	drawCircle(bubble_pos[i], vpSolver->foamVortexData()->radius, 50);
-	//	auto r = 0.03;
-	//	//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
-	//}
+	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
+		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->radius, 50);
+		auto r = 0.03;
+		//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
+	}
 
 
 	vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
@@ -226,7 +226,8 @@ int main(int argc, char** argv)
 		.makeShared();
 	double temp_r = 0.01;// grid->gridSpacing().x * 0.5;
 
-	Vector2D tempC(1.0, 1.0);
+	//Vector2D tempC(1.0, 1.0);
+	Vector2D tempC(0.6, 1.0);
 	for (int i = 0; i < grid->resolution().x; ++i) {
 		for (int j = 0; j < grid->resolution().y; ++j) {
 			auto pos = (grid->dataPosition())(i, j);
@@ -388,7 +389,8 @@ int main(int argc, char** argv)
 	//记得重新算的时候要删掉 原来的文件夹
 	int frame = 100000000;
 
-	auto position = vpSolver->foamVortexData()->tracePosition;
+	auto position = vpSolver->foamVortexData()->positions();
+	//auto position = vpSolver->foamVortexData()->tracePosition;
 	auto num = position.dataSize();
 
 	int interval = 1;
@@ -397,7 +399,7 @@ int main(int argc, char** argv)
 
 	for (int i = 0; i < frame; i += 1) {
 
-		std::ofstream out("E:\\zhangjian\\solve_data\\0016\\" + outfilename + ".txt", std::ios::app);
+		std::ofstream out("E:\\zhangjian\\solve_data\\0022\\" + outfilename + ".txt", std::ios::app);
 
 		for (int n = 0; n < num; ++n) {
 			auto x = position[n].x;

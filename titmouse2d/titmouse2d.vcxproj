@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClCompile Include="src\boundingbox2.cpp" />
     <ClCompile Include="src\Collider2.cpp" />
-    <ClCompile Include="src\ColliderSet2.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp" />
@@ -212,7 +211,6 @@
     <ClInclude Include="src\ArrayUtils.hpp" />
     <ClInclude Include="src\boundingbox2.h" />
     <ClInclude Include="src\Collider2.h" />
-    <ClInclude Include="src\ColliderSet2.h" />
     <ClInclude Include="src\Color3.hpp" />
     <ClInclude Include="src\ConstVar.h" />
     <ClInclude Include="src\Eulerian\AdvectionSolver2.h" />
@@ -270,6 +268,8 @@
     <ClInclude Include="src\Matrix.hpp" />
     <ClInclude Include="src\mesh\objout.hpp" />
     <ClInclude Include="src\mesh\Plyout.h" />
+    <ClInclude Include="src\OtherMethod\FEM\FEMData2.h" />
+    <ClInclude Include="src\OtherMethod\FEM\FEMSolver2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHData2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
