@@ -39,55 +39,58 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 实现的弹性体/刚体算法：
 - Constraint Dynamics （Mass-spring system）
 - 单个刚体动力学
+
 效果图
 - 1.FLIP算法（没有在网格上对边界条件进行处理，因此边界处速度有散度）
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse2d_firstdemo.gif" width="300">
 
 - 2.advection测试
-
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif)
-
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/titmouse_advection_without_.gif" width="300">
 - 3.level set free surface flow
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/levelset2.gif" width="300">
 
 - 4.Marching cube2d
-- ![Image]( https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/marching%20cube2d.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/marching%20cube2d.gif" width="300">
 
 - 5.SSPH
-- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/ssph2d.gif" width="300">
 
 - 6.PIC
-- ![Image](  https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pic.gif" width="300">
 
 - 7.Vortex Particles Method
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/vortexparticles_titmouse.gif" width="300">
 
 - 8.LBM(湍流模型模拟顶盖流动)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif)
-
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/LBM_turbulence_with_circle.gif" width="300">
 
 
 - 9.PBF(参数和SPH一样恶心。。。)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf2.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/pbf2.gif" width="300">
 
 - 10.IISPH
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/iisph2.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/iisph2.gif" width="300">
 
 - 11.APIC
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/apic.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/apic.gif" width="300">
 
 - 12.MLS-MPM(用了双线性插值，粘成这个样子，中间还有一块蜜汁突起，也可能是代码写错了)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/mls_mpm_linear.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/mls_mpm_linear.gif" width="300">
 
 - 13.Eulerian Smoke(双线性插值，midpoint，边界还有点bug没解决，还没有加vorticity force)
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/eulerian_smoke.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/eulerian_smoke.gif" width="300">
+
+
 - 14.kama vortex
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/kamavortex.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/kamavortex.gif" width="300">
+
 - 15.shallow wave solver
-- ![Image](https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/swe_small.gif" width="300">
+
 - 16.Constrained Dynamics（这玩意弹簧系数调大了是可以做刚体的，为什么会碎呢，是因为我的约束条件的问题，超过一定距离就把约束撤掉了）
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/constrained_dynamics.gif" width="300">
-
+- 17.RigidBody(单个刚体的模拟，多个刚体之间碰撞尚未实现)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/rigidbody1.gif" width="300">
 即将实现的算法或数据结构：
 - PCISPH
 - BVH加速结构
