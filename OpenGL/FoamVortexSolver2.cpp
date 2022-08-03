@@ -91,7 +91,7 @@ void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
 	update_bubble_panelset_pos(timeIntervalInSeconds);
 
 	decayVorticity();
-	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
+	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 }
 
 
@@ -320,13 +320,13 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 0;
+	int emitNum = 10000;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
 	Vector2D tempPos;
 	for (int i = 0; i < emitNum; ++i) {
-		tempPos.x = random_double(0.2, 1.0);
+		tempPos.x = random_double(0.2, 0.8);
 		tempPos.y = random_double(0.5, 1.5);
 		tracerPos[i] = tempPos;
 	}
@@ -606,6 +606,18 @@ void FoamVortexSolver::constructMovingBoundaryMatrix() {
 }
 
 void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
+	auto& bubble_pos = _foamVortexData->positions();
+	auto bubble_r = _foamVortexData->radius;
+	auto bubble_num = bubble_pos.dataSize();
+	for (int i = 0; i < bubble_num; ++i) {
+		if (pos.dis(bubble_pos[i]) < bubble_r) {
+			auto dir = (pos - bubble_pos[i]).getNormalize();
+			auto newPos = bubble_pos[i] + bubble_r * dir;
+			pos = newPos;
+		}
+	}
+
+
 	if (pos.x > 2)
 		pos.x = 2;
 	if (pos.x < 0)
@@ -614,6 +626,8 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 		pos.y = 2;
 	if (pos.y < 0)
 		pos.y = 0;
+
+
 }
 
 //ÏßÐÔºÄÉ¢

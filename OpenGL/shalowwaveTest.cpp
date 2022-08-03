@@ -204,7 +204,7 @@
 //		swSolver->setMarkers(lower, upper);
 //		swSolver->onAdvanceTimeStep(dt);
 //
-//		t += 0.2;
+//		t += dt;
 //		if (t > 3.14)t = 0;
 //		/**************“‘…œº∆À„”Ú*************/
 //
