@@ -334,7 +334,6 @@ SparseMatrix<T> SparseMatrix<T>::ICholesky0()const {
 		for (int i = k + 1; i < n; ++i) {
 			if (L(i, k) != 0) {
 				L.modify(i, k) = L(i, k) / L(k, k);
-				//std::cout << (*this)(k, k) << std::endl;
 			}
 		}
 		for (int j = k + 1; j < n; ++j) {

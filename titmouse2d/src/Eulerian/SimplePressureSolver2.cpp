@@ -151,9 +151,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 	////JacobiSolver.compute(A, x, b);
 	////rjSolver.compute(A, x, b);
 	//sorSolver.compute(A, x, b);
-	jpcgSplver.compute(A, x, b);
+	//jpcgSplver.compute(A, x, b);
 	//gspcgSolver.compute(A, x, b);
-	//iccgSolver.compute(A, x, b);
+	iccgSolver.compute(A, x, b);
 }
 
 void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow,

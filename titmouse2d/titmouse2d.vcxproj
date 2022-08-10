@@ -199,6 +199,8 @@
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
     <ClInclude Include="src\Geometry\Heart2.h" />
     <ClInclude Include="src\Geometry\RegularPolygon.h" />
+    <ClInclude Include="src\helper\printer.h" />
+    <ClInclude Include="src\helper_function.h" />
     <ClInclude Include="src\LinearSystem\DirectSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GaussianElimSolver.hpp" />
     <ClInclude Include="src\LinearSystem\GSPCGSolver.hpp" />
@@ -266,10 +268,12 @@
     <ClInclude Include="src\LinearSystem\SteepestDescentSolver.hpp" />
     <ClInclude Include="src\MathUtils.hpp" />
     <ClInclude Include="src\Matrix.hpp" />
+    <ClInclude Include="src\mesh\Mesh2.h" />
     <ClInclude Include="src\mesh\objout.hpp" />
     <ClInclude Include="src\mesh\Plyout.h" />
     <ClInclude Include="src\OtherMethod\FEM\FEMData2.h" />
     <ClInclude Include="src\OtherMethod\FEM\FEMSolver2.h" />
+    <ClInclude Include="src\OtherMethod\FEM\FVMData2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHData2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />
