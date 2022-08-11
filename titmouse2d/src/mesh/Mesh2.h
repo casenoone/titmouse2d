@@ -47,6 +47,10 @@ public:
 		return vertexList[triList[i].index[j]];
 	}
 
+	Vector2D& at(int i, int j) {
+		return vertexList[triList[i].index[j]];
+	}
+
 	int size()const {
 		return triList.size();
 	}

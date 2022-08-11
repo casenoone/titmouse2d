@@ -55,6 +55,9 @@ public:
 
 	T trace()const;
 
+	Matrix2x2<T> transpose()const;
+
+
 	static Matrix2x2<T> identityMatrix() {
 		Matrix2x2<T> result(1, 0, 0, 1);
 		return result;
@@ -211,6 +214,17 @@ Matrix2x2<T> Matrix2x2<T>::inverse() {
 template<class T>
 T Matrix2x2<T>::trace()const {
 	return (*_data)[0] + (*_data)[3];
+}
+
+template<class T>
+Matrix2x2<T>  Matrix2x2<T>::transpose()const {
+	auto a11 = (*_data)[0];
+	auto a12 = (*_data)[2];
+	auto a21 = (*_data)[1];
+	auto a22 = (*_data)[3];
+
+	Matrix3x3<double> result(a11, a12, a21, a22);
+	return result;
 }
 
 

@@ -23,5 +23,7 @@ int main() {
 		//std::cout << mesh(i, 2).x << " " << mesh(i, 2).y << std::endl;
 	}
 
+	FEMSolver2 fem(pos, index);
+
 	return 0;
 }
