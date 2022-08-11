@@ -223,7 +223,7 @@ Matrix2x2<T>  Matrix2x2<T>::transpose()const {
 	auto a21 = (*_data)[1];
 	auto a22 = (*_data)[3];
 
-	Matrix3x3<double> result(a11, a12, a21, a22);
+	Matrix2x2<double> result(a11, a12, a21, a22);
 	return result;
 }
 

@@ -25,8 +25,6 @@ public:
 		for (auto i = indexs.begin(); i != indexs.end(); i += 3) {
 			triList[count++] = Triangle(*i, *(i + 1), *(i + 2));
 		}
-
-		originVertexList = vertexList;
 	}
 
 	struct Triangle {
@@ -58,7 +56,6 @@ public:
 public:
 	std::vector<Vector2D> vertexList;
 	std::vector<Triangle> triList;
-	std::vector<Vector2D> originVertexList;
 };
 
 typedef std::shared_ptr<Mesh2> Mesh2Ptr;

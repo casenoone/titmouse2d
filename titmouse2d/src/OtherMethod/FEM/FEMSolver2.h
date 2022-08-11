@@ -5,6 +5,7 @@ public:
 	FEMSolver2(std::initializer_list<Vector2D> vertexs,
 		std::initializer_list<int> indexs) {
 		femData = std::make_shared<FEMData2>(vertexs, indexs);
+		initOriginEdgeMat();
 	}
 
 	double calculateTriArea(int idx)const {
@@ -46,12 +47,96 @@ public:
 
 	void calculateGreenStrainMat() {
 		auto& mesh = femData->mesh;
+		auto mu = femData->mu;
+		auto lambda = femData->lambda;
 		for (int i = 0; i < mesh->size(); ++i) {
 			auto& S = femData->strainMatrix[i];
 			auto& F = femData->deformGradMatrix[i];
 			auto G = 0.5 * (F.transpose() * F - Matrix2x2<double>::identityMatrix());
 
-			auto s11 =
+			S(0, 0) = 2 * mu * G(0, 0) + lambda * G(0, 0);;
+			S(0, 1) = 2 * mu * G(0, 1);
+			S(1, 0) = 2 * mu * G(1, 0);
+			S(1, 1) = 2 * mu * G(1, 1) + lambda * G(1, 1);
+		}
+	}
+
+	void calculateForces() {
+		auto& mesh = femData->mesh;
+		auto& F = femData->deformGradMatrix;
+		auto& S = femData->strainMatrix;
+		auto& O = femData->originEdgeMatrix;
+		auto& forces = femData->forces;
+		for (int i = 0; i < mesh->size(); ++i) {
+			auto result = -calculateTriArea(i) * F[i] * S[i] * O[i];
+			auto f1 = Vector2D(result(0, 0), result(1, 0));
+			auto f2 = Vector2D(result(0, 1), result(1, 1));
+			auto f0 = -1.0 * (f1 + f2);
+
+			auto i0 = mesh->triList[i].index[0];
+			auto i1 = mesh->triList[i].index[1];
+			auto i2 = mesh->triList[i].index[2];
+
+			forces[i0] += f0;
+			forces[i1] += f1;
+			forces[i2] += f2;
+
+		}
+	}
+
+	void timeIntegration(double dt) {
+		auto& forces = femData->forces;
+		auto& vels = femData->velocities;
+		auto& pos = femData->mesh->vertexList;
+		for (int i = 0; i < vels.size(); ++i) {
+			vels[i] += (forces[i] + Vector2D(0, -9.8)) * dt;
+			pos[i] += vels[i] * dt;
+		}
+	}
+
+	void onAdvanceTimeStep(double dt) {
+		clearForces();
+		calculateDeformGradMat();
+		calculateGreenStrainMat();
+		calculateForces();
+		//accumulateDamping();
+		timeIntegration(dt);
+		solveCollision();
+	}
+
+	void accumulateDamping() {
+		auto& forces = femData->forces;
+		auto& vels = femData->velocities;
+		for (int i = 0; i < vels.size(); ++i) {
+			vels[i] = vels[i] - 0.06 * vels[i];
+		}
+
+	}
+
+	void clearForces() {
+		auto& forces = femData->forces;
+		//clear会使capacity变为0吗
+		forces.clear();
+		forces.resize(femData->mesh->vertexList.size());
+	}
+
+	void solveCollision() {
+		auto& pos = femData->mesh->vertexList;
+		auto& vels = femData->velocities;
+
+		for (int i = 0; i < pos.size(); ++i) {
+			if (pos[i].x > 2) {
+				pos[i].x = 2;
+			}
+			if (pos[i].y > 2) {
+				pos[i].y = 2;
+			}
+			if (pos[i].x < 0.01) {
+				pos[i].x = 0.01;
+			}
+			if (pos[i].y < 0.01) {
+				pos[i].y = 0.01;
+			}
 
 		}
 	}
