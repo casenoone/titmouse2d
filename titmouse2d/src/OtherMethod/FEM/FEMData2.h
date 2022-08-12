@@ -10,6 +10,7 @@ public:
 		originEdgeMatrix.resize(indexs.size() / 3);
 		deformGradMatrix.resize(indexs.size() / 3);
 		strainMatrix.resize(indexs.size() / 3);
+		areas.resize(indexs.size() / 3);
 	}
 
 public:
@@ -27,9 +28,12 @@ public:
 	//S矩阵，不知道这玩意叫啥
 	std::vector<Matrix2x2<double>> strainMatrix;
 
+	//原始面积
+	std::vector<double>	areas;
+
 	//能量密度函数的参数
-	double mu = 0.3;
-	double lambda = 8000;
+	double mu = 1;
+	double lambda = 2900;
 };
 
 typedef std::shared_ptr<FEMData2> FEMData2Ptr;

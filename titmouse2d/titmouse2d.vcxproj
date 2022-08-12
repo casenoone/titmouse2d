@@ -274,6 +274,7 @@
     <ClInclude Include="src\OtherMethod\FEM\FEMData2.h" />
     <ClInclude Include="src\OtherMethod\FEM\FEMSolver2.h" />
     <ClInclude Include="src\OtherMethod\FEM\FVMData2.h" />
+    <ClInclude Include="src\OtherMethod\FEM\FVMSolver2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHData2.h" />
     <ClInclude Include="src\OtherMethod\IISPH\IISPHSolver2.h" />
     <ClInclude Include="src\OtherMethod\LBM\LBMSolver2.h" />

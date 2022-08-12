@@ -6,13 +6,20 @@ public:
 		std::initializer_list<int> indexs) {
 		femData = std::make_shared<FEMData2>(vertexs, indexs);
 		initOriginEdgeMat();
+		calculateTriArea();
 	}
 
-	double calculateTriArea(int idx)const {
-		auto r1 = femData->mesh->at(idx, 1) - femData->mesh->at(idx, 0);
-		auto r2 = femData->mesh->at(idx, 2) - femData->mesh->at(idx, 0);
-		return 0.5 * std::abs(r1.cross(r2));
+	//只执行一次
+	void calculateTriArea()const {
+		auto& mesh = femData->mesh;
+		auto& areas = femData->areas;
+		for (int i = 0; i < mesh->size(); ++i) {
+			auto r1 = femData->mesh->at(i, 1) - femData->mesh->at(i, 0);
+			auto r2 = femData->mesh->at(i, 2) - femData->mesh->at(i, 0);
+			areas[i] = 0.5 * std::abs(r1.cross(r2));
+		}
 	}
+
 
 	//只执行一次
 	void initOriginEdgeMat() {
@@ -67,8 +74,9 @@ public:
 		auto& S = femData->strainMatrix;
 		auto& O = femData->originEdgeMatrix;
 		auto& forces = femData->forces;
+		auto& areas = femData->areas;
 		for (int i = 0; i < mesh->size(); ++i) {
-			auto result = -calculateTriArea(i) * F[i] * S[i] * O[i];
+			auto result = -areas[i] * F[i] * S[i] * O[i];
 			auto f1 = Vector2D(result(0, 0), result(1, 0));
 			auto f2 = Vector2D(result(0, 1), result(1, 1));
 			auto f0 = -1.0 * (f1 + f2);
