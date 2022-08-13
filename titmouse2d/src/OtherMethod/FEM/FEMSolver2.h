@@ -1,5 +1,10 @@
 #include "FEMData2.h"
 
+//遇到的问题
+//力是能量对位移求导
+//那么力的方向该如何确定？
+//以及，三角形的边向量该如何规定
+
 class FEMSolver2 {
 public:
 	FEMSolver2(std::initializer_list<Vector2D> vertexs,
@@ -8,6 +13,8 @@ public:
 		initOriginEdgeMat();
 		calculateTriArea();
 	}
+
+
 
 	//只执行一次
 	void calculateTriArea()const {
@@ -20,7 +27,6 @@ public:
 		}
 	}
 
-
 	//只执行一次
 	void initOriginEdgeMat() {
 		auto& mesh = femData->mesh;
@@ -28,10 +34,10 @@ public:
 			auto& originEdgeMat = femData->originEdgeMatrix[i];
 			auto x10 = mesh->at(i, 0) - femData->mesh->at(i, 1);
 			auto x20 = mesh->at(i, 0) - femData->mesh->at(i, 2);
-			originEdgeMat(0, 0) = x10.x;
-			originEdgeMat(0, 1) = x20.x;
-			originEdgeMat(1, 0) = x10.y;
-			originEdgeMat(1, 1) = x20.y;
+			originEdgeMat(0, 0) = -x10.x;
+			originEdgeMat(0, 1) = -x20.x;
+			originEdgeMat(1, 0) = -x10.y;
+			originEdgeMat(1, 1) = -x20.y;
 			//这里可作优化，直接优化成求逆
 			originEdgeMat = originEdgeMat.inverse();
 		}
@@ -43,10 +49,10 @@ public:
 			auto& deformGradMat = femData->deformGradMatrix[i];
 			auto x10 = mesh->at(i, 0) - femData->mesh->at(i, 1);
 			auto x20 = mesh->at(i, 0) - femData->mesh->at(i, 2);
-			deformGradMat(0, 0) = x10.x;
-			deformGradMat(0, 1) = x20.x;
-			deformGradMat(1, 0) = x10.y;
-			deformGradMat(1, 1) = x20.y;
+			deformGradMat(0, 0) = -x10.x;
+			deformGradMat(0, 1) = -x20.x;
+			deformGradMat(1, 0) = -x10.y;
+			deformGradMat(1, 1) = -x20.y;
 
 			deformGradMat = deformGradMat * femData->originEdgeMatrix[i];
 		}
@@ -61,10 +67,7 @@ public:
 			auto& F = femData->deformGradMatrix[i];
 			auto G = 0.5 * (F.transpose() * F - Matrix2x2<double>::identityMatrix());
 
-			S(0, 0) = 2 * mu * G(0, 0) + lambda * G(0, 0);;
-			S(0, 1) = 2 * mu * G(0, 1);
-			S(1, 0) = 2 * mu * G(1, 0);
-			S(1, 1) = 2 * mu * G(1, 1) + lambda * G(1, 1);
+			S = 2 * mu * G + lambda * G.trace() * Matrix2x2<double>::identityMatrix();
 		}
 	}
 
@@ -76,7 +79,7 @@ public:
 		auto& forces = femData->forces;
 		auto& areas = femData->areas;
 		for (int i = 0; i < mesh->size(); ++i) {
-			auto result = -areas[i] * F[i] * S[i] * O[i];
+			auto result = -areas[i] * F[i] * S[i] * O[i].transpose();
 			auto f1 = Vector2D(result(0, 0), result(1, 0));
 			auto f2 = Vector2D(result(0, 1), result(1, 1));
 			auto f0 = -1.0 * (f1 + f2);
@@ -88,7 +91,6 @@ public:
 			forces[i0] += f0;
 			forces[i1] += f1;
 			forces[i2] += f2;
-
 		}
 	}
 
@@ -97,6 +99,8 @@ public:
 		auto& vels = femData->velocities;
 		auto& pos = femData->mesh->vertexList;
 		for (int i = 0; i < vels.size(); ++i) {
+			if (i == 0 || i == 12 || i == 1 || i == 13 || i == 2 || i == 14)
+				continue;
 			vels[i] += (forces[i] + Vector2D(0, -9.8)) * dt;
 			pos[i] += vels[i] * dt;
 		}
@@ -123,7 +127,6 @@ public:
 
 	void clearForces() {
 		auto& forces = femData->forces;
-		//clear会使capacity变为0吗
 		forces.clear();
 		forces.resize(femData->mesh->vertexList.size());
 	}
