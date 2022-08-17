@@ -262,6 +262,21 @@ void ShallowWaveSolver2::setMarkers(const Vector2D& lower, const Vector2D& upper
 }
 
 
+void ShallowWaveSolver2::setBoxMarkers(const RecTanglePtr box) {
+	auto data = _shallowWaveData;
+	auto res = data->resolution();
+	auto marker = data->markers;
+	auto h = data->height;
+
+	marker.reSize(res.x, res.y, 0);
+	for (int i = 0; i < res.x; ++i) {
+		for (int j = 0; j < res.y; ++j) {
+
+		}
+	}
+}
+
+
 void ShallowWaveSolver2::setSphereMarkers(const Vector2D& center, const double r) {
 	auto data = _shallowWaveData;
 	auto res = data->resolution();

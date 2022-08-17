@@ -80,10 +80,10 @@ Matrix2x2<T>::Matrix2x2() {
 
 	_data = std::make_shared<std::array<T, 4>>();
 
-	(*_data)[0] = 0;
+	(*_data)[0] = 1;
 	(*_data)[1] = 0;
 	(*_data)[2] = 0;
-	(*_data)[3] = 0;
+	(*_data)[3] = 1;
 }
 
 

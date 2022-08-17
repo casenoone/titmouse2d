@@ -42,7 +42,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.05f);//缺省是1
+	glPointSize(2.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -53,7 +53,7 @@ void drawPoint(double x, double y)
 void drawPoint(double x, double y, double color_x, double color_y, double color_z)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(4.05f);//缺省是1
+	glPointSize(2.05f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(color_x / 255, color_y / 255, color_z / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -111,7 +111,7 @@ auto grid_x = 2 / 70.0;
 
 auto vpSolver = std::make_shared<FoamVortexSolver>(res, Vector2D(grid_x, grid_x));
 //RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
-auto obj2 = std::make_shared<RecTangle>(Box2(Vector2D(0, 0.9), Vector2D(0.25, 0.93)));
+auto obj2 = std::make_shared<RecTangle>(Box2(Vector2D(0.25, 0.9), Vector2D(0.5, 0.93)));
 
 
 double dt = 0.006;
@@ -157,7 +157,6 @@ static void display(void)
 		rotation = Matrix2x2<double>::rotationMatrix(-3.14 / 100);
 		obj2->updatePosition(dt, rotation);
 	}
-	//obj2->setRotationMatrix(rotation);
 
 
 
@@ -207,7 +206,8 @@ static void display(void)
 
 	for (int i = 0; i < tracer_n; ++i) {
 		//if ((tracer_pos[i] - obj1->center()).getLength() > obj1->r())
-		drawPoint(tracer_pos[i].x, tracer_pos[i].y);
+		if (!obj2->IsInBox(tracer_pos[i]))
+			drawPoint(tracer_pos[i].x, tracer_pos[i].y);
 	}
 
 	//可视化移动边界

@@ -3,7 +3,7 @@
 
 #include "../../Eulerian/GridFluidSolver2.h"
 #include "ShallowWaveData2.h"
-
+#include "../../Geometry/RecTangle.h"
 class ShallowWaveSolver2 : public GridFluidSolver2 {
 public:
 	class Builder;
@@ -27,6 +27,9 @@ public:
 
 	//设置一个圆形的移动边界
 	void setSphereMarkers(const Vector2D& center, const double r);
+
+	//设置一个矩形的移动边界
+	void setBoxMarkers(const RecTanglePtr box);
 
 	//返回水面数据以供OpenGL渲染
 	int getWaterSurface(float mesh[]);

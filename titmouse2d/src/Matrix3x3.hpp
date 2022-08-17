@@ -81,6 +81,16 @@ public:
 		return result;
 	}
 
+	static Matrix3x3<T> rotationMatrix(double radian) {
+		auto cos_ = std::cos(radian);
+		auto sin_ = std::sin(radian);
+		return { cos_,-sin_,0,sin_,cos_, 0, 0, 0, 1 };
+	}
+
+	static Matrix3x3<T> translatonMatrix(double x_, double y_) {
+		return { 1, 0, x_, 0, 1, y_, 0, 0, 1 };
+	}
+
 private:
 	std::shared_ptr<std::array<T, 9>> _data;
 };
@@ -88,12 +98,16 @@ private:
 
 template<class T>
 Matrix3x3<T>::Matrix3x3() {
-
 	_data = std::make_shared<std::array<T, 9>>();
-
-	for (int i = 0; i < 9; ++i) {
-		(*_data)[i] = 0;
-	}
+	(*_data)[0] = 1;
+	(*_data)[1] = 0;
+	(*_data)[2] = 0;
+	(*_data)[3] = 0;
+	(*_data)[4] = 1;
+	(*_data)[5] = 0;
+	(*_data)[6] = 0;
+	(*_data)[7] = 0;
+	(*_data)[8] = 1;
 }
 
 

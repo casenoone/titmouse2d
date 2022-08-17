@@ -1,11 +1,8 @@
 #include "FoamVortexSolver2.h"
-
 #include "../titmouse2d/src/ConstVar.h"
-
 #include "../titmouse2d/src/random.h"
-
 #include "../titmouse2d/src/boundingbox2.h"
-
+#include "../titmouse2d/src/Geometry/RecTangle.h"
 #include <omp.h>
 
 #include <iostream>
@@ -148,9 +145,14 @@ void FoamVortexSolver::setStaticBoudnary(ExplicitSurface2Ptr surfaces) {
 	constructStaticBoundaryMatrix();
 }
 
-
+//设置圆形边界
 void FoamVortexSolver::setShallowWaveMovingBoundary(const Vector2D& center, const double r) {
 	_shallowWaveSolver->setSphereMarkers(center, r);
+}
+
+//设置矩形边界
+void FoamVortexSolver::setShallowWaveMovingBoundary(const RecTanglePtr box) {
+	//_shallowWaveSolver->setBoxMarkers(const RecTanglePtr box);
 }
 
 //index:bubble的索引
@@ -420,7 +422,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 1;
+	int emitNum = 0;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
