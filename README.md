@@ -39,6 +39,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 实现的弹性体/刚体算法：
 - Constraint Dynamics （Mass-spring system）
 - 单个刚体动力学
+- 线性有限元
 
 效果图
 - 1.FLIP算法（没有在网格上对边界条件进行处理，因此边界处速度有散度）
@@ -91,6 +92,8 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/constrained_dynamics.gif" width="300">
 - 17.RigidBody(单个刚体的模拟，多个刚体之间碰撞尚未实现)
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/rigidbody1.gif" width="300">
+- 18.Linear FEM(线性有限元)
+- <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/fem1.gif" width="300">
 即将实现的算法或数据结构：
 - PCISPH
 - BVH加速结构
@@ -100,6 +103,8 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - TreeCode多体问题加速
 - FMM(快速多极展开)
 - 更适合物理模拟的稀疏矩阵结构
+- PBD
+- PD
 
 
 
