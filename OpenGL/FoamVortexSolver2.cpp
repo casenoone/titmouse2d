@@ -12,8 +12,8 @@
 #include <cmath>
 
 
-static const int numOfStep = 7;
-static const double vorticity_eps = 0.04;
+static const int numOfStep = 1;
+static const double vorticity_eps = 0.06;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
 
@@ -81,17 +81,17 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
-	no_through_solve(timeIntervalInSeconds);
+	//_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
+	//no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
-	bubble_timeIntegration(timeIntervalInSeconds);
+	//bubble_timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
-	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
+	//all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
 
-	update_bubble_panelset_pos(timeIntervalInSeconds);
+	//update_bubble_panelset_pos(timeIntervalInSeconds);
 
-	decayVorticity();
-	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
+	//decayVorticity();
+	//_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
 }
 
 
@@ -112,7 +112,12 @@ Vector2D FoamVortexSolver::computeUSingle(const Vector2D& pos, int i)const {
 
 
 
-void FoamVortexSolver::setMovingBoudnary(RegularPolygonPtr surfaces) {
+//void FoamVortexSolver::setMovingBoudnary(RegularPolygonPtr surfaces) {
+//	_foamVortexData->panelSet = surfaces;
+//	constructMovingBoundaryMatrix();
+//}
+
+void FoamVortexSolver::setMovingBoudnary(RecTanglePtr surfaces) {
 	_foamVortexData->panelSet = surfaces;
 	constructMovingBoundaryMatrix();
 }
@@ -231,6 +236,7 @@ void FoamVortexSolver::emitVortexRing() {
 }
 
 
+
 void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 
 	static int step = 0;
@@ -239,15 +245,34 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 	auto panelVel = data->panelSet->velocity;
 	auto panel = data->panelSet;
 	auto& emitParticle = data->newParticles;
-
+	auto panelSize = panel->size();
 	auto emitNum = emitParticle.dataSize();
+	auto& mat = panel->rotationMat;
+	const auto& center = panel->center();
+	////同步旋转分量
+	//for (int i = 0; i < emitNum; ++i) {
+	//	emitParticle[i] += panelVel * timeIntervalInSeconds;
+	//}
 
-	//更改粒子发射位置使得与panel同步
+
+
+	//同步旋转
+	for (int i = 0; i < emitNum; ++i) {
+		//先把顶点平移回原点
+		emitParticle[i] -= center;
+		//然后再开始旋转
+		emitParticle[i] = mat * emitParticle[i];
+		//最后再把顶点平移回去
+		emitParticle[i] += center;
+	}
+
+	//同步平移
 	for (int i = 0; i < emitNum; ++i) {
 		emitParticle[i] += panelVel * timeIntervalInSeconds;
 	}
 
-	if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 1.6) {
+	//if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 1.6) {
+	if (step % 4 == 0 && pos.dataSize() < 100000) {
 		auto& pos = data->vortexPosition;
 		auto& vel = data->vortexVelocity;
 		auto panels = data->panelSet;
@@ -301,6 +326,81 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 
 
 
+//void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
+//
+//	static int step = 0;
+//	auto data = _foamVortexData;
+//	auto& pos = _foamVortexData->vortexPosition;
+//	auto panelVel = data->panelSet->velocity;
+//	auto panel = data->panelSet;
+//	auto& emitParticle = data->newParticles;
+//
+//	auto emitNum = emitParticle.dataSize();
+//
+//	//同步旋转分量
+//
+//
+//	//更改粒子发射位置使得与panel同步
+//	for (int i = 0; i < emitNum; ++i) {
+//		emitParticle[i] += panelVel * timeIntervalInSeconds;
+//	}
+//
+//
+//	//if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 1.6) {
+//	if (step % 4 == 0 && pos.dataSize() < 100000) {
+//		auto& pos = data->vortexPosition;
+//		auto& vel = data->vortexVelocity;
+//		auto panels = data->panelSet;
+//		auto gamma = data->slip_strength;
+//		auto initGamma = data->initVorticity;
+//		Vector2D tempPos;
+//
+//		auto startNum = pos.dataSize();
+//
+//		//push_back这里可作优化
+//		for (int i = 0; i < emitNum; ++i) {
+//			pos.push(emitParticle(i));
+//			vel.push(Vector2D(0.0, 0.0));
+//			double temp_gamma = 0;
+//			data->gamma().push(temp_gamma);
+//			data->initVorticity.push(temp_gamma);
+//		}
+//
+//
+//		Eigen::MatrixXd& B = _foamVortexData->slip_matrix;
+//		Eigen::VectorXd& x = _foamVortexData->slip_strength;
+//
+//		auto panelSize = data->panelSet->size();
+//		auto panelVelocity = data->panelSet->velocity;
+//		//组装b
+//		Eigen::VectorXd b(panelSize * 2);
+//
+//		for (int i = 0; i < panelSize; ++i) {
+//			auto temp_pos = panels->midPoint(i);
+//			Vector2D tempVel;
+//			for (int j = 0; j < pos.dataSize(); ++j) {
+//				tempVel += computeUSingle(temp_pos, j);
+//			}
+//			auto v1 = (panelVelocity - tempVel);
+//			b[i] = v1.x;
+//			b[i + panelSize] = v1.y;
+//		}
+//
+//		x = B * b;
+//		auto& vor = data->gamma();
+//		int j = 0;
+//		for (int i = startNum; i < pos.dataSize(); ++i) {
+//			vor[i] = x[j++];
+//			data->initVorticity[i] = vor[i];
+//		}
+//	}
+//
+//	step++;
+//}
+
+
+
+
 //计算在pos处引发的诱导速度
 Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(const Vector2D& pos, int index) {
 
@@ -320,7 +420,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 10000;
+	int emitNum = 1;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
@@ -987,11 +1087,11 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 			velocities[i].y = 0;
 		}
 
-		if (positions[i].dis(obj->center()) < (foamVortexData()->radius + obj->r())) {
-			auto dir = (positions[i] - obj->center()).getNormalize();
-			positions[i] = obj->center() + (foamVortexData()->radius + obj->r()) * dir;
+		//if (positions[i].dis(obj->center()) < (foamVortexData()->radius + obj->r())) {
+			//auto dir = (positions[i] - obj->center()).getNormalize();
+			//positions[i] = obj->center() + (foamVortexData()->radius + obj->r()) * dir;
 			//velocities[i] = obj->velocity;
-		}
+		//}
 	}
 
 

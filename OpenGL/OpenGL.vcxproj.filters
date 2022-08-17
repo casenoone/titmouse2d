@@ -54,6 +54,9 @@
     <ClCompile Include="bubble.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="couplingTest3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader\shader.h">

@@ -42,11 +42,15 @@ public:
 	//设置移动边界（使用siggraph2020的边界求解方法）
 	void setMovingBoudnary(RegularPolygonPtr surfaces);
 
+	void setMovingBoudnary(RecTanglePtr surfaces);
+
 	//设置静态边界（使用siggraph2005的边界求解方法）
 	void setStaticBoudnary(ExplicitSurface2Ptr surfaces);
 
 	//发射追踪粒子
 	void emitTracerParticles();
+
+
 
 	//从移动边界上发射涡粒子以满足no-slip边界条件
 	void emitParticlesFromPanels(double timeIntervalInSeconds);

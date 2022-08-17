@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 #include "../titmouse2d/src/Lagrangian/ParticleSystemData2.h"
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
+#include "../titmouse2d/src/Geometry/RecTangle.h"
 #include "MovingFaceCenteredGrid2.h"
 #include <Eigen/Sparse>
 
@@ -76,7 +77,8 @@ public:
 	/**************以上泡沫**************/
 
 
-	RegularPolygonPtr panelSet;
+	//RegularPolygonPtr panelSet;
+	RecTanglePtr panelSet;
 	std::vector<Panel> staticBoundary;
 
 	//2021 paper 边界处理

@@ -63,6 +63,12 @@ public:
 		return result;
 	}
 
+	static Matrix2x2<T> rotationMatrix(double radian) {
+		auto cos_ = std::cos(radian);
+		auto sin_ = std::sin(radian);
+		return { cos_,-sin_,sin_,cos_ };
+	}
+
 
 private:
 	std::shared_ptr<std::array<T, 4>> _data;
