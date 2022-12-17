@@ -97,7 +97,6 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/fem1.gif" width="300">
 即将实现的算法或数据结构：
 - PCISPH
-- BVH加速结构
 - Clebsch gauge fluid solver
 - Multigrid Method
 - FVM（有限体积法）
