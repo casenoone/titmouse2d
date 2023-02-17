@@ -1,6 +1,4 @@
-#ifndef FOAMVORTEXSOLVER2_H
-#define FOAMVORTEXSOLVER2_H
-
+#pragma once
 
 #include "FoamVortexData2.h"
 #include "../titmouse2d/src/Lagrangian/ParticleSystemSolver2.h"
@@ -40,7 +38,7 @@ public:
 	Vector2D computeUSingle(const Vector2D& pos, int i)const;
 
 	//设置移动边界（使用siggraph2020的边界求解方法）
-	void setMovingBoudnary(RegularPolygonPtr surfaces);
+	//void setMovingBoudnary(RegularPolygonPtr surfaces);
 
 	void setMovingBoudnary(RecTanglePtr surfaces);
 
@@ -115,7 +113,7 @@ private:
 	void update_bubble_panelset_pos(double dt);
 
 private:
-	/**************以下泡沫**************/
+	/**************以下气泡**************/
 
 	void bubble_timeIntegration(double dt);
 
@@ -146,10 +144,11 @@ private:
 	//计算所有的two-way力
 	void compute_all_twoway_force(double dt);
 
-	//计算所有的力
-	void computeTotalForce(double dt);
 
-	/**************以上泡沫**************/
+
+	/**************以上气泡**************/
+
+
 
 
 public:
@@ -157,8 +156,8 @@ public:
 
 private:
 	FoamVortexDataPtr _foamVortexData;
+
 };
 
 
 
-#endif

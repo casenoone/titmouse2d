@@ -21,6 +21,12 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="2023.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="haha.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MassSpringData2.h">

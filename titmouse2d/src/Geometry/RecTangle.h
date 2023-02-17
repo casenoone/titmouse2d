@@ -63,6 +63,9 @@ public:
 			i->start += velocity * dt;
 			i->end += velocity * dt;
 		}
+
+		local_lower += velocity * dt;
+		local_upper += velocity * dt;
 		_center += velocity * dt;
 		local_o += velocity * dt;
 	}

@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+//ËÄ²æÊ÷½á¹¹
+
 
 class QuadTree {
 public:

@@ -7,13 +7,13 @@
 const double shallow_H = 1.0;
 
 //控制流体的粘性
-const double shallow_beta = 0.9;
-
+//const double shallow_beta = 0.93;
+const double shallow_beta = 0.94;
 //控制耦合稳定性
 const double shallow_gama = 0.4;
 
-const double shallow_e = 0.035;
-
+//const double shallow_e = 0.045;
+const double shallow_e = 0.08;
 //假设标签的值为1时是被固体占据
 void ShallowWaveSolver2::setCouplingCellNum() {
 	auto data = _shallowWaveData;
@@ -271,7 +271,14 @@ void ShallowWaveSolver2::setBoxMarkers(const RecTanglePtr box) {
 	marker.reSize(res.x, res.y, 0);
 	for (int i = 0; i < res.x; ++i) {
 		for (int j = 0; j < res.y; ++j) {
-
+			auto posFunc = h->dataPosition();
+			auto pos = posFunc(i, j);
+			if (box->IsInBox(pos)) {
+				marker(i, j) = 1;
+				//std::cout << i << "   " << j << std::endl;
+				//std::cout << box->center().x << "     " << box->center().y << std::endl;
+				//std::cout << box->local_lower.x << "     " << box->local_lower.y << std::endl;
+			}
 		}
 	}
 }

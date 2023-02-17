@@ -13,6 +13,14 @@ public:
 
 	Box2(const Box2& other);
 
+	bool IsInSide(const Vector2D& p) {
+		if (p.x > lowerCorner.x && p.x<upperCorner.x &&
+			p.y>lowerCorner.y && p.y < upperCorner.y) {
+			return true;
+		}
+		return false;
+	}
+
 	virtual Vector2D closestPoint(const Vector2D& otherPoint)const;
 
 	virtual double closestDistance(const Vector2D& otherPoint)const;
@@ -26,7 +34,7 @@ public:
 
 	Vector2D upperCorner;
 
-
+	bool fliped;
 };
 
 

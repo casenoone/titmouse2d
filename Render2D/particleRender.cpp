@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
+#include "../titmouse2d/src/Geometry/RecTangle.h"
 #include "../titmouse2d/src/Color3.hpp"
 #include <GL/glut.h>
 
@@ -32,11 +33,12 @@ const double kPiD = 3.1415926535;
 
 RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
 
+auto obj2 = std::make_shared<RecTangle>(Box2(Vector2D(0.71, 0.2), Vector2D(0.77, 0.6)));
+int k1 = 1;
 
 
 
-
-const float SCREEN_SIZE = 600;
+const float SCREEN_SIZE = 400;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
 void split(const std::string& s, std::vector<std::string>& tokens, char delim = ' ') {
 	tokens.clear();
@@ -162,8 +164,8 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 bool clearState = true;
+//double dt = 0.006;
 double dt = 0.006;
-
 
 
 static void display(void)
@@ -184,7 +186,8 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	//在这里读取粒子数据
-	std::ifstream myfile("E:\\zhangjian\\solve_data\\0022\\" + filename + ".txt");
+	//std::ifstream myfile("E:\\zhangjian\\solve_data\\2023\\" + filename + ".txt");
+	std::ifstream myfile("E:\\zhangjian\\solve_data\\2023shiyan\\0002\\" + filename + ".txt");
 
 	if (myfile.is_open() == false) {
 		system("pause");
@@ -194,7 +197,7 @@ static void display(void)
 
 	auto temp1 = std::atoi(filename.c_str());
 
-	int skipNum = 2;
+	int skipNum = 1;
 	temp1 += skipNum;
 	filename = std::to_string(temp1);
 
@@ -217,7 +220,6 @@ static void display(void)
 			//drawPoint(x, y);
 			//drawCircle(Vector2D(x, y), 0.03, 20); 
 			drawCircle(tempPos, 0.01, 20);
-			//drawPoint(x, y);
 		}
 	}
 
@@ -229,11 +231,28 @@ static void display(void)
 		drawLine(start.x, start.y, end.x, end.y);
 	}*/
 
-	obj1->velocity = Vector2D(3, 0.0);
+	//obj1->velocity = Vector2D(3, 0.0);
+	obj1->velocity = Vector2D(0.0, 0.0);
 	obj1->updatePosition(dt * skipNum);
 
+	if (obj2->center().x + dt * obj2->velocity.x > 1.8) {
+		k1 = -k1;
+	}
+	if (obj2->center().x - dt * obj2->velocity.x < 0.7) {
+		k1 = -k1;
+	}
+
+	obj2->updatePosition(dt * k1);
+	obj2->velocity = Vector2D(3, 0);
+	//可视化移动边界
+	for (auto i = obj2->_data.begin(); i != obj2->_data.end(); ++i) {
+		auto start = i->start;
+		auto end = i->end;
+		drawLine(start.x, start.y, end.x, end.y);
+	}
+
 	//drawCircle(obj1->center(), obj1->r(), 50);
-	drawCircle(obj1->center(), obj1->r(), 50, Color3<double>(0, 191, 255));
+	//drawCircle(obj1->center(), obj1->r(), 50, Color3<double>(0, 191, 255));
 
 	//然后前后缓存交换 
 	glutSwapBuffers();
@@ -241,7 +260,7 @@ static void display(void)
 	//延时0.5秒
 
 
-	//Sleep(25);
+	Sleep(25);
 
 }
 
@@ -275,7 +294,7 @@ int main(int argc, char** argv)
 	glutCreateWindow("titmouse2d");
 
 	glClearColor(6 / 255.0, 133 / 255.0, 135 / 255.0, 1);
-	glClearColor(0, 0, 0, 1);
+	//glClearColor(0, 0, 0, 1);
 	glShadeModel(GL_FLAT);
 
 

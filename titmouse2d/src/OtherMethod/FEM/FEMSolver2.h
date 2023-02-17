@@ -99,8 +99,8 @@ public:
 		auto& vels = femData->velocities;
 		auto& pos = femData->mesh->vertexList;
 		for (int i = 0; i < vels.size(); ++i) {
-			if (i == 0 || i == 12 || i == 1 || i == 13 || i == 2 || i == 14)
-				continue;
+			//if (i == 0 || i == 12 || i == 1 || i == 13 || i == 2 || i == 14)
+			//	continue;
 			vels[i] += (forces[i] + Vector2D(0, -9.8)) * dt;
 			pos[i] += vels[i] * dt;
 		}

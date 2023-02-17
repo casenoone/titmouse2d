@@ -32,8 +32,10 @@ public:
 	std::vector<double>	areas;
 
 	//能量密度函数的参数
-	double mu = 8000;
-	double lambda = 150000;
+	//double mu = 8000;
+	//double lambda = 150000;
+	double mu = 40000;
+	double lambda = 100000;
 };
 
 typedef std::shared_ptr<FEMData2> FEMData2Ptr;

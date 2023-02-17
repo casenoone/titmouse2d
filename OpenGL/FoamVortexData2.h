@@ -63,7 +63,10 @@ public:
 	Eigen::SparseMatrix<double> JacobinMat;
 
 	//临时的静止长度
-	double restLen = 0.07;
+	double restLen = 0.0001;
+
+	Array<double> restLens;
+	Array<double> radiuss;
 
 	//临时的刚度
 	//double stiff = 8000000;

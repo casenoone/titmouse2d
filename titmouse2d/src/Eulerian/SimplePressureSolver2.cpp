@@ -80,6 +80,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 					if (markers.lookAt(i + 1, j) == FLUID) {
 						A.insert(row, solveSystemMarker(i + 1, j), -invH);
 					}
+					if (markers.lookAt(i + 1, j) == SOLID) {
+						++coeff;
+					}
 				}
 
 				else {
@@ -89,6 +92,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				if (i - 1 >= 0) {
 					if (markers.lookAt(i - 1, j) == FLUID) {
 						A.insert(row, solveSystemMarker(i - 1, j), -invH);
+					}
+					if (markers.lookAt(i - 1, j) == SOLID) {
+						++coeff;
 					}
 				}
 				else {
@@ -100,6 +106,9 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 					if (markers.lookAt(i, j + 1) == FLUID) {
 						A.insert(row, solveSystemMarker(i, j + 1), -invH);
 					}
+					if (markers.lookAt(i, j + 1) == SOLID) {
+						++coeff;
+					}
 				}
 				else {
 					++coeff;
@@ -109,11 +118,13 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 					if (markers.lookAt(i, j - 1) == FLUID) {
 						A.insert(row, solveSystemMarker(i, j - 1), -invH);
 					}
+					if (markers.lookAt(i, j - 1) == SOLID) {
+						++coeff;
+					}
 				}
 				else {
 					++coeff;
 				}
-
 				A.insert(row, solveSystemMarker(i, j), -coeff * invH);
 				if (i <= 0 || i >= flow->uSize().x - 1) {
 					u(i, j) = 0;
@@ -121,6 +132,10 @@ void SimplePressureSolver2::constructMatrix(FaceCenteredGrid2Ptr& flow,
 				}
 
 				if (j <= 0 || j >= flow->vSize().y - 1) {
+					v(i, j) = 0;
+				}
+				if (markers.lookAt(i, j) == SOLID) {
+					u(i, j) = 0;
 					v(i, j) = 0;
 				}
 				b[row] = -(u(i + 1, j) - u(i, j) + v(i, j + 1) - v(i, j));
@@ -179,6 +194,10 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 			if (i <= 0 || i >= sizeU.x - 1) {
 				u(i, j) = 0;
 			}
+			//如果在边界上
+			//else if (markers.lookAt(i, j) == SOLID) {
+				//u(i, j) = 0;
+			//}
 			else {
 				//如果左右都是流体
 				if (markers.lookAt(i - 1, j) == FLUID && markers.lookAt(i, j) == FLUID) {
@@ -212,6 +231,9 @@ void SimplePressureSolver2::applyGradientandUpdateVel(FaceCenteredGrid2Ptr& flow
 			if (j <= 0 || j >= sizeV.y - 1) {
 				v(i, j) = 0;
 			}
+			//else if (markers.lookAt(i, j) == SOLID) {
+				//v(i, j) = 0;
+			//}
 			else {
 				//如果上下都是流体
 				if (markers.lookAt(i, j - 1) == FLUID && markers.lookAt(i, j) == FLUID) {

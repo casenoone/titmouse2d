@@ -22,6 +22,8 @@ public:
 
 	NeighborSearcher2Ptr neighbor;
 
+	Array<Vector2D> tempForces;
+
 private:
 
 	Array<Vector2D> _positions;

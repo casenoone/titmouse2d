@@ -8,6 +8,8 @@
 //#include "../titmouse2d/src/random.h"
 //#include "../titmouse2d/src/Eulerian/CellCenteredScalarGrid2.h"
 //#include "../titmouse2d/src/Geometry/Heart2.h"
+//#include "../titmouse2d/src/Geometry/Box2.h"
+//#include "../titmouse2d/src/Hybrid/ApicSolver2.h"
 //
 //const float SCREEN_SIZE = 400;
 //const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -27,7 +29,7 @@
 //void drawPoint(double x, double y)
 //{
 //	//在后缓存绘制图形，就一个点
-//	glPointSize(5.0f);//缺省是1
+//	glPointSize(4.0f);//缺省是1
 //	glBegin(GL_POINTS);
 //	glColor3f(1, 128.0 / 255, 51.0 / 255);
 //	glColor3f(1.0, 0.0, 0.0);
@@ -54,7 +56,10 @@
 //double dt = 0.01;
 //int n;
 //std::vector<ExplicitSurface2Ptr> surfaceSet;
-//
+//auto apicSolver = ApicSolver2::builder()
+//.withOrigin(Vector2D(0.0, 0.0))
+//.withResolution(Vector2I(70, 70))
+//.makeShared();
 //static void display(void)
 //{
 //
@@ -121,34 +126,104 @@
 //	glShadeModel(GL_FLAT);
 //
 //
-//	/*************************以下程序主逻辑***************************/
+//	double numH = 0.6;
+//
+//	Box2Ptr box1 = std::make_shared<Box2>(Vector2D(0.01, 0.01), Vector2D(2.1, 2.1), true);
+//
+//	Box2Ptr p1 = std::make_shared<Box2>(Vector2D(0.01 + 0.15, 0.01 + numH), Vector2D(0.3 + 0.15, 0.07 + numH), false);
+//	Box2Ptr p2 = std::make_shared<Box2>(Vector2D(0.01 + 0.15, 0.01 + numH), Vector2D(0.08 + 0.15, 0.23 + numH), false);
+//	Box2Ptr p3 = std::make_shared<Box2>(Vector2D(0.01 + 0.15, 0.16 + numH), Vector2D(0.3 + 0.15, 0.24 + numH), false);
+//	Box2Ptr p4 = std::make_shared<Box2>(Vector2D(0.24 + 0.15, 0.17 + numH), Vector2D(0.31 + 0.15, 0.41 + numH), false);
+//	Box2Ptr p5 = std::make_shared<Box2>(Vector2D(0.01 + 0.15, 0.33 + numH), Vector2D(0.3 + 0.15, 0.41 + numH), false);
+//
+//	Box2Ptr q1 = std::make_shared<Box2>(Vector2D(0.45 + 0.15, 0.01 + numH), Vector2D(0.52 + 0.15, 0.41 + numH), false);
+//	Box2Ptr q2 = std::make_shared<Box2>(Vector2D(0.45 + 0.15, 0.01 + numH), Vector2D(0.75 + 0.15, 0.07 + numH), false);
+//	Box2Ptr q3 = std::make_shared<Box2>(Vector2D(0.45 + 0.15, 0.34 + numH), Vector2D(0.75 + 0.15, 0.41 + numH), false);
+//	Box2Ptr q4 = std::make_shared<Box2>(Vector2D(0.68 + 0.15, 0.01 + numH), Vector2D(0.75 + 0.15, 0.41 + numH), false);
+//
+//	Box2Ptr r1 = std::make_shared<Box2>(Vector2D(0.9 + 0.15, 0.01 + numH), Vector2D(1.2 + 0.15, 0.07 + numH), false);
+//	Box2Ptr r2 = std::make_shared<Box2>(Vector2D(0.9 + 0.15, 0.01 + numH), Vector2D(0.98 + 0.15, 0.23 + numH), false);
+//	Box2Ptr r3 = std::make_shared<Box2>(Vector2D(0.9 + 0.15, 0.16 + numH), Vector2D(1.2 + 0.15, 0.24 + numH), false);
+//	Box2Ptr r4 = std::make_shared<Box2>(Vector2D(1.14 + 0.15, 0.17 + numH), Vector2D(1.21 + 0.15, 0.41 + numH), false);
+//	Box2Ptr r5 = std::make_shared<Box2>(Vector2D(0.9 + 0.15, 0.33 + numH), Vector2D(1.2 + 0.15, 0.41 + numH), false);
+//
+//	Box2Ptr s1 = std::make_shared<Box2>(Vector2D(1.4 + 0.15, 0.01 + numH), Vector2D(1.7 + 0.15, 0.07 + numH), false);
+//	Box2Ptr s2 = std::make_shared<Box2>(Vector2D(1.63 + 0.15, 0.01 + numH), Vector2D(1.70 + 0.15, 0.41 + numH), false);
+//	Box2Ptr s3 = std::make_shared<Box2>(Vector2D(1.4 + 0.15, 0.34 + numH), Vector2D(1.7 + 0.15, 0.41 + numH), false);
+//	Box2Ptr s4 = std::make_shared<Box2>(Vector2D(1.4 + 0.15, 0.17 + numH), Vector2D(1.7 + 0.15, 0.24 + numH), false);
+//
+//
+//
+//
+//	surfaceSet.push_back(box1);
+//	surfaceSet.push_back(p1);
+//	surfaceSet.push_back(p2);
+//	surfaceSet.push_back(p3);
+//	surfaceSet.push_back(p4);
+//	surfaceSet.push_back(p5);
+//	surfaceSet.push_back(q1);
+//	surfaceSet.push_back(q2);
+//	surfaceSet.push_back(q3);
+//	surfaceSet.push_back(q4);
+//	surfaceSet.push_back(r1);
+//	surfaceSet.push_back(r2);
+//	surfaceSet.push_back(r3);
+//	surfaceSet.push_back(r4);
+//	surfaceSet.push_back(r5);
+//	surfaceSet.push_back(s1);
+//	surfaceSet.push_back(s2);
+//	surfaceSet.push_back(s3);
+//	surfaceSet.push_back(s4);
+//
+//
 //	n = 0;
 //	std::vector<Vector2D> pos(n);
 //
-//	/*for (int i = 0; i < n; ++i) {
-//		pos[i].x = random_double(0.1, 0.7);
-//		pos[i].y = random_double(0.1, 0.7);
-//	}*/
 //
-//	/*auto grid = CellCenteredScalarGrid2::builder()
-//		.withOrigin(0, 0)
-//		.withResolution(30, 30)
-//		.makeShared();
+//	auto spacing = apicSolver->gridSpacing();
+//	auto res = apicSolver->resolution();
+//	auto posFunc = apicSolver->velocity()->cellCenterPosition();
 //
 //
-//	Vector2D tempC(1, 1.8);
-//	for (int i = 0; i < grid->resolution().x; ++i) {
-//		for (int j = 0; j < grid->resolution().y; ++j) {
-//			auto c_pos = (grid->dataPosition())(i, j);
-//			if (c_pos.dis(tempC) < 0.2) {
+//	for (auto& sur : surfaceSet) {
+//		auto son = std::dynamic_pointer_cast<Box2>(sur);
+//		for (int i = 0; i < res.x; ++i) {
+//			for (int j = 0; j < res.y; ++j) {
 //
-//				pos.push_back(c_pos);
-//				n++;
+//				if (son->IsInSide(posFunc(i, j)) && son->fliped == false) {
+//					for (int k = 0; k < 1; ++k) {
+//						n++;
+//						auto tempP = posFunc(i, j);
+//						auto randX = random_double(tempP.x - spacing.x / 2, tempP.x + spacing.x / 2);
+//						auto randY = random_double(tempP.y - spacing.x / 2, tempP.y + spacing.x / 2);
+//
+//						pos.push_back(Vector2D(randX, randY));
+//					}
+//
+//
+//				}
 //			}
 //		}
-//	}*/
 //
-//	Heart2 heart(Vector2D(1, 1), 0.1, Vector2I(30, 30), Vector2D::zero(), 0);
+//
+//	}
+//	std::cout << n << std::endl;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//	/*************************以下程序主逻辑***************************/
+//
+//
+//
+//
+//	/*Heart2 heart(Vector2D(1, 1), 0.1, Vector2I(30, 30), Vector2D::zero(), 0);
 //	auto& heart_sdf = heart.sdf();
 //	auto heart_res = heart_sdf->resolution();
 //	for (int i = 0; i < heart_res.x; ++i) {
@@ -159,11 +234,10 @@
 //				n++;
 //			}
 //		}
-//	}
+//	}*/
 //
 //	constSolver = std::make_shared<ConstrainedSolver2>(pos);
-//	//constSolver->massSpringData->restLen = grid->gridSpacing().x;
-//	//std::cout << "质点间距:" << grid->gridSpacing().x << std::endl;
+//
 //	/*************************以上程序主逻辑***************************/
 //
 //	glutKeyboardFunc(key);       //键盘按下去时

@@ -36,6 +36,8 @@ public:
 
 	static Builder builder();
 
+	FaceCenteredGrid2Ptr velocity();
+
 protected:
 
 	virtual void onBeginAdvanceTimeStep(double timeIntervalInSeconds);
@@ -71,7 +73,6 @@ protected:
 
 	const GridSystemData2Ptr& gridSystemData() const;
 
-	FaceCenteredGrid2Ptr velocity();
 
 
 protected:

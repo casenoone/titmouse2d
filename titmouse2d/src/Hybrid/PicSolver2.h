@@ -51,6 +51,7 @@ protected:
 	virtual void moveParticles(double timeIntervalInSeconds);
 
 	void setMarkers();
+	void setBoundaryMarkers();
 
 	void setFluidCellNum();
 

@@ -18,7 +18,7 @@ void ParticleSystemSolver2::setData(int numberOfParticles,
 	_particleSystemData->positions() = pos;
 	_particleSystemData->velocities().reSize(numberOfParticles);
 	_particleSystemData->forces().reSize(numberOfParticles);
-
+	_particleSystemData->tempForces.reSize(numberOfParticles);
 
 	////初始化neighborSearche
 	_particleSystemData->neighbor = std::make_shared<NeighborSearcher2>(resolutionX, resolutionY, numberOfParticles);
@@ -117,7 +117,8 @@ void ParticleSystemSolver2::accumlateExternalForces() {
 	auto& velocities = _particleSystemData->velocities();
 	auto& positions = _particleSystemData->positions();
 	double mass = 1.0;
-	auto g = Vector2D(0.0, -9.8);
+	auto g = Vector2D(0.0, 0.0);
+	//auto g = Vector2D(0.0, -9.8);
 	for (int i = 0; i < n; ++i) {
 		auto force = g * mass;
 		forces[i] = forces[i] + force;

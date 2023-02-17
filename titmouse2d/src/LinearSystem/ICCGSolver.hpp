@@ -68,7 +68,7 @@ void ICCGSolver<T>::compute(const SparseMatrix<T>& A, VectorN<T>& x, const Vecto
 		delta_new = r * r;
 
 	}
-	std::cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << std::endl;
+	//std::cout << "迭代次数：" << this->_iterNum << "当前误差：" << this->_r.norm() << std::endl;
 
 }
 

@@ -1,8 +1,8 @@
-ï»¿#include "ConstrainedSolver2.h"
+#include "ConstrainedSolver2.h"
 #include<Eigen/IterativeLinearSolvers>
 
-//CompliantMatçš„å°ºå¯¸ï¼šExE
-//E:çº¦æŸçš„æ•°é‡
+//CompliantMatµÄ³ß´ç£ºExE
+//E:Ô¼ÊøµÄÊıÁ¿
 
 void ConstrainedSolver2::constructCompliantMat() {
 	auto& edge = massSpringData->edges;
@@ -41,16 +41,19 @@ void ConstrainedSolver2::constructConstraint() {
 	auto& edge = massSpringData->edges;
 	auto restLen = massSpringData->restLen;
 
-	//è¿™é‡Œè¦æ”¹è¿›ä¸€ä¸‹clearå‡½æ•°ï¼Œæœ‰é—®é¢˜,
+	//ÕâÀïÒª¸Ä½øÒ»ÏÂclearº¯Êı£¬ÓĞÎÊÌâ,
 	edge.reSize(0);
 	edge.clear();
 	for (int i = 0; i < n; ++i) {
 		for (int j = i + 1; j < n; ++j) {
 			auto& pos_i = pos[i];
 			auto& pos_j = pos[j];
-			//å¦‚æœæ»¡è¶³è¿™ä¸ªæ¡ä»¶å°±å»ºç«‹çº¦æŸ
+			//Èç¹ûÂú×ãÕâ¸öÌõ¼ş¾Í½¨Á¢Ô¼Êø
 
-			if (pos_i.dis(pos_j) <= 0.08) {
+			//Õâ¸öÊÇ2023ÌØ±ğ°æ£¬¼ÇµÃ¸Ã»ØÈ¥
+
+
+			if (pos_i.dis(pos_j) <= 0.05 && pos_i.dis(pos_j) >= 0.04) {
 				edge.push(MassSpringData2::Edge{ i,j });
 			}
 		}
@@ -60,7 +63,7 @@ void ConstrainedSolver2::constructConstraint() {
 
 }
 
-//æ³¨æ„è¿™é‡Œå‘é‡çš„æ–¹å‘ä¸€å®šä¸è¦æé”™äº†
+//×¢ÒâÕâÀïÏòÁ¿µÄ·½ÏòÒ»¶¨²»Òª¸ã´íÁË
 Vector2D ConstrainedSolver2::getDerivation(int phi_idx, int x_idx) {
 	auto& pos = massSpringData->positions;
 	auto& edge = massSpringData->edges;
@@ -108,7 +111,7 @@ void ConstrainedSolver2::construct_VelocityVector(Eigen::VectorXd& vec) {
 
 }
 
-//è®¡ç®—å¼¹ç°§ä¹‹é—´çš„é˜»å°¼
+//¼ÆËãµ¯»ÉÖ®¼äµÄ×èÄá
 Vector2D ConstrainedSolver2::computeSpringDragForce(int idx) {
 	auto& pos = massSpringData->positions;
 	auto& vel = massSpringData->velocities;
@@ -126,16 +129,15 @@ Vector2D ConstrainedSolver2::computeSpringDragForce(int idx) {
 
 
 void ConstrainedSolver2::onAdvanceTimeStep(double dt) {
-	//æ„é€ è´¨ç‚¹ä¹‹é—´çš„çº¦æŸ
-	constructConstraint();
 
-	//æ„é€ æŸ”åº¦çŸ©é˜µ
+
+	//¹¹ÔìÈá¶È¾ØÕó
 	constructCompliantMat();
 
-	//æ„é€ é›…å¯æ¯”çŸ©é˜µ
+	//¹¹ÔìÑÅ¿É±È¾ØÕó
 	constructJacobinMat();
 
-	//æ—¶é—´ç§¯åˆ†
+	//Ê±¼ä»ı·Ö
 	timeIntegration(dt);
 }
 
@@ -169,7 +171,7 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 	cg.compute(A);
 	lambda = cg.solve(b);
 
-	//æ³¨æ„è¿™é‡Œçš„ç¬¦å·ï¼Œè§†é¢‘é‡Œå†™é”™äº†
+	//×¢ÒâÕâÀïµÄ·ûºÅ£¬ÊÓÆµÀïĞ´´íÁË
 	vel_new = vel + dt * jacobin_trans * lambda;
 
 	for (int i = 0; i < n; ++i) {
@@ -179,22 +181,22 @@ void ConstrainedSolver2::timeIntegration(double dt) {
 	for (int k = 0; k < edgeNum; ++k) {
 		int i = edges[k].i;
 		int j = edges[k].j;
-		auto damping = computeSpringDragForce(k) * dt;
+		auto damping = computeSpringDragForce(k) * 0;
 		velocities[i] += damping;
 		velocities[j] -= damping;
 	}
 
-	//é˜»å°¼
+	//×èÄá
 	for (int i = 0; i < n; ++i) {
-		velocities[i] += (-1.0 * velocities[i]) * dt * 0.5;
+		//velocities[i] += (-1.0 * velocities[i]) * dt * 0.5;
 	}
 
-	//ä½ç½®æ›´æ–°
+	//Î»ÖÃ¸üĞÂ
 	for (int i = 0; i < n; ++i) {
 		positions[i] += velocities[i] * dt;
 	}
 
-	//è¾¹ç•Œå¤„ç†
+	//±ß½ç´¦Àí
 	for (int i = 0; i < n; ++i) {
 		if (positions[i].x < 0)
 		{

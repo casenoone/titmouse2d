@@ -151,7 +151,7 @@ int main(int argc, char** argv)
 	numberOfParticles = 400;
 	for (int i = 0; i < numberOfParticles; ++i) {
 		auto x = random_double(1.2, 1.8);
-		auto y = random_double(0.2, 1.5);
+		auto y = random_double(0.2, 1.0);
 		Vector2D temp(x, y);
 		temp_pos.push_back(temp);
 	}

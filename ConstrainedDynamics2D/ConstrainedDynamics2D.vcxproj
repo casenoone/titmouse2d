@@ -140,7 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="2023.cpp" />
     <ClCompile Include="ConstrainedSolver2.cpp" />
+    <ClCompile Include="haha.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

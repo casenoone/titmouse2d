@@ -20,7 +20,7 @@ Box2::~Box2() {
 Box2::Box2(const Vector2D& _lowerCorner,
 	const Vector2D& _upperCorner,
 	bool IsFliped) :
-	lowerCorner(_lowerCorner), upperCorner(_upperCorner)
+	lowerCorner(_lowerCorner), upperCorner(_upperCorner), fliped(IsFliped)
 {
 
 	Vector2D A(lowerCorner.x, upperCorner.y);

@@ -6,7 +6,7 @@
 //#include <vector>
 //
 //#include "../titmouse2d/src/Geometry/Sphere2.h"
-//#include "FoamVortexSolver.h"
+//#include "FoamVortexSolver2.h"
 //#include "../titmouse2d/src/SparseMatrix.hpp"
 //#include "../titmouse2d/src/Eulerian/MarchingCubes2.h"
 //#include "../titmouse2d/src/Geometry/RegularPolygon.h"
@@ -109,6 +109,7 @@
 //auto vpSolver = std::make_shared<FoamVortexSolver>(res, Vector2D(grid_x, grid_x));
 //RegularPolygonPtr obj1 = std::make_shared<RegularPolygon>(21, Vector2D(0.1, 1), 0.06);
 //
+////double dt = 0.006;
 //double dt = 0.006;
 //int bubble_num = 0;
 //
@@ -143,9 +144,10 @@
 //	std::string path1 = "E:\\zhangjian\\solve_data\\all\\bubble\\";
 //	Plyout writer1(path1, name, bubble_pos.dataSize(), "r");
 //	for (int i = 0; i < bubble_pos.dataSize(); ++i) {
-//		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->particleRadius(i), 50);
-//		auto r = vpSolver->foamVortexData()->particleRadius(i);
-//		//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
+//		drawCircle(bubble_pos[i], vpSolver->foamVortexData()->radiuss[i], 50);
+//
+//		//auto r = 0.03;
+//	//writer1.write_in_ply(bubble_pos[i].x, 0, bubble_pos[i].y, r);
 //	}
 //
 //
@@ -156,7 +158,7 @@
 //	for (int i = 0; i < n; ++i) {
 //
 //		auto pos = vpSolver->foamVortexData()->vortexPosition;
-//		drawPoint(pos[i].x, pos[i].y, 255, 0, 0);
+//		drawPoint(pos[i].x, pos[i].y, 10, 0, 0);
 //	}
 //
 //	//可视化tracer粒子
@@ -196,6 +198,115 @@
 //	glLoadIdentity();
 //}
 //
+///******************以下随机生成非均匀气泡数据**********************/
+//void generateBubble(
+//	Array<Vector2D>& positions,
+//	Array<double>& rs,
+//	int model,
+//	double gridSpacing,
+//	Vector2D gridCenter) {
+//	auto grid_devide_2 = gridSpacing / 2;
+//	auto grid_devide_4 = gridSpacing / 4;
+//	auto grid_devide_8 = gridSpacing / 8;
+//
+//	if (model == 0) {
+//		positions.push(gridCenter);
+//		rs.push(grid_devide_2);
+//	}
+//	else if (model == 1) {
+//		Vector2D center1 = Vector2D(gridCenter.x - grid_devide_4, gridCenter.y + grid_devide_4);
+//		Vector2D center2 = Vector2D(gridCenter.x + grid_devide_4, gridCenter.y + grid_devide_4);
+//		Vector2D center3(gridCenter.x, gridCenter.y - grid_devide_4);
+//
+//		positions.push(Vector2D(center1.x - grid_devide_8, center1.y + grid_devide_8));
+//		positions.push(Vector2D(center1.x - grid_devide_8, center1.y - grid_devide_8));
+//		positions.push(Vector2D(center1.x + grid_devide_8, center1.y - grid_devide_8));
+//		positions.push(Vector2D(center1.x + grid_devide_8, center1.y + grid_devide_8));
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//
+//		positions.push(center2);
+//		rs.push(grid_devide_4 * random_double(0.8, 1));
+//
+//		auto temp_x = random_double(center3.x - grid_devide_4, center3.x + grid_devide_4);
+//		positions.push(Vector2D(temp_x, center3.y));
+//		rs.push(grid_devide_4);
+//	}
+//	else if (model == 2) {
+//		Vector2D center1 = Vector2D(gridCenter.x, gridCenter.y + grid_devide_4);
+//		Vector2D center2 = Vector2D(gridCenter.x - grid_devide_4, gridCenter.y - grid_devide_4);
+//		Vector2D center3 = Vector2D(gridCenter.x + grid_devide_4, gridCenter.y - grid_devide_4);
+//
+//		auto temp_x = random_double(center1.x - grid_devide_4, center1.x + grid_devide_4);
+//		positions.push(Vector2D(temp_x, center1.y));
+//		rs.push(grid_devide_4);
+//
+//		positions.push(Vector2D(center2.x + grid_devide_8, center2.y + grid_devide_8));
+//		positions.push(Vector2D(center2.x + grid_devide_8, center2.y - grid_devide_8));
+//		positions.push(Vector2D(center2.x - grid_devide_8, center2.y + grid_devide_8));
+//		positions.push(Vector2D(center2.x - grid_devide_8, center2.y - grid_devide_8));
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//
+//		positions.push(center3);
+//		rs.push(grid_devide_4 * random_double(0.8, 1));
+//	}
+//	else if (model == 3) {
+//		Vector2D center1 = Vector2D(gridCenter.x - grid_devide_4, gridCenter.y);
+//		Vector2D center2 = Vector2D(gridCenter.x + grid_devide_4, gridCenter.y + grid_devide_4);
+//		Vector2D center3 = Vector2D(gridCenter.x + grid_devide_4, gridCenter.y - grid_devide_4);
+//
+//		auto temp_y = random_double(center1.y - grid_devide_4, center1.y + grid_devide_4);
+//		positions.push(Vector2D(center1.x, temp_y));
+//		rs.push(grid_devide_4);
+//
+//		positions.push(Vector2D(center2.x - grid_devide_8, center2.y - grid_devide_8));
+//		positions.push(Vector2D(center2.x - grid_devide_8, center2.y + grid_devide_8));
+//		positions.push(Vector2D(center2.x + grid_devide_8, center2.y - grid_devide_8));
+//		positions.push(Vector2D(center2.x + grid_devide_8, center2.y + grid_devide_8));
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//
+//		positions.push(center3);
+//		rs.push(grid_devide_4 * random_double(0.8, 1));
+//
+//	}
+//	else if (model == 4) {
+//		Vector2D center1 = Vector2D(gridCenter.x - grid_devide_4, gridCenter.y + grid_devide_4);
+//		Vector2D center2 = Vector2D(gridCenter.x + grid_devide_4, gridCenter.y);
+//		Vector2D center3 = Vector2D(gridCenter.x - grid_devide_4, gridCenter.y - grid_devide_4);
+//
+//		positions.push(Vector2D(center1.x - grid_devide_8, center1.y - grid_devide_8));
+//		positions.push(Vector2D(center1.x - grid_devide_8, center1.y + grid_devide_8));
+//		positions.push(Vector2D(center1.x + grid_devide_8, center1.y - grid_devide_8));
+//		positions.push(Vector2D(center1.x + grid_devide_8, center1.y + grid_devide_8));
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//		rs.push(grid_devide_8);
+//
+//		auto temp_y = random_double(center2.y - grid_devide_4, center2.y + grid_devide_4);
+//		positions.push(Vector2D(center2.x, temp_y));
+//		rs.push(grid_devide_4);
+//
+//
+//		positions.push(center3);
+//		rs.push(grid_devide_4 * random_double(0.8, 1));
+//	}
+//
+//}
+//
+//
+//
+//
+//
+///******************以上随机生成非均匀气泡数据**********************/
 //
 //int main(int argc, char** argv)
 //{
@@ -217,31 +328,49 @@
 //
 //
 //	/**********以下生成气泡**********/
-//	double temp_r = 0.01;
 //	Array<Vector2D> this_pos;
+//	Array<double> this_r;
 //	Vector2D temp1;
 //
 //	auto grid = CellCenteredScalarGrid2::builder()
 //		.withOrigin(0, 0)
-//		.withResolution(50, 50)
+//		.withResolution(25, 25)
 //		.makeShared();
+//	double temp_r = 0.01;// grid->gridSpacing().x * 0.5;
 //
-//	Vector2D tempC(1.0, 1.0);
+//	//Vector2D tempC(0.6, 1.0);
+//	//Box2 bubble_box(Vector2D(0.3, 0.7), Vector2D(0.8, 1.3));
+//	//for (int i = 0; i < grid->resolution().x; ++i) {
+//	//	for (int j = 0; j < grid->resolution().y; ++j) {
+//	//		auto pos = (grid->dataPosition())(i, j);
+//	//		if (pos.dis(tempC) < 0.4) {
+//	//			this_pos.push(pos);
+//	//			bubble_num++;
+//	//		}
+//	//		/*if (bubble_box.IsInSide(pos)) {
+//	//			this_pos.push(pos);
+//	//			bubble_num++;
+//	//		}*/
+//	//	}
+//	//}
+//
+//	Vector2D tempC(0.6, 1.0);
+//	Box2 bubble_box(Vector2D(0.3, 0.7), Vector2D(0.8, 1.3));
+//
+//	int random_num[] = { 0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4 };
 //	for (int i = 0; i < grid->resolution().x; ++i) {
 //		for (int j = 0; j < grid->resolution().y; ++j) {
 //			auto pos = (grid->dataPosition())(i, j);
-//			if (pos.dis(tempC) < 0.2) {
-//				//pos.x += random_double(-0.02, 0.02);
-//				//pos.y += random_double(-0.02, 0.02);
-//				this_pos.push(pos);
-//				//temp_r = random_double(0.01, 0.03);
-//				vpSolver->foamVortexData()->particleRadius.push(temp_r);
-//				bubble_num++;
+//			if (pos.dis(tempC) < 0.4) {
+//				generateBubble(this_pos, this_r, random_num[int(random_double(0, 16))], grid->gridSpacing().x, pos);
 //			}
+//
 //		}
 //	}
 //
-//	vpSolver->setData(bubble_num, this_pos, 20, 20);
+//
+//	vpSolver->setData(this_pos.dataSize(), this_pos, 20, 20);
+//	//vpSolver->emitVortexRing();
 //
 //	Collider2 collider;
 //	collider.push(box1);
@@ -249,14 +378,25 @@
 //	vpSolver->setCollider(collider);
 //	/**********以上生成气泡**********/
 //
-//	obj1->velocity = Vector2D(3, 0.0);
+//	//obj1->velocity = Vector2D(3, 0.0);
+//	obj1->velocity = Vector2D(1, 0.0);
 //
-//	vpSolver->generatePanelSet(this_pos, vpSolver->foamVortexData()->particleRadius);
-//	//vpSolver->emitVortexRing();
+//	vpSolver->generatePanelSet(this_pos, this_r);
 //
-//
+//	vpSolver->foamVortexData()->restLen = grid->gridSpacing().x;
+//	vpSolver->foamVortexData()->radius = grid->gridSpacing().x / 2;
 //	UINT timerId = 1;
 //	MSG msg;
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //	SetTimer(NULL, timerId, 1, TimerProc);
 //
 //
@@ -265,7 +405,7 @@
 //	glutReshapeFunc(resize);     //改变窗口大小时
 //	glutDisplayFunc(display);    //绘制窗口显示时
 //
-//	glutMainLoop();
+//	//glutMainLoop();
 //
 //
 //
@@ -306,28 +446,30 @@
 //	//auto position = vpSolver->foamVortexData()->positions();
 //	//auto waterdata = vpSolver->_shallowWaveSolver->shallowWaveData();
 //	//auto water_num = waterdata->resolution().x * waterdata->resolution().x;
-//
+//	//auto bubble_num = vpSolver->foamVortexData()->numberOfParticles();
 //	//for (int i = 0; i < frame; i += 1) {
 //
 //	//	auto tracer_num = vpSolver->foamVortexData()->tracePosition.dataSize();
-//	//	obj1->velocity = Vector2D(2, 0.0);
+//	//	obj1->velocity = Vector2D(3, 0.0);
 //	//	obj1->updatePosition(dt);
 //	//	vpSolver->setShallowWaveMovingBoundary(obj1->center(), obj1->r());
 //
 //	//	static int fileNum = 1;
 //	//	std::string	name = std::to_string(fileNum);
 //	//	fileNum++;
-//	//	std::string path1 = "E:\\zhangjian\\solve_data\\all\\boundary1\\";
-//	//	std::string path2 = "E:\\zhangjian\\solve_data\\all\\thinfoam1\\";
-//	//	//std::string path2 = "E:\\zhangjian\\solve_data\\test520_1\\";
-//	//	std::string path3 = "E:\\zhangjian\\solve_data\\all\\water1\\";
+//	//	std::string path1 = "E:\\zhangjian\\solve_data\\all_3\\boundary\\";
+//	//	std::string path2 = "E:\\zhangjian\\solve_data\\all_3\\thinfoam\\";
+//	//	std::string path3 = "E:\\zhangjian\\solve_data\\all_3\\water\\";
+//	//	std::string path4 = "E:\\zhangjian\\solve_data\\all_3\\bubble\\";
+//
 //	//	Plyout writer1(path1, name, 1);
 //	//	Plyout writer2(path2, name, tracer_num + 4);
 //	//	Plyout writer3(path3, name, water_num);
+//	//	Plyout writer4(path4, name, bubble_num + 4);
 //
 //
 //	//	//写入移动边界的数据
-//	//	//writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
+//	//	writer1.write_in_ply(obj1->center().x, 0, obj1->center().y);
 //
 //	//	//写入thinfoam数据
 //	//	for (int n = 0; n < tracer_num; ++n) {
@@ -335,17 +477,15 @@
 //	//		auto y = vpSolver->foamVortexData()->tracePosition[n].y;
 //	//		if (x < 2 && y < 2 && x >= 0 && y >= 0) {
 //	//			auto height = waterdata->height->sample(vpSolver->foamVortexData()->tracePosition[n]);
-//	//			//writer2.write_in_ply(x, height, y);
+//	//			writer2.write_in_ply(x, height, y);
 //	//		}
 //	//	}
-//	//	auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();
-//	//	std::cout << "当前解算到第：" << i << "步，涡粒子数：" << vortex_num << std::endl;
 //
 //	//	//为了保证thinfoam模型与water模型对齐，追加四个点
-//	//	/*writer2.write_in_ply(0, 0, 0);
+//	//	writer2.write_in_ply(0, 0, 0);
 //	//	writer2.write_in_ply(2, 0, 2);
 //	//	writer2.write_in_ply(2, 0, 0);
-//	//	writer2.write_in_ply(0, 0, 2);*/
+//	//	writer2.write_in_ply(0, 0, 2);
 //
 //	//	//写入water数据
 //	//	for (int q1 = 0; q1 < waterdata->resolution().x; ++q1) {
@@ -353,11 +493,26 @@
 //	//			auto posFunc = waterdata->height->dataPosition();
 //	//			auto pos = posFunc(q1, q2);
 //	//			auto height = waterdata->height->lookAt(q1, q2);
-//	//			//writer3.write_in_ply(pos.x, height, pos.y);
+//	//			writer3.write_in_ply(pos.x, height, pos.y);
 //	//		}
 //	//	}
 //
+//
+//	//	//写入bubble数据
+//	//	for (int n = 0; n < bubble_num; ++n) {
+//	//		auto height = waterdata->height->sample(position[n]);
+//	//		writer4.write_in_ply(position[n].x, height, position[n].y);
+//	//	}
+//
+//	//	//为了保证bubble模型与water模型对齐，追加四个点
+//	//	writer4.write_in_ply(0, 0, 0);
+//	//	writer4.write_in_ply(2, 0, 2);
+//	//	writer4.write_in_ply(2, 0, 0);
+//	//	writer4.write_in_ply(0, 0, 2);
+//
 //	//	vpSolver->onAdvanceTimeStep(dt);
+//	//	auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();
+//	//	std::cout << "当前解算到第：" << i << "步，涡粒子数：" << vortex_num << std::endl;
 //
 //	//}
 //
@@ -365,25 +520,26 @@
 //
 //
 //
+//	dt = 0.006;
 //
 //
+//	//这里是写入文件
+////记得重新算的时候要删掉 原来的文件夹
+//	int frame = 100000000;
 //
-//		//这里是写入文件
-//	//记得重新算的时候要删掉 原来的文件夹
-//	int frame = 1000;
-//	auto num = vpSolver->foamVortexData()->numberOfParticles();
 //	auto position = vpSolver->foamVortexData()->positions();
-//
+//	//auto position = vpSolver->foamVortexData()->tracePosition;
+//	auto num = position.dataSize();
 //
 //	int interval = 1;
 //
 //	std::string outfilename = "1";
 //
-//	//system("mkdir FlipData3");
-//
 //	for (int i = 0; i < frame; i += 1) {
 //
-//		std::ofstream out("E:\\zhangjian\\solve_data\\test520_1\\" + outfilename + ".txt", std::ios::app);
+//		std::ofstream out("E:\\zhangjian\\solve_data\\2023shiyan\\0001\\" + outfilename + ".txt", std::ios::app);
+//		//std::ofstream out("E:\\zhangjian\\solve_data\\0024\\" + outfilename + ".txt", std::ios::app);
+//
 //
 //		for (int n = 0; n < num; ++n) {
 //			auto x = position[n].x;
@@ -395,7 +551,7 @@
 //		auto temp1 = std::atoi(outfilename.c_str());
 //		temp1++;
 //		outfilename = std::to_string(temp1);
-//
+//		std::cout << "当前解算到" << i << "帧" << std::endl;
 //	}
 //
 //

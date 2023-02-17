@@ -39,22 +39,16 @@
     <ClCompile Include="vp2005test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="couplingTest.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="couplingTest2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="FoamVortexSolver2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="001.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="bubble.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="couplingTest3.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="couplingTest4.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

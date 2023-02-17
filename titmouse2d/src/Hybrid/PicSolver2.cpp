@@ -1,7 +1,8 @@
 #include "PicSolver2.h"
 #include "../boundingbox2.h"
 #include <array>
-
+#include "../Collider2.h"
+#include "../Geometry/Box2.h"
 #include<omp.h>
 
 PicSolver2::PicSolver2() {
@@ -214,7 +215,32 @@ void PicSolver2::moveParticles(double timeIntervalInSeconds) {
 	}
 }
 
+void PicSolver2::setBoundaryMarkers() {
+	auto size = resolution();
 
+	for (auto& surface : collider._surfaces) {
+		auto son = std::dynamic_pointer_cast<Box2>(surface);
+		for (int i = 0; i < size.x; ++i) {
+			for (int j = 0; j < size.y; ++j) {
+				auto posFunc = gridSystemData()->velocity()->cellCenterPosition();
+				auto pos = posFunc(i, j);
+
+				if (son->IsInSide(pos) && son->fliped == false) {
+					/*std::cout << son->lowerCorner.x << ","
+						<< son->lowerCorner.y << ","
+						<< son->upperCorner.x << ","
+						<< son->upperCorner.y
+						<< std::endl;
+					std::cout << pos.x << "   " << pos.y << std::endl;*/
+					//cellCenterMarkers(i, j) = SOLID;
+				}
+			}
+		}
+
+
+	}
+
+}
 
 void PicSolver2::setMarkers() {
 	auto size = resolution();
@@ -246,6 +272,7 @@ void PicSolver2::setMarkers() {
 		cellCenterMarkers(xss, yss) = FLUID;
 
 	}
+	setBoundaryMarkers();
 }
 
 void PicSolver2::setFluidCellNum() {
