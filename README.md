@@ -16,6 +16,7 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
   - ICCG
 - 基于网格的粒子邻近搜索结构
 - 2D情况下任意几何形状的碰撞检测与处理
+- BVH加速结构
 - 显式/隐式曲面转换
 - 常用几何形状的sdf计算
 - 有限差分计算用到的均匀网格结构
@@ -96,7 +97,6 @@ titmouse是一个2d离线物理引擎（个人玩具），由于程序性能受�
 - <img src="https://github.com/casenoone/titmouse2d/blob/master/titmouse2d/src/gif/fem1.gif" width="300">
 即将实现的算法或数据结构：
 - PCISPH
-- BVH加速结构
 - Clebsch gauge fluid solver
 - Multigrid Method
 - FVM（有限体积法）
