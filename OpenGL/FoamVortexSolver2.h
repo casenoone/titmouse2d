@@ -38,9 +38,9 @@ public:
 	Vector2D computeUSingle(const Vector2D& pos, int i)const;
 
 	//设置移动边界（使用siggraph2020的边界求解方法）
-	//void setMovingBoudnary(RegularPolygonPtr surfaces);
+	void setMovingBoudnary(RegularPolygonPtr surfaces);
 
-	void setMovingBoudnary(RecTanglePtr surfaces);
+	//void setMovingBoudnary(RecTanglePtr surfaces);
 
 	//设置静态边界（使用siggraph2005的边界求解方法）
 	void setStaticBoudnary(ExplicitSurface2Ptr surfaces);
@@ -60,7 +60,7 @@ public:
 	void setShallowWaveMovingBoundary(const Vector2D& center, const double r);
 
 	//为高度场设置矩形移动边界
-	void setShallowWaveMovingBoundary(const RecTanglePtr box);
+	//void setShallowWaveMovingBoundary(const RecTanglePtr box);
 
 	//计算流体与气泡的交互力
 	Vector2D computeTwoWayForce(int index, double dt);
@@ -158,6 +158,4 @@ private:
 	FoamVortexDataPtr _foamVortexData;
 
 };
-
-
 

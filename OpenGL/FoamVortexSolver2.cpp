@@ -1,3 +1,4 @@
+
 #include "FoamVortexSolver2.h"
 #include "../titmouse2d/src/ConstVar.h"
 #include "../titmouse2d/src/random.h"
@@ -9,7 +10,7 @@
 #include <cmath>
 
 
-static const int numOfStep = 5;
+static const int numOfStep = 6;
 static const double vorticity_eps = 0.04;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
@@ -78,14 +79,14 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
+	//_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
 	//no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
-	bubble_timeIntegration(timeIntervalInSeconds);
+	//bubble_timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
-	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
+	//all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
 
-	update_bubble_panelset_pos(timeIntervalInSeconds);
+	//update_bubble_panelset_pos(timeIntervalInSeconds);
 
 	decayVorticity();
 	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
@@ -107,16 +108,16 @@ Vector2D FoamVortexSolver::computeUSingle(const Vector2D& pos, int i)const {
 }
 
 
-//
-//void FoamVortexSolver::setMovingBoudnary(RegularPolygonPtr surfaces) {
-//	_foamVortexData->panelSet = surfaces;
-//	constructMovingBoundaryMatrix();
-//}
 
-void FoamVortexSolver::setMovingBoudnary(RecTanglePtr surfaces) {
+void FoamVortexSolver::setMovingBoudnary(RegularPolygonPtr surfaces) {
 	_foamVortexData->panelSet = surfaces;
 	constructMovingBoundaryMatrix();
 }
+
+//void FoamVortexSolver::setMovingBoudnary(RecTanglePtr surfaces) {
+//	_foamVortexData->panelSet = surfaces;
+//	constructMovingBoundaryMatrix();
+//}
 
 void FoamVortexSolver::setStaticBoudnary(ExplicitSurface2Ptr surfaces) {
 	auto box = surfaces;
@@ -144,15 +145,15 @@ void FoamVortexSolver::setStaticBoudnary(ExplicitSurface2Ptr surfaces) {
 	constructStaticBoundaryMatrix();
 }
 
-////设置圆形边界
-//void FoamVortexSolver::setShallowWaveMovingBoundary(const Vector2D& center, const double r) {
-//	_shallowWaveSolver->setSphereMarkers(center, r);
-//}
-
-//设置矩形边界
-void FoamVortexSolver::setShallowWaveMovingBoundary(const RecTanglePtr box) {
-	_shallowWaveSolver->setBoxMarkers(box);
+//设置圆形边界
+void FoamVortexSolver::setShallowWaveMovingBoundary(const Vector2D& center, const double r) {
+	_shallowWaveSolver->setSphereMarkers(center, r);
 }
+
+////设置矩形边界
+//void FoamVortexSolver::setShallowWaveMovingBoundary(const RecTanglePtr box) {
+//	_shallowWaveSolver->setBoxMarkers(box);
+//}
 
 //index:bubble的索引
 Vector2D FoamVortexSolver::computeTwoWayForce(int index, double dt) {
@@ -339,8 +340,9 @@ void FoamVortexSolver::emitParticlesFromPanels(double timeIntervalInSeconds) {
 	}
 
 
-	//if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 1.6) {
-	if (step % 4 == 0 && pos.dataSize() < 100000) {
+	//只要小球没穿出边界，就一直发射涡粒子
+	if (step % 4 == 0 && pos.dataSize() < 100000 && (panel->center().x - panel->r()) < 2.0) {
+		//if (step % 4 == 0 && pos.dataSize() < 100000) {
 		auto& pos = data->vortexPosition;
 		auto& vel = data->vortexVelocity;
 		auto panels = data->panelSet;
@@ -413,7 +415,7 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 0;
+	int emitNum = 10000;
 	//int emitNum = 1;
 	tracerPos.reSize(emitNum);
 	tracerVel.reSize(emitNum);
@@ -723,14 +725,15 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 
 }
 
-//线性耗散
+//标准耗散方法
 void FoamVortexSolver::decayVorticity() {
 	auto& vorticity = _foamVortexData->gamma();
 	auto len = vorticity.dataSize();
 	for (int i = 0; i < len; ++i) {
 		static double init = vorticity[i];
 		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
-			vorticity[i] -= vorticity[i] * 0.005;
+			//0.005
+			vorticity[i] -= vorticity[i] * 0.03;
 		else {
 			vorticity[i] = 0;
 
@@ -746,7 +749,8 @@ void FoamVortexSolver::decayVorticity() {
 //	auto len = vorticity.dataSize();
 //	for (int i = 0; i < len; ++i) {
 //		if (std::fabs(vorticity[i]) >= std::fabs(initVorticites[i] * 0.2))
-//			vorticity[i] -= vorticity[i] * 0.01;
+//			//分别做0.005 0.01 0.015 0.02
+//			vorticity[i] -= vorticity[i] * 0.005;
 //		else {
 //			vorticity[i] = 0;
 //
@@ -857,9 +861,16 @@ void FoamVortexSolver::constructCompliantMat() {
 	auto& compliantMat = _foamVortexData->CompliantMat;
 	compliantMat.resize(edgeNum, edgeNum);
 	int j = 0;
+
+	//2是标准数据,标准数据
+	double temp_radius = 2;
+
+	//double temp_radius = 4;
+
+	//double temp_radius = 1;
 	for (int i = 0; i < edgeNum; ++i) {
 		auto midP = 0.5 * (pos[edge[i].i] + pos[edge[i].j]);
-		if (midP.dis(obj->center()) < radius * 4) {
+		if (midP.dis(obj->center()) < radius * temp_radius) {
 			compliantMat.insert(i, j++) = 50;
 		}
 		else {
@@ -903,6 +914,7 @@ void FoamVortexSolver::constructConstraint() {
 			auto& pos_j = pos[j];
 			auto r_ij = rs[i] + rs[j];
 
+			//标准距离：r_ij * 1.3
 			//如果满足这个条件就建立约束
 			if (pos_i.dis(pos_j) <= r_ij * 1.3) {
 				edge.push(FoamVortexData::Edge{ i,j });
@@ -1036,10 +1048,6 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 		velocities[j] -= damping;
 	}
 
-	////阻尼
-	//for (int i = 0; i < n; ++i) {
-	//	velocities[i] += (-1.0 * velocities[i]) * dt * 30;
-	//}
 
 
 	//阻尼
@@ -1048,9 +1056,9 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 	}
 
 
+	//这里是干嘛的？
 	/*auto& tracerPos = positions;
 	auto vor_n = _foamVortexData->vortexPosition.dataSize();
-
 	for (int i = 0; i < n; ++i) {
 		Vector2D tempVel;
 		Vector2D pos = tracerPos(i);
@@ -1094,11 +1102,13 @@ void FoamVortexSolver::bubble_timeIntegration(double dt) {
 			velocities[i].y = 0;
 		}
 
-		/*if (positions[i].dis(obj->center()) < (foamVortexData()->radius + obj->r())) {
+
+		//移动边界与追踪粒子的边界判断
+		if (positions[i].dis(obj->center()) < (foamVortexData()->radius + obj->r())) {
 			auto dir = (positions[i] - obj->center()).getNormalize();
 			positions[i] = obj->center() + (foamVortexData()->radius + obj->r()) * dir;
 			velocities[i] = obj->velocity;
-		}*/
+		}
 	}
 
 
@@ -1113,5 +1123,4 @@ void FoamVortexSolver::compute_all_twoway_force(double dt) {
 		forces[i] += computeTwoWayForce(i, dt);
 	}
 }
-
 

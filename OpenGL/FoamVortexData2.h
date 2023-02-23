@@ -69,8 +69,14 @@ public:
 	Array<double> radiuss;
 
 	//临时的刚度
-	//double stiff = 8000000;
+	//100000为标准数据
+	//double stiff = 100000;
+	// 
+
+	//double stiff = 500000;
 	double stiff = 100000;
+	//double stiff = 10000;
+
 	//阻尼系数
 	double dampingCoeff = 30;
 
@@ -80,8 +86,8 @@ public:
 	/**************以上泡沫**************/
 
 
-	//RegularPolygonPtr panelSet;
-	RecTanglePtr panelSet;
+	RegularPolygonPtr panelSet;
+	//RecTanglePtr panelSet;
 	std::vector<Panel> staticBoundary;
 
 	//2021 paper 边界处理
