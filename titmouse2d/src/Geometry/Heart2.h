@@ -17,7 +17,8 @@ public:
 	virtual const VertexCenteredScalarGrid2Ptr sdf() const;
 
 public:
-
+	Vector2D center;
+	double radius;
 
 public:
 	virtual void computeSdf()override;

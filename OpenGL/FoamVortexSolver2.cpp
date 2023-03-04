@@ -4,13 +4,14 @@
 #include "../titmouse2d/src/random.h"
 #include "../titmouse2d/src/boundingbox2.h"
 #include "../titmouse2d/src/Geometry/RecTangle.h"
+#include "../titmouse2d/src/Geometry/Heart2.h"
 #include <omp.h>
 
 #include <iostream>
 #include <cmath>
 
 
-static const int numOfStep = 6;
+static const int numOfStep = 7;
 static const double vorticity_eps = 0.04;
 static double fv_eps = 0.001;
 static int static_boudary_interval = 20;
@@ -79,14 +80,14 @@ void FoamVortexSolver::timeIntegration(double timeIntervalInSeconds) {
 
 
 void FoamVortexSolver::onAdvanceTimeStep(double timeIntervalInSeconds) {
-	//_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
+	_foamVortexData->neighbor->setNeiborList(0.12, _foamVortexData->positions());
 	//no_through_solve(timeIntervalInSeconds);
 	timeIntegration(timeIntervalInSeconds);
-	//bubble_timeIntegration(timeIntervalInSeconds);
+	bubble_timeIntegration(timeIntervalInSeconds);
 	emitParticlesFromPanels(timeIntervalInSeconds);
-	//all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
+	all_bubble_vortexStrengthSolve(timeIntervalInSeconds);
 
-	//update_bubble_panelset_pos(timeIntervalInSeconds);
+	update_bubble_panelset_pos(timeIntervalInSeconds);
 
 	decayVorticity();
 	_shallowWaveSolver->onAdvanceTimeStep(timeIntervalInSeconds);
@@ -406,6 +407,28 @@ Vector2D FoamVortexSolver::computeUnitVelocityFromPanels(const Vector2D& pos, in
 }
 
 
+////移动边界所使用的tracer粒子
+//void FoamVortexSolver::emitTracerParticles() {
+//	static int step = 0;
+//	auto data = _foamVortexData;
+//	auto& tracerPos = _foamVortexData->tracePosition;
+//	auto& tracerVel = _foamVortexData->traceVelocity;
+//	auto n = tracerPos.dataSize();
+//	auto panels = data->panelSet;
+//
+//	int emitNum = 10000;
+//	//int emitNum = 1;
+//	tracerPos.reSize(emitNum);
+//	tracerVel.reSize(emitNum);
+//	Vector2D tempPos;
+//	for (int i = 0; i < emitNum; ++i) {
+//		tempPos.x = random_double(0.2, 0.8);
+//		tempPos.y = random_double(0.5, 1.5);
+//		tracerPos[i] = tempPos;
+//	}
+//}
+
+//爱心形状发射
 //移动边界所使用的tracer粒子
 void FoamVortexSolver::emitTracerParticles() {
 	static int step = 0;
@@ -415,17 +438,46 @@ void FoamVortexSolver::emitTracerParticles() {
 	auto n = tracerPos.dataSize();
 	auto panels = data->panelSet;
 
-	int emitNum = 10000;
+	int emitNum = 0;
+	//int emitNum = 10000;
 	//int emitNum = 1;
-	tracerPos.reSize(emitNum);
-	tracerVel.reSize(emitNum);
+	//tracerPos.reSize(emitNum);
+	//tracerVel.reSize(emitNum);
 	Vector2D tempPos;
-	for (int i = 0; i < emitNum; ++i) {
-		tempPos.x = random_double(0.2, 0.8);
-		tempPos.y = random_double(0.5, 1.5);
-		tracerPos[i] = tempPos;
+
+
+	Heart2 heart(Vector2D(0.5, 0.5), -0.12, Vector2I(250, 250), Vector2D::zero(), 0);
+	int n1 = 0;
+	auto& heart_sdf = heart.sdf();
+	auto heart_res = heart_sdf->resolution();
+	for (int i = 0; i < heart_res.x; ++i) {
+		for (int j = 0; j < heart_res.y; ++j) {
+			if (heart_sdf->lookAt(i, j) < 0) {
+				auto cell_center = heart_sdf->cellCenterPosition()(i, j);
+
+				tracerPos.push(cell_center);
+				emitNum++;
+			}
+		}
 	}
+
+	Heart2 heart1(Vector2D(1.0, 1.1), -0.3, Vector2I(250, 250), Vector2D::zero(), 0);
+	auto& heart_sdf1 = heart1.sdf();
+	auto heart_res1 = heart_sdf->resolution();
+	for (int i = 0; i < heart_res1.x; ++i) {
+		for (int j = 0; j < heart_res1.y; ++j) {
+			if (heart_sdf1->lookAt(i, j) < 0) {
+				auto cell_center = heart_sdf1->cellCenterPosition()(i, j);
+				tracerPos.push(cell_center);
+				emitNum++;
+			}
+		}
+	}
+
+	tracerVel.reSize(emitNum);
+
 }
+
 
 
 //求解tracer粒子的运动
@@ -725,31 +777,14 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 
 }
 
-//标准耗散方法
-void FoamVortexSolver::decayVorticity() {
-	auto& vorticity = _foamVortexData->gamma();
-	auto len = vorticity.dataSize();
-	for (int i = 0; i < len; ++i) {
-		static double init = vorticity[i];
-		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
-			//0.005
-			vorticity[i] -= vorticity[i] * 0.03;
-		else {
-			vorticity[i] = 0;
-
-		}
-	}
-}
-
-
-////线性耗散
+////标准耗散方法
 //void FoamVortexSolver::decayVorticity() {
-//	auto& initVorticites = _foamVortexData->initVorticity;
 //	auto& vorticity = _foamVortexData->gamma();
 //	auto len = vorticity.dataSize();
 //	for (int i = 0; i < len; ++i) {
-//		if (std::fabs(vorticity[i]) >= std::fabs(initVorticites[i] * 0.2))
-//			//分别做0.005 0.01 0.015 0.02
+//		static double init = vorticity[i];
+//		if (std::fabs(vorticity[i]) >= std::fabs(init * 0.2))
+//			//0.005
 //			vorticity[i] -= vorticity[i] * 0.005;
 //		else {
 //			vorticity[i] = 0;
@@ -757,6 +792,23 @@ void FoamVortexSolver::decayVorticity() {
 //		}
 //	}
 //}
+
+
+//线性耗散
+void FoamVortexSolver::decayVorticity() {
+	auto& initVorticites = _foamVortexData->initVorticity;
+	auto& vorticity = _foamVortexData->gamma();
+	auto len = vorticity.dataSize();
+	for (int i = 0; i < len; ++i) {
+		if (std::fabs(vorticity[i]) >= std::fabs(initVorticites[i] * 0.2))
+			//分别做0.005 0.01 0.015 0.02
+			vorticity[i] -= vorticity[i] * 0.005;
+		else {
+			vorticity[i] = 0;
+
+		}
+	}
+}
 
 
 ////线性+非线性耗散

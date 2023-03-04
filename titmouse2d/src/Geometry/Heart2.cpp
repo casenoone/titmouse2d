@@ -1,9 +1,9 @@
 #include "Heart2.h"
 
-Heart2::Heart2(const Vector2D& center, const double& r,
+Heart2::Heart2(const Vector2D& center_, const double& r,
 	const Vector2I& resolution,
 	const Vector2D& origin,
-	double initialValue) {
+	double initialValue) :center(center_), radius(r) {
 
 	_data = std::make_shared<VertexCenteredScalarGrid2>(resolution, origin, initialValue);
 
@@ -31,9 +31,10 @@ void Heart2::computeSdf() {
 			auto posFunc = _data->dataPosition();
 			auto p = posFunc(i, j);
 
-			p.x -= 0.9;
+			//移动调这里
+			p.x -= center.x;
 			p.x = fabs(p.x);
-			p.y -= 0.8;
+			p.y -= center.y;
 
 			auto p1 = (p - Vector2D(0.25, 0.75));
 			if ((p.y + p.x) > 1.0) {
@@ -45,7 +46,8 @@ void Heart2::computeSdf() {
 				auto p3 = Vector2D(p.x - 0.5 * std::max(p.x + p.y, 0.0), p.y - 0.5 * std::max(p.x + p.y, 0.0));
 				(*_data)(i, j) = sqrt(std::min(p2.dot(p2), p3.dot(p3))) * sign(p.x - p.y);
 			}
-			(*_data)(i, j) += 0.1;
+			//缩放调这里
+			(*_data)(i, j) -= radius;
 
 		}
 	}

@@ -12,6 +12,7 @@
 #include "../titmouse2d/src/Geometry/RegularPolygon.h"
 #include "../titmouse2d/src/Geometry/Box2.h"
 #include "../titmouse2d/src/mesh/Plyout.h"
+#include "../titmouse2d/src/Geometry/Heart2.h"
 #include <GL/glut.h>
 
 #include <windows.h>
@@ -39,7 +40,7 @@ static void key(unsigned char key, int x, int y)
 void drawPoint(double x, double y)
 {
 	//在后缓存绘制图形，就一个点
-	glPointSize(1.05f);//缺省是1
+	glPointSize(2.5f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -177,7 +178,7 @@ static void display(void)
 		drawLine(start.x, start.y, end.x, end.y);
 	}
 
-
+	std::cout << "泡沫粒子数：" << tracer_n << "," << "气泡粒子数：" << bubble_pos.dataSize() << std::endl;
 
 	glutSwapBuffers();
 }
@@ -336,23 +337,55 @@ int main(int argc, char** argv)
 	//标准分辨率30x30
 	auto grid = CellCenteredScalarGrid2::builder()
 		.withOrigin(0, 0)
-		.withResolution(30, 30)
+		.withResolution(33, 33)
 		.makeShared();
 
 
 
-	Vector2D tempC(0.9, 1.0);
+	//Vector2D tempC(1.3, 1.0);
+	//Box2 bubble_box(Vector2D(0.3, 0.7), Vector2D(0.8, 1.3));
+
+	//int random_num[] = { 0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4 };
+	//for (int i = 0; i < grid->resolution().x; ++i) {
+	//	for (int j = 0; j < grid->resolution().y; ++j) {
+	//		auto pos = (grid->dataPosition())(i, j);
+	//		//0.5
+	//		if (pos.dis(tempC) < 0.45) {
+	//			generateBubble(this_pos, this_r, random_num[int(random_double(0, 16))], grid->gridSpacing().x, pos);
+	//		}
+
+	//	}
+	//}
+
+
+	Vector2D tempC(1.3, 1.0);
 	Box2 bubble_box(Vector2D(0.3, 0.7), Vector2D(0.8, 1.3));
 
 	int random_num[] = { 0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4 };
-	for (int i = 0; i < grid->resolution().x; ++i) {
-		for (int j = 0; j < grid->resolution().y; ++j) {
-			auto pos = (grid->dataPosition())(i, j);
-			//0.5
-			if (pos.dis(tempC) < 0.0) {
-				generateBubble(this_pos, this_r, random_num[int(random_double(0, 16))], grid->gridSpacing().x, pos);
-			}
+	Heart2 heart(Vector2D(1.5, 0.5), -0.1, Vector2I(30, 30), Vector2D::zero(), 0);
+	auto& heart_sdf = heart.sdf();
+	auto heart_res = heart_sdf->resolution();
+	for (int i = 0; i < heart_res.x; ++i) {
+		for (int j = 0; j < heart_res.y; ++j) {
+			if (heart_sdf->lookAt(i, j) < 0) {
+				auto cell_center = heart_sdf->cellCenterPosition()(i, j);
+				generateBubble(this_pos, this_r, random_num[int(random_double(0, 16))], grid->gridSpacing().x, cell_center);
 
+			}
+		}
+	}
+
+
+	Heart2 heart1(Vector2D(1.0, -0.2), -0.3, Vector2I(30, 30), Vector2D::zero(), 0);
+	auto& heart_sdf1 = heart1.sdf();
+	auto heart_res1 = heart_sdf->resolution();
+	for (int i = 0; i < heart_res1.x; ++i) {
+		for (int j = 0; j < heart_res1.y; ++j) {
+			if (heart_sdf1->lookAt(i, j) < 0) {
+				auto cell_center = heart_sdf1->cellCenterPosition()(i, j);
+				generateBubble(this_pos, this_r, random_num[int(random_double(0, 16))], grid->gridSpacing().x, cell_center);
+
+			}
 		}
 	}
 
@@ -372,7 +405,7 @@ int main(int argc, char** argv)
 
 
 	//模拟气泡时记得把这个打开
-	//vpSolver->generatePanelSet(this_pos, this_r);
+	vpSolver->generatePanelSet(this_pos, this_r);
 	vpSolver->foamVortexData()->restLen = grid->gridSpacing().x;
 	vpSolver->foamVortexData()->radius = grid->gridSpacing().x / 2;
 	UINT timerId = 1;
@@ -448,10 +481,10 @@ int main(int argc, char** argv)
 		static int fileNum = 1;
 		std::string	name = std::to_string(fileNum);
 		fileNum++;
-		std::string path1 = "E:\\zhangjian\\solve_data\\2023shiyan\\0007\\boundary\\";
-		std::string path2 = "E:\\zhangjian\\solve_data\\2023shiyan\\0007\\thinfoam\\";
-		std::string path3 = "E:\\zhangjian\\solve_data\\2023shiyan\\0007\\water\\";
-		std::string path4 = "E:\\zhangjian\\solve_data\\2023shiyan\\0007\\bubble\\";
+		std::string path1 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\boundary\\";
+		std::string path2 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\thinfoam\\";
+		std::string path3 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\water\\";
+		std::string path4 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\bubble\\";
 
 		Plyout writer1(path1, name, 1);
 		Plyout writer2(path2, name, tracer_num + 4);
@@ -488,17 +521,17 @@ int main(int argc, char** argv)
 		}
 
 		Plyout writer4(path4, name, bubble_num + 4, "r");
-		////写入bubble数据
-		//for (int n = 0; n < bubble_num; ++n) {
-		//	auto height = waterdata->height->sample(position[n]);
-		//	writer4.write_in_ply(position[n].x, height, position[n].y, rs[n]);
-		//}
+		//写入bubble数据
+		for (int n = 0; n < bubble_num; ++n) {
+			auto height = waterdata->height->sample(position[n]);
+			writer4.write_in_ply(position[n].x, height, position[n].y, rs[n]);
+		}
 
-		////为了保证bubble模型与water模型对齐，追加四个点
-		//writer4.write_in_ply(0, 0, 0);
-		//writer4.write_in_ply(2, 0, 2);
-		//writer4.write_in_ply(2, 0, 0);
-		//writer4.write_in_ply(0, 0, 2);
+		//为了保证bubble模型与water模型对齐，追加四个点
+		writer4.write_in_ply(0, 0, 0);
+		writer4.write_in_ply(2, 0, 2);
+		writer4.write_in_ply(2, 0, 0);
+		writer4.write_in_ply(0, 0, 2);
 
 		vpSolver->onAdvanceTimeStep(dt);
 		auto vortex_num = vpSolver->foamVortexData()->vortexPosition.dataSize();

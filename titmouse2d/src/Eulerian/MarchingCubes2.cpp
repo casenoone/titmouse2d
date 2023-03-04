@@ -148,6 +148,9 @@ void MarchingCube2::getLineSegmentSet(std::vector<LineSegment>& lineSet) {
 
 }
 
+void getSdf() {
+
+}
 
 void MarchingCube2::calculateWeight() {
 
