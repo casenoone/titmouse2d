@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <array>
 #include "../Vector2.hpp"
 
 
@@ -12,16 +13,9 @@ public:
 		~Node() {}
 	public:
 		//四个子树指针
-		std::unique_ptr<Node> p1 = nullptr;
-		std::unique_ptr<Node> p2 = nullptr;
-		std::unique_ptr<Node> p3 = nullptr;
-		std::unique_ptr<Node> p4 = nullptr;
-
+		std::array<std::unique_ptr<Node>, 4> ch;
 		//存放该结点对应的网格索引
 		std::unique_ptr<Vector2I> gridIdx = nullptr;
-
-		//标记当前节点在树的第几层
-		int level = 0;
 	};
 
 
@@ -29,7 +23,21 @@ public:
 	QuadTree() = default;
 
 	QuadTree(Vector2I minRes_, std::vector<Vector2D>& pos_) :
-		pos(pos_), _minRes(minRes_) {}
+		pos(pos_), _minRes(minRes_) {
+		root = std::make_unique<Node>();
+		resetMapGrid();
+		buildMapGrid();
+		buildQuadTree();
+	}
+
+	//重置网格
+	void resetMapGrid() {
+		mapGrid.clear();
+		mapGrid.resize(_minRes.x);
+		for (auto iter = mapGrid.begin(); iter != mapGrid.end(); iter++) {
+			iter->resize(_minRes.y);
+		}
+	}
 
 	//将粒子映射到四叉树最细分辨率网格中
 	void buildMapGrid() {
@@ -61,18 +69,50 @@ public:
 		}
 	}
 
-	//重置网格
-	void resetMapGrid() {
-		mapGrid.clear();
-		mapGrid.resize(_minRes.x);
-		for (auto iter = mapGrid.begin(); iter != mapGrid.end(); iter++) {
-			iter->resize(_minRes.y);
+	void buildQuadTree() {
+		build(root, 0, _minRes.x, 0, _minRes.y);
+	}
+
+	//xl:xleft
+	//xr:xright
+	//yd:ydown
+	//yu:yup
+
+	//网格-结点分布：
+	//2*****3
+	//*******
+	//*******
+	//0*****1
+	void build(
+		std::unique_ptr<QuadTree::Node>& node,
+		int xl, int xr, int yd, int yu) {
+		if ((xr - xl) < 2) {
+			return;
 		}
+
+		//为子结点分配内存
+		for (int i = 0; i < 4; ++i) {
+			node->ch[i] = std::make_unique<QuadTree::Node>();
+		}
+
+		//当xl-xr等于2时，达到最细分辨率
+		//确定叶子结点坐标
+		if ((xl - xr) == 2) {
+			node->ch[0]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl, yd));
+			node->ch[1]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl + 1, yd));
+			node->ch[2]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl, yd + 1));
+			node->ch[3]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl + 1, yd + 1));
+		}
+
+		build(node->ch[0], xl, (xl + xr) * 0.5, yd, (yd + yu) * 0.5);
+		build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
+		build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
+		build(node->ch[3], (xl + xr) * 0.5, xr, (yd + yu) * 0.5, yu);
 	}
 
 public:
 	//树的根节点
-	std::shared_ptr<Node> root;
+	std::unique_ptr<Node> root;
 
 	//树的总层数
 	int totalLevel = 1;
