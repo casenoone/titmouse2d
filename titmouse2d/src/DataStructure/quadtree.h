@@ -110,6 +110,10 @@ public:
 		build(node->ch[3], (xl + xr) * 0.5, xr, (yd + yu) * 0.5, yu);
 	}
 
+	void test() {
+
+	}
+
 public:
 	//树的根节点
 	std::unique_ptr<Node> root;
