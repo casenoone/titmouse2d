@@ -15,5 +15,7 @@ int main() {
 
 	QuadTree tree(Vector2I(4, 4), pos);
 
+	tree.findLeafNode(tree.root);
+
 	return 0;
 }

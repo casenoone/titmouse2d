@@ -11,6 +11,15 @@ public:
 	public:
 		Node() = default;
 		~Node() {}
+		bool isLeafNode() {
+			if (ch[0] == nullptr &&
+				ch[1] == nullptr &&
+				ch[2] == nullptr &&
+				ch[3] == nullptr) {
+				return true;
+			}
+			return false;
+		}
 	public:
 		//四个子树指针
 		std::array<std::unique_ptr<Node>, 4> ch;
@@ -86,18 +95,19 @@ public:
 	void build(
 		std::unique_ptr<QuadTree::Node>& node,
 		int xl, int xr, int yd, int yu) {
+
 		if ((xr - xl) < 2) {
 			return;
 		}
-
 		//为子结点分配内存
 		for (int i = 0; i < 4; ++i) {
 			node->ch[i] = std::make_unique<QuadTree::Node>();
 		}
+		//std::cout << (xr - xl) << std::endl;
 
 		//当xl-xr等于2时，达到最细分辨率
 		//确定叶子结点坐标
-		if ((xl - xr) == 2) {
+		if ((xr - xl) == 2) {
 			node->ch[0]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl, yd));
 			node->ch[1]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl + 1, yd));
 			node->ch[2]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl, yd + 1));
@@ -108,6 +118,20 @@ public:
 		build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
 		build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
 		build(node->ch[3], (xl + xr) * 0.5, xr, (yd + yu) * 0.5, yu);
+	}
+
+
+
+	//遍历树的叶结点
+	void findLeafNode(std::unique_ptr<QuadTree::Node>& node) {
+		if (node == nullptr)return;
+		if (node->isLeafNode()) {
+			if (node->gridIdx)
+				std::cout << node->gridIdx->x << "," << node->gridIdx->y << std::endl;
+			return;
+		}
+		for (int i = 0; i < 4; ++i)
+			findLeafNode(node->ch[i]);
 	}
 
 	void test() {
