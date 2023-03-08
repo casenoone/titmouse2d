@@ -168,6 +168,9 @@
     <ClCompile Include="src\OtherMethod\RigidBody\RigidBodyCollider2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\DataStructure\quadtree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Vector2.hpp">

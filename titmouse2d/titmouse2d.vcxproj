@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClCompile Include="src\boundingbox2.cpp" />
     <ClCompile Include="src\Collider2.cpp" />
+    <ClCompile Include="src\DataStructure\quadtree.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp" />
