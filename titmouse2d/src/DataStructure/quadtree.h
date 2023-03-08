@@ -77,8 +77,10 @@ public:
 	//遍历树的叶结点
 	void findLeafNode(std::unique_ptr<QuadTree::Node>& node) {
 		if (node == nullptr)return;
+		std::cout << "质量：" << node->cmass << "位置:" << node->mcenter.x << "," << node->mcenter.y << std::endl;
+
 		if (node->isLeafNode()) {
-			std::cout << node->gridIdx->x << "," << node->gridIdx->y << std::endl;
+			//std::cout << node->gridIdx->x << "," << node->gridIdx->y << std::endl;
 			return;
 		}
 		for (int i = 0; i < 4; ++i)
