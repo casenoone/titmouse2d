@@ -13,7 +13,7 @@ int main() {
 		pos.push_back(Vector2D(i * 0.1 + 0.1, i * 0.2));
 	}
 
-	QuadTree tree(Vector2I(4, 4), pos);
+	BarnesHut tree(Vector2I(8, 8), pos);
 
 	tree.findLeafNode(tree.root);
 

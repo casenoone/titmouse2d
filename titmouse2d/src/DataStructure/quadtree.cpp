@@ -1,7 +1,7 @@
 #include "quadtree.h"
 
 //将粒子映射到四叉树最细分辨率网格中
-void QuadTree::buildMapGrid() {
+void BarnesHut::buildMapGrid() {
 	int particleIdx = 0;
 	for (int i = 0; i < pos.size(); ++i) {
 		double maxWidth = 2;
@@ -26,13 +26,12 @@ void QuadTree::buildMapGrid() {
 			gridY = 0;
 
 		mapGrid[gridX][gridY].push_back(i);
-		//std::cout << gridX << "," << gridY << std::endl;
 	}
 }
 
 
-void QuadTree::build(
-	std::unique_ptr<QuadTree::Node>& node,
+void BarnesHut::build(
+	std::unique_ptr<BarnesHut::Node>& node,
 	int xl, int xr, int yd, int yu) {
 
 	if (node == nullptr)return;
@@ -41,7 +40,7 @@ void QuadTree::build(
 
 	//为子结点分配内存
 	for (int i = 0; i < 4; ++i) {
-		node->ch[i] = std::make_unique<QuadTree::Node>();
+		node->ch[i] = std::make_unique<BarnesHut::Node>();
 	}
 
 	//当xl-xr等于2时，达到最细分辨率
@@ -51,24 +50,24 @@ void QuadTree::build(
 		node->ch[1]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl + 1, yd));
 		node->ch[2]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl, yd + 1));
 		node->ch[3]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl + 1, yd + 1));
-
+		//假设粒子质量统一为1
+		double particle_mass = 1.0;
 		for (int t = 0; t < 4; ++t) {
 			int i = node->ch[t]->gridIdx->x;
 			int j = node->ch[t]->gridIdx->y;
 			auto& particlesList = mapGrid[i][j];
 			if (particlesList.size() == 0)continue;
-
-			//std::cout << particlesList.size() << std::endl;
 			for (int k = 0; k < particlesList.size(); ++k) {
-				//目前假设粒子质量均为1
-				node->ch[t]->cmass += 1;
+				node->ch[t]->cmass += particle_mass;
 			}
 
 			double temp_x = 0;
 			double temp_y = 0;
+
 			for (int k = 0; k < particlesList.size(); ++k) {
-				temp_x += pos[k].x;
-				temp_y += pos[k].y;
+				int idx = particlesList[k];
+				temp_x += pos[idx].x * particle_mass;
+				temp_y += pos[idx].y * particle_mass;
 			}
 			temp_x /= node->ch[t]->cmass;
 			temp_y /= node->ch[t]->cmass;
@@ -77,13 +76,22 @@ void QuadTree::build(
 		}
 	}
 
+
+
+	build(node->ch[0], xl, (xl + xr) * 0.5, yd, (yd + yu) * 0.5);
+	build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
+	build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
+	build(node->ch[3], (xl + xr) * 0.5, xr, (yd + yu) * 0.5, yu);
+
 	double temp_mass = 0;
 	double temp_x = 0;
 	double temp_y = 0;
+
+
 	for (int i = 0; i < 4; ++i) {
 		temp_mass += node->ch[i]->cmass;
-		temp_x += node->ch[i]->mcenter.x;
-		temp_y += node->ch[i]->mcenter.y;
+		temp_x += node->ch[i]->mcenter.x * node->ch[i]->cmass;
+		temp_y += node->ch[i]->mcenter.y * node->ch[i]->cmass;
 	}
 	if (temp_mass != 0) {
 		temp_x /= temp_mass;
@@ -91,10 +99,4 @@ void QuadTree::build(
 		node->cmass = temp_mass;
 		node->mcenter = Vector2D(temp_x, temp_y);
 	}
-	//std::cout << "sdsds" << std::endl;
-
-	build(node->ch[0], xl, (xl + xr) * 0.5, yd, (yd + yu) * 0.5);
-	build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
-	build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
-	build(node->ch[3], (xl + xr) * 0.5, xr, (yd + yu) * 0.5, yu);
 }

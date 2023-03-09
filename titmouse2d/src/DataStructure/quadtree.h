@@ -5,7 +5,7 @@
 #include "../Vector2.hpp"
 
 
-class QuadTree {
+class BarnesHut {
 public:
 	class Node {
 	public:
@@ -34,9 +34,9 @@ public:
 
 
 public:
-	QuadTree() = default;
+	BarnesHut() = default;
 
-	QuadTree(Vector2I minRes_, std::vector<Vector2D>& pos_) :
+	BarnesHut(Vector2I minRes_, std::vector<Vector2D>& pos_) :
 		pos(pos_), _minRes(minRes_) {
 		root = std::make_unique<Node>();
 		resetMapGrid();
@@ -70,17 +70,16 @@ public:
 	//*******
 	//0*****1
 	void build(
-		std::unique_ptr<QuadTree::Node>& node,
+		std::unique_ptr<BarnesHut::Node>& node,
 		int xl, int xr, int yd, int yu);
 
 
 	//遍历树的叶结点
-	void findLeafNode(std::unique_ptr<QuadTree::Node>& node) {
+	void findLeafNode(std::unique_ptr<BarnesHut::Node>& node) {
 		if (node == nullptr)return;
 		std::cout << "质量：" << node->cmass << "位置:" << node->mcenter.x << "," << node->mcenter.y << std::endl;
 
 		if (node->isLeafNode()) {
-			//std::cout << node->gridIdx->x << "," << node->gridIdx->y << std::endl;
 			return;
 		}
 		for (int i = 0; i < 4; ++i)
