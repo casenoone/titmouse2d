@@ -3,7 +3,7 @@
 #include <vector>
 #include <array>
 #include "../titmouse2d/src/Vector2.hpp"
-
+#include "../titmouse2d/src/boundingbox2.h"
 
 class BarnesHut {
 public:
@@ -91,6 +91,10 @@ public:
 	//*******
 	//*******
 	//0*****1
+
+public:
+	//树的根节点
+	std::unique_ptr<Node> root;
 private:
 	//最细分辨率，必须为2的整数次幂
 	Vector2I _minRes;
@@ -98,8 +102,9 @@ private:
 	std::vector<Vector2D>& pos;
 	//保存属于当前格子里所有粒子的编号
 	std::vector<std::vector<std::vector<int>>> mapGrid;
-	//树的根节点
-	std::unique_ptr<Node> root;
+
+	//每个结点对应的包围盒，叶子结点的包围盒就不计算了
+
 };
 
 using BarnesHutPtr = std::shared_ptr<BarnesHut>;

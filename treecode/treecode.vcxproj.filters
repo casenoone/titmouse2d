@@ -29,8 +29,5 @@
     <ClInclude Include="GravitySolver2.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GravityData2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

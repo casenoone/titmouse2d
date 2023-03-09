@@ -149,7 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BarnesHut.h" />
-    <ClInclude Include="GravityData2.h" />
     <ClInclude Include="GravitySolver2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

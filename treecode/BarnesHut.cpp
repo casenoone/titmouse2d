@@ -76,7 +76,7 @@ void BarnesHut::build(
 		}
 	}
 
-
+	//需要添加包围盒
 
 	build(node->ch[0], xl, (xl + xr) * 0.5, yd, (yd + yu) * 0.5);
 	build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
