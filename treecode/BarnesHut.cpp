@@ -1,4 +1,4 @@
-#include "quadtree.h"
+#include "BarnesHut.h"
 
 //将粒子映射到四叉树最细分辨率网格中
 void BarnesHut::buildMapGrid() {

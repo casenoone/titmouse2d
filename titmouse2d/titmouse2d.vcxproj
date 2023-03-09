@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClCompile Include="src\boundingbox2.cpp" />
     <ClCompile Include="src\Collider2.cpp" />
-    <ClCompile Include="src\DataStructure\quadtree.cpp" />
     <ClCompile Include="src\Eulerian\AdvectionSolver2.cpp" />
     <ClCompile Include="src\Eulerian\CellCenteredScalarGrid2.cpp" />
     <ClCompile Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.cpp" />
@@ -195,7 +194,6 @@
     <ClCompile Include="src\Size2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\DataStructure\quadtree.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeSolver2.h" />
     <ClInclude Include="src\Eulerian\EulerianSmoke\EulerianSmokeGridData2.h" />
     <ClInclude Include="src\Geometry\Heart2.h" />

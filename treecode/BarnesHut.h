@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include "../Vector2.hpp"
+#include "../titmouse2d/src/Vector2.hpp"
 
 
 class BarnesHut {
@@ -32,18 +32,7 @@ public:
 		Vector2D mcenter;
 	};
 
-
-public:
-	BarnesHut() = default;
-
-	BarnesHut(Vector2I minRes_, std::vector<Vector2D>& pos_) :
-		pos(pos_), _minRes(minRes_) {
-		root = std::make_unique<Node>();
-		resetMapGrid();
-		buildMapGrid();
-		buildQuadTree();
-	}
-
+private:
 	//重置网格
 	void resetMapGrid() {
 		mapGrid.clear();
@@ -58,22 +47,9 @@ public:
 	void buildQuadTree() {
 		build(root, 0, _minRes.x, 0, _minRes.y);
 	}
-
-	//xl:xleft
-	//xr:xright
-	//yd:ydown
-	//yu:yup
-
-	//网格-结点分布：
-	//2*****3
-	//*******
-	//*******
-	//0*****1
 	void build(
 		std::unique_ptr<BarnesHut::Node>& node,
 		int xl, int xr, int yd, int yu);
-
-
 	//遍历树的叶结点
 	void findLeafNode(std::unique_ptr<BarnesHut::Node>& node) {
 		if (node == nullptr)return;
@@ -85,25 +61,40 @@ public:
 		for (int i = 0; i < 4; ++i)
 			findLeafNode(node->ch[i]);
 	}
+public:
+	BarnesHut() = default;
 
-	void test() {
-
+	BarnesHut(Vector2I minRes_, std::vector<Vector2D>& pos_) :
+		pos(pos_), _minRes(minRes_) {
+		root = std::make_unique<Node>();
+		resetMapGrid();
+		buildMapGrid();
+		buildQuadTree();
 	}
 
-public:
-	//树的根节点
-	std::unique_ptr<Node> root;
 
-	//树的总层数
-	int totalLevel = 1;
+	//遍历树的叶结点
+	void findLeafNode() {
+		findLeafNode(root);
+	}
 
-	//粒子位置的引用
-	std::vector<Vector2D>& pos;
+	//xl:xleft
+	//xr:xright
+	//yd:ydown
+	//yu:yup
 
-	//保存属于当前格子里所有粒子的编号
-	std::vector<std::vector<std::vector<int>>> mapGrid;
-
+	//网格-结点分布：
+	//2*****3
+	//*******
+	//*******
+	//0*****1
 private:
 	//最细分辨率，必须为2的整数次幂
 	Vector2I _minRes;
+	//粒子位置的引用
+	std::vector<Vector2D>& pos;
+	//保存属于当前格子里所有粒子的编号
+	std::vector<std::vector<std::vector<int>>> mapGrid;
+	//树的根节点
+	std::unique_ptr<Node> root;
 };
