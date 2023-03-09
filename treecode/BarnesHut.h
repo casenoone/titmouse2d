@@ -72,6 +72,9 @@ public:
 		buildQuadTree();
 	}
 
+	std::unique_ptr<BarnesHut::Node> rebuildTree() {
+
+	}
 
 	//遍历树的叶结点
 	void findLeafNode() {
@@ -98,3 +101,5 @@ private:
 	//树的根节点
 	std::unique_ptr<Node> root;
 };
+
+using BarnesHutPtr = std::shared_ptr<BarnesHut>;
