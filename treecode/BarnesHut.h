@@ -30,6 +30,8 @@ public:
 
 		//质量中心
 		Vector2D mcenter;
+
+		BoundingBox2 box;
 	};
 
 private:
