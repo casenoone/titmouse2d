@@ -18,12 +18,33 @@ public:
 		if (!node)return;
 		auto dis = node->mcenter.dis(p);
 		auto dis_v = node->mcenter - p;
-		if (dis > _minDis /*并且当前粒子不在当前node内*/) {
+
+		if (node->isLeafNode()) {
+
+			auto& idx = _barnesHut->root->gridIdx;
+			auto& list = _barnesHut->mapGrid[idx->x][idx->y];
+
+			for (int i = 0; i < list.size(); ++i) {
+				auto i_pos = pos[list[i]];
+				double pdis = p.dis(i_pos);
+				auto temp1 = pdis * pdis + _factor * _factor;
+				auto temp2 = std::pow(temp1, 3 / 2.0);
+				auto temp3 = 1.0 * 1.0 * dis_v / temp2;
+				sum += temp3;
+			}
+			return;
+		}
+
+		//如果当前粒子与当前树结点的距离超过最小距离，并且当前粒子不在当前树结点中
+		//则直接用该结点作为一个整体进行计算
+		if (dis > _minDis && !node->box.IsInBox(p)) {
 			auto temp1 = dis * dis + _factor * _factor;
 			auto temp2 = std::pow(temp1, 3 / 2.0);
 			auto temp3 = 1.0 * node->cmass * dis_v / temp2;
 			sum += temp3;
 		}
+
+		//否则，就继续递归，直到超过最小距离，或者是遇到叶子结点
 		else {
 			for (int i = 0; i < 4; ++i) {
 				traverse(node->ch[i], p, sum);

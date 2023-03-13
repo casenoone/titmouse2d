@@ -63,6 +63,20 @@ private:
 		for (int i = 0; i < 4; ++i)
 			findLeafNode(node->ch[i]);
 	}
+
+	void buildBoundingBox(
+		std::unique_ptr<BarnesHut::Node>& node,
+		int xl, int xr, int yd, int yu) {
+
+		double scale = _minRes.x / 2.0;
+		double low_x = xl / scale;
+		double up_x = (xr - 1) / scale;
+		double low_y = yd / scale;
+		double up_y = (yu - 1) / scale;
+		node->box = BoundingBox2(Vector2D(low_x, low_y), Vector2D(up_x, up_y));
+	}
+
+
 public:
 	BarnesHut() = default;
 
@@ -97,7 +111,7 @@ public:
 public:
 	//树的根节点
 	std::unique_ptr<Node> root;
-private:
+public:
 	//最细分辨率，必须为2的整数次幂
 	Vector2I _minRes;
 	//粒子位置的引用

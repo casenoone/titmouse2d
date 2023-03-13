@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 	}
 
 	BarnesHut tree(Vector2I(8, 8), pos);
-	tree.findLeafNode();
+	//tree.findLeafNode();
 
 
 
