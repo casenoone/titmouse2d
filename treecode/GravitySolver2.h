@@ -55,17 +55,19 @@ public:
 	void solveGravity() {
 		int num = pos.size();
 		for (int i = 0; i < num; ++i) {
-
-
+			traverse(_barnesHut->root, pos[i], _force[i]);
 		}
 	}
 
+	//能不能写对，就看这里了！开干！
 	void timeIntegration(double dt) {
 
 	}
 
 	void onAdvanceTimeStep(double dt) {
 		toZero();
+		solveGravity();
+		timeIntegration(dt);
 	}
 
 	void toZero() {
