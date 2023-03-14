@@ -70,10 +70,11 @@ private:
 
 		double scale = _minRes.x / 2.0;
 		double low_x = xl / scale;
-		double up_x = (xr - 1) / scale;
+		double up_x = xr / scale;
 		double low_y = yd / scale;
-		double up_y = (yu - 1) / scale;
+		double up_y = yu / scale;
 		node->box = BoundingBox2(Vector2D(low_x, low_y), Vector2D(up_x, up_y));
+		//std::cout << low_x << "," << low_y << "," << up_x << "," << up_y << std::endl;
 	}
 
 

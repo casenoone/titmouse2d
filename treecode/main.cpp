@@ -5,6 +5,7 @@
 
 #include "BarnesHut.h"
 #include "../titmouse2d/src/random.h"
+#include "GravitySolver2.h"
 
 const float SCREEN_SIZE = 400;
 const float DRAW_SIZE = SCREEN_SIZE / 200 * 10;
@@ -22,7 +23,7 @@ static void key(unsigned char key, int x, int y) {
 
 void drawPoint(double x, double y) {
 	//在后缓存绘制图形，就一个点
-	glPointSize(2.5f);//缺省是1
+	glPointSize(3.5f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);
@@ -43,7 +44,7 @@ void drawLine(double x1, double y1, double x2, double y2) {
 
 
 std::vector<Vector2D> pos;
-
+GravitySolver2Ptr gsolver;
 
 static void display(void)
 {
@@ -52,6 +53,8 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	/****************以下为绘图区*****************/
+	gsolver->onAdvanceTimeStep(0.0009);
+
 
 	for (int i = 0; i < pos.size(); ++i) {
 		drawPoint(pos[i].x, pos[i].y);
@@ -90,14 +93,13 @@ int main(int argc, char** argv) {
 
 	/****************以下为主函数区*******************/
 
-	for (int i = 0; i < 10; ++i) {
-		double temp_x = random_double(0, 2);
-		double temp_y = random_double(0, 2);
+	for (int i = 0; i < 5000; ++i) {
+		double temp_x = random_double(0.5, 1.5);
+		double temp_y = random_double(0.5, 1.5);
 		pos.push_back(Vector2D(temp_x, temp_y));
 	}
 
-	BarnesHut tree(Vector2I(8, 8), pos);
-	//tree.findLeafNode();
+	gsolver = std::make_shared<GravitySolver2>(Vector2I(16, 16), pos);
 
 
 

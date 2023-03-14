@@ -43,8 +43,7 @@ void BarnesHut::build(
 		node->ch[i] = std::make_unique<BarnesHut::Node>();
 	}
 
-	//构建
-	buildBoundingBox(node, xl, xr, yd, yu);
+
 
 	//当xl-xr等于2时，达到最细分辨率
 	//确定叶子结点坐标
@@ -80,7 +79,8 @@ void BarnesHut::build(
 	}
 
 	//需要添加包围盒
-
+	buildBoundingBox(node, xl, xr, yd, yu);
+	//std::cout << xl << "," << xr << "," << yd << "," << yu << std::endl;
 	build(node->ch[0], xl, (xl + xr) * 0.5, yd, (yd + yu) * 0.5);
 	build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
 	build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
