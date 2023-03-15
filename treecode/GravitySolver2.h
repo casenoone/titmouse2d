@@ -32,7 +32,7 @@ public:
 				auto pdis_v = i_pos - p;
 				auto temp1 = pdis * pdis + _factor * _factor;
 				auto temp2 = std::pow(temp1, 3 / 2.0);
-				auto temp3 = _mass * pdis_v / temp2;
+				auto temp3 = _barnesHut->mass * pdis_v / temp2;
 				sum += temp3;
 			}
 			return;
@@ -45,10 +45,10 @@ public:
 			auto temp3 = node->cmass * dis_v / temp2;
 			sum += temp3;
 		}
-
-		for (int i = 0; i < 4; ++i) {
-			traverse(node->ch[i], p, sum);
-		}
+		else
+			for (int i = 0; i < 4; ++i) {
+				traverse(node->ch[i], p, sum);
+			}
 
 	}
 
@@ -56,7 +56,7 @@ public:
 		int num = pos.size();
 		for (int i = 0; i < num; ++i) {
 			traverse(_barnesHut->root, pos[i], _force[i]);
-			_force[i] *= (9.8 * _mass);
+			_force[i] *= (9.8 * _barnesHut->mass);
 		}
 	}
 
@@ -85,14 +85,13 @@ public:
 private:
 	Vector2I _minRes;
 	BarnesHutPtr _barnesHut;
-	double _minDis = 0.4;
+	double _minDis = 0.15;
 	std::vector<Vector2D> _vel;
 	std::vector<Vector2D> _force;
 
 	//松弛因子，防止粒子之间距离过近而导致的数值爆炸
-	double _factor = 0.001;
+	double _factor = 0.01;
 
-	double _mass = 0.05;
 };
 
 using GravitySolver2Ptr = std::shared_ptr<GravitySolver2>;

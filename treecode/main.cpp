@@ -53,7 +53,7 @@ static void display(void)
 	gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
 
 	/****************以下为绘图区*****************/
-	gsolver->onAdvanceTimeStep(0.0009);
+	gsolver->onAdvanceTimeStep(0.01);
 
 
 	for (int i = 0; i < pos.size(); ++i) {
@@ -93,13 +93,13 @@ int main(int argc, char** argv) {
 
 	/****************以下为主函数区*******************/
 
-	for (int i = 0; i < 5000; ++i) {
-		double temp_x = random_double(0.5, 1.5);
-		double temp_y = random_double(0.5, 1.5);
+	for (int i = 0; i < 2000; ++i) {
+		double temp_x = random_double(0.2, 1.5);
+		double temp_y = random_double(0.2, 1.5);
 		pos.push_back(Vector2D(temp_x, temp_y));
 	}
 
-	gsolver = std::make_shared<GravitySolver2>(Vector2I(16, 16), pos);
+	gsolver = std::make_shared<GravitySolver2>(Vector2I(32, 32), pos);
 
 
 

@@ -55,7 +55,6 @@ private:
 	//遍历树的叶结点
 	void findLeafNode(std::unique_ptr<BarnesHut::Node>& node) {
 		if (node == nullptr)return;
-		std::cout << "质量：" << node->cmass << "位置:" << node->mcenter.x << "," << node->mcenter.y << std::endl;
 
 		if (node->isLeafNode()) {
 			return;
@@ -74,7 +73,6 @@ private:
 		double low_y = yd / scale;
 		double up_y = yu / scale;
 		node->box = BoundingBox2(Vector2D(low_x, low_y), Vector2D(up_x, up_y));
-		//std::cout << low_x << "," << low_y << "," << up_x << "," << up_y << std::endl;
 	}
 
 
@@ -120,7 +118,7 @@ public:
 	//保存属于当前格子里所有粒子的编号
 	std::vector<std::vector<std::vector<int>>> mapGrid;
 
-	//每个结点对应的包围盒，叶子结点的包围盒就不计算了
+	double mass = 0.03;
 
 };
 

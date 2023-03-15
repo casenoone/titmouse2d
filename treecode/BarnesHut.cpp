@@ -53,7 +53,7 @@ void BarnesHut::build(
 		node->ch[2]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl, yd + 1));
 		node->ch[3]->gridIdx = std::make_unique<Vector2I>(Vector2I(xl + 1, yd + 1));
 		//假设粒子质量统一为1
-		double particle_mass = 1.0;
+		double particle_mass = mass;
 		for (int t = 0; t < 4; ++t) {
 			int i = node->ch[t]->gridIdx->x;
 			int j = node->ch[t]->gridIdx->y;
@@ -80,7 +80,6 @@ void BarnesHut::build(
 
 	//需要添加包围盒
 	buildBoundingBox(node, xl, xr, yd, yu);
-	//std::cout << xl << "," << xr << "," << yd << "," << yu << std::endl;
 	build(node->ch[0], xl, (xl + xr) * 0.5, yd, (yd + yu) * 0.5);
 	build(node->ch[1], (xl + xr) * 0.5, xr, yd, (yd + yu) * 0.5);
 	build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
