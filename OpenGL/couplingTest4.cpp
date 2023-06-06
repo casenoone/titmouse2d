@@ -400,7 +400,7 @@ int main(int argc, char** argv)
 	/**********以上生成气泡**********/
 
 	//obj1->velocity = Vector2D(3, 0.0);
-	obj1->velocity = Vector2D(3, 0.0);
+	obj1->velocity = Vector2D(4.5, 0.0);
 	//std::cout << 8888 << std::endl;
 
 
@@ -428,7 +428,7 @@ int main(int argc, char** argv)
 	glutReshapeFunc(resize);     //改变窗口大小时
 	glutDisplayFunc(display);    //绘制窗口显示时
 
-	//glutMainLoop();
+	glutMainLoop();
 
 
 
@@ -481,10 +481,10 @@ int main(int argc, char** argv)
 		static int fileNum = 1;
 		std::string	name = std::to_string(fileNum);
 		fileNum++;
-		std::string path1 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\boundary\\";
-		std::string path2 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\thinfoam\\";
-		std::string path3 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\water\\";
-		std::string path4 = "E:\\zhangjian\\solve_data\\2023shiyan\\0009\\bubble\\";
+		std::string path1 = "E:\\zhangjian\\solve_data\\2023shiyan\\0011\\boundary\\";
+		std::string path2 = "E:\\zhangjian\\solve_data\\2023shiyan\\0011\\thinfoam\\";
+		std::string path3 = "E:\\zhangjian\\solve_data\\2023shiyan\\0011\\water\\";
+		std::string path4 = "E:\\zhangjian\\solve_data\\2023shiyan\\0011\\bubble\\";
 
 		Plyout writer1(path1, name, 1);
 		Plyout writer2(path2, name, tracer_num + 4);

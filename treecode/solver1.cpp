@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "../titmouse2d/src/Vector2.hpp"
-#include "BarnesHut.h"
+#include "solver.h"
 
 class GravitySolver2 {
 public:
@@ -16,7 +16,7 @@ public:
 		_barnesHut = std::make_shared<BarnesHut>(_minRes, pos);
 	}
 
-	void traverse(std::unique_ptr<BarnesHut::Node>& node, const Vector2D& p, Vector2D& sum) {
+	void traverse(std::unique_ptr<BarnesHut::Node>& node, const Vector2D& p, Vector2D& sum, Vector2D gamm) {
 		if (!node)return;
 
 		auto dis = node->mcenter.dis(p);
@@ -28,26 +28,23 @@ public:
 			auto& list = _barnesHut->mapGrid[idx->x][idx->y];
 			for (int i = 0; i < list.size(); ++i) {
 				auto i_pos = pos[list[i]];
-				double pdis = p.dis(i_pos);
-				auto pdis_v = i_pos - p;
-				auto temp1 = pdis * pdis + _factor * _factor;
-				auto temp2 = std::pow(temp1, 3 / 2.0);
-				auto temp3 = _barnesHut->mass * pdis_v / temp2;
-				sum += temp3;
+
+				sum += node->Q * node->Q_k;
 			}
 			return;
 		}
 		//如果当前粒子与当前树结点的距离超过最小距离，并且当前粒子不在当前树结点中
 		//则直接用该结点作为一个整体进行计算
 		if (dis > _minDis && !node->box.IsInBox(p)) {
-			auto temp1 = dis * dis + _factor * _factor;
-			auto temp2 = std::pow(temp1, 3 / 2.0);
-			auto temp3 = node->cmass * dis_v / temp2;
-			sum += temp3;
+
+			auto temp1 = (1 - std::pow(2.8, -dis * dis) / 0.0001) * (node->mcenter - p).cross(gamm) * (node->mcenter - p).normalize();
+			auto temp2 = 2 * 3.1415926 * (node->mcenter - p).getLengthSquared();
+
+			sum += temp1 / temp2;
 		}
 		else
 			for (int i = 0; i < 4; ++i) {
-				traverse(node->ch[i], p, sum);
+				traverse(node->ch[i], p, sum, gamm);
 			}
 
 	}
@@ -55,7 +52,7 @@ public:
 	void solveGravity() {
 		int num = pos.size();
 		for (int i = 0; i < num; ++i) {
-			traverse(_barnesHut->root, pos[i], _force[i]);
+			traverse(_barnesHut->root, pos[i], _force[i], Vector2D());
 			_force[i] *= (9.8 * _barnesHut->mass);
 		}
 	}

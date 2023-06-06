@@ -141,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="BarnesHut.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="solver.cpp" />
+    <ClCompile Include="solver1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\titmouse2d\titmouse2d.vcxproj">
@@ -150,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="BarnesHut.h" />
     <ClInclude Include="GravitySolver2.h" />
+    <ClInclude Include="solver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

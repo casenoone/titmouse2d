@@ -777,7 +777,7 @@ void FoamVortexSolver::tarcerCollisionSolve(Vector2D& pos) {
 
 }
 
-////标准耗散方法
+////高斯耗散方法
 //void FoamVortexSolver::decayVorticity() {
 //	auto& vorticity = _foamVortexData->gamma();
 //	auto len = vorticity.dataSize();

@@ -1,4 +1,5 @@
-#include "BarnesHut.h"
+#include "solver.h"
+
 
 //将粒子映射到四叉树最细分辨率网格中
 void BarnesHut::buildMapGrid() {
@@ -92,21 +93,23 @@ void BarnesHut::build(
 			int j = node->ch[t]->gridIdx->y;
 			auto& particlesList = mapGrid[i][j];
 			if (particlesList.size() == 0)continue;
-			for (int k = 0; k < particlesList.size(); ++k) {
-				node->ch[t]->cmass += particle_mass;
-			}
 
-			double temp_x = 0;
-			double temp_y = 0;
-
+			//计算Q
 			for (int k = 0; k < particlesList.size(); ++k) {
 				int idx = particlesList[k];
-				temp_x += pos[idx].x * particle_mass;
-				temp_y += pos[idx].y * particle_mass;
+				Vector2D temp_x;
+				temp_x = pos[idx] - node->ch[t]->mcenter;
+				auto temp1 = std::pow(2.8, (temp_x.getLengthSquared() * -1) / 2 * 0.01);
+				auto temp2 = (temp_x.getLengthSquared() * 2) / 0.0001;
+				node->ch[t]->Q += std::pow(2.8, temp1) * temp2;
 			}
-			temp_x /= node->ch[t]->cmass;
-			temp_y /= node->ch[t]->cmass;
-			node->ch[t]->mcenter = Vector2D(temp_x, temp_y);
+
+			//计算Q_k
+			for (int k = 0; k < particlesList.size(); ++k) {
+				int idx = particlesList[k];
+				auto temp1 = std::pow((pos[idx] - node->ch[t]->mcenter).getLength(), 2);
+				node->ch[t]->Q_k += gamma[k] * temp1;
+			}
 
 		}
 	}
@@ -119,20 +122,20 @@ void BarnesHut::build(
 	build(node->ch[2], xl, (xl + xr) * 0.5, (yd + yu) * 0.5, yu);
 	build(node->ch[3], (xl + xr) * 0.5, xr, (yd + yu) * 0.5, yu);
 
-	double temp_mass = 0;
-	double temp_x = 0;
-	double temp_y = 0;
+	//double temp_mass = 0;
+	//double temp_x = 0;
+	//double temp_y = 0;
 
 
-	for (int i = 0; i < 4; ++i) {
-		temp_mass += node->ch[i]->cmass;
-		temp_x += node->ch[i]->mcenter.x * node->ch[i]->cmass;
-		temp_y += node->ch[i]->mcenter.y * node->ch[i]->cmass;
-	}
-	if (temp_mass != 0) {
-		temp_x /= temp_mass;
-		temp_y /= temp_mass;
-		node->cmass = temp_mass;
-		node->mcenter = Vector2D(temp_x, temp_y);
-	}
+	//for (int i = 0; i < 4; ++i) {
+	//	temp_mass += node->ch[i]->cmass;
+	//	temp_x += node->ch[i]->mcenter.x * node->ch[i]->cmass;
+	//	temp_y += node->ch[i]->mcenter.y * node->ch[i]->cmass;
+	//}
+	//if (temp_mass != 0) {
+	//	temp_x /= temp_mass;
+	//	temp_y /= temp_mass;
+	//	node->cmass = temp_mass;
+	//	node->mcenter = Vector2D(temp_x, temp_y);
+	//}
 }

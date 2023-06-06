@@ -23,7 +23,7 @@ static void key(unsigned char key, int x, int y) {
 
 void drawPoint(double x, double y) {
 	//在后缓存绘制图形，就一个点
-	glPointSize(3.5f);//缺省是1
+	glPointSize(3.0f);//缺省是1
 	glBegin(GL_POINTS);
 	glColor3f(1, 128.0 / 255, 51.0 / 255);
 	glVertex3f((x - 1) * DRAW_SIZE, (y - 1) * DRAW_SIZE, 0);

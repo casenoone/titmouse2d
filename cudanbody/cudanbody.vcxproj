@@ -150,11 +150,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="NbodySystemKernel.cu" />
     <CudaCompile Include="q.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper_cuda.h" />
     <ClInclude Include="helper_string.h" />
+    <ClInclude Include="NbodySystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NbodySystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
